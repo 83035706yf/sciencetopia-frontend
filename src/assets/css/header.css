@@ -1,0 +1,130 @@
+/* Header */
+.site-header {
+  background-color: #e4d8c0;
+  padding: 0px 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.header h1 {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.header p {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container i:first-child {
+  width: 80px;
+}
+
+.logo-container i:nth-child(2) {
+  width: 320px;
+}
+
+.logo-icon {
+  font-size: 36px;
+  margin-right: 10px;
+}
+
+.site-description {
+  font-size: 14px !important;
+  margin-bottom: 0;
+}
+
+.site-description img {
+  width: 500px;
+}
+
+.header-bottom {
+  justify-content: space-between;
+  align-items: center;
+  float: left;
+  padding: 10px 50px;
+  width: 1000px;
+  height: 50px;
+}
+
+.search-container {
+  width: 60%;
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+}
+
+.search-form input {
+  width: 250px;
+  border: 1px solid #ccc;
+  margin: 5px;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+.search-btn {
+  background-color: white;
+  border: none;
+  font-size: 16px;
+  padding: 5px 10px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.user-avatar img {
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-name {
+  margin: 0;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.user-email {
+  margin: 0;
+  font-size: 14px;
+  color: #888;
+}
+
+/* dark mode icons */
+.sun-icon,
+.moon-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: 0.4s;
+}
+
+.sun-icon {
+  left: 8px;
+}
+
+.moon-icon {
+  left: 34px;
+  opacity: 0;
+}
+
+input:checked+.slider .sun-icon {
+  opacity: 0;
+}
+
+input:checked+.slider .moon-icon {
+  opacity: 1;
+}

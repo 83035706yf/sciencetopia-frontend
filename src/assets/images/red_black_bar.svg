@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="124.88334mm"
+   height="10.936111mm"
+   viewBox="0 0 124.88334 10.936111"
+   version="1.1"
+   id="svg2751"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="red_black_bar.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview2753"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.914906"
+     inkscape:cx="181.98591"
+     inkscape:cy="108.75434"
+     inkscape:window-width="2560"
+     inkscape:window-height="1411"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2748">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath662">
+      <path
+         d="m 10,12020 h 3540 v 310 H 10 Z"
+         id="path660" />
+    </clipPath>
+    <linearGradient
+       x1="0"
+       y1="0"
+       x2="1"
+       y2="0"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(3540,0,0,-3540,10,12175)"
+       spreadMethod="pad"
+       id="linearGradient670">
+      <stop
+         style="stop-opacity:1;stop-color:#ff0000"
+         offset="0"
+         id="stop664" />
+      <stop
+         style="stop-opacity:1;stop-color:#231815"
+         offset="0.713222"
+         id="stop666" />
+      <stop
+         style="stop-opacity:1;stop-color:#231815"
+         offset="1"
+         id="stop668" />
+    </linearGradient>
+  </defs>
+  <g
+     inkscape:label="图层 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-56.994558,-119.75196)">
+    <g
+       id="g656"
+       transform="matrix(0.03527778,0,0,-0.03527778,56.64178,554.72699)"
+       inkscape:label="bar shape"
+       style="display:inline">
+      <g
+         id="g658"
+         clip-path="url(#clipPath662)">
+        <path
+           d="m 10,12020 h 3540 v 310 H 10 Z"
+           style="fill:url(#linearGradient670);fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="path672" />
+      </g>
+    </g>
+  </g>
+</svg>

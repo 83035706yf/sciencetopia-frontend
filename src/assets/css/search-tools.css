@@ -1,0 +1,18 @@
+/* Search Tools */
+.search-tools form {
+  display: flex;
+  align-items: center;
+  border-color: gray;
+}
+
+.search-tools input[type="text"] {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+.search-tools button {
+  width: 15%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}

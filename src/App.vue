@@ -1,16 +1,20 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <LayOut>
+  <HomePage msg="Sciencetopia - 一个系统、完备、面向群众永久免费的科学平台"/>
+  </LayOut>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HomePage from './components/HomePage.vue'
+import LayOut from './components/LayOut.vue';
+import 'bootstrap/dist/css/bootstrap.css';
 
 export default {
-  name: 'App',
+  name: 'ScienceTopia',
   components: {
-    HelloWorld
-  }
+    HomePage,
+    LayOut
+}
 }
 </script>
 
@@ -21,6 +25,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

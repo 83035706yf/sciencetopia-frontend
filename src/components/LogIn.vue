@@ -1,0 +1,57 @@
+<template>
+    <div>
+        <h2>{{ title }}</h2>
+        <form @submit.prevent="handleSubmit" class="form-container">
+            <div class="text-danger">{{ validationSummary }}</div>
+            <div class="form-group">
+                <label for="userName">{{ userNameLabel }}</label>
+                <input v-model="userName" id="userName" class="form-control" />
+                <span class="text-danger">{{ userNameError }}</span>
+            </div>
+            <div class="form-group">
+                <label for="password">{{ passwordLabel }}</label>
+                <input v-model="password" type="password" id="password" class="form-control" />
+                <span class="text-danger">{{ passwordError }}</span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" v-model="rememberMe" /> {{ rememberMeLabel }}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">登录</button>
+            </div>
+        </form>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'LogIn',
+    data() {
+        return {
+            title: '登录',
+            userName: '',
+            password: '',
+            rememberMe: false,
+            userNameLabel: '用户名',
+            passwordLabel: '密码',
+            rememberMeLabel: '记住我',
+            validationSummary: '',
+            userNameError: '',
+            passwordError: ''
+        };
+    },
+    methods: {
+        handleSubmit() {
+
+        }
+    }
+};
+</script>
+
+<style scoped>
+@import "../assets/css/form.css";
+</style>

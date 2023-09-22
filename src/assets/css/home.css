@@ -1,0 +1,37 @@
+.explore-btn {
+    background-color: #333;
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.content {
+    padding: 50px;
+}
+
+.features {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.feature {
+    width: 200px;
+    text-align: center;
+}
+
+.feature i {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.feature h3 {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.feature p {
+    font-size: 16px;
+}

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="118.53334mm"
+   height="8.0978727mm"
+   viewBox="0 0 118.53334 8.0978727"
+   version="1.1"
+   id="svg2184"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="red_arrow.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview2186"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.914906"
+     inkscape:cx="67.22002"
+     inkscape:cy="189.63697"
+     inkscape:window-width="1280"
+     inkscape:window-height="1411"
+     inkscape:window-x="1271"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2181" />
+  <g
+     inkscape:label="图层 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-58.72361,-98.614103)">
+    <g
+       id="g6537"
+       inkscape:label="red arrow"
+       transform="matrix(0.03527778,0,0,-0.03527778,-84.856955,770.18309)"
+       style="display:inline">
+      <path
+         d="m 7280,19036.6 v -173.2 l 150,86.6"
+         style="fill:#d5282a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path326" />
+      <path
+         d="M 4070,18945 H 7295"
+         style="fill:none;stroke:#d5282a;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path16" />
+      <g
+         id="g352"
+         style="display:inline"
+         inkscape:label="site title description"
+         transform="scale(10)">
+        <text
+           xml:space="preserve"
+           transform="matrix(0.909609,0,0,-1,427.088,1882.69)"
+           style="font-variant:normal;font-weight:normal;font-size:14.3908px;font-family:SimHei;-inkscape-font-specification:SimHei;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text356"><tspan
+             sodipodi:role="line"
+             id="tspan354"
+             x="0"
+             y="0">一个系统、完备</tspan></text>
+        <text
+           xml:space="preserve"
+           transform="matrix(0.792839,0,0,-1,531.547,1882.34)"
+           style="font-variant:normal;font-weight:normal;font-size:14.9449px;font-family:SimHei;-inkscape-font-specification:SimHei;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text362"><tspan
+             x="0 14.9449 29.889799 44.834702 59.779598 74.724503 89.669403 104.6143 119.5592"
+             y="0"
+             sodipodi:role="line"
+             id="tspan358">面向群众、永久免费</tspan><tspan
+             x="146.565 161.5099 176.4548 191.3997 206.3446"
+             y="-0.14921901"
+             sodipodi:role="line"
+             id="tspan360">的科学平台</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>
