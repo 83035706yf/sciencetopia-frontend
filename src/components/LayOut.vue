@@ -4,8 +4,10 @@
       <div class="header">
         <!-- 显示网站Logo -->
         <div class="logo-container">
-          <i><img src="../assets/images/logo.png" alt="Logo" /></i>
-          <i><img src="../assets/images/ciencetopia.svg" alt="ciencetopia"></i>
+          <button class="btn" @click="backToHomePage">
+            <i><img src="../assets/images/logo.png" alt="Logo" /></i>
+            <i><img src="../assets/images/ciencetopia.svg" alt="ciencetopia"></i>
+          </button>
         </div>
         <!-- 显示网站标语 -->
         <div class="site-description">
@@ -69,6 +71,9 @@ export default {
       } else {
         this.themePath = '';  // 使用浅色模式
       }
+    },
+    backToHomePage() {
+      this.$router.push({ name: 'HomePage' });  // 跳转到LogIn组件
     }
   },
   components: { LogInPartial }

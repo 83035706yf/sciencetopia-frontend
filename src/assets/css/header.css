@@ -26,11 +26,16 @@
   align-items: center;
 }
 
-.logo-container i:first-child {
+.logo-container .btn {
+  display: flex;
+  align-items: center;  /* 如果需要垂直居中对齐 */
+}
+
+.logo-container .btn i:nth-child(1) img {
   width: 80px;
 }
 
-.logo-container i:nth-child(2) {
+.logo-container .btn i:nth-child(2) img {
   width: 320px;
 }
 

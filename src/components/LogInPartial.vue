@@ -38,7 +38,7 @@ export default {
             this.$router.push({ name: 'login' });  // 跳转到LogIn组件
         },
         register() {
-            // 注册逻辑
+            this.$router.push({ name: 'register' });  // 跳转到LogIn组件
         },
         logout() {
             // 登出逻辑

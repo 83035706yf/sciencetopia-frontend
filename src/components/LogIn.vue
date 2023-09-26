@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import axios from 'axios'; // Import axios
+
 export default {
     name: 'LogIn',
     data() {
@@ -45,8 +47,26 @@ export default {
         };
     },
     methods: {
-        handleSubmit() {
+        async handleSubmit() {
+            try {
+                // Make a POST request to the .NET Web API
+                const response = await axios.post('http://localhost:5085/api/Account/Login', {
+                    userName: this.userName,
+                    password: this.password,
+                    rememberMe: this.rememberMe
+                });
 
+                // Handle the response as needed
+                console.log('Login successful:', response.data);
+            } catch (error) {
+                // Handle errors
+                console.error('There was an error during the login process:', error);
+                if (error.response && error.response.data) {
+                    this.validationSummary = error.response.data.error || '登录失败';
+                } else {
+                    this.validationSummary = '登录失败';
+                }
+            }
         }
     }
 };
