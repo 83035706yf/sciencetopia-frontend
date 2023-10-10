@@ -2,10 +2,10 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
-/* import router*/
+/* import router */
 import router from './router'
 
-/* import custom css*/ 
+/* import custom css */ 
 import './assets/css/site.css'
 
 /* import the fontawesome core */
@@ -19,10 +19,23 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { faSun } from '@fortawesome/free-solid-svg-icons'
 
 /* add icons to the library */
-library.add(faSearch)
-library.add(faSun)
+library.add(faSearch, faSun)
 
-createApp(App)
-.component('font-awesome-icon', FontAwesomeIcon)
-.use(router)
-.mount('#app')
+/* Import Vuetify and its styles */
+import { createVuetify } from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+
+/* Create Vue app */
+const app = createApp(App)
+
+app.component('font-awesome-icon', FontAwesomeIcon)
+app.use(router)
+
+/* Use Vuetify */
+const vuetify = createVuetify({
+    // 这里可以提供一些Vuetify选项
+  })
+    
+app.use(vuetify)
+
+app.mount('#app')

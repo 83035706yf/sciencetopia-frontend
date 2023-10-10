@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import axios from 'axios'; // Import axios
+import apiClient from '@/api'; // 根据api.js的实际路径进行调整
 
 export default {
     name: 'LogIn',
@@ -50,7 +50,7 @@ export default {
         async handleSubmit() {
             try {
                 // Make a POST request to the .NET Web API
-                const response = await axios.post('http://localhost:5085/api/Account/Login', {
+                const response = await apiClient.post('/Account/Login', {
                     userName: this.userName,
                     password: this.password,
                     rememberMe: this.rememberMe

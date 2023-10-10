@@ -2,17 +2,29 @@
     <div>
         <!-- 如果用户已登录 -->
         <div v-if="isAuthenticated">
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="userDropdown" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    <img :src="avatarUrl" alt="用户头像" style="width: 30px; height: 30px; border-radius: 50%;">
-                </button>
-                <div class="dropdown-menu" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="#">个人中心</a>
-                    <div class="dropdown-divider"></div>
-                    <button @click="logout" class="dropdown-item">登出</button>
-                </div>
-            </div>
+            <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn v-bind="attrs" v-on="on">
+                        <v-avatar size="30">
+                            <img :src="avatarUrl" alt="用户头像">
+                        </v-avatar>
+                    </v-btn>
+                </template>
+
+                <v-list>
+                    <v-list-item link>
+                        <v-list-item-content>
+                            <v-list-item-title>个人中心</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-divider></v-divider>
+                    <v-list-item @click="logout">
+                        <v-list-item-content>
+                            <v-list-item-title>登出</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
         </div>
 
         <!-- 如果用户未登录 -->
@@ -25,7 +37,7 @@
 </template>
   
 <script>
-import axios from 'axios'; // Import axios
+import apiClient from '@/api'; // 根据api.js的实际路径进行调整
 
 export default {
     name: 'LogInPartial',
@@ -45,7 +57,7 @@ export default {
         async logout() {
             try {
                 // 向后端发送登出请求
-                await axios.post('http://localhost:5085/api/Account/Logout');
+                await apiClient.post('/Account/Logout');
 
                 // 可选：跳转到登录页面或首页
                 this.$router.push('/');
@@ -55,13 +67,18 @@ export default {
         },
         async checkAuthenticationStatus() {
             try {
-                const response = await axios.get('http://localhost:5085/api/Account/IsAuthenticated');
+                const response = await apiClient.get('/Account/IsAuthenticated');
                 this.isAuthenticated = response.data.isAuthenticated;
-                console.log(response);
+                if (this.isAuthenticated) {
+                    this.avatarUrl = response.data.avatarUrl;  // 设置头像URL
+                    // 如果需要，你还可以设置其他用户信息，例如userName
+                    // this.userName = response.data.userName;
+                }
             } catch (error) {
                 console.error('Error checking authentication status:', error);
             }
         }
+
     },
     mounted() {
         this.checkAuthenticationStatus(); // 当组件挂载时，检查身份验证状态
