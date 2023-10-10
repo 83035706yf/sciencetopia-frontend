@@ -3,7 +3,7 @@
     <div class="container">
       <router-view></router-view>
     </div>
-  <!-- <HomePage msg="Sciencetopia - 一个系统、完备、面向群众永久免费的科学平台"/> -->
+    <!-- <HomePage msg="Sciencetopia - 一个系统、完备、面向群众永久免费的科学平台"/> -->
   </LayOut>
 </template>
 
@@ -15,7 +15,8 @@ export default {
   name: 'ScienceTopia',
   components: {
     LayOut
-}
+  }
+
 }
 </script>
 

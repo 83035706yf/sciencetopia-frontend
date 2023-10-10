@@ -25,6 +25,8 @@
 </template>
   
 <script>
+import axios from 'axios'; // Import axios
+
 export default {
     name: 'LogInPartial',
     data() {
@@ -40,9 +42,29 @@ export default {
         register() {
             this.$router.push({ name: 'register' });  // 跳转到LogIn组件
         },
-        logout() {
-            // 登出逻辑
+        async logout() {
+            try {
+                // 向后端发送登出请求
+                await axios.post('http://localhost:5085/api/Account/Logout');
+
+                // 可选：跳转到登录页面或首页
+                this.$router.push('/');
+            } catch (error) {
+                console.error('登出过程中出现错误:', error);
+            }
+        },
+        async checkAuthenticationStatus() {
+            try {
+                const response = await axios.get('http://localhost:5085/api/Account/IsAuthenticated');
+                this.isAuthenticated = response.data.isAuthenticated;
+                console.log(response);
+            } catch (error) {
+                console.error('Error checking authentication status:', error);
+            }
         }
+    },
+    mounted() {
+        this.checkAuthenticationStatus(); // 当组件挂载时，检查身份验证状态
     }
 }
 </script>

@@ -56,8 +56,11 @@ export default {
                     rememberMe: this.rememberMe
                 });
 
+                // 在登陆成功后跳转到首页
+                this.$router.push('/');
+
                 // Handle the response as needed
-                console.log('Login successful:', response.data);
+                console.log('Login successful:', response.config.data);
             } catch (error) {
                 // Handle errors
                 console.error('There was an error during the login process:', error);
