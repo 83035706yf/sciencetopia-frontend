@@ -12,9 +12,10 @@
                 </template>
 
                 <v-list>
-                    <v-list-item>
+                    <v-list-item @click="personalcenter">
                         <v-list-item-title>个人中心</v-list-item-title>
                     </v-list-item>
+                    <v-divider></v-divider>
                     <v-list-item @click="logout">
                         <v-list-item-title>登出</v-list-item-title>
                     </v-list-item>
@@ -42,6 +43,9 @@ export default {
         },
         register() {
             this.$router.push({ name: 'register' });  // 跳转到LogIn组件
+        },
+        personalcenter() {
+            this.$router.push({ name: 'personalcenter' });  // 跳转到PersonalCenter组件
         },
         async logout() {
             try {
