@@ -18,7 +18,8 @@
     "jquery": "^3.7.1",
     "vue": "^3.2.13",
     "vue-router": "^4.0.13",
-    "vuetify": "^3.4.0-alpha.1"
+    "vuetify": "^3.4.0-alpha.1",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

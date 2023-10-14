@@ -1,5 +1,6 @@
 /* Set up using Vue 3 */
 import { createApp } from 'vue'
+import store from './store';  // Import the store
 import App from './App.vue'
 
 /* import router */
@@ -21,21 +22,23 @@ import { faSun } from '@fortawesome/free-solid-svg-icons'
 /* add icons to the library */
 library.add(faSearch, faSun)
 
-/* Import Vuetify and its styles */
+// Vuetify
+import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
+const vuetify = createVuetify({
+  components,
+  directives,
+})
 
 /* Create Vue app */
 const app = createApp(App)
 
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)
-
-/* Use Vuetify */
-const vuetify = createVuetify({
-    // 这里可以提供一些Vuetify选项
-  })
-    
+app.use(store)
 app.use(vuetify)
 
 app.mount('#app')

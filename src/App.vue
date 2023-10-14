@@ -12,11 +12,10 @@ import LayOut from './components/LayOut.vue';
 import 'bootstrap/dist/css/bootstrap.css';
 
 export default {
-  name: 'ScienceTopia',
+  name: 'App',
   components: {
     LayOut
   }
-
 }
 </script>
 
