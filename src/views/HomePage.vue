@@ -1,78 +1,55 @@
 <template>
-  <div>
+  <v-container>
     <!-- 知识网络 -->
-    <section class="container">
-      <div class="knowledge-network">
-        <div class="knowledge-network-figure">
-          <i class="fas fa-box-open"></i>
-          <h3>自动关联知识网络</h3>
-          <p>一个可以查询节点内容和生成学习路径的知识网络</p>
-        </div>
-        <div class="knowledge-network-description">
-          <i class="fas fa-cogs"></i>
-          <h3>知识描述</h3>
-          <p>当查询某一知识节点内容时，显示该节点内容的描述；当查询学习路径时，显示学习路径内容</p>
-        </div>
-      </div>
-    </section>
+    <v-row>
+      <v-col cols="12">
+        <KnowledgeNetwork></KnowledgeNetwork>
+        <!-- <p>一个可以查询节点内容和生成学习路径的知识网络</p> -->
+      </v-col>
+      <v-col cols="6">
+        <h3>知识描述</h3>
+        <NodeInfo></NodeInfo>
+        <!-- <p>当查询某一知识节点内容时，显示该节点内容的描述；当查询学习路径时，显示学习路径内容</p> -->
+      </v-col>
+    </v-row>
 
     <!-- 分割线 -->
-    <div class="break-nav">
-      <div class="break">
-        <i><img src="../assets/images/red_black_bar.svg" alt="bar-break"></i>
-        <i><img src="../assets/images/black_line.svg" alt="line-break"></i>
-      </div>
-      <div class="news-nav">
-        <button type="word" class="btn">
-          <h3>科学前沿</h3>
-        </button>
-        <button type="word" class="btn">
-          <h3>项目动态</h3>
-        </button>
-        <button type="word" class="btn">
-          <h3>全部项目</h3>
-        </button>
-        <button type="word" class="btn">
-          <i class="fas fa-refresh"></i>
-        </button>
-      </div>
-    </div>
+    <v-divider></v-divider>
 
     <!-- 动态推送 -->
-    <section class="container">
-      <div class="news-grid">
-        <i class="news-grid-item"></i>
-        <i class="news-grid-item"></i>
-        <i class="news-grid-item"></i>
-        <i class="news-grid-item"></i>
-        <i class="news-grid-item"></i>
-        <i class="news-grid-item"></i>
-        <i class="news-grid-item"></i>
-        <i class="news-grid-item"></i>
-        <i class="news-grid-item"></i>
-      </div>
-    </section>
-  </div>
+    <v-row>
+      <v-btn text>
+        <h3>科学前沿</h3>
+      </v-btn>
+      <v-btn text>
+        <h3>项目动态</h3>
+      </v-btn>
+      <v-btn text>
+        <h3>全部项目</h3>
+      </v-btn>
+      <v-btn icon>
+        <v-icon>mdi-refresh</v-icon>
+      </v-btn>
+    </v-row>
+
+    <v-row>
+      <v-col v-for="n in 9" :key="n" cols="4">
+        <!-- 这里可以放置新闻项的内容 -->
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
-  
+
 <script>
+import KnowledgeNetwork from '@/components/KnowledgeNetwork.vue';
+import NodeInfo from '@/components/NodeInfo.vue';
+
 export default {
-  name: 'HomePage',
-  data() {
-    return {
-      // 这里可以定义您需要的数据
-    };
-  },
-  methods: {
-    // 这里可以定义您需要的方法
-  }
+    name: 'HomePage',
+    components: { KnowledgeNetwork, NodeInfo }
 };
 </script>
-  
+
 <style scoped>
-@import "../assets/css/home.css";
-@import "../assets/css/layout.css";
-@import "../assets/css/knowledge-network.css";
-@import "../assets/css/news-recommendation.css";
+/* 你可以在这里添加或修改样式 */
 </style>
-  

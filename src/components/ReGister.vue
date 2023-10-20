@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import apiClient from '@/api';
 
 export default {
   name: 'ReGister',
@@ -47,7 +47,7 @@ export default {
           return;
         }
 
-        const response = await axios.post('http://localhost:5085/api/Account/Register', {
+        const response = await apiClient.post('/Account/Register', {
           userName: this.userName,
           email: this.email,
           password: this.password,
