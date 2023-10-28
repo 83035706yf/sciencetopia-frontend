@@ -6,7 +6,7 @@
 import { ref, onMounted } from 'vue';
 import cytoscape from 'cytoscape';
 import { useStore } from 'vuex';
-import apiClient from '@/api';
+import { apiClient } from '@/api';
 
 export default {
     name: 'KnowledgeNetwork',

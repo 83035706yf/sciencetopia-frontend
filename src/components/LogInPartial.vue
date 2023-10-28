@@ -33,7 +33,7 @@
 </template>
   
 <script>
-import apiClient from '@/api'; // 根据api.js的实际路径进行调整
+import { apiClient } from '@/api'; // 根据api.js的实际路径进行调整
 
 export default {
     name: 'LogInPartial',

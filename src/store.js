@@ -1,6 +1,6 @@
 // src/store.js or src/store/index.js
 import { createStore } from 'vuex';
-import apiClient from '@/api';  // Adjust the path to your api.js file
+import { apiClient } from '@/api';  // Adjust the path to your api.js file
 
 export default createStore({
   state: {

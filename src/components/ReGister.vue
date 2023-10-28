@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import apiClient from '@/api';
+import { apiClient } from '@/api';
 
 export default {
   name: 'ReGister',

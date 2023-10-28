@@ -9,4 +9,16 @@ const apiClient = axios.create({
   },
 });
 
-export default apiClient;
+const pyApiClient = axios.create({
+  baseURL: 'http://localhost:5086/api', // 替换为您的API的基础URL
+  withCredentials: true,
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+});
+
+export {
+  apiClient,
+  pyApiClient
+};
