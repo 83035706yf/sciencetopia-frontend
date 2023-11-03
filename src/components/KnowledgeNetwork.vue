@@ -1,9 +1,16 @@
 <template>
-    <div id="cy"></div>
+    <div id="cy">
+        <!-- 选中节点时显示的按钮 -->
+        <div v-if="selectedNode" class="node-actions">
+            <button @click="showAdjacentNodes">相邻节点</button>
+            <button @click="showPrerequisiteNodes">前置知识</button>
+            <button @click="showSubsequentNodes">后置知识</button>
+        </div>
+    </div>
 </template>
   
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import cytoscape from 'cytoscape';
 import { useStore } from 'vuex';
 import { apiClient } from '@/api';
@@ -13,6 +20,7 @@ export default {
     setup() {
         const cy = ref(null);
         const store = useStore();
+        const selectedNode = computed(() => store.state.selectedNode);
 
         onMounted(() => {
             // 初始化Cytoscape实例
@@ -111,7 +119,63 @@ export default {
             }
         };
 
-        return {};
+        const getAdjacentNodes = (nodeId) => {
+            const node = cy.value.getElementById(nodeId);
+            const adjacentNodes = node.connectedNodes();
+            return adjacentNodes.map(n => n.data());
+        };
+
+        const getPrerequisiteNodes = (nodeId) => {
+            const node = cy.value.getElementById(nodeId);
+            const incomingEdges = node.connectedEdges().filter(edge => edge.target().id() === nodeId);
+            return incomingEdges.map(edge => edge.source().data());
+        };
+
+        const getSubsequentNodes = (nodeId) => {
+            const node = cy.value.getElementById(nodeId);
+            const outgoingEdges = node.connectedEdges().filter(edge => edge.source().id() === nodeId);
+            return outgoingEdges.map(edge => edge.target().data());
+        };
+
+        const showAdjacentNodes = () => {
+            const nodesData = getAdjacentNodes(selectedNode.value.id);
+            // 隐藏所有节点和边
+            cy.value.elements().style('display', 'none');
+            // 只显示与选定节点相关的节点和边
+            nodesData.forEach(data => {
+                cy.value.getElementById(data.id).style('display', 'element');
+                cy.value.getElementById(data.id).connectedEdges().style('display', 'element');
+            });
+        };
+
+        const showPrerequisiteNodes = () => {
+            const nodesData = getPrerequisiteNodes(selectedNode.value.id);
+            // 隐藏所有节点和边
+            cy.value.elements().style('display', 'none');
+            // 只显示与选定节点相关的节点和边
+            nodesData.forEach(data => {
+                cy.value.getElementById(data.id).style('display', 'element');
+                cy.value.getElementById(data.id).connectedEdges().style('display', 'element');
+            });
+        };
+
+        const showSubsequentNodes = () => {
+            const nodesData = getSubsequentNodes(selectedNode.value.id);
+            // 隐藏所有节点和边
+            cy.value.elements().style('display', 'none');
+            // 只显示与选定节点相关的节点和边
+            nodesData.forEach(data => {
+                cy.value.getElementById(data.id).style('display', 'element');
+                cy.value.getElementById(data.id).connectedEdges().style('display', 'element');
+            });
+        };
+
+        return {
+            selectedNode,
+            showAdjacentNodes,
+            showPrerequisiteNodes,
+            showSubsequentNodes
+        };
     }
 }
 </script>
@@ -126,6 +190,14 @@ export default {
 #cy canvas {
     position: relative !important;
     margin: auto !important;
+}
+
+.node-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
 }
 </style>
   

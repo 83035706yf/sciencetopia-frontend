@@ -11,6 +11,9 @@
         <NodeInfo></NodeInfo>
         <!-- <p>当查询某一知识节点内容时，显示该节点内容的描述；当查询学习路径时，显示学习路径内容</p> -->
       </v-col>
+      <v-col>
+        <LearningPlan></LearningPlan>
+      </v-col>
     </v-row>
 
     <!-- 分割线 -->
@@ -42,11 +45,12 @@
 
 <script>
 import KnowledgeNetwork from '@/components/KnowledgeNetwork.vue';
+import LearningPlan from '@/components/LearningPlan.vue';
 import NodeInfo from '@/components/NodeInfo.vue';
 
 export default {
     name: 'HomePage',
-    components: { KnowledgeNetwork, NodeInfo }
+    components: { KnowledgeNetwork, NodeInfo, LearningPlan }
 };
 </script>
 

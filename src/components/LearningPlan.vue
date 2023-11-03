@@ -1,44 +1,52 @@
 <template>
     <div>
         <h1>学习计划</h1>
+        <button v-if="selectedNode && selectedNode.name" @click="fetchStudyPlan">创建学习计划</button>
+        <v-card v-if="!loading && studyPlan" class="mx-auto" max-width="500">
+            <v-card-title>
+                Learning Plan
+            </v-card-title>
+            <v-card-text>
+                {{ studyPlan }}
+            </v-card-text>
+        </v-card>
         <div v-if="loading">Loading...</div>
-        <div v-else>{{ studyPlan }}</div>
     </div>
 </template>
 
 <script>
 import { pyApiClient } from '@/api';
-import { computed } from 'vue';
-import { useStore } from 'vuex';
 
 export default {
     data() {
         return {
             studyPlan: '',
-            loading: true
+            loading: false  // initially set to false
         };
     },
-    setup() {
-        const store = useStore();
-        const selectedNode = computed(() => store.state.selectedNode);
-        return { selectedNode };
+    computed: {
+        selectedNode() {
+            return this.$store.state.selectedNode;
+        }
     },
-    async created() {
-        if (this.selectedNode) {
-            try {
-                const response = await pyApiClient.post('/studyplan', {
-                    Name: this.selectedNode.name,
-                    Description: this.selectedNode.description
-                });
-                this.studyPlan = response.data.StudyPlan;
-            } catch (error) {
-                console.error('Error fetching the study plan:', error);
-            } finally {
-                this.loading = false;
+    methods: {
+        async fetchStudyPlan() {
+            if (this.selectedNode) {
+                this.loading = true;  // set loading to true when fetching
+                try {
+                    const response = await pyApiClient.post('/studyplan', {
+                        Name: this.selectedNode.name,
+                        Description: this.selectedNode.description
+                    });
+                    this.studyPlan = response.data.StudyPlan;
+                } catch (error) {
+                    console.error('Error fetching the study plan:', error);
+                } finally {
+                    this.loading = false;  // set loading to false when done fetching
+                }
+            } else {
+                console.error('No selected node found');
             }
-        } else {
-            console.error('No selected node found');
-            this.loading = false;
         }
     }
 }
