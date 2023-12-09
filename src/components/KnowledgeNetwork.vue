@@ -1,12 +1,12 @@
 <template>
-    <div id="cy">
+    <div ref="svgRef" id="cy">
         <!-- 选中节点时显示的按钮 -->
         <div v-if="selectedNode" class="node-actions">
             <button @click="showAdjacentNodes">
                 <font-awesome-icon :icon="['fas', 'circle-nodes']" />
             </button>
             <button @click="showPrerequisiteNodes">
-                <font-awesome-icon :icon="['fas', 'share-nodes']" flip="horizontal" />            </button>
+                <font-awesome-icon :icon="['fas', 'share-nodes']" flip="horizontal" /> </button>
             <button @click="showSubsequentNodes">
                 <font-awesome-icon :icon="['fas', 'share-nodes']" />
             </button>
@@ -27,7 +27,7 @@ import { apiClient } from '@/api';
 export default {
     name: 'KnowledgeNetwork',
     setup() {
-        const { cy,
+        const { svgRef,
             selectedNode,
             fetchData,
             showAdjacentNodes,
@@ -50,7 +50,7 @@ export default {
         };
 
         return {
-            cy,
+            svgRef,
             selectedNode,
             fetchData,
             showAdjacentNodes,
@@ -66,8 +66,7 @@ export default {
 <style scoped>
 #cy {
     width: 800px;
-    height: 500px;
-    border: 1px solid #ccc;
+    height: 640px;
 }
 
 #cy canvas {
@@ -77,9 +76,9 @@ export default {
 
 .node-actions {
     z-index: 1000;
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    position: relative;
+    top: 20px;
+    right: -680px;
     display: flex;
     gap: 10px;
 }
