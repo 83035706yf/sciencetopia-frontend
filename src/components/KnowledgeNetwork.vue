@@ -22,18 +22,24 @@
   
 <script>
 import useKnowledgeGraph from './useKnowledgeGraph';
+import { computed, watch } from 'vue';
 import { apiClient } from '@/api';
+import { useStore } from 'vuex';
 
 export default {
     name: 'KnowledgeNetwork',
     setup() {
+        const store = useStore();
+        const highlightNodeId = computed(() => store.state.highlightNodeId);
+
         const { svgRef,
             selectedNode,
             fetchData,
             showAdjacentNodes,
             showPrerequisiteNodes,
             showSubsequentNodes,
-            resetView, } = useKnowledgeGraph('/KnowledgeGraph');
+            resetView,
+            highlightAndCenterNode } = useKnowledgeGraph('/KnowledgeGraph/GetNodes');
 
         const addToFavorites = async () => {
             try {
@@ -48,6 +54,13 @@ export default {
                 console.error('Error adding node to favorites:', error);
             }
         };
+
+        watch(highlightNodeId, (newNodeId, oldNodeId) => {
+            // console.log("watch triggered:", newNodeId, oldNodeId);
+            if (newNodeId !== null && newNodeId !== oldNodeId) {
+                highlightAndCenterNode(newNodeId);
+            }
+        });
 
         return {
             svgRef,

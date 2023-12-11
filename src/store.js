@@ -17,6 +17,9 @@ export default createStore({
     },
     setSelectedNode(state, node) {
       state.selectedNode = node;
+    },
+    SET_HIGHLIGHTNODE(state, nodeId) {
+      state.highlightNodeId = nodeId;
     }
   },
   actions: {
@@ -29,6 +32,6 @@ export default createStore({
       } catch (error) {
         console.error('Error checking authentication status:', error);
       }
-    },
+    }
   },
 });

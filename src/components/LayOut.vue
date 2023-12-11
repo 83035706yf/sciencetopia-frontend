@@ -19,7 +19,7 @@
         </div>
         <!-- 夜间模式切换 -->
         <div class="dark-mode-switch">
-          <button class = "btn" id="theme-toggler" @click="toggleTheme">
+          <button class="btn" id="theme-toggler" @click="toggleTheme">
             <font-awesome-icon :icon="['fas', 'sun']" style="color: #000000;" />
           </button>
         </div>
@@ -29,12 +29,12 @@
     <div class="header-bottom">
       <!-- 搜索栏 -->
       <div class="search-container">
-        <form action="/search" method="GET" class="search-form">
-          <input type="text" name="query" placeholder="我想要了解..." />
-          <button type="submit" class="search-btn">
+        <div class="search-form">
+          <input v-model="searchQuery" type="text" placeholder="我想要了解..." />
+          <button @click="searchNode" class="search-btn">
             <font-awesome-icon :icon="['fas', 'search']" />
           </button>
-        </form>
+        </div>
       </div>
     </div>
     <slot></slot>
@@ -54,15 +54,26 @@
 
 <script>
 import LogInPartial from './LogInPartial.vue';
+import debounce from 'lodash/debounce';
+import { apiClient } from '@/api';
+// import { useStore } from 'vuex';
 
 export default {
   name: 'LayOut',
   data() {
     return {
       isDarkThemeEnabled: false,
-      themePath: ''
+      themePath: '',
+      searchQuery: '',
+      searchResults: [],
+      isLoading: false
     };
   },
+
+  created() {
+    this.debouncedSearch = debounce(this.searchNode, 300);
+  },
+
   methods: {
     toggleTheme() {
       this.isDarkThemeEnabled = !this.isDarkThemeEnabled;
@@ -74,8 +85,34 @@ export default {
     },
     backToHomePage() {
       this.$router.push({ name: 'HomePage' });  // 跳转到LogIn组件
+    },
+
+    async searchNode() {
+      if (!this.searchQuery.trim()) {
+        this.searchResults = [];
+        return;
+      }
+
+      this.isLoading = true;
+      try {
+        const response = await apiClient.get('/KnowledgeGraph/Search', {
+          params: { query: this.searchQuery }
+        });
+        const foundNode = response.data;
+        if (foundNode) {
+          this.$store.commit('SET_HIGHLIGHTNODE', foundNode.identity);
+        } else {
+          console.log('Node not found');
+        }
+      } catch (error) {
+        console.error('Error during search:', error);
+        // Handle error appropriately
+      } finally {
+        this.isLoading = false;
+      }
     }
   },
+
   components: { LogInPartial }
 }
 </script>

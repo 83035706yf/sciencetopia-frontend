@@ -7,9 +7,9 @@ import * as d3 from 'd3';
 export default function useKnowledgeGraph(endpoint) {
     const links = ref([]);
     const store = useStore();
-    const selectedNode = computed(() => store.state.selectedNode);
     const svgRef = ref(null);
-    let link, node, labels, simulation;
+    let link, node, labels, zoom, simulation;
+    const selectedNode = computed(() => store.state.selectedNode);
 
     // D3 Drag behavior
     const drag = simulation => {
@@ -41,7 +41,7 @@ export default function useKnowledgeGraph(endpoint) {
         const width = 800;  // Example fixed width
         const height = 640; // Example fixed height
 
-        const zoom = d3.zoom()
+        zoom = d3.zoom()
             .scaleExtent([0.5, 8]) // Adjust these values as needed
             .on('zoom', (event) => {
                 svg.selectAll('g').attr('transform', event.transform);
@@ -156,11 +156,11 @@ export default function useKnowledgeGraph(endpoint) {
             .text(d => d.labels.includes('Topic') ? d.name : '') // Only display name for 'Topic' nodes
             .attr("text-anchor", "middle")
             .attr("alignment-baseline", "central")
-            .style("font-size", d => d.labels.includes('Topic') ?  20: 16)
+            .style("font-size", d => d.labels.includes('Topic') ? 20 : 16)
             .style('font-weight', 'bold')
-            .style("fill", d => d.labels.includes('Topic') ? "#fff": '#fff')
-            .style("stroke", d => d.labels.includes('Topic') ? "#d5282a": 'black') // Black stroke for text outline
-            .style("stroke-width", d => d.labels.includes('Topic') ? 1: 0.5) // Adjust stroke width as needed
+            .style("fill", d => d.labels.includes('Topic') ? "#fff" : '#fff')
+            .style("stroke", d => d.labels.includes('Topic') ? "#d5282a" : 'black') // Black stroke for text outline
+            .style("stroke-width", d => d.labels.includes('Topic') ? 1 : 0.5) // Adjust stroke width as needed
             .style("pointer-events", "none") // To prevent interference with node interactivity
             .attr("alignment-baseline", d => d.labels.includes('Topic') ? "middle" : "hanging")
             .attr("dy", d => d.labels.includes('Topic') ? 0 : "-1.2em"); // Adjust vertical position
@@ -300,6 +300,50 @@ export default function useKnowledgeGraph(endpoint) {
             .attr('transform', 'translate(0,0) scale(1)');
     };
 
+    const highlightAndCenterNode = (nodeId) => {
+        const svgElement = svgRef.value;
+        const width = svgElement.clientWidth;
+        const height = svgElement.clientHeight;
+        const zoomLevel = 1; // 根据需要调整放大级别
+        const transitionDuration = 750; // 过渡动画的持续时间
+
+        // 找到与 nodeId 匹配的节点
+        const nodeData = node.data().find(n => n.id === nodeId);
+
+        if (!nodeData) {
+            console.error("Node not found:", nodeId);
+            return;
+        }
+
+        if (!zoom) {
+            console.error("zoom is not defined");
+            return;
+        }
+
+        // 计算放大和居中的变换
+        const targetX = width / 2 - nodeData.x * zoomLevel;
+        const targetY = height / 2 - nodeData.y * zoomLevel;
+        const transform = d3.zoomIdentity
+            .translate(targetX, targetY)
+            .scale(zoomLevel);
+
+        // 应用变换
+        const svgSelection = d3.select(svgElement);
+        svgSelection.select('g')
+            .transition()
+            .duration(transitionDuration)
+            .call(zoom.transform, transform);
+
+        // console.log("Node Data:", nodeData);
+        // console.log("SVG Dimensions:", svg.attr('width'), svg.attr('height'));
+        // console.log("Transform:", transform);
+        // console.log(svgRef.value); // 检查 SVG 元素引用
+        // console.log(svgRef.value.clientWidth, svgRef.value.clientHeight); // 检查 SVG 尺寸
+
+        store.commit('setSelectedNode', nodeData);
+        store.commit('SET_HIGHLIGHTNODE', null);
+    };
+
     return {
         svgRef,
         selectedNode,
@@ -308,5 +352,6 @@ export default function useKnowledgeGraph(endpoint) {
         showPrerequisiteNodes,
         showSubsequentNodes,
         resetView,
+        highlightAndCenterNode,
     };
 }
