@@ -38,8 +38,8 @@ export default function useKnowledgeGraph(endpoint) {
 
     // Function to create the force-directed graph
     const createForceDirectedGraph = () => {
-        const width = 800;  // Example fixed width
-        const height = 640; // Example fixed height
+        const width = 900;  // Example fixed width
+        const height = 900; // Example fixed height
 
         zoom = d3.zoom()
             .scaleExtent([0.5, 8]) // Adjust these values as needed
@@ -81,8 +81,8 @@ export default function useKnowledgeGraph(endpoint) {
                 const target = nodes.find(n => n.id === link.target.id);
                 if (source && target) {
                     // Check if source and target have at least one common label
-                    const commonLabels = source.labels.filter(label => target.labels.includes(label));
-                    if (commonLabels.length > 0 && (link.source.id === node.id || link.target.id === node.id)) {
+                    // const commonLabels = source.labels.filter(label => target.labels.includes(label));
+                    if ((link.source.id === node.id || link.target.id === node.id)) {
                         return acc + 1;
                     }
                 }
@@ -99,7 +99,7 @@ export default function useKnowledgeGraph(endpoint) {
 
                 // Check if both connected nodes are topics
                 if (sourceNode && targetNode && sourceNode.labels.includes('Topic') && targetNode.labels.includes('Topic')) {
-                    return 5; // Thicker line for links between two topics
+                    return 2; // Thicker line for links between two topics
                 } else {
                     return Math.sqrt(d.value || 1); // Normal width for other links
                 }
@@ -135,12 +135,14 @@ export default function useKnowledgeGraph(endpoint) {
             .join('circle')
             .attr('r', d => {
                 // Adjust node size
-                return d.labels.includes('Topic') ? (5 + (isNaN(d.degree) ? 0 : d.degree)) * 3 : 5 + (isNaN(d.degree) ? 0 : d.degree);
+                return d.labels.includes('Topic') ? (10 + (isNaN(d.degree) ? 0 : d.degree)) * 0.8 : 5 + (isNaN(d.degree) ? 0 : d.degree) * 0.5;
             })
             .attr('fill', d => {
-                if (d.labels.includes('Keyword')) return '#423F38';
+                if (d.labels.includes('Keyword')) return '#C6A969';
                 if (d.labels.includes('Topic')) return '#d5282a';
-                if (d.labels.includes('Tag')) return '#00fff7';
+                if (d.labels.includes('People')) return '#597E52';
+                if (d.labels.includes('Works')) return '#4CB9E7';
+                if (d.labels.includes('Event')) return '#5C469C';
                 return '#ccc'; // Default color
             })
             .call(drag(simulation))
@@ -156,7 +158,7 @@ export default function useKnowledgeGraph(endpoint) {
             .text(d => d.labels.includes('Topic') ? d.name : '') // Only display name for 'Topic' nodes
             .attr("text-anchor", "middle")
             .attr("alignment-baseline", "central")
-            .style("font-size", d => d.labels.includes('Topic') ? 20 : 16)
+            .style("font-size", d => d.labels.includes('Topic') ? 16 : 16)
             .style('font-weight', 'bold')
             .style("fill", d => d.labels.includes('Topic') ? "#fff" : '#fff')
             .style("stroke", d => d.labels.includes('Topic') ? "#d5282a" : 'black') // Black stroke for text outline

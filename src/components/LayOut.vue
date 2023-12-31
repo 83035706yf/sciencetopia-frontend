@@ -13,6 +13,17 @@
         <div class="site-description">
           <img src="../assets/images/red_arrow.svg" alt="Red arrow">
         </div>
+        <div class="header-bottom">
+          <!-- 搜索栏 -->
+          <div class="search-container">
+            <div class="search-form">
+              <input v-model="searchQuery" type="text" placeholder="我想要了解..." />
+              <button @click="searchNode" class="search-btn">
+                <font-awesome-icon :icon="['fas', 'search']" />
+              </button>
+            </div>
+          </div>
+        </div>
         <!-- 显示当前用户的用户名 -->
         <div class="navbar-right">
           <LogInPartial></LogInPartial>
@@ -26,17 +37,7 @@
         <link :href="themePath" rel="stylesheet">
       </div>
     </header>
-    <div class="header-bottom">
-      <!-- 搜索栏 -->
-      <div class="search-container">
-        <div class="search-form">
-          <input v-model="searchQuery" type="text" placeholder="我想要了解..." />
-          <button @click="searchNode" class="search-btn">
-            <font-awesome-icon :icon="['fas', 'search']" />
-          </button>
-        </div>
-      </div>
-    </div>
+
     <slot></slot>
     <footer>
       <p>&copy; 2023 sciencetopia.org 版权所有。</p>
