@@ -1,6 +1,6 @@
 <template>
   <LayOut>
-    <div class="container">
+    <div class="container custom-width">
       <router-view></router-view>
     </div>
     <!-- <HomePage msg="Sciencetopia - 一个系统、完备、面向群众永久免费的科学平台"/> -->
@@ -9,6 +9,7 @@
 
 <script>
 import LayOut from './components/LayOut.vue';
+// import './assets/css/site.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 export default {
@@ -26,5 +27,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+.custom-width {
+  max-width: 1800px; /* Example custom width */
 }
 </style>

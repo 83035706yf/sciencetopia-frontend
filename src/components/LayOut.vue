@@ -13,6 +13,9 @@
         <div class="site-description">
           <img src="../assets/images/red_arrow.svg" alt="Red arrow">
         </div>
+        <div class="scrollToSection-container">
+          <v-btn @click="scrollToSection">动态推送</v-btn>
+        </div>
         <div class="header-bottom">
           <!-- 搜索栏 -->
           <div class="search-container">
@@ -24,6 +27,7 @@
             </div>
           </div>
         </div>
+        <LearningPlan></LearningPlan>
         <!-- 显示当前用户的用户名 -->
         <div class="navbar-right">
           <LogInPartial></LogInPartial>
@@ -55,6 +59,7 @@
 
 <script>
 import LogInPartial from './LogInPartial.vue';
+import LearningPlan from './LearningPlan.vue';
 import debounce from 'lodash/debounce';
 import { apiClient } from '@/api';
 // import { useStore } from 'vuex';
@@ -84,8 +89,22 @@ export default {
         this.themePath = '';  // 使用浅色模式
       }
     },
+    
     backToHomePage() {
       this.$router.push({ name: 'HomePage' });  // 跳转到LogIn组件
+    },
+
+    scrollToSection() {
+        // 获取目标元素的位置
+        const section = document.getElementById('feed-section');
+        console.log("section:", section);
+        if (section) {
+          const yOffset = -60; // 调整偏移量，根据需要修改
+          const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+          // 滚动到指定位置
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
     },
 
     async searchNode() {
@@ -114,7 +133,7 @@ export default {
     }
   },
 
-  components: { LogInPartial }
+  components: { LogInPartial, LearningPlan }
 }
 </script>
 

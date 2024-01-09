@@ -1,5 +1,5 @@
 <template>
-    <div ref="svgRef" id="cy">
+    <div ref="svgRef" id="cy" :style="{ width: width + 'px', height: height + 'px' }">
         <!-- 选中节点时显示的按钮 -->
         <div v-if="selectedNode" class="node-actions">
             <button @click="showAdjacentNodes">
@@ -26,7 +26,7 @@
                     <svg-icon type="mdi" :path="path"></svg-icon>
                 </button>
                 <!-- 输入栏 -->
-                <input v-if="inputVisible" v-model="searchQuery" type="text" placeholder="我想要了解..." @input="handleInput"
+                <input v-if="inputVisible" v-model="searchQuery" type="text" placeholder="定位到..." @input="handleInput"
                     ref="searchInput" class="search-input" />
             </div>
         </div>
@@ -64,7 +64,9 @@ export default {
             showPrerequisiteNodes,
             showSubsequentNodes,
             resetView,
-            highlightAndCenterNode } = useKnowledgeGraph('/KnowledgeGraph/GetNodes');
+            highlightAndCenterNode,
+            width,
+            height } = useKnowledgeGraph('/KnowledgeGraph/GetNodes');
 
         const addToFavorites = async () => {
             try {
@@ -100,7 +102,9 @@ export default {
             inputVisible,
             inputContent,
             overContainer,
-            path
+            path,
+            width,
+            height
         };
     },
 
@@ -156,30 +160,25 @@ export default {
 </script>
   
 <style scoped>
-#cy {
-    width: 900px;
-    height: 900px;
-}
-
 #cy canvas {
     position: relative !important;
-    margin: auto !important;
+    margin: 0px;
 }
 
 .node-actions {
     z-index: 1000;
-    position: relative;
+    position: absolute;
     top: 20px;
-    right: -680px;
+    right: 80px;
     display: flex;
     gap: 10px;
 }
 
 .map-actions {
     z-index: 1000;
-    position: relative;
-    top: 700px;
-    right: -680px;
+    position: absolute;
+    bottom: 20px;
+    right: 80px;
     display: flex;
     gap: 10px;
 }

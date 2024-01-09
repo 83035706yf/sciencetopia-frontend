@@ -10,6 +10,8 @@ export default function useKnowledgeGraph(endpoint) {
     const svgRef = ref(null);
     let link, node, labels, zoom, simulation;
     const selectedNode = computed(() => store.state.selectedNode);
+    const width = 860;  // Example fixed width
+    const height = 860; // Example fixed height
 
     // D3 Drag behavior
     const drag = simulation => {
@@ -38,8 +40,7 @@ export default function useKnowledgeGraph(endpoint) {
 
     // Function to create the force-directed graph
     const createForceDirectedGraph = () => {
-        const width = 900;  // Example fixed width
-        const height = 900; // Example fixed height
+
 
         zoom = d3.zoom()
             .scaleExtent([0.5, 8]) // Adjust these values as needed
@@ -355,5 +356,7 @@ export default function useKnowledgeGraph(endpoint) {
         showSubsequentNodes,
         resetView,
         highlightAndCenterNode,
+        width,
+        height
     };
 }

@@ -1,7 +1,6 @@
 <template>
     <div>
-        <h1>学习计划</h1>
-        <button v-if="selectedNode && selectedNode.name" @click="fetchStudyPlan">创建学习计划</button>
+        <v-btn @click="fetchStudyPlan">规划器</v-btn>
         <v-card v-if="!loading && studyPlan" class="mx-auto" max-width="500">
             <v-card-title>
                 Learning Plan

@@ -75,6 +75,7 @@
 
 .search-form input {
   width: 250px;
+  height: 40px;
   border: 1px solid #ccc;
   margin: 5px;
   padding: 5px 10px;
@@ -82,7 +83,7 @@
 }
 
 .search-btn {
-  background-color: white;
+  /* background-color: white; */
   border: none;
   font-size: 16px;
   padding: 5px 10px;
