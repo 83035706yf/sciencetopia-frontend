@@ -1,5 +1,5 @@
 <template>
-  <div id="cy">
+  <div id="cy" :style="{ width: width + 'px', height: height + 'px' }">
     <!-- 选中节点时显示的按钮 -->
     <div v-if="selectedNode" class="node-actions">
       <button @click="showAdjacentNodes">
@@ -33,7 +33,9 @@ export default {
       showAdjacentNodes,
       showPrerequisiteNodes,
       showSubsequentNodes,
-      resetView, } = useKnowledgeGraph('/Favorites/MyFavorites');
+      resetView,
+      width,
+      height } = useKnowledgeGraph('/Favorites/MyFavorites');
 
     // ... 你可以添加或覆盖一些逻辑 ...
     // 删除选中的节点
@@ -67,28 +69,28 @@ export default {
       showSubsequentNodes,
       resetView,
       removeSelectedNode,
+      width,
+      height
     };
   }
 }
 </script>
 
 <style scoped>
-#cy {
-  width: 800px;
-  height: 500px;
+/* #cy {
   border: 1px solid #ccc;
-}
+} */
 
 #cy canvas {
-  position: relative !important;
-  margin: auto !important;
+    position: relative !important;
+    margin: 0px;
 }
 
 .node-actions {
   z-index: 1000;
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 20px;
+  right: 80px;
   display: flex;
   gap: 10px;
 }

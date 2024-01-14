@@ -50,7 +50,7 @@ export default {
         async handleSubmit() {
             try {
                 // Make a POST request to the .NET Web API
-                const response = await apiClient.post('/Account/Login', {
+                const response = await apiClient.post('/users/Account/Login', {
                     userName: this.userName,
                     password: this.password,
                     rememberMe: this.rememberMe

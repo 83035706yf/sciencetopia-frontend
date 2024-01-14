@@ -47,7 +47,7 @@ export default {
           return;
         }
 
-        const response = await apiClient.post('/Account/Register', {
+        const response = await apiClient.post('/users/Account/Register', {
           userName: this.userName,
           email: this.email,
           password: this.password,

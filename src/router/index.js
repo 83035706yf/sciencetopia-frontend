@@ -4,6 +4,7 @@ import HomePageVue from '@/views/HomePage.vue'
 import LogIn from '@/components/LogIn.vue'
 import ReGister from '@/components/ReGister.vue'
 import PersonalCenter from '@/components/PersonalCenter.vue'
+import AccountCenter from '@/components/AccountCenter.vue'
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
     path: '/personalurl',
     name: 'personalcenter',
     component: PersonalCenter
+  },
+  {
+    path: '/personalurl/account',
+    name: 'accountcenter',
+    component: AccountCenter
   },
 ]
 

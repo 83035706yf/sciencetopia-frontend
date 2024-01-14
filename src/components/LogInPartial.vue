@@ -16,6 +16,10 @@
                         <v-list-item-title>个人中心</v-list-item-title>
                     </v-list-item>
                     <v-divider></v-divider>
+                    <v-list-item @click="accountcenter">
+                        <v-list-item-title>账号设置</v-list-item-title>
+                    </v-list-item>
+                    <v-divider></v-divider>
                     <v-list-item @click="logout">
                         <v-list-item-title>登出</v-list-item-title>
                     </v-list-item>
@@ -47,10 +51,13 @@ export default {
         personalcenter() {
             this.$router.push({ name: 'personalcenter' });  // 跳转到PersonalCenter组件
         },
+        accountcenter() {
+            this.$router.push({ name: 'accountcenter' });  // 跳转到AccountCenter组件
+        },
         async logout() {
             try {
                 // 向后端发送登出请求
-                await apiClient.post('/Account/Logout');
+                await apiClient.post('/users/Account/Logout');
 
                 await this.$store.dispatch('checkAuthenticationStatus');  // Add this line
 
