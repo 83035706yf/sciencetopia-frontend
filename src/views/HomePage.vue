@@ -14,10 +14,10 @@
     </v-row>
   </v-container>
 
-    <!-- 分割线 -->
-    <v-divider style="margin-top: 100px;"></v-divider>
+  <!-- 分割线 -->
+  <v-divider style="margin-top: 100px;"></v-divider>
 
-    <!-- 动态推送 -->
+  <!-- 动态推送 -->
   <v-container id="feed-section">
     <v-row>
       <v-btn text>
@@ -33,10 +33,11 @@
         <v-icon>mdi-refresh</v-icon>
       </v-btn>
     </v-row>
-
+  </v-container>
+  <v-container>
     <v-row>
-      <v-col v-for="n in 9" :key="n" cols="4">
-        <!-- 这里可以放置新闻项的内容 -->
+      <v-col v-for="media in mediaList" :key="media.id" cols="6">
+        <mediaFeed :cover="media.cover" :title="media.title" :author="media.author" :date="media.date"></mediaFeed>
       </v-col>
     </v-row>
   </v-container>
@@ -45,24 +46,33 @@
 <script>
 import KnowledgeNetwork from '@/components/KnowledgeNetwork.vue';
 import NodeInfo from '@/components/NodeInfo.vue';
+import MediaFeed from '@/components/MediaFeed.vue';
 
 export default {
   name: 'HomePage',
-  components: { KnowledgeNetwork, NodeInfo }
+  components: { KnowledgeNetwork, NodeInfo, MediaFeed },
+  data() {
+    return {
+      mediaList: [
+        {
+          id: 1,
+          cover: require('@/assets/images/banner.png'),
+          title: '动态推送功能开发中，敬请期待！',
+          author: 'Sciencetopia团队',
+          date: '2024-01-14'
+        },
+        // ... more media items ...
+      ]
+    }
+  }
 };
 </script>
 
 <style scoped>
+@import "../assets/css/knowledge-graph.css";
+
 .knowledgegraph-container {
   margin: 20px;
   padding: 10px;
-}
-
-.knowledge-graph {
-  position: relative;
-  /* 添加圆角边框 */
-  border: 2px solid #000; /* 这里设置边框的粗细和颜色 */
-  border-radius: 10px; /* 这里设置边框的圆角大小 */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 可选：添加阴影效果以提升视觉效果 */
 }
 </style>

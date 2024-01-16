@@ -1,6 +1,11 @@
 <template>
     <v-container>
+        <h3>账号设置</h3>
+    </v-container>
+    <v-divider></v-divider>
+    <v-container>
         <v-row v-if="!showChangePasswordForm">
+            <p>当前的密码强度：</p>
             <v-btn @click="toggleChangePasswordForm">更改密码</v-btn>
         </v-row>
         <v-card v-else>
@@ -20,8 +25,10 @@
             </v-form>
         </v-card>
     </v-container>
+    <v-divider></v-divider>
     <v-container>
         <v-row v-if="!showChangeEmailForm">
+            <p>当前绑定的电子邮箱：</p>
             <v-btn @click="toggleChangeEmailForm">更改邮箱</v-btn>
         </v-row>
         <v-card v-else>
@@ -39,8 +46,10 @@
             </v-form>
         </v-card>
     </v-container>
+    <v-divider></v-divider>
     <v-container>
         <v-row v-if="!showChangePhoneNumberForm">
+            <p>当前绑定的手机号：</p>
             <v-btn @click="toggleChangePhoneNumberForm">更改手机号</v-btn>
         </v-row>
         <v-card v-else>
@@ -58,6 +67,7 @@
             </v-form>
         </v-card>
     </v-container>
+    <v-divider></v-divider>
 </template>
   
 <script>
