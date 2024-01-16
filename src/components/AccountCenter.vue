@@ -5,7 +5,7 @@
     <v-divider></v-divider>
     <v-container>
         <v-row v-if="!showChangePasswordForm">
-            <p>当前的密码强度：</p>
+            <!-- <p>当前的密码强度：</p> -->
             <v-btn @click="toggleChangePasswordForm">更改密码</v-btn>
         </v-row>
         <v-card v-else>
@@ -28,7 +28,7 @@
     <v-divider></v-divider>
     <v-container>
         <v-row v-if="!showChangeEmailForm">
-            <p>当前绑定的电子邮箱：</p>
+            <p>当前绑定的电子邮箱：{{ userInfo.email == null ? '尚未绑定电子邮箱噢！点击“更改邮箱”去绑定吧。': userInfo.email }}</p>
             <v-btn @click="toggleChangeEmailForm">更改邮箱</v-btn>
         </v-row>
         <v-card v-else>
@@ -49,7 +49,7 @@
     <v-divider></v-divider>
     <v-container>
         <v-row v-if="!showChangePhoneNumberForm">
-            <p>当前绑定的手机号：</p>
+            <p>当前绑定的手机号：{{ userInfo.phoneNumber === null ? '尚未绑定手机号噢！点击“更改手机号”去绑定吧。' : userInfo.phoneNumber }}</p>
             <v-btn @click="toggleChangePhoneNumberForm">更改手机号</v-btn>
         </v-row>
         <v-card v-else>
@@ -71,6 +71,8 @@
 </template>
   
 <script>
+import { mapState } from 'vuex';
+
 export default {
     data() {
         return {
@@ -87,6 +89,9 @@ export default {
                 // ... other rules ...
             },
         };
+    },
+    computed: {
+        ...mapState(['userInfo']),
     },
     methods: {
         toggleChangePasswordForm() {

@@ -5,7 +5,7 @@
             <v-row>
                 <v-col>
                     <v-avatar size="120">
-                        <img :src="userInfo.avatarUrl" alt="Avatar">
+                        <img :src="avatarUrl" alt="Avatar">
                     </v-avatar>
                     <v-icon large @click="enterEditMode">mdi-pencil</v-icon>
                 </v-col>
@@ -28,7 +28,7 @@
                         <v-row>
                             <v-col>
                                 <v-avatar size="120" class="mb-2">
-                                    <img :src="userInfo.avatarUrl" alt="Avatar">
+                                    <img :src="avatarUrl" alt="Avatar">
                                 </v-avatar>
                                 <v-icon large class="edit-avatar-icon" @click="openFilePicker">mdi-camera</v-icon>
                                 <input type="file" ref="fileInput" hidden @change="onFileSelected" accept="image/*">
@@ -62,6 +62,7 @@
   
 <script>
 import { apiClient } from '@/api';
+import { mapState, mapActions } from 'vuex';
 // import { VDatePicker } from 'vuetify/components';
 
 export default {
@@ -70,14 +71,6 @@ export default {
         return {
             valid: true,
             isEditMode: false,
-            userInfo: {
-                avatarUrl: '',
-                userName: '',
-                gender: '',
-                formattedBirthDate: '',
-                selfIntroduction: '',
-                originalUsername: '',
-            },
             usernameRules: [
                 v => !!v || 'Username is required',
                 v => (v && v.length <= 20) || 'Username must be less than 20 characters'
@@ -85,56 +78,28 @@ export default {
             menu: false,
         }
     },
+    computed: {
+        ...mapState({
+            userInfo: state => state.userInfo
+        }),
+        avatarUrl() {
+            return this.$store.state.avatarUrl;
+        }
+    },
     // components: {
     //     VDatePicker,
     // },
     methods: {
+        ...mapActions(['fetchUserInfo', 'updateUserInfo']),
+
         toggleMenu() {
             this.menu = !this.menu;
-        },
-        async fetchUserInfo() {
-            try {
-                const response = await apiClient.get('/users/UserInformation/GetUserInfo');
-                this.userInfo = response.data;
-                this.userInfo.avatarUrl = this.$store.state.avatarUrl;
-                this.originalUsername = response.data.userName;
-            } catch (error) {
-                console.error('Error fetching user info:', error);
-                // Handle error appropriately
-            }
         },
 
         editProfile() {
             this.$router.push({ name: 'EditProfile' });  // Assuming you have an EditProfile route
         },
 
-        async updateUserInfo() {
-            if (this.$refs.form.validate()) {
-                try {
-                    const responseInfo = await apiClient.put('/users/UserInformation/Update', {
-                        selfIntroduction: this.userInfo.selfIntroduction,
-                        gender: this.userInfo.gender,
-                        birthDate: this.userInfo.formattedBirthDate
-                    });
-
-                    let responseUserName;
-                    if (this.userInfo.userName !== this.originalUsername) {
-                        responseUserName = await apiClient.post('/users/UserInformation/ChangeUsername', { newUsername: this.userInfo.userName });
-                    }
-
-                    if (responseInfo.status === 200 && (!responseUserName || responseUserName.status === 200)) {
-                        alert('User information updated successfully');
-                        // Optionally, refresh user info after update
-                        this.fetchUserInfo();
-                        this.isEditMode = false;
-                        console.log("updated user info:", this.userInfo);
-                    }
-                } catch (error) {
-                    console.error('Error updating user info:', error);
-                    // Handle error appropriately
-                }
-            }
-        },
         enterEditMode() {
             this.isEditMode = true;
         },

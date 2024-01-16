@@ -301,6 +301,9 @@ export default function useKnowledgeGraph(endpoint) {
         d3.select(svgRef.value).transition()
             .duration(750)
             .attr('transform', 'translate(0,0) scale(1)');
+
+        // Release vuex stored variable: selected node
+        store.commit('setSelectedNode', null);
     };
 
     const highlightAndCenterNode = (nodeId) => {

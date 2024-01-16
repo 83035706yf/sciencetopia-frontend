@@ -10,6 +10,11 @@
       </a>
     </v-card-item>
   </v-card>
+  <v-card v-else class="pb-6">
+    <v-card-text style="color: grey;">
+      获取知识，从点击一个节点开始。
+    </v-card-text>
+  </v-card>
 </template>
   
 <script>

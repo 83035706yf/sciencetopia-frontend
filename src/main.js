@@ -42,6 +42,14 @@ const vuetify = createVuetify({
   directives,
 })
 
+router.beforeEach((to, from, next) => {
+  // Check if the URL has changed
+  if (to.path !== from.path) {
+    store.commit('resetSelectedNode');
+  }
+  next();
+});
+
 /* Create Vue app */
 const app = createApp(App)
 
