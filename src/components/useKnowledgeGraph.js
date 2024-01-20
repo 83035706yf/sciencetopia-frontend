@@ -3,15 +3,17 @@ import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { apiClient } from '@/api';
 import * as d3 from 'd3';
+// import { eventBus } from '../eventBus';
 
 export default function useKnowledgeGraph(endpoint) {
     const links = ref([]);
     const store = useStore();
     const svgRef = ref(null);
-    let link, node, labels, zoom, simulation;
+    let link, node, svg, labels, zoom, simulation;
     const selectedNode = computed(() => store.state.selectedNode);
     const width = 860;  // Example fixed width
     const height = 860; // Example fixed height
+    // let previousZoomLevel = 1; // Initial zoom level
 
     // D3 Drag behavior
     const drag = simulation => {
@@ -30,6 +32,8 @@ export default function useKnowledgeGraph(endpoint) {
             if (!event.active) simulation.alphaTarget(0);
             d.fx = null;
             d.fy = null;
+
+            // console.log("dragended is called, the current position is:(", event.x, ",", event.y, ")")
         }
 
         return d3.drag()
@@ -40,15 +44,13 @@ export default function useKnowledgeGraph(endpoint) {
 
     // Function to create the force-directed graph
     const createForceDirectedGraph = () => {
-
-
         zoom = d3.zoom()
             .scaleExtent([0.5, 8]) // Adjust these values as needed
             .on('zoom', (event) => {
                 svg.selectAll('g').attr('transform', event.transform);
             });
 
-        const svg = d3.select('#cy').append('svg')
+        svg = d3.select(svgRef.value).append('svg')
             .attr('width', width)
             .attr('height', height)
             .call(zoom);
@@ -253,6 +255,7 @@ export default function useKnowledgeGraph(endpoint) {
 
     onMounted(() => {
         createForceDirectedGraph();
+        // console.log("zoom:", zoom)
     });
 
     // Assuming `nodes` and `links` are your D3 data arrays
@@ -297,58 +300,64 @@ export default function useKnowledgeGraph(endpoint) {
         node.style('opacity', 1);
         link.style('opacity', 1);
 
-        // Reset zoom and pan
-        d3.select(svgRef.value).transition()
-            .duration(750)
-            .attr('transform', 'translate(0,0) scale(1)');
+        // // Apply changes from the external state manager to D3
+        // // Define the reset transformation
+        // const resetTransform = d3.zoomIdentity;
+        // svg.transition().duration(750).call(zoom.transform, resetTransform);
 
         // Release vuex stored variable: selected node
         store.commit('setSelectedNode', null);
     };
 
-    const highlightAndCenterNode = (nodeId) => {
-        const svgElement = svgRef.value;
+    const highlightAndCenterNode = (nodeId, svgElement) => {
+        if (!svgElement) {
+            console.error("SVG Element not found");
+            return;
+        }
+
         const width = svgElement.clientWidth;
         const height = svgElement.clientHeight;
-        const zoomLevel = 1; // 根据需要调整放大级别
-        const transitionDuration = 750; // 过渡动画的持续时间
+        const zoomLevel = 1; // Adjust based on your requirements
+        const transitionDuration = 750; // Duration for the zoom transition
 
-        // 找到与 nodeId 匹配的节点
         const nodeData = node.data().find(n => n.id === nodeId);
-
         if (!nodeData) {
             console.error("Node not found:", nodeId);
             return;
         }
 
         if (!zoom) {
-            console.error("zoom is not defined");
+            console.error("zoom behavior is not defined");
             return;
         }
 
-        // 计算放大和居中的变换
         const targetX = width / 2 - nodeData.x * zoomLevel;
         const targetY = height / 2 - nodeData.y * zoomLevel;
-        const transform = d3.zoomIdentity
-            .translate(targetX, targetY)
-            .scale(zoomLevel);
+        const transform = d3.zoomIdentity.translate(targetX, targetY).scale(zoomLevel);
 
-        // 应用变换
-        const svgSelection = d3.select(svgElement);
-        svgSelection.select('g')
-            .transition()
+        svg.transition()
             .duration(transitionDuration)
             .call(zoom.transform, transform);
 
-        // console.log("Node Data:", nodeData);
-        // console.log("SVG Dimensions:", svg.attr('width'), svg.attr('height'));
-        // console.log("Transform:", transform);
-        // console.log(svgRef.value); // 检查 SVG 元素引用
-        // console.log(svgRef.value.clientWidth, svgRef.value.clientHeight); // 检查 SVG 尺寸
-
+        // Update the Vuex store if needed
         store.commit('setSelectedNode', nodeData);
-        store.commit('SET_HIGHLIGHTNODE', null);
     };
+
+    async function searchNode(searchQuery) {
+        if (!searchQuery.trim()) {
+            return null;
+        }
+
+        try {
+            const response = await apiClient.get('/KnowledgeGraph/Search', {
+                params: { query: searchQuery }
+            });
+            return response.data.identity; // Assuming the response data has an 'identity' field
+        } catch (error) {
+            console.error('Error during search:', error);
+            return null;
+        }
+    }
 
     return {
         svgRef,
@@ -359,6 +368,7 @@ export default function useKnowledgeGraph(endpoint) {
         showSubsequentNodes,
         resetView,
         highlightAndCenterNode,
+        searchNode,
         width,
         height
     };

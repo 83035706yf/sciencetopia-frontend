@@ -22,7 +22,7 @@
             <div @mouseover="showInput(), overContainer = true" @mouseleave="overContainer = false; hideInput()"
                 class="action-container">
                 <!-- 定位器按钮 -->
-                <button @click="toggleSearch" class="locator-btn">
+                <button @click="handleSearch" class="locator-btn">
                     <svg-icon type="mdi" :path="path"></svg-icon>
                 </button>
                 <!-- 输入栏 -->
@@ -35,9 +35,8 @@
   
 <script>
 import useKnowledgeGraph from './useKnowledgeGraph';
-import { computed, watch, ref } from 'vue';
+import { ref } from 'vue';
 import { apiClient } from '@/api';
-import { useStore } from 'vuex';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiMapSearch } from '@mdi/js';
 
@@ -49,13 +48,12 @@ export default {
     },
 
     setup() {
-        const store = useStore();
-        const highlightNodeId = computed(() => store.state.highlightNodeId);
-        const searchQuery = '';
+        let searchQuery = ref('');
         const inputVisible = ref(false);
         const inputContent = ref(false);
         const overContainer = ref(false);
         const path = ref(mdiMapSearch);
+
 
         const { svgRef,
             selectedNode,
@@ -65,6 +63,7 @@ export default {
             showSubsequentNodes,
             resetView,
             highlightAndCenterNode,
+            searchNode,
             width,
             height } = useKnowledgeGraph('/KnowledgeGraph/GetNodes');
 
@@ -82,12 +81,15 @@ export default {
             }
         };
 
-        watch(highlightNodeId, (newNodeId, oldNodeId) => {
-            // console.log("watch triggered:", newNodeId, oldNodeId);
-            if (newNodeId !== null && newNodeId !== oldNodeId) {
-                highlightAndCenterNode(newNodeId);
+        const handleSearch = async () => {
+            const foundNodeId = await searchNode(searchQuery.value);
+            if (foundNodeId) {
+                // `svgRef.value` should be the SVG element
+                highlightAndCenterNode(foundNodeId, svgRef.value);
+            } else {
+                console.log('Node not found');
             }
-        });
+        };
 
         return {
             svgRef,
@@ -98,6 +100,7 @@ export default {
             showSubsequentNodes,
             resetView,
             addToFavorites,
+            handleSearch,
             searchQuery,
             inputVisible,
             inputContent,
@@ -117,13 +120,6 @@ export default {
                 this.inputVisible = false;
             }
         },
-        toggleSearch() {
-            if (this.searchQuery) {
-                this.searchNode();
-            } else {
-                this.inputVisible = !this.inputVisible;
-            }
-        },
         handleInput() {
             this.inputContent = this.searchQuery.length > 0;
             // 如果输入栏为空，并且鼠标不在按钮或输入栏上，隐藏输入栏
@@ -131,30 +127,6 @@ export default {
                 this.inputVisible = false;
             }
         },
-        async searchNode() {
-            if (!this.searchQuery.trim()) {
-                this.searchResults = [];
-                return;
-            }
-
-            this.isLoading = true;
-            try {
-                const response = await apiClient.get('/KnowledgeGraph/Search', {
-                    params: { query: this.searchQuery }
-                });
-                const foundNode = response.data;
-                if (foundNode) {
-                    this.$store.commit('SET_HIGHLIGHTNODE', foundNode.identity);
-                } else {
-                    console.log('Node not found');
-                }
-            } catch (error) {
-                console.error('Error during search:', error);
-                // Handle error appropriately
-            } finally {
-                this.isLoading = false;
-            }
-        }
     }
 }
 </script>

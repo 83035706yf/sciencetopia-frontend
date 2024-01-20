@@ -36,9 +36,6 @@ export default createStore({
     resetSelectedNode(state) {
       state.selectedNode = null;
     },
-    SET_HIGHLIGHTNODE(state, nodeId) {
-      state.highlightNodeId = nodeId;
-    }
   },
   actions: {
     async checkAuthenticationStatus({ commit }) {
