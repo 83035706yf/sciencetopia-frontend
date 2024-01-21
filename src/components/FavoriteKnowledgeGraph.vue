@@ -1,5 +1,5 @@
 <template>
-  <div id="cy" :style="{ width: width + 'px', height: height + 'px' }">
+  <div ref="svgRef" id="cy" :style="{ width: width + 'px', height: height + 'px' }">
     <!-- 选中节点时显示的按钮 -->
     <div v-if="selectedNode" class="node-actions">
       <button @click="showAdjacentNodes">
@@ -27,15 +27,17 @@ import { apiClient } from '@/api';
 export default {
   name: 'FavoriteKnowledgeGraph',
   setup() {
-    const { cy,
-      selectedNode,
-      fetchData,
-      showAdjacentNodes,
-      showPrerequisiteNodes,
-      showSubsequentNodes,
-      resetView,
-      width,
-      height } = useKnowledgeGraph('/Favorites/MyFavorites');
+    const { svgRef,
+            selectedNode,
+            fetchData,
+            showAdjacentNodes,
+            showPrerequisiteNodes,
+            showSubsequentNodes,
+            resetView,
+            // highlightAndCenterNode,
+            // searchNode,
+            width,
+            height } = useKnowledgeGraph('/Favorites/MyFavorites');
 
     // ... 你可以添加或覆盖一些逻辑 ...
     // 删除选中的节点
@@ -45,7 +47,7 @@ export default {
           const response = await apiClient.delete(`/Favorites/${selectedNode.value.id}`);
           if (response.data.success) {
             // 从图中删除节点
-            cy.value.elements(`node[id = "${selectedNode.value.id}"]`).remove();
+            svgRef.value.elements(`node[id = "${selectedNode.value.id}"]`).remove();
             // 重置选中的节点
             selectedNode.value = null;
             // 刷新图数据
@@ -61,7 +63,7 @@ export default {
 
 
     return {
-      cy,
+      svgRef,
       selectedNode,
       fetchData,
       showAdjacentNodes,

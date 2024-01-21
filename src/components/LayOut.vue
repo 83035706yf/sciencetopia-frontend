@@ -27,7 +27,24 @@
             </div>
           </div>
         </div>
-        <LearningPlan></LearningPlan>
+        <!-- 显示学习规划按钮 -->
+        <div>
+          <v-btn @click="dialog = true">学习计划</v-btn>
+
+          <v-dialog v-model="dialog" persistent max-width="1600px">
+            <v-card>
+              <v-card-title>学习计划</v-card-title>
+              <v-card-text>
+                <LearningPlanner @update:showStudyPlan="handleShowStudyPlanUpdate"></LearningPlanner>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="red darken-1" text v-if="showStudyPlan" @click="save">保存学习计划</v-btn>
+                <v-btn color="blue darken-1" text @click="closeDialog">关闭</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
         <!-- 显示当前用户的用户名 -->
         <div class="navbar-right">
           <LogInPartial></LogInPartial>
@@ -59,7 +76,7 @@
 
 <script>
 import LogInPartial from './LogInPartial.vue';
-import LearningPlan from './LearningPlan.vue';
+import LearningPlanner from './LearningPlanner.vue';
 import debounce from 'lodash/debounce';
 import { apiClient } from '@/api';
 // import { useStore } from 'vuex';
@@ -72,7 +89,9 @@ export default {
       themePath: '',
       searchQuery: '',
       searchResults: [],
-      isLoading: false
+      isLoading: false,
+      dialog: false,
+      showStudyPlan: false,
     };
   },
 
@@ -89,22 +108,22 @@ export default {
         this.themePath = '';  // 使用浅色模式
       }
     },
-    
+
     backToHomePage() {
       this.$router.push({ name: 'HomePage' });  // 跳转到LogIn组件
     },
 
     scrollToSection() {
-        // 获取目标元素的位置
-        const section = document.getElementById('feed-section');
-        console.log("section:", section);
-        if (section) {
-          const yOffset = -60; // 调整偏移量，根据需要修改
-          const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      // 获取目标元素的位置
+      const section = document.getElementById('feed-section');
+      console.log("section:", section);
+      if (section) {
+        const yOffset = -60; // 调整偏移量，根据需要修改
+        const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
-          // 滚动到指定位置
-          window.scrollTo({ top: y, behavior: 'smooth' });
-        }
+        // 滚动到指定位置
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
     },
 
     async searchNode() {
@@ -130,10 +149,20 @@ export default {
       } finally {
         this.isLoading = false;
       }
-    }
+    },
+
+    closeDialog() {
+      this.showStudyPlan = false;
+      // Any other logic needed to handle the closing of the dialog
+      this.dialog = false; // Assuming 'dialog' is a local data property controlling the dialog visibility
+    },
+
+    handleShowStudyPlanUpdate(value) {
+      this.showStudyPlan = value;
+    },
   },
 
-  components: { LogInPartial, LearningPlan }
+  components: { LogInPartial, LearningPlanner }
 }
 </script>
 
@@ -143,4 +172,32 @@ export default {
 @import "../assets/css/header.css";
 @import "../assets/css/switches.css";
 @import "../assets/css/footer.css";
+
+.planner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.planner-card {
+  max-width: 1600px;
+  /* 或者其他合适的宽度 */
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .3);
+}
+
+/* 模糊背景 */
+body.modal-open {
+  overflow: hidden;
+}
+
+body.modal-open .main-content {
+  filter: blur(5px);
+}
 </style>

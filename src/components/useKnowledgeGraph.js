@@ -6,14 +6,15 @@ import * as d3 from 'd3';
 // import { eventBus } from '../eventBus';
 
 export default function useKnowledgeGraph(endpoint) {
-    const links = ref([]);
+    const links = ref([]);  // Reactive reference for links
+    const nodes = ref([]);  // Reactive reference for nodes
     const store = useStore();
     const svgRef = ref(null);
     let link, node, svg, labels, zoom, simulation;
     const selectedNode = computed(() => store.state.selectedNode);
     const width = 860;  // Example fixed width
     const height = 860; // Example fixed height
-    // let previousZoomLevel = 1; // Initial zoom level
+    let currentZoomLevel = 1;
 
     // D3 Drag behavior
     const drag = simulation => {
@@ -45,9 +46,11 @@ export default function useKnowledgeGraph(endpoint) {
     // Function to create the force-directed graph
     const createForceDirectedGraph = () => {
         zoom = d3.zoom()
-            .scaleExtent([0.5, 8]) // Adjust these values as needed
+            .scaleExtent([0.2, 4]) // Adjust these values as needed
             .on('zoom', (event) => {
+                currentZoomLevel = event.transform.k; // Update current zoom level
                 svg.selectAll('g').attr('transform', event.transform);
+                updateVisibilityBasedOnZoom(); // Update visibility of nodes and labels
             });
 
         svg = d3.select(svgRef.value).append('svg')
@@ -101,7 +104,7 @@ export default function useKnowledgeGraph(endpoint) {
                 const targetNode = nodes.find(n => n.id === d.target.id);
 
                 // Check if both connected nodes are topics
-                if (sourceNode && targetNode && sourceNode.labels.includes('Topic') && targetNode.labels.includes('Topic')) {
+                if (sourceNode && targetNode && targetNode.labels.includes('Topic')) {
                     return 2; // Thicker line for links between two topics
                 } else {
                     return Math.sqrt(d.value || 1); // Normal width for other links
@@ -113,7 +116,7 @@ export default function useKnowledgeGraph(endpoint) {
 
                 // Determine color based on node label combinations
                 if (sourceNode && targetNode) {
-                    if (sourceNode.labels.includes('Topic') && targetNode.labels.includes('Topic')) {
+                    if (targetNode.labels.includes('Topic')) {
                         return '#d5282a'; // Red for links between two topics
                     } else if ((sourceNode.labels.includes('Topic') && targetNode.labels.includes('Keyword')) ||
                         (sourceNode.labels.includes('Keyword') && targetNode.labels.includes('Topic'))) {
@@ -138,11 +141,12 @@ export default function useKnowledgeGraph(endpoint) {
             .join('circle')
             .attr('r', d => {
                 // Adjust node size
-                return d.labels.includes('Topic') ? (10 + (isNaN(d.degree) ? 0 : d.degree)) * 0.8 : 5 + (isNaN(d.degree) ? 0 : d.degree) * 0.5;
+                return (d.labels.includes('Topic') || d.labels.includes('Field')) ? (10 + (isNaN(d.degree) ? 0 : d.degree)) * 0.8 : 5 + (isNaN(d.degree) ? 0 : d.degree) * 0.5;
             })
             .attr('fill', d => {
                 if (d.labels.includes('Keyword')) return '#C6A969';
                 if (d.labels.includes('Topic')) return '#d5282a';
+                if (d.labels.includes('Field')) return '#c5282a';
                 if (d.labels.includes('People')) return '#597E52';
                 if (d.labels.includes('Works')) return '#4CB9E7';
                 if (d.labels.includes('Event')) return '#5C469C';
@@ -154,34 +158,98 @@ export default function useKnowledgeGraph(endpoint) {
                 // Implement zoom on node click
             });
 
-
         // Add labels to nodes
         labels = labels.data(nodes, d => d.id)
             .join("text")
-            .text(d => d.labels.includes('Topic') ? d.name : '') // Only display name for 'Topic' nodes
             .attr("text-anchor", "middle")
             .attr("alignment-baseline", "central")
-            .style("font-size", d => d.labels.includes('Topic') ? 16 : 16)
             .style('font-weight', 'bold')
             .style("fill", d => d.labels.includes('Topic') ? "#fff" : '#fff')
-            .style("stroke", d => d.labels.includes('Topic') ? "#d5282a" : 'black') // Black stroke for text outline
-            .style("stroke-width", d => d.labels.includes('Topic') ? 1 : 0.5) // Adjust stroke width as needed
             .style("pointer-events", "none") // To prevent interference with node interactivity
-            .attr("alignment-baseline", d => d.labels.includes('Topic') ? "middle" : "hanging")
-            .attr("dy", d => d.labels.includes('Topic') ? 0 : "-1.2em"); // Adjust vertical position
 
         node.on('mouseover', function (event, d) {
             labels.filter(l => l === d).text(l => l.name); // Show name on hover
         });
 
-        node.on('mouseout', function (event, d) {
-            labels.filter(l => l === d && !l.labels.includes('Topic')).text(''); // Hide name on mouseout, except for 'Topic' nodes
-        });
+        // node.on('mouseout', function (event, d) {
+        //     labels.filter(l => l === d && !l.labels.includes('Topic')).text(''); // Hide name on mouseout, except for 'Topic' nodes
+        // });
 
         // Restart the simulation with new data
         simulation.nodes(nodes).on('tick', ticked);
         simulation.force('link').links(links);
         simulation.alpha(1).restart();
+
+        // Apply zoom level based visibility updates
+        updateVisibilityBasedOnZoom();
+    };
+
+    const updateVisibilityBasedOnZoom = () => {
+        // Define thresholds for zoom levels
+        const topicThreshold = 0.5;
+        const keywordThreshold = 0.9;
+        const topicLabelThreshold = 0.7;
+        const keywordLabelThreshold = 2;
+        
+        node
+            .style('visibility', d => {
+                if (d.labels.includes('Field')) return 'visible';
+                if (currentZoomLevel > topicThreshold && d.labels.includes('Topic')) return 'visible';
+                return currentZoomLevel > keywordThreshold ? 'visible' : 'hidden';
+            })
+            .on('mouseout', function (event, d) {
+                if (currentZoomLevel <= topicLabelThreshold) labels.filter(l => l === d && !l.labels.includes('Field')).text('') // Hide name on mouseout, except for 'Field' nodes
+                else if (currentZoomLevel <= keywordLabelThreshold) labels.filter(l => l === d && (!l.labels.includes('Topic') && !l.labels.includes('Field'))).text('') // Hide name on mouseout, except for 'Field' and 'Topic' nodes
+                // return labels.filter(l => l === d && !l.labels.includes('Field')).text('');
+            });
+
+        labels
+            // .style('visibility', d => {
+            //     if (d.labels.includes('Field')) return 'visible';
+            //     if (currentZoomLevel > topicLabelThreshold && d.labels.includes('Topic')) return 'visible';
+            //     return currentZoomLevel > keywordLabelThreshold ? 'visible' : 'hidden';
+            // })
+            .style("font-size", 16 / currentZoomLevel)
+            .style("stroke", d => {
+                if (d.labels.includes('Field')) return "#d5282a"
+                else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return "#d5282a"
+                else return 'black'
+            })
+            .style("stroke-width", d => {
+                if (d.labels.includes('Field')) return 1 / currentZoomLevel
+                else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return 1 / currentZoomLevel
+                else  return 0.5 / currentZoomLevel
+            })// Adjust stroke width as needed
+            .text(d => {
+                if (d.labels.includes('Field')) return d.name;
+                if (currentZoomLevel > topicLabelThreshold && d.labels.includes('Topic')) return d.name;
+                return currentZoomLevel > keywordLabelThreshold ? d.name : '';
+            })
+            .attr("alignment-baseline", d => {
+                if (d.labels.includes('Field')) return "middle" 
+                else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return "middle"
+                else  return "hanging"
+            })
+            .attr("dy", d => {
+                if (d.labels.includes('Field')) return 0 
+                else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return 0 
+                else  return "-1.2em"
+            }); // Adjust vertical position;
+
+
+        link.style('visibility', d => {
+            const sourceNode = nodes.value.find(n => n.id === d.source.id);
+            const targetNode = nodes.value.find(n => n.id === d.target.id);
+            if (!sourceNode || !targetNode) return 'hidden';
+
+            if (currentZoomLevel <= topicThreshold) {
+                return (sourceNode.labels.includes('Field') && targetNode.labels.includes('Field')) ? 'visible' : 'hidden';
+            } else if (currentZoomLevel <= keywordThreshold) {
+                return targetNode.labels.includes('Topic') ? 'visible' : 'hidden';
+            } else {
+                return 'visible';
+            }
+        });
     };
 
     // Ticked function for updating node and link positions
@@ -245,6 +313,7 @@ export default function useKnowledgeGraph(endpoint) {
             });
 
             links.value = newLinks; // Update the reactive reference
+            nodes.value = newNodes;
 
             // Update D3 graph
             updateD3Graph(newNodes, newLinks);
@@ -280,24 +349,28 @@ export default function useKnowledgeGraph(endpoint) {
     const showAdjacentNodes = () => {
         const adjacentNodeIds = getAdjacentNodes(selectedNode.value.id).map(node => node.id);
         node.style('opacity', d => adjacentNodeIds.includes(d.id) ? 1 : 0.1);
+        labels.style('opacity', d => adjacentNodeIds.includes(d.id) ? 1 : 0.1);
         link.style('opacity', d => adjacentNodeIds.includes(d.source.id) || adjacentNodeIds.includes(d.target.id) ? 1 : 0.1);
     };
 
     const showPrerequisiteNodes = () => {
         const prerequisiteNodeIds = getPrerequisiteNodes(selectedNode.value.id).map(node => node.id);
         node.style('opacity', d => prerequisiteNodeIds.includes(d.id) ? 1 : 0.1);
+        labels.style('opacity', d => prerequisiteNodeIds.includes(d.id) ? 1 : 0.1);
         link.style('opacity', d => prerequisiteNodeIds.includes(d.source.id) ? 1 : 0.1);
     };
 
     const showSubsequentNodes = () => {
         const subsequentNodeIds = getSubsequentNodes(selectedNode.value.id).map(node => node.id);
         node.style('opacity', d => subsequentNodeIds.includes(d.id) ? 1 : 0.1);
+        labels.style('opacity', d => subsequentNodeIds.includes(d.id) ? 1 : 0.1);
         link.style('opacity', d => subsequentNodeIds.includes(d.target.id) ? 1 : 0.1);
     };
 
     const resetView = () => {
         // Reset opacity of nodes and links
         node.style('opacity', 1);
+        labels.style('opacity', 1);
         link.style('opacity', 1);
 
         // // Apply changes from the external state manager to D3
