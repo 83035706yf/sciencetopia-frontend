@@ -1,23 +1,22 @@
 <template>
     <div class="study-plan">
-        <h2>{{ studyPlan.study_plan.title }}</h2>
+        <h2>{{ studyPlan.title }}</h2>
         <h2>Prerequisite</h2>
         <ul class="prerequisite-list">
-            <div v-for="(item, key) in studyPlan.study_plan.prerequisite" :key="key" class="item-box"
+            <div v-for="(lesson, key) in studyPlan.prerequisite" :key="key" class="item-box"
                 @click="toggleDetails(key, 'prerequisite')">
-                <div class="title">{{ parseTitle(item) }}</div>
-                <div v-if="detailsVisible.prerequisite[key]" class="description">{{ parseDetail(item) }}</div>
+                <div class="title">{{ lesson.name }}</div>
+                <div v-if="detailsVisible.prerequisite[key]" class="description">{{ lesson.description }}</div>
             </div>
         </ul>
         <div class="py-3"></div>
         <h2>Main Curriculum</h2>
         <div class="main-curriculum">
-            <div v-for="(item, key) in studyPlan.study_plan.main_curriculum" :key="key" class="module-wrapper">
+            <div v-for="(lesson, key) in studyPlan.mainCurriculum" :key="key" class="module-wrapper">
                 <div v-if="!isFirstKey(key)" class="arrow" :style="{ backgroundImage: 'url(' + rightArrowUrl + ')' }"></div>
                 <div class="module item-box" @click="toggleDetails(key, 'mainCurriculum')">
-                    <!-- Content of the box -->
-                    <div class="title">{{ parseTitle(item) }}</div>
-                    <div v-if="detailsVisible.mainCurriculum[key]" class="description">{{ parseDetail(item) }}</div>
+                    <div class="title">{{ lesson.name }}</div>
+                    <div v-if="detailsVisible.mainCurriculum[key]" class="description">{{ lesson.description }}</div>
                 </div>
             </div>
         </div>
@@ -47,20 +46,14 @@ export default {
         toggleDetails(key, section) {
             this.detailsVisible[section][key] = !this.detailsVisible[section][key];
         },
-        parseTitle(item) {
-            return item.split(':')[0];
-        },
-        parseDetail(item) {
-            return item.split(':')[1];
-        },
         isFirstKey(currentKey) {
-            const keys = Object.keys(this.studyPlan.study_plan.main_curriculum);
+            const keys = Object.keys(this.studyPlan.mainCurriculum);
             return currentKey === keys[0];
         },
     }
 };
 </script>
-  
+
 <style>
 .prerequisite-list,
 .main-curriculum {

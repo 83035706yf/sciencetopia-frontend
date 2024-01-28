@@ -5,6 +5,7 @@ import LogIn from '@/components/LogIn.vue'
 import ReGister from '@/components/ReGister.vue'
 import PersonalCenter from '@/components/PersonalCenter.vue'
 import AccountCenter from '@/components/AccountCenter.vue'
+import StudyGroup from '@/components/StudyGroup.vue'
 
 const routes = [
   {
@@ -31,6 +32,11 @@ const routes = [
     path: '/personalurl/account',
     name: 'accountcenter',
     component: AccountCenter
+  },
+  {
+    path: '/allstudygroups',
+    name: 'studyGroup',
+    component: StudyGroup
   },
 ]
 

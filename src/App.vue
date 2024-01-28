@@ -32,4 +32,9 @@ export default {
 .custom-width {
   max-width: 1800px; /* Example custom width */
 }
+
+@font-face {
+  font-family: 'Chinese-font';
+  src: url('./assets/fonts/ChillRoundGothic_Regular.otf') format('opentype');
+}
 </style>

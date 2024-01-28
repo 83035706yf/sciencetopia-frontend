@@ -19,7 +19,19 @@
     <!-- 已制定的学习计划 -->
     <v-container>
       <h3>我的学习计划</h3>
-      <p>你还没有创建任何学习计划</p>
+      <p v-if="studyPlanDataList.length === 0">你还没有创建任何学习计划</p>
+      <v-col v-else v-for="item in studyPlanDataList" :key="item.studyPlan.title" cols="12">
+        <v-card class="mb-3">
+          <v-row>
+            <v-col cols="11">
+              <study-plan :studyPlan="item.studyPlan"></study-plan>
+            </v-col>
+            <v-col cols="1" class="d-flex justify-end pt-5 pr-5">
+              <v-btn small variant="text" color="red" @click="deleteStudyPlan(item.studyPlan.title)">删除</v-btn>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
     </v-container>
 
     <!-- 已加入的学习小组 -->
@@ -33,13 +45,52 @@
 <script>
 import FavoriteKnowledgeGraph from './FavoriteKnowledgeGraph.vue';
 import PersonalInformation from './PersonalInformation.vue';
+import StudyPlan from './StudyPlan.vue';
+import { apiClient } from '@/api';
 import NodeInfo from './NodeInfo.vue';
 
 export default {
   components: {
     FavoriteKnowledgeGraph,
     PersonalInformation,
+    StudyPlan,
     NodeInfo
+  },
+  data() {
+    return {
+      studyPlanDataList: []
+    }
+  },
+  created() {
+    this.fetchStudyPlans();
+  },
+  methods: {
+    async fetchStudyPlans() {
+      try {
+        const response = await apiClient.get('/StudyPlan/FetchStudyPlan');
+        this.studyPlanDataList = response.data;
+      } catch (error) {
+        console.error('Error fetching study plans:', error);
+        // Handle error as needed (e.g., show a notification to the user)
+      }
+    },
+
+    async deleteStudyPlan(planTitle) {
+      if (confirm('Are you sure you want to delete this study plan?')) {
+        try {
+          const response = await apiClient.delete(`/StudyPlan/DeleteStudyPlan`, { params: { studyPlanTitle: planTitle } });
+          if (response.status === 200) {
+            alert('Study plan deleted successfully.');
+            this.fetchStudyPlans(); // Refresh the list of study plans
+          } else {
+            throw new Error('Failed to delete study plan.');
+          }
+        } catch (error) {
+          console.error('Error deleting study plan:', error);
+          alert('Error deleting study plan.');
+        }
+      }
+    }
   }
 }
 </script>
@@ -57,5 +108,4 @@ export default {
   position: relative !important;
   margin: auto !important;
 } */
-
 </style>

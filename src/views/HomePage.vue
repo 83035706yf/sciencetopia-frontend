@@ -20,14 +20,17 @@
   <!-- 动态推送 -->
   <v-container id="feed-section">
     <v-row>
-      <v-btn text>
-        <h3>科学前沿</h3>
+      <v-btn variant="text">
+        <h3>全部动态</h3>
       </v-btn>
-      <v-btn text>
-        <h3>项目动态</h3>
-      </v-btn>
-      <v-btn text>
-        <h3>全部项目</h3>
+      <v-btn variant="text">
+        <h3>产</h3>
+      </v-btn>•
+      <v-btn variant="text">
+        <h3>学</h3>
+      </v-btn>•
+      <v-btn variant="text">
+        <h3>研</h3>
       </v-btn>
       <v-btn icon>
         <v-icon>mdi-refresh</v-icon>

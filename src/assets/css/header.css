@@ -54,12 +54,7 @@
 }
 
 .header-bottom {
-  justify-content: space-between;
-  align-items: center;
-  float: left;
-  padding: 10px 50px;
   width: 1000px;
-  height: 50px;
 }
 
 .search-container {
@@ -74,8 +69,6 @@
 }
 
 .search-form input {
-  width: 250px;
-  height: 40px;
   border: 1px solid #ccc;
   margin: 5px;
   padding: 5px 10px;

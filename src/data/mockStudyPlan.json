@@ -1,29 +1,85 @@
 {
-    "study_plan": {
-      "title": "Biophysics network and coarse-grainablity",
-      "prerequisite": {
-        "0.1": "Advanced Network Theory: Delving into the intricacies of network structures in biological systems, exploring small-world and scale-free networks.",
-        "0.2": "Statistical Mechanics Foundations: Understanding the principles of statistical mechanics, essential for grasping complex system behaviors.",
-        "0.3": "Mathematical Tools for Biophysics: Familiarizing with the mathematical tools and techniques commonly used in biophysical research.",
-        "0.4": "Systems Biology Overview: Gaining a broad understanding of how biological systems function as a whole, integrating various components.",
-        "0.5": "Introduction to Coarse-Graining: Exploring the basics of coarse-graining methodologies in the context of biological systems.",
-        "0.6": "Epistemology in Complex Systems: Discussing the philosophical aspects of knowledge acquisition in complex systems.",
-        "0.7": "Preparatory Research Methods: Enhancing research skills, focusing on methods relevant to complex systems in biophysics.",
-        "0.8": "Computational Modeling Basics: Building a foundation in computational modeling as applied to biophysical systems.",
-        "0.9": "Critical Reading and Analysis: Developing skills for critically reading and analyzing scientific literature in complex systems."
+  "studyPlan": {
+    "title": "Biophysics network and coarse-grainablity",
+    "prerequisite": [
+      {
+        "name": "Advanced Network Theory",
+        "description": "Delving into the intricacies of network structures in biological systems, exploring small-world and scale-free networks."
       },
-      "main_curriculum": {
-        "1.1": "In-depth Network Analysis: Advanced techniques and applications in network analysis specific to biophysical systems.",
-        "1.2": "Quantitative Modeling in Biophysics: Developing and applying quantitative models to understand complex biophysical systems.",
-        "1.3": "Advanced Coarse-Graining Techniques: Exploring sophisticated coarse-graining methods and their implications in biological networks.",
-        "1.4": "Philosophy of Complex Systems: A deeper exploration into the epistemological questions surrounding complex systems.",
-        "1.5": "Applied Computational Modeling: Hands-on experience with computational modeling, tailored to biophysical research.",
-        "1.6": "Research Methodology Advancement: Advancing research methods, focusing on innovative approaches in complex systems.",
-        "1.7": "Critical Analysis and Synthesis: Enhancing abilities to synthesize and critically analyze emerging research in biophysics.",
-        "1.8": "Special Topics in Biophysical Complex Systems: Exploring current and cutting-edge topics in the field of biophysical complex systems.",
-        "1.9": "Research Project Design: Guidance in designing a rigorous research project in the realm of complex biophysical systems.",
-        "1.10": "Comprehensive Review and Assessment: A thorough review and assessment to solidify your understanding and application of concepts in complex biophysical systems."
+      {
+        "name": "Statistical Mechanics Foundations",
+        "description": "Understanding the principles of statistical mechanics, essential for grasping complex system behaviors."
+      },
+      {
+        "name": "Mathematical Tools for Biophysics",
+        "description": "Familiarizing with the mathematical tools and techniques commonly used in biophysical research."
+      },
+      {
+        "name": "Systems Biology Overview",
+        "description": "Gaining a broad understanding of how biological systems function as a whole, integrating various components."
+      },
+      {
+        "name": "Introduction to Coarse-Graining",
+        "description": "Exploring the basics of coarse-graining methodologies in the context of biological systems."
+      },
+      {
+        "name": "Epistemology in Complex Systems",
+        "description": "Discussing the philosophical aspects of knowledge acquisition in complex systems."
+      },
+      {
+        "name": "Preparatory Research Methods",
+        "description": "Enhancing research skills, focusing on methods relevant to complex systems in biophysics."
+      },
+      {
+        "name": "Computational Modeling Basics",
+        "description": "Building a foundation in computational modeling as applied to biophysical systems."
+      },
+      {
+        "name": "Critical Reading and Analysis",
+        "description": "Developing skills for critically reading and analyzing scientific literature in complex systems."
       }
-    }
+    ],
+    "mainCurriculum": [
+      {
+        "name": "In-depth Network Analysis",
+        "description": "Advanced techniques and applications in network analysis specific to biophysical systems."
+      },
+      {
+        "name": "Quantitative Modeling in Biophysics",
+        "description": "Developing and applying quantitative models to understand complex biophysical systems."
+      },
+      {
+        "name": "Advanced Coarse-Graining Techniques",
+        "description": "Exploring sophisticated coarse-graining methods and their implications in biological networks."
+      },
+      {
+        "name": "Philosophy of Complex Systems",
+        "description": "A deeper exploration into the epistemological questions surrounding complex systems."
+      },
+      {
+        "name": "Applied Computational Modeling",
+        "description": "Hands-on experience with computational modeling, tailored to biophysical research."
+      },
+      {
+        "name": "Research Methodology Advancement",
+        "description": "Advancing research methods, focusing on innovative approaches in complex systems."
+      },
+      {
+        "name": "Critical Analysis and Synthesis",
+        "description": "Enhancing abilities to synthesize and critically analyze emerging research in biophysics."
+      },
+      {
+        "name": "Special Topics in Biophysical Complex Systems",
+        "description": "Exploring current and cutting-edge topics in the field of biophysical complex systems."
+      },
+      {
+        "name": "Research Project Design",
+        "description": "Guidance in designing a rigorous research project in the realm of complex biophysical systems."
+      },
+      {
+        "name": "Comprehensive Review and Assessment",
+        "description": "A thorough review and assessment to solidify your understanding and application of concepts in complex biophysical systems."
+      }
+    ]
   }
-  
+}
