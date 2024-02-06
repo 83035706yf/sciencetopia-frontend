@@ -6,7 +6,18 @@
             <div v-for="(lesson, key) in studyPlan.prerequisite" :key="key" class="item-box"
                 @click="toggleDetails(key, 'prerequisite')">
                 <div class="title">{{ lesson.name }}</div>
-                <div v-if="detailsVisible.prerequisite[key]" class="description">{{ lesson.description }}</div>
+                <div v-if="detailsVisible.prerequisite[key]" class="description">
+                    {{ lesson.description }}
+                    <!-- Resource Link Previews for Prerequisite Lessons -->
+                    <div v-for="(preview, index) in lessonPreviews[`prerequisite-${key}`]"
+                        :key="`prerequisite-${key}-preview-${index}`" class="link-preview-container">
+                        <a :href="preview.url" target="_blank">
+                            <img :src="preview.image" alt="Resource thumbnail" />
+                            <div>{{ preview.title }}</div>
+                            <p>{{ preview.description }}</p>
+                        </a>
+                    </div>
+                </div>
             </div>
         </ul>
         <div class="py-3"></div>
@@ -16,7 +27,25 @@
                 <div v-if="!isFirstKey(key)" class="arrow" :style="{ backgroundImage: 'url(' + rightArrowUrl + ')' }"></div>
                 <div class="module item-box" @click="toggleDetails(key, 'mainCurriculum')">
                     <div class="title">{{ lesson.name }}</div>
-                    <div v-if="detailsVisible.mainCurriculum[key]" class="description">{{ lesson.description }}</div>
+                    <div v-if="detailsVisible.mainCurriculum[key]" class="description">
+                        {{ lesson.description }}
+                        <!-- Flex container for link previews -->
+                        <div class="link-previews-container">
+                            <!-- Resource Link Previews for Main Curriculum Lessons -->
+                            <v-card v-for="(preview, index) in  lessonPreviews[`mainCurriculum-${key}`]"
+                                :key="`mainCurriculum-${key}-preview-${index}`" class="link-preview-container">
+                                <!-- <v-card> -->
+                                    <v-card-item>
+                                        <a :href="preview.url" target="_blank">
+                                            <div>{{ preview.title }}</div>
+                                            <img :src="preview.image" alt="缩略图" />
+                                            <p>{{ preview.description }}</p>
+                                        </a>
+                                    </v-card-item>
+                                <!-- </v-card> -->
+                            </v-card>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -25,8 +54,16 @@
   
 <script>
 import rightArrow from '@/assets/images/right-arrow-next.svg';
+import { useStore, mapActions, mapState } from 'vuex';
+import { onBeforeUnmount } from 'vue';
 
 export default {
+    props: {
+        studyPlan: {
+            type: Object,
+            // required: true
+        }
+    },
     data() {
         return {
             detailsVisible: {
@@ -34,27 +71,54 @@ export default {
                 mainCurriculum: {}
             },
             rightArrowUrl: rightArrow,
+            lessonPreviews: {}, // Object to hold previews keyed by lesson identifiers
         };
     },
-    props: {
-        studyPlan: {
-            type: Object,
-            required: true
-        }
+    computed: {
+        ...mapState({
+            linkPreviews: state => state.linkPreviews,
+        }),
     },
     methods: {
-        toggleDetails(key, section) {
-            this.detailsVisible[section][key] = !this.detailsVisible[section][key];
+        ...mapActions(['fetchLinkPreviews']),
+
+        async toggleDetails(lessonIndex, lessonType) {
+            const key = `${lessonType}-${lessonIndex}`;
+            // Toggle visibility
+            this.detailsVisible[lessonType][lessonIndex] = !this.detailsVisible[lessonType][lessonIndex];
+
+            if (!this.detailsVisible[lessonType][lessonIndex]) {
+                return; // Collapse the details without fetching previews again
+            }
+
+            const lessons = this.studyPlan[lessonType];
+            const lesson = lessons[lessonIndex];
+            if (lesson.resources && lesson.resources.length > 0 && !this.lessonPreviews[key]) {
+                // Dispatch the action to fetch and store previews in Vuex state
+                await this.fetchLinkPreviews(lesson.resources);
+                // The component's computed property will react to the state change
+                this.lessonPreviews[key] = this.linkPreviews;
+            }
         },
+
         isFirstKey(currentKey) {
             const keys = Object.keys(this.studyPlan.mainCurriculum);
             return currentKey === keys[0];
         },
+    },
+    setup() {
+        const store = useStore();
+
+        onBeforeUnmount(() => {
+            store.dispatch('clearLinkPreviews');
+        });
     }
 };
 </script>
 
 <style>
+@import "../assets/css/link-preview.css";
+
 .prerequisite-list,
 .main-curriculum {
     display: flex;
@@ -117,13 +181,15 @@ export default {
 }
 
 .arrow {
-    width: 24px; /* Adjust as per your SVG's aspect ratio */
-    height: 24px; /* Adjust as per your SVG's aspect ratio */
+    width: 24px;
+    /* Adjust as per your SVG's aspect ratio */
+    height: 24px;
+    /* Adjust as per your SVG's aspect ratio */
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    margin-right: 20px; /* Space between arrow and box */
+    margin-right: 20px;
+    /* Space between arrow and box */
     margin-top: 10px;
 }
-
 </style>

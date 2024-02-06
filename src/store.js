@@ -15,7 +15,8 @@ export default createStore({
       formattedBirthDate: '',
       selfIntroduction: '',
       originalUsername: '',
-    }
+    },
+    linkPreviews: [],
   },
   mutations: {
     SET_AUTHENTICATED(state, value) {
@@ -35,6 +36,12 @@ export default createStore({
     },
     resetSelectedNode(state) {
       state.selectedNode = null;
+    },
+    setLinkPreviews(state, previews) {
+      state.linkPreviews = previews;
+    },
+    resetLinkPreviews(state) {
+      state.linkPreviews = null;
     },
   },
   actions: {
@@ -94,6 +101,26 @@ export default createStore({
           // Handle the error appropriately
         }
       }
+    },
+    async fetchLinkPreviews({ commit }, resources) {
+      const previews = [];
+      for (const resource of resources) {
+        try {
+          const response = await apiClient.get('/LinkPreview', { params: { url: resource.link } });
+          previews.push({
+            url: resource.link,
+            title: response.data.title,
+            image: response.data.image,
+            description: response.data.description,
+          });
+        } catch (error) {
+          console.error('Error fetching link preview:', error);
+        }
+      }
+      commit('setLinkPreviews', previews);
+    },
+    clearLinkPreviews({ commit }) {
+      commit('resetLinkPreviews');
     },
   },
 });

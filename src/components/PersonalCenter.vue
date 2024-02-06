@@ -22,14 +22,16 @@
       <p v-if="studyPlanDataList.length === 0">你还没有创建任何学习计划</p>
       <v-col v-else v-for="item in studyPlanDataList" :key="item.studyPlan.title" cols="12">
         <v-card class="mb-3">
-          <v-row>
-            <v-col cols="11">
-              <study-plan :studyPlan="item.studyPlan"></study-plan>
-            </v-col>
-            <v-col cols="1" class="d-flex justify-end pt-5 pr-5">
-              <v-btn small variant="text" color="red" @click="deleteStudyPlan(item.studyPlan.title)">删除</v-btn>
-            </v-col>
-          </v-row>
+          <v-card-item>
+            <v-row>
+              <v-col cols="11">
+                <study-plan :studyPlan="item.studyPlan"></study-plan>
+              </v-col>
+              <v-col cols="1" class="d-flex justify-end pt-4 pr-4">
+                <v-btn small variant="text" color="red" @click="deleteStudyPlan(item.studyPlan.title)">删除</v-btn>
+              </v-col>
+            </v-row>
+          </v-card-item>
         </v-card>
       </v-col>
     </v-container>

@@ -170,7 +170,7 @@ export default {
     },
 
     RouteToStudyGroup() {
-      this.$router.push({ name: 'studyGroup' });
+      this.$router.push({ name: 'studyGroupList' });
     },
 
     triggerSavePlan() {

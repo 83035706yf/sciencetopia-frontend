@@ -5,7 +5,10 @@ import LogIn from '@/components/LogIn.vue'
 import ReGister from '@/components/ReGister.vue'
 import PersonalCenter from '@/components/PersonalCenter.vue'
 import AccountCenter from '@/components/AccountCenter.vue'
-import StudyGroup from '@/components/StudyGroup.vue'
+import StudyGroupList from '@/components/StudyGroupList.vue'
+import StudyGroupPage from '@/components/StudyGroupPage.vue'
+import StudyGroupSpace from '@/components/StudyGroupSpace.vue'
+import CreateStudyGroup from '@/components/CreateStudyGroup.vue'
 
 const routes = [
   {
@@ -35,9 +38,22 @@ const routes = [
   },
   {
     path: '/allstudygroups',
-    name: 'studyGroup',
-    component: StudyGroup
+    name: 'studyGroupList',
+    component: StudyGroupList
   },
+  {
+    path: '/createstudygroup',
+    name: 'createStudyGroup',
+    component: CreateStudyGroup
+  },
+  {
+    path: '/studygroup/:id',
+    component: StudyGroupPage
+  },
+  {
+    path: '/studygroup/:id/space',
+    component: StudyGroupSpace
+  }
 ]
 
 const router = createRouter({

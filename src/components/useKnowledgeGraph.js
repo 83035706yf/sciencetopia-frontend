@@ -190,7 +190,7 @@ export default function useKnowledgeGraph(endpoint) {
         const keywordThreshold = 0.9;
         const topicLabelThreshold = 0.7;
         const keywordLabelThreshold = 2;
-        
+
         node
             .style('visibility', d => {
                 if (d.labels.includes('Field')) return 'visible';
@@ -218,7 +218,7 @@ export default function useKnowledgeGraph(endpoint) {
             .style("stroke-width", d => {
                 if (d.labels.includes('Field')) return 1 / currentZoomLevel
                 else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return 1 / currentZoomLevel
-                else  return 0.5 / currentZoomLevel
+                else return 0.5 / currentZoomLevel
             })// Adjust stroke width as needed
             .text(d => {
                 if (d.labels.includes('Field')) return d.name;
@@ -226,14 +226,14 @@ export default function useKnowledgeGraph(endpoint) {
                 return currentZoomLevel > keywordLabelThreshold ? d.name : '';
             })
             .attr("alignment-baseline", d => {
-                if (d.labels.includes('Field')) return "middle" 
+                if (d.labels.includes('Field')) return "middle"
                 else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return "middle"
-                else  return "hanging"
+                else return "hanging"
             })
             .attr("dy", d => {
-                if (d.labels.includes('Field')) return 0 
-                else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return 0 
-                else  return "-1.2em"
+                if (d.labels.includes('Field')) return 0
+                else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return 0
+                else return "-1.2em"
             }); // Adjust vertical position;
 
 
@@ -280,24 +280,27 @@ export default function useKnowledgeGraph(endpoint) {
             const newNodes = [], newLinks = [];
 
             backendData.forEach(item => {
-                // Process nodes
+                // Process source nodes
                 if (!newNodes.some(n => n.id === item.source.identity)) {
                     newNodes.push({
                         id: item.source.identity,
                         labels: item.source.labels,
                         name: item.source.properties.name,
-                        link: item.source.properties.link,
-                        description: item.source.properties.description
+                        // Removed the direct link property handling
+                        description: item.source.properties.description,
+                        resources: item.source.resources // Assuming resources are now passed as an array of links
                     });
                 }
 
+                // Process target nodes
                 if (item.target && !newNodes.some(n => n.id === item.target.identity)) {
                     newNodes.push({
                         id: item.target.identity,
                         labels: item.target.labels,
                         name: item.target.properties.name,
-                        link: item.target.properties.link,
-                        description: item.target.properties.description
+                        // Removed the direct link property handling
+                        description: item.target.properties.description,
+                        resources: item.target.resources // Assuming resources are now passed as an array of links
                     });
                 }
 

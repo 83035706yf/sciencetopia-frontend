@@ -1,0 +1,42 @@
+.link-previews-container {
+  display: flex;
+  flex-wrap: wrap; /* Allows items to wrap to the next line */
+  gap: 16px; /* Adjust the space between items */
+  align-items: flex-start; /* Align items to the start of the container vertically */
+}
+
+.link-preview-container {
+  max-width: 100%; /* Limit the width of the container */
+}
+
+.link-preview {
+  flex: 1 1 150px; /* Grow to fill available space, starting at 150px */
+}
+
+.preview-title {
+  font-size: 16px; /* 减小标题字号 */
+  word-break: break-word; /* 防止标题溢出容器 */
+  margin-top: 0.5em; /* 上边距 */
+  margin-bottom: 0.5em; /* 下边距 */
+  max-width: 300px; /* 设置标题的最大宽度 */
+  overflow: hidden; /* 隐藏溢出的内容 */
+  text-overflow: ellipsis; /* 用省略号表示被裁切的文本 */
+  white-space: nowrap; /* 不允许文本换行 */
+}
+
+.preview-image {
+  max-width: 100%; /* 限制图片的最大宽度 */
+  max-height: 200px; /* 限制图片的最大高度 */
+  border-radius: 10px; /* 为图片添加圆角 */
+  object-fit: cover; /* 确保图片在保持比例的同时填充容器 */
+}
+
+.link-preview {
+  display: inline-block; /* Make the link fit its content */
+  text-decoration: none; /* 去除链接的下划线 */
+  color: inherit; /* 使用继承的文字颜色 */
+}
+
+.link-preview:hover {
+  text-decoration: underline; /* 鼠标悬停时添加下划线 */
+}
