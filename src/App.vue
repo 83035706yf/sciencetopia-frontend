@@ -11,6 +11,7 @@
 import LayOut from './components/LayOut.vue';
 // import './assets/css/site.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'quill/dist/quill.snow.css'; // for snow theme
 
 export default {
   name: 'App',

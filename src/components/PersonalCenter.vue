@@ -25,7 +25,7 @@
           <v-card-item>
             <v-row>
               <v-col cols="11">
-                <study-plan :studyPlan="item.studyPlan"></study-plan>
+                <study-plan :studyPlan="item.studyPlan" @resourceUpdated="handleResourceUpdated"></study-plan>
               </v-col>
               <v-col cols="1" class="d-flex justify-end pt-4 pr-4">
                 <v-btn small variant="text" color="red" @click="deleteStudyPlan(item.studyPlan.title)">删除</v-btn>
@@ -39,7 +39,18 @@
     <!-- 已加入的学习小组 -->
     <v-container>
       <h3>我的学习小组</h3>
-      <p>你还没有加入任何学习小组哦！</p>
+      <p v-if="studyGroupList.length === 0">你还没有加入任何学习小组哦！</p>
+      <v-row v-else>
+        <v-col v-for="group in studyGroupList" :key="group.id" cols="12">
+          <v-card class="mb-3">
+            <v-card-title>{{ group.name }}</v-card-title>
+            <v-card-text>{{ group.description }}</v-card-text>
+            <v-card-actions>
+              <v-btn text @click="toGroupPage(group.id)">查看详情</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -60,11 +71,13 @@ export default {
   },
   data() {
     return {
-      studyPlanDataList: []
+      studyPlanDataList: [],
+      studyGroupList: []
     }
   },
   created() {
     this.fetchStudyPlans();
+    this.fetchStudyGroups();
   },
   methods: {
     async fetchStudyPlans() {
@@ -78,7 +91,7 @@ export default {
     },
 
     async deleteStudyPlan(planTitle) {
-      if (confirm('Are you sure you want to delete this study plan?')) {
+      if (confirm('确定要删除这个学习计划吗?')) {
         try {
           const response = await apiClient.delete(`/StudyPlan/DeleteStudyPlan`, { params: { studyPlanTitle: planTitle } });
           if (response.status === 200) {
@@ -92,7 +105,26 @@ export default {
           alert('Error deleting study plan.');
         }
       }
-    }
+    },
+
+    async handleResourceUpdated() {
+      await this.fetchStudyPlans();
+    },
+
+    async fetchStudyGroups() {
+      try {
+        const response = await apiClient.get('/StudyGroup/GetMyStudyGroup');
+        this.studyGroupList = response.data;
+      } catch (error) {
+        console.error('Error fetching study groups:', error);
+        // Handle error as needed (e.g., show a notification to the user)
+      }
+    },
+
+    toGroupPage(groupId) {
+      // Logic to navigate to the group page
+      this.$router.push({ name: 'studyGroupPage', params: { groupId } });
+    },
   }
 }
 </script>

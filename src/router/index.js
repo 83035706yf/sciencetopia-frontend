@@ -4,6 +4,7 @@ import HomePageVue from '@/views/HomePage.vue'
 import LogIn from '@/components/LogIn.vue'
 import ReGister from '@/components/ReGister.vue'
 import PersonalCenter from '@/components/PersonalCenter.vue'
+import MessageCenter from '@/components/MessageCenter.vue'
 import AccountCenter from '@/components/AccountCenter.vue'
 import StudyGroupList from '@/components/StudyGroupList.vue'
 import StudyGroupPage from '@/components/StudyGroupPage.vue'
@@ -32,6 +33,11 @@ const routes = [
     component: PersonalCenter
   },
   {
+    path: '/personalurl/message',
+    name: 'messagecenter',
+    component: MessageCenter
+  },
+  {
     path: '/personalurl/account',
     name: 'accountcenter',
     component: AccountCenter
@@ -47,12 +53,16 @@ const routes = [
     component: CreateStudyGroup
   },
   {
-    path: '/studygroup/:id',
-    component: StudyGroupPage
+    path: '/studygroup/:groupId',
+    name: 'studyGroupPage',
+    component: StudyGroupPage,
+    props: true, // Enables the route parameter to be passed as a prop to the component
   },
   {
-    path: '/studygroup/:id/space',
-    component: StudyGroupSpace
+    path: '/studygroup/:groupId/space',
+    name: 'studyGroupSpace',
+    component: StudyGroupSpace,
+    props: true, // Enables the route parameter to be passed as a prop to the component
   }
 ]
 

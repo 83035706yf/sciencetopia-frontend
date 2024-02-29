@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ChatHub Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
+</head>
+<body>
+    <input type="text" id="conversationId" placeholder="Conversation ID" />
+    <input type="text" id="userId" placeholder="Your User ID" />
+    <input type="text" id="receiverId" placeholder="Receiver User ID" />
+    <input type="text" id="messageContent" placeholder="Message Content" />
+    <button onclick="joinConversation()">Join Conversation</button>
+    <button onclick="sendMessage()">Send Message</button>
+    <div id="messages"></div>
+
+    <script>
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("http://localhost:5085/chathub")
+            .build();
+
+        connection.start().then(function () {
+            console.log("Connected!");
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        connection.on("ReceiveMessage", function (message) {
+            // Assuming message is an object with senderId and content properties
+            var msg = document.createElement("div");
+            msg.textContent = message.senderId + ": " + message.content; // Adjust this line
+            document.getElementById("messages").appendChild(msg);
+        });
+
+        connection.on("LoadHistory", function (messages) {
+            messages.forEach((message) => {
+                var msg = document.createElement("div");
+                msg.textContent = message.senderId + ": " + message.content; // Adjust this line
+                document.getElementById("messages").appendChild(msg);
+            });
+        });
+
+        function joinConversation() {
+            var conversationId = document.getElementById("conversationId").value;
+            connection.invoke("JoinConversation", conversationId).catch(function (err) {
+                return console.error(err.toString());
+            });
+            console.log("Joined conversation: " + conversationId);
+        }
+
+        function sendMessage() {
+            var conversationId = document.getElementById("conversationId").value;
+            var userId = document.getElementById("userId").value;
+            var receiverId = document.getElementById("receiverId").value;
+            var messageContent = document.getElementById("messageContent").value;
+            connection.invoke("SendMessage", conversationId, userId, receiverId, messageContent)
+                .catch(function (err) {
+                    return console.error("Error sending message: ", err.toString());
+                });
+        }
+    </script>
+</body>
+</html>

@@ -16,6 +16,10 @@
                         <v-list-item-title>个人中心</v-list-item-title>
                     </v-list-item>
                     <v-divider></v-divider>
+                    <v-list-item @click="messagecenter">
+                        <v-list-item-title>消息中心</v-list-item-title>
+                    </v-list-item>
+                    <v-divider></v-divider>
                     <v-list-item @click="accountcenter">
                         <v-list-item-title>账号设置</v-list-item-title>
                     </v-list-item>
@@ -50,6 +54,9 @@ export default {
         },
         personalcenter() {
             this.$router.push({ name: 'personalcenter' });  // 跳转到PersonalCenter组件
+        },
+        messagecenter() {
+            this.$router.push({ name: 'messagecenter' });  // 跳转到MessageCenter组件
         },
         accountcenter() {
             this.$router.push({ name: 'accountcenter' });  // 跳转到AccountCenter组件
