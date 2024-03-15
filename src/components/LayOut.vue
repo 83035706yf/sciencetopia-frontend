@@ -37,9 +37,9 @@
           <!-- 搜索栏 -->
           <div class="search-container">
             <div class="search-form">
-              <input v-model="searchQuery" type="text" placeholder="我想要了解..." />
-              <button @click="searchNode" class="search-btn">
-                <font-awesome-icon :icon="['fas', 'search']" />
+              <input v-model="searchQuery" type="text" placeholder="我想要了解..." @keyup.enter="globalSearch" />
+              <button @click="globalSearch" class="search-btn">
+                <i class="fas fa-search" />
               </button>
             </div>
           </div>
@@ -70,7 +70,7 @@
         <!-- 夜间模式切换 -->
         <div class="dark-mode-switch">
           <button class="btn" id="theme-toggler" @click="toggleTheme">
-            <font-awesome-icon :icon="['fas', 'sun']" style="color: #000000;" />
+            <i class="fas fa-sun" style="color: #000000;"></i>
           </button>
         </div>
         <link :href="themePath" rel="stylesheet">
@@ -95,8 +95,8 @@
 <script>
 import LogInPartial from './LogInPartial.vue';
 import LearningPlanner from './LearningPlanner.vue';
-import debounce from 'lodash/debounce';
-import { apiClient } from '@/api';
+// import debounce from 'lodash/debounce';
+// import { apiClient } from '@/api';
 // import { useStore } from 'vuex';
 
 export default {
@@ -113,9 +113,9 @@ export default {
     };
   },
 
-  created() {
-    this.debouncedSearch = debounce(this.searchNode, 300);
-  },
+  // created() {
+  //   this.debouncedSearch = debounce(this.searchNode, 300);
+  // },
 
   methods: {
     toggleTheme() {
@@ -137,33 +137,25 @@ export default {
       console.log("section:", section);
       if (section) {
         const yOffset = -60; // 调整偏移量，根据需要修改
-        const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        const y = section.getBoundingClientRect().top + window.scrollY + yOffset;
 
         // 滚动到指定位置
         window.scrollTo({ top: y, behavior: 'smooth' });
       }
     },
 
-    async searchNode() {
+    async globalSearch() {
       if (!this.searchQuery.trim()) {
         this.searchResults = [];
         return;
       }
-
+      
       this.isLoading = true;
       try {
-        const response = await apiClient.get('/KnowledgeGraph/Search', {
-          params: { query: this.searchQuery }
-        });
-        const foundNode = response.data;
-        if (foundNode) {
-          this.$store.commit('SET_HIGHLIGHTNODE', foundNode.identity);
-        } else {
-          console.log('Node not found');
-        }
+        const path = this.$router.resolve({ name: 'searchList', query: { q: this.searchQuery } }).href; 
+        window.open(path, '_blank');
       } catch (error) {
-        console.error('Error during search:', error);
-        // Handle error appropriately
+        console.error('Error searching:', error);
       } finally {
         this.isLoading = false;
       }
@@ -285,4 +277,5 @@ body.modal-open .main-content {
     padding-left: 0px;
     border-radius: px;
   }
-}</style>
+}
+</style>

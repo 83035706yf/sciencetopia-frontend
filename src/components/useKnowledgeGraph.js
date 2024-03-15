@@ -1,5 +1,6 @@
 // useKnowledgeGraph.js
 import { ref, computed, onMounted } from 'vue';
+import useGraphEditMode from './useGraphEditMode';
 import { useStore } from 'vuex';
 import { apiClient } from '@/api';
 import * as d3 from 'd3';
@@ -183,6 +184,9 @@ export default function useKnowledgeGraph(endpoint) {
         // Apply zoom level based visibility updates
         updateVisibilityBasedOnZoom();
     };
+
+    // 初始化编辑模式逻辑，传递节点、链接数据和更新方法
+    const { isEditing, addNode, addLink } = useGraphEditMode(nodes, links, updateD3Graph);
 
     const updateVisibilityBasedOnZoom = () => {
         // Define thresholds for zoom levels
@@ -446,6 +450,9 @@ export default function useKnowledgeGraph(endpoint) {
         highlightAndCenterNode,
         searchNode,
         width,
-        height
+        height,
+        isEditing,
+        addNode,
+        addLink,
     };
 }

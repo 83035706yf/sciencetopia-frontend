@@ -3,19 +3,29 @@
         <!-- 选中节点时显示的按钮 -->
         <div v-if="selectedNode" class="node-actions">
             <button @click="showAdjacentNodes">
-                <font-awesome-icon :icon="['fas', 'circle-nodes']" />
+                <i class="fas fa-circle-nodes action-icon"></i>
             </button>
             <button @click="showPrerequisiteNodes">
-                <font-awesome-icon :icon="['fas', 'share-nodes']" flip="horizontal" /> </button>
+                <i class="fas fa-share-nodes action-icon"></i>
+            </button>
             <button @click="showSubsequentNodes">
-                <font-awesome-icon :icon="['fas', 'share-nodes']" />
+                <i class="fas fa-share-nodes action-icon"></i>
             </button>
             <button @click="resetView">
-                <font-awesome-icon :icon="['fas', 'arrows-rotate']" />
+                <i class="fas fa-arrows-rotate action-icon"></i>
             </button>
             <button @click="addToFavorites">
-                <font-awesome-icon :icon="['fas', 'heart-circle-plus']" />
+                <i class="fas fa-heart-circle-plus action-icon"></i>
             </button>
+        </div>
+        <div class="edit-action">
+            <button v-if="!isEditing" @click="startEditing">
+                <i class="fas fa-pen action-icon"></i>
+            </button>
+            <button v-else @click="submitEditing">
+                <i class="fas fa-floppy-disk highlight-icon"></i>
+            </button>
+            <EditGuideDialog v-model="dialogVisible" @confirmed="confirmGuide"></EditGuideDialog>
         </div>
         <div class="map-actions">
             <!-- 容器包裹按钮和输入栏 -->
@@ -32,9 +42,10 @@
         </div>
     </div>
 </template>
-  
+
 <script>
 import useKnowledgeGraph from './useKnowledgeGraph';
+import EditGuideDialog from './EditGuideDialog.vue'
 import { ref } from 'vue';
 import { apiClient } from '@/api';
 import SvgIcon from '@jamescoyle/vue-icon';
@@ -44,7 +55,8 @@ export default {
     name: 'KnowledgeNetwork',
 
     components: {
-        SvgIcon
+        SvgIcon,
+        EditGuideDialog
     },
 
     setup() {
@@ -54,6 +66,8 @@ export default {
         const overContainer = ref(false);
         const path = ref(mdiMapSearch);
 
+        const dialogVisible = ref(false);
+        const isEditing = ref(false);
 
         const { svgRef,
             selectedNode,
@@ -91,6 +105,20 @@ export default {
             }
         };
 
+        const startEditing = () => {
+            dialogVisible.value = true; // 用于控制对话框的显示
+        };
+
+        const confirmGuide = () => {
+            // 用户确认指南后的逻辑
+            dialogVisible.value = false;
+            isEditing.value = true;
+        };
+
+        // function toggleEditMode() {
+        //     isEditing.value = !isEditing.value;
+        // }
+
         return {
             svgRef,
             selectedNode,
@@ -107,7 +135,11 @@ export default {
             overContainer,
             path,
             width,
-            height
+            height,
+            dialogVisible,
+            startEditing,
+            confirmGuide,
+            isEditing,
         };
     },
 
@@ -130,7 +162,7 @@ export default {
     }
 }
 </script>
-  
+
 <style scoped>
 #cy canvas {
     position: relative !important;
@@ -146,6 +178,25 @@ export default {
     gap: 10px;
 }
 
+.edit-action {
+    z-index: 1000;
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    display: flex;
+    gap: 10px;
+}
+
+.action-icon {
+    font-size: 18px;
+}
+
+.highlight-icon {
+    color: red;
+    font-size: 22px;
+    /* background-color: rgba(255, 0, 0, 0.4);
+    box-shadow: 0 0 10px red; */
+}
 .map-actions {
     z-index: 1000;
     position: absolute;
@@ -196,4 +247,3 @@ export default {
     /* 其他输入框样式... */
 }
 </style>
-  

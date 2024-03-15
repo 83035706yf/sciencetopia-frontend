@@ -1,6 +1,7 @@
 // router.js
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePageVue from '@/views/HomePage.vue'
+import SearchListPage from '@/views/SearchListPage.vue'
 import LogIn from '@/components/LogIn.vue'
 import ReGister from '@/components/ReGister.vue'
 import PersonalCenter from '@/components/PersonalCenter.vue'
@@ -16,6 +17,12 @@ const routes = [
     path: '/',
     name: 'HomePage',
     component: HomePageVue,
+  },
+  {
+    path: '/search',
+    name: 'searchList',
+    component: SearchListPage,
+    props: true
   },
   {
     path: '/login',
