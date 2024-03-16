@@ -18,6 +18,8 @@ export default createStore({
     },
     selectedNode: null,
     linkPreviews: [],
+    isEditing: false,
+    displayNodeCreationForm: false,
   },
   mutations: {
     SET_AUTHENTICATED(state, value) {
@@ -49,6 +51,17 @@ export default createStore({
     },
     resetLinkPreviews(state) {
       state.linkPreviews = null;
+    },
+    // Mutation to toggle the isEditing state
+    TOGGLE_EDIT_MODE(state) {
+      state.isEditing = !state.isEditing;
+    },
+    RESET_EDIT_MODE(state) {
+      state.isEditing = false;
+      state.displayNodeCreationForm = false;
+    },
+    SET_DISPLAY_NODE_CREATION_FORM(state, newValue) {
+      state.displayNodeCreationForm = newValue;
     },
   },
   actions: {
@@ -147,7 +160,18 @@ export default createStore({
         console.error('Error fetching avatar URL:', error);
         return require('@/assets/images/default_avatar.png'); // Fallback avatar
       }
-    }
+    },
+    // Action to commit the toggle mutation
+    toggleEditMode({ commit }) {
+      commit('TOGGLE_EDIT_MODE');
+    },
+    toggleNodeCreationForm({ commit }, newValue) {
+      commit('SET_DISPLAY_NODE_CREATION_FORM', newValue);
+    },
   },
 
+  getters: {
+    // Getter to access the isEditing state
+    isEditing: state => state.isEditing,
+  }
 });

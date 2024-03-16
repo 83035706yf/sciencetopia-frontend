@@ -8,7 +8,8 @@
       </v-col>
       <v-col cols="6">
         <!-- <h3>知识描述</h3> -->
-        <NodeInfo></NodeInfo>
+        <NodeCreationForm v-if="this.$store.state.displayNodeCreationForm"></NodeCreationForm>
+        <NodeInfo v-else></NodeInfo>
         <!-- <p>当查询某一知识节点内容时，显示该节点内容的描述；当查询学习路径时，显示学习路径内容</p> -->
       </v-col>
     </v-row>
@@ -50,12 +51,14 @@
 import KnowledgeNetwork from '@/components/KnowledgeNetwork.vue';
 import NodeInfo from '@/components/NodeInfo.vue';
 import MediaFeed from '@/components/MediaFeed.vue';
+import NodeCreationForm from '@/components/NodeCreationForm.vue';
 
 export default {
   name: 'HomePage',
-  components: { KnowledgeNetwork, NodeInfo, MediaFeed },
+  components: { KnowledgeNetwork, NodeInfo, MediaFeed, NodeCreationForm },
   data() {
     return {
+      displayNodeCreationForm: false,
       mediaList: [
         {
           id: 1,

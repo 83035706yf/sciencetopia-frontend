@@ -46,6 +46,8 @@ router.beforeEach((to, from, next) => {
   // Check if the URL has changed
   if (to.path !== from.path) {
     store.commit('resetSelectedNode');
+    store.commit('resetLinkPreviews');
+    store.commit('RESET_EDIT_MODE');
   }
   next();
 });

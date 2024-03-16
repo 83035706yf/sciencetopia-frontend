@@ -1,35 +1,17 @@
 // useGraphEditMode.js
-import { ref } from 'vue';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
-export default function useGraphEditMode(nodes, links, updateGraph) {
-    const isEditing = ref(false); // 控制编辑模式的状态
+export function useGraphEditMode() {
+  const store = useStore();
 
-    const toggleEditMode = () => {
-        isEditing.value = !isEditing.value;
-        // 根据编辑状态调整D3图形的交互逻辑
-        if (isEditing.value) {
-            // 激活编辑模式的逻辑
-        } else {
-            // 禁用编辑模式的逻辑
-        }
-    };
+  // Computed property to get the isEditing state from the store
+  const isEditing = computed(() => store.state.isEditing);
 
-    // 示例：添加一个新节点
-    const addNode = (newNode) => {
-        nodes.value.push(newNode); // 假设nodes是一个响应式引用
-        updateGraph(); // 调用更新图形的方法
-    };
+  // Method to toggle the isEditing state
+  const toggleEditMode = () => {
+    store.dispatch('toggleEditMode');
+  };
 
-    // 示例：添加一个新链接
-    const addLink = (newLink) => {
-        links.value.push(newLink); // 假设links是一个响应式引用
-        updateGraph(); // 调用更新图形的方法
-    };
-    
-    return {
-        isEditing,
-        toggleEditMode,
-        addNode,
-        addLink,
-    };
+  return { isEditing, toggleEditMode };
 }

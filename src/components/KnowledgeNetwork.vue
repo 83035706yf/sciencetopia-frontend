@@ -23,7 +23,7 @@
                 <i class="fas fa-pen action-icon"></i>
             </button>
             <button v-else @click="submitEditing">
-                <i class="fas fa-floppy-disk highlight-icon"></i>
+                <i class="fa-solid fa-right-from-bracket highlight-icon"></i>
             </button>
             <EditGuideDialog v-model="dialogVisible" @confirmed="confirmGuide"></EditGuideDialog>
         </div>
@@ -40,14 +40,18 @@
                     ref="searchInput" class="search-input" />
             </div>
         </div>
+        <ContextMenu :visible="contextMenuState.visible" :position="contextMenuState.position"
+            @update:visible="contextMenuState.visible = $event" @close="hideContextMenu" />
     </div>
 </template>
 
 <script>
 import useKnowledgeGraph from './useKnowledgeGraph';
 import EditGuideDialog from './EditGuideDialog.vue'
-import { ref } from 'vue';
+import ContextMenu from './ContextMenu.vue';
+import { ref, computed } from 'vue';
 import { apiClient } from '@/api';
+import { useStore } from 'vuex';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiMapSearch } from '@mdi/js';
 
@@ -56,10 +60,12 @@ export default {
 
     components: {
         SvgIcon,
-        EditGuideDialog
+        EditGuideDialog,
+        ContextMenu,
     },
 
     setup() {
+        const store = useStore();
         let searchQuery = ref('');
         const inputVisible = ref(false);
         const inputContent = ref(false);
@@ -67,7 +73,6 @@ export default {
         const path = ref(mdiMapSearch);
 
         const dialogVisible = ref(false);
-        const isEditing = ref(false);
 
         const { svgRef,
             selectedNode,
@@ -79,7 +84,9 @@ export default {
             highlightAndCenterNode,
             searchNode,
             width,
-            height } = useKnowledgeGraph('/KnowledgeGraph/GetNodes');
+            height,
+            contextMenuState,
+            hideContextMenu } = useKnowledgeGraph('/KnowledgeGraph/GetNodes');
 
         const addToFavorites = async () => {
             try {
@@ -105,6 +112,15 @@ export default {
             }
         };
 
+        // Access Vuex state
+        const isEditing = computed(() => store.state.isEditing);
+
+        // Methods to interact with Vuex actions
+        const toggleEditMode = () => {
+            store.dispatch('toggleEditMode');
+        };
+
+
         const startEditing = () => {
             dialogVisible.value = true; // 用于控制对话框的显示
         };
@@ -112,12 +128,14 @@ export default {
         const confirmGuide = () => {
             // 用户确认指南后的逻辑
             dialogVisible.value = false;
-            isEditing.value = true;
+            toggleEditMode();
+            // isEditing.value = true;
         };
 
-        // function toggleEditMode() {
-        //     isEditing.value = !isEditing.value;
-        // }
+        const submitEditing = () => {
+            toggleEditMode();
+            store.dispatch('toggleNodeCreationForm', false);
+        };
 
         return {
             svgRef,
@@ -139,7 +157,11 @@ export default {
             dialogVisible,
             startEditing,
             confirmGuide,
+            submitEditing,
             isEditing,
+            toggleEditMode,
+            hideContextMenu,
+            contextMenuState,
         };
     },
 
@@ -197,6 +219,7 @@ export default {
     /* background-color: rgba(255, 0, 0, 0.4);
     box-shadow: 0 0 10px red; */
 }
+
 .map-actions {
     z-index: 1000;
     position: absolute;

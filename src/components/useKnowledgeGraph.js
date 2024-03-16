@@ -1,10 +1,16 @@
 // useKnowledgeGraph.js
-import { ref, computed, onMounted } from 'vue';
-import useGraphEditMode from './useGraphEditMode';
+import { ref, computed, onMounted, reactive } from 'vue';
+// import useGraphEditMode from './useGraphEditMode';
 import { useStore } from 'vuex';
 import { apiClient } from '@/api';
 import * as d3 from 'd3';
 // import { eventBus } from '../eventBus';
+
+// Context menu state
+const contextMenuState = reactive({
+    visible: false,
+    position: { x: 0, y: 0 },
+});
 
 export default function useKnowledgeGraph(endpoint) {
     const links = ref([]);  // Reactive reference for links
@@ -16,6 +22,9 @@ export default function useKnowledgeGraph(endpoint) {
     const width = 860;  // Example fixed width
     const height = 860; // Example fixed height
     let currentZoomLevel = 1;
+
+    // Directly use Vuex store to access and modify isEditing
+    const isEditing = computed(() => store.state.isEditing);
 
     // D3 Drag behavior
     const drag = simulation => {
@@ -57,7 +66,9 @@ export default function useKnowledgeGraph(endpoint) {
         svg = d3.select(svgRef.value).append('svg')
             .attr('width', width)
             .attr('height', height)
-            .call(zoom);
+            .call(zoom)
+            .on('contextmenu', handleSvgRightClick)
+            .on('click', handleNodeClick);
 
         simulation = d3.forceSimulation()
             .force('link', d3.forceLink().id(d => d.id))
@@ -155,8 +166,19 @@ export default function useKnowledgeGraph(endpoint) {
             })
             .call(drag(simulation))
             .on('click', (event, d) => {
-                store.commit('setSelectedNode', d);
-                // Implement zoom on node click
+                if (store.state.displayNodeCreationForm) {
+                    // 弹出确认对话框
+                    if (confirm("确定离开创建节点页面？创建的节点将不会被保存！")) {
+                        // 用户点击确认
+                        store.dispatch('toggleNodeCreationForm', false);
+                        store.commit('setSelectedNode', d);
+                    } else {
+                        // 用户点击取消，什么也不做
+                    }
+                } else {
+                    // 正常处理点击事件
+                    store.commit('setSelectedNode', d);
+                }
             });
 
         // Add labels to nodes
@@ -184,9 +206,6 @@ export default function useKnowledgeGraph(endpoint) {
         // Apply zoom level based visibility updates
         updateVisibilityBasedOnZoom();
     };
-
-    // 初始化编辑模式逻辑，传递节点、链接数据和更新方法
-    const { isEditing, addNode, addLink } = useGraphEditMode(nodes, links, updateD3Graph);
 
     const updateVisibilityBasedOnZoom = () => {
         // Define thresholds for zoom levels
@@ -439,6 +458,45 @@ export default function useKnowledgeGraph(endpoint) {
         }
     }
 
+    const showContextMenu = (x, y) => {
+        contextMenuState.position = { x, y };
+        contextMenuState.visible = true;
+    };
+
+    const hideContextMenu = () => {
+        contextMenuState.visible = false;
+    };
+
+    const handleSvgRightClick = (event) => {
+        event.preventDefault();
+        if (!isEditing.value) return;
+
+        const [x, y] = d3.pointer(event);
+        // Display a context menu here or emit an event to show a Vue component-based context menu
+        // Check if editing mode is active before showing the context menu
+        if (isEditing.value) {
+            showContextMenu(x, y);
+        }
+        // For simplicity, let's log the coordinates
+        console.log("Right-click at:", x, y);
+        // Here you would typically trigger Vue state changes to show a custom context menu
+        // and eventually call addNode() with the necessary node data
+    };
+
+    let selectedNodesForLink = [];
+
+    const handleNodeClick = (event, d) => {
+        if (!isEditing.value) return;
+
+        selectedNodesForLink.push(d);
+        if (selectedNodesForLink.length === 2) {
+            // Here, you would show a context menu or Vue component to create a link
+            console.log(`Creating link between ${selectedNodesForLink[0].id} and ${selectedNodesForLink[1].id}`);
+            // Reset selected nodes for next operation
+            selectedNodesForLink = [];
+        }
+    };
+
     return {
         svgRef,
         selectedNode,
@@ -452,7 +510,8 @@ export default function useKnowledgeGraph(endpoint) {
         width,
         height,
         isEditing,
-        addNode,
-        addLink,
+        contextMenuState,
+        hideContextMenu,
+        showContextMenu
     };
 }
