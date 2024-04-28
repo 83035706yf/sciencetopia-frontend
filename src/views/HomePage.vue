@@ -33,7 +33,7 @@
       <v-btn variant="text">
         <h3>研</h3>
       </v-btn>
-      <v-btn icon>
+      <v-btn variant="text">
         <v-icon>mdi-refresh</v-icon>
       </v-btn>
     </v-row>

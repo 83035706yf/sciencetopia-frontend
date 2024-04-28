@@ -116,8 +116,10 @@ export default function useKnowledgeGraph(endpoint) {
                 const targetNode = nodes.find(n => n.id === d.target.id);
 
                 // Check if both connected nodes are topics
-                if (sourceNode && targetNode && targetNode.labels.includes('Topic')) {
-                    return 2; // Thicker line for links between two topics
+                if (sourceNode && targetNode && targetNode.labels.includes('Field')) {
+                    return 2; // Thicker line for links between a Subject and a field
+                } else if (sourceNode && targetNode && targetNode.labels.includes('Topic')) {
+                    return 1.5; // Thicker line for links between a field and a topic or two topics
                 } else {
                     return Math.sqrt(d.value || 1); // Normal width for other links
                 }
@@ -128,8 +130,10 @@ export default function useKnowledgeGraph(endpoint) {
 
                 // Determine color based on node label combinations
                 if (sourceNode && targetNode) {
-                    if (targetNode.labels.includes('Topic')) {
-                        return '#d5282a'; // Red for links between two topics
+                    if (sourceNode.labels.includes('Subject') && targetNode.labels.includes('Field')) {
+                        return '#c5282a'; // Red for links between a subject and a field
+                    } else if (targetNode.labels.includes('Topic')) {
+                        return '#d5282a'; // Red for links between two topics or a field and a topic
                     } else if ((sourceNode.labels.includes('Topic') && targetNode.labels.includes('Keyword')) ||
                         (sourceNode.labels.includes('Keyword') && targetNode.labels.includes('Topic'))) {
                         return '#999'; // Pink for links between a topic and a keyword
@@ -156,6 +160,7 @@ export default function useKnowledgeGraph(endpoint) {
                 return (d.labels.includes('Topic') || d.labels.includes('Field')) ? (10 + (isNaN(d.degree) ? 0 : d.degree)) * 0.8 : 5 + (isNaN(d.degree) ? 0 : d.degree) * 0.5;
             })
             .attr('fill', d => {
+                if (d.labels.includes('Subject')) return '#c5282a';
                 if (d.labels.includes('Keyword')) return '#C6A969';
                 if (d.labels.includes('Topic')) return '#d5282a';
                 if (d.labels.includes('Field')) return '#c5282a';
@@ -209,6 +214,7 @@ export default function useKnowledgeGraph(endpoint) {
 
     const updateVisibilityBasedOnZoom = () => {
         // Define thresholds for zoom levels
+        const fieldThreshold = 0.2;
         const topicThreshold = 0.5;
         const keywordThreshold = 0.9;
         const topicLabelThreshold = 0.7;
@@ -216,12 +222,13 @@ export default function useKnowledgeGraph(endpoint) {
 
         node
             .style('visibility', d => {
-                if (d.labels.includes('Field')) return 'visible';
-                if (currentZoomLevel > topicThreshold && d.labels.includes('Topic')) return 'visible';
+                if (d.labels.includes('Subject')) return 'visible';
+                else if (currentZoomLevel > fieldThreshold && d.labels.includes('Field')) return 'visible';
+                else if (currentZoomLevel > topicThreshold && d.labels.includes('Topic')) return 'visible';
                 return currentZoomLevel > keywordThreshold ? 'visible' : 'hidden';
             })
             .on('mouseout', function (event, d) {
-                if (currentZoomLevel <= topicLabelThreshold) labels.filter(l => l === d && !l.labels.includes('Field')).text('') // Hide name on mouseout, except for 'Field' nodes
+                if (currentZoomLevel <= topicLabelThreshold) labels.filter(l => l === d && !l.labels.includes('Subject')).text('') // Hide name on mouseout, except for 'Field' nodes
                 else if (currentZoomLevel <= keywordLabelThreshold) labels.filter(l => l === d && (!l.labels.includes('Topic') && !l.labels.includes('Field'))).text('') // Hide name on mouseout, except for 'Field' and 'Topic' nodes
                 // return labels.filter(l => l === d && !l.labels.includes('Field')).text('');
             });
@@ -234,27 +241,32 @@ export default function useKnowledgeGraph(endpoint) {
             // })
             .style("font-size", 16 / currentZoomLevel)
             .style("stroke", d => {
-                if (d.labels.includes('Field')) return "#d5282a"
+                if (d.labels.includes('Subject')) return "#d5282a"
+                else if (currentZoomLevel > topicThreshold && d.labels.includes('Field')) return "#d5282a"
                 else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return "#d5282a"
                 else return 'black'
             })
             .style("stroke-width", d => {
-                if (d.labels.includes('Field')) return 1 / currentZoomLevel
+                if (d.labels.includes('Subject')) return 1 / currentZoomLevel
+                else if (currentZoomLevel > topicThreshold && d.labels.includes('Field')) return 1 / currentZoomLevel
                 else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return 1 / currentZoomLevel
                 else return 0.5 / currentZoomLevel
             })// Adjust stroke width as needed
             .text(d => {
-                if (d.labels.includes('Field')) return d.name;
-                if (currentZoomLevel > topicLabelThreshold && d.labels.includes('Topic')) return d.name;
+                if (d.labels.includes('Subject')) return d.name;
+                else if (currentZoomLevel > fieldThreshold && d.labels.includes('Field')) return d.name;
+                else if (currentZoomLevel > topicLabelThreshold && d.labels.includes('Topic')) return d.name;
                 return currentZoomLevel > keywordLabelThreshold ? d.name : '';
             })
             .attr("alignment-baseline", d => {
-                if (d.labels.includes('Field')) return "middle"
+                if (d.labels.includes('Subject')) return "middle"
+                else if (currentZoomLevel > fieldThreshold && d.labels.includes('Field')) return "middle"
                 else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return "middle"
                 else return "hanging"
             })
             .attr("dy", d => {
-                if (d.labels.includes('Field')) return 0
+                if (d.labels.includes('Subject')) return 0
+                else if (currentZoomLevel > fieldThreshold && d.labels.includes('Field')) return 0
                 else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return 0
                 else return "-1.2em"
             }); // Adjust vertical position;
@@ -265,8 +277,10 @@ export default function useKnowledgeGraph(endpoint) {
             const targetNode = nodes.value.find(n => n.id === d.target.id);
             if (!sourceNode || !targetNode) return 'hidden';
 
-            if (currentZoomLevel <= topicThreshold) {
-                return (sourceNode.labels.includes('Field') && targetNode.labels.includes('Field')) ? 'visible' : 'hidden';
+            if (currentZoomLevel <= fieldThreshold) {
+                return (targetNode.labels.includes('Subject')) ? 'visible' : 'hidden';
+            } else if (currentZoomLevel <= topicThreshold) {
+                return (targetNode.labels.includes('Field')) ? 'visible' : 'hidden';
             } else if (currentZoomLevel <= keywordThreshold) {
                 return targetNode.labels.includes('Topic') ? 'visible' : 'hidden';
             } else {
