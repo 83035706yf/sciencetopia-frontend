@@ -492,7 +492,7 @@ export default function useKnowledgeGraph(endpoint) {
             showContextMenu(x, y);
         }
         // For simplicity, let's log the coordinates
-        console.log("Right-click at:", x, y);
+        // console.log("Right-click at:", x, y);
         // Here you would typically trigger Vue state changes to show a custom context menu
         // and eventually call addNode() with the necessary node data
     };

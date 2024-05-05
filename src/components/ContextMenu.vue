@@ -33,7 +33,7 @@ export default {
         createNode() {
             this.$store.dispatch('toggleNodeCreationForm', true); // Or true, depending on the context
             this.$emit('update:visible', false);
-            console.log('createNode');
+            // console.log('createNode');
         },
         createLink() {
             this.$emit('createLink');

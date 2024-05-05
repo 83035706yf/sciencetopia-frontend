@@ -1,6 +1,8 @@
 <template>
   <v-card>
     <v-card-title>
+      <v-select label="节点类型" v-model="nodeData.label" :items="['Subject', 'Field', 'Topic', 'Keyword']" outlined
+        dense></v-select>
       <v-text-field label="知识名称" v-model="nodeData.name" outlined dense></v-text-field>
     </v-card-title>
     <v-card-text>
@@ -32,14 +34,16 @@
 </template>
 
 <script>
+import { apiClient } from '@/api';
 import { ref } from 'vue';
 import { useStore } from 'vuex'; // Import useStore if you're using Vuex 4 with Vue 3
 
 export default {
   name: 'NodeCreationForm',
-  setup(props, { emit }) {
+  setup() {
     const store = useStore(); // Access the Vuex store
     const nodeData = ref({
+      label: '',
       name: '',
       description: '',
       urls: [{ link: '' }], // Initialize with an empty URL for "知识资源"
@@ -53,7 +57,7 @@ export default {
     };
 
     const addUrl = () => {
-      nodeData.value.urls.push({ link: ''}); // Add an empty URL field
+      nodeData.value.urls.push({ link: '' }); // Add an empty URL field
     };
 
     const removeUrl = (index) => {
@@ -64,15 +68,21 @@ export default {
       nodeData.value.urls[index] = newValue; // Update the URL at the given index
     };
 
-    const submitNode = () => {
+    const submitNode = async () => {
       // Emit an event with the new node data to the parent component
-      emit('createNode', nodeData.value);
-      // Reset form
-      nodeData.value = {
-        name: '',
-        description: '',
-        urls: [''], // Reset to initial state with one empty URL
-      };
+      console.log('Submitting Node:', nodeData.value);
+      try {
+        await apiClient.post('/KnowledgeGraph/CreateNode', {
+          label: nodeData.value.label,
+          name: nodeData.value.name,
+          description: nodeData.value.description,
+          link: nodeData.value.urls.map(u => u.link)
+        });
+        alert('节点已提交并等待审核。');
+        nodeData.value = { name: '', description: '', urls: [{ link: '' }] }; // Reset form
+      } catch (error) {
+        alert('提交失败: ' + error.message);
+      }
     };
 
     const cancelNodeCreation = () => {
