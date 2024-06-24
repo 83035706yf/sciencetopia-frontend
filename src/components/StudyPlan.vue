@@ -1,6 +1,7 @@
 <template>
     <div v-if="isCelebrating" class="celebration">
-        <div class="confetti" v-for="n in 200" :key="n" :style="{ animationDelay: `${n * 10}ms`, backgroundColor: getConfettiColor(n) }"></div>
+        <div class="confetti" v-for="n in 200" :key="n"
+            :style="{ animationDelay: `${n * 10}ms`, backgroundColor: getConfettiColor(n) }"></div>
     </div>
     <div class="study-plan">
         <h2>{{ studyPlan.title }}</h2>
@@ -14,13 +15,17 @@
                 <div v-if="detailsVisible.prerequisite[key]" class="description">
                     {{ lesson.description }}
                     <!-- Resource Link Previews for Prerequisite Lessons -->
-                    <div v-for="(preview, index) in lessonPreviews[`prerequisite-${key}`]"
-                        :key="`prerequisite-${key}-preview-${index}`" class="link-preview-container">
-                        <a :href="preview.url" target="_blank">
-                            <img :src="preview.image" alt="Resource thumbnail" />
-                            <div>{{ preview.title }}</div>
-                            <p>{{ preview.description }}</p>
-                        </a>
+                    <div v-if="lesson.resources[0].link != null" class="link-previews-container">
+                        <v-card v-for="resource in lesson.resources" :key="resource" class="link-preview-container">
+                            <v-card-item>
+                                <LinkPreview :url="resource.link" />
+                                <!-- Checkbox to mark the resource as learned -->
+                                <v-checkbox v-model="resource.learned"
+                                    @change.prevent="() => markResourceAsLearned(resource, lesson)"
+                                    :label="resource.learned ? '已完成' : '未完成'">
+                                </v-checkbox>
+                            </v-card-item>
+                        </v-card>
                     </div>
                 </div>
             </div>
@@ -29,7 +34,8 @@
         <h2>Main Curriculum</h2>
         <div class="main-curriculum">
             <div v-for="(lesson, key) in studyPlan.mainCurriculum" :key="key" class="module-wrapper">
-                <div v-if="!isFirstKey(key)" class="arrow" :style="{ backgroundImage: 'url(' + rightArrowUrl + ')' }"></div>
+                <div v-if="!isFirstKey(key)" class="arrow" :style="{ backgroundImage: 'url(' + rightArrowUrl + ')' }">
+                </div>
                 <div class="module item-box" @click="toggleDetails(key, 'mainCurriculum')">
                     <v-progress-linear :model-value="lesson.progressPercentage" color="light-green-darken-4" height="10"
                         striped></v-progress-linear>
@@ -39,23 +45,19 @@
                         <!-- Flex container for link previews -->
                         <div class="link-previews-container">
                             <!-- Resource Link Previews for Main Curriculum Lessons -->
-                            <v-card v-for="(preview, index) in  lessonPreviews[`mainCurriculum-${key}`]"
-                                :key="`mainCurriculum-${key}-preview-${index}`" class="link-preview-container">
-                                <!-- <v-card> -->
-                                <v-card-item @click.stop>
-                                    <a :href="preview.url" target="_blank">
-                                        <div>{{ preview.title }}</div>
-                                        <img :src="preview.image" alt="缩略图" />
-                                        <p>{{ preview.description }}</p>
-                                    </a>
-                                    <!-- Checkbox to mark the resource as learned -->
-                                    <v-checkbox v-model="lesson.resources[index].learned"
-                                        @change.prevent="() => markResourceAsLearned(preview, lesson, 'mainCurriculum', index)"
-                                        :label="lesson.resources[index].learned ? '已完成' : '未完成'">
-                                    </v-checkbox>
-                                </v-card-item>
-                                <!-- </v-card> -->
-                            </v-card>
+                            <div v-if="lesson.resources[0].link != null" class="link-previews-container">
+                                <v-card v-for="resource in lesson.resources" :key="resource"
+                                    class="link-preview-container">
+                                    <v-card-item>
+                                        <LinkPreview :url="resource.link" />
+                                        <!-- Checkbox to mark the resource as learned -->
+                                        <v-checkbox v-model="resource.learned"
+                                            @click.stop="() => markResourceAsLearned(resource, lesson)"
+                                            :label="resource.learned ? '已完成' : '未完成'">
+                                        </v-checkbox>
+                                    </v-card-item>
+                                </v-card>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -63,12 +65,11 @@
         </div>
     </div>
 </template>
-  
+
 <script>
 import rightArrow from '@/assets/images/right-arrow-next.svg';
-import { useStore, mapActions, mapState } from 'vuex';
-import { onBeforeUnmount } from 'vue';
 import { apiClient } from '@/api';
+import LinkPreview from '@/components/LinkPreview.vue'; // Assuming you have a LinkPreview component
 
 export default {
     props: {
@@ -77,6 +78,9 @@ export default {
             // required: true
         }
     },
+    components: {
+        LinkPreview,
+    },
     data() {
         return {
             detailsVisible: {
@@ -84,34 +88,16 @@ export default {
                 mainCurriculum: {}
             },
             rightArrowUrl: rightArrow,
-            lessonPreviews: {}, // Object to hold previews keyed by lesson identifiers
             isCelebrating: false,
         };
     },
-    computed: {
-        ...mapState({
-            linkPreviews: state => state.linkPreviews,
-        }),
-    },
     methods: {
-        ...mapActions(['fetchLinkPreviews']),
-
         async toggleDetails(lessonIndex, lessonType) {
-            const key = `${lessonType}-${lessonIndex}`;
             // Toggle visibility
             this.detailsVisible[lessonType][lessonIndex] = !this.detailsVisible[lessonType][lessonIndex];
 
             if (!this.detailsVisible[lessonType][lessonIndex]) {
                 return; // Collapse the details without fetching previews again
-            }
-
-            const lessons = this.studyPlan[lessonType];
-            const lesson = lessons[lessonIndex];
-            if (lesson.resources && lesson.resources.length > 0 && !this.lessonPreviews[key]) {
-                // Dispatch the action to fetch and store previews in Vuex state
-                await this.fetchLinkPreviews(lesson.resources);
-                // The component's computed property will react to the state change
-                this.lessonPreviews[key] = this.linkPreviews;
             }
         },
 
@@ -120,16 +106,16 @@ export default {
             return currentKey === keys[0];
         },
 
-        async markResourceAsLearned(preview, lesson, lessonType, index) {
+        async markResourceAsLearned(resource, lesson) {
             // Store the initial learned status
-            const wasLearned = lesson.resources[index].learned;
+            const wasLearned = resource.learned;
 
-            if (!wasLearned) {
+            if (wasLearned) {
                 // If trying to unlearn, confirm the action
                 const confirmed = confirm('确定要将它重新标记为未完成吗?');
                 if (!confirmed) {
                     // If the user cancels, revert the learned status and exit the method
-                    lesson.resources[index].learned = !wasLearned;
+                    resource.learned = !wasLearned;
                     return;
                 }
             } else {
@@ -140,22 +126,22 @@ export default {
 
             // Update the learned status based on the action
             // Note: The actual toggling for learning new resources is automatically handled by v-model binding
-            lesson.resources[index].learned = !wasLearned;
+            resource.learned = !wasLearned;
 
             try {
                 // API call to update the backend with the new learned status
                 await apiClient.post('/StudyPlan/LearningLessons/ToggleFinishedLearning', {
                     name: lesson.name,
-                    resourceLink: preview.url
+                    resourceLink: resource.link,
                 });
                 // Handle any additional UI updates or state management here
 
                 // Emit an event or call a method to refresh the UI as needed
-                this.$emit('resourceUpdated', lessonType, index);
+                this.$emit('resourceUpdated');
             } catch (error) {
                 console.error('Error updating resource learned status:', error);
                 // Revert the change in case of an API error
-                lesson.resources[index].learned = wasLearned;
+                resource.learned = wasLearned;
                 // Optionally, inform the user that the update failed
             }
         },
@@ -183,13 +169,6 @@ export default {
             return colors[index % colors.length];
         }
     },
-    setup() {
-        const store = useStore();
-
-        onBeforeUnmount(() => {
-            store.dispatch('clearLinkPreviews');
-        });
-    }
 };
 </script>
 

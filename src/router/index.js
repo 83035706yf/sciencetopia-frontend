@@ -1,5 +1,6 @@
 // router.js
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '@/store.js'
 import HomePageVue from '@/views/HomePage.vue'
 import SearchListPage from '@/views/SearchListPage.vue'
 import LogIn from '@/components/LogIn.vue'
@@ -42,7 +43,23 @@ const routes = [
   {
     path: '/personalurl/message',
     name: 'messagecenter',
-    component: MessageCenter
+    component: MessageCenter,
+    children: [
+      {
+        path: 'directMessages',
+        name: 'directMessages',
+        component: MessageCenter,
+      },
+      {
+        path: 'notifications',
+        name: 'notifications',
+        component: MessageCenter,
+      }
+    ]
+  },
+  {
+    path: '/:catchAll(.*)',
+    redirect: '/messages/directMessages'
   },
   {
     path: '/personalurl/account',
@@ -77,5 +94,10 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  store.commit('resetSelectedNodes'); // commit the mutation
+  next(); // proceed to the next route
+});
 
 export default router

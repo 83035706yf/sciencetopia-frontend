@@ -2,7 +2,7 @@
     <div>
         <!-- 如果用户已登录 -->
         <div v-if="isAuthenticated">
-            <v-menu>
+            <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
                     <v-btn icon="dots-vertical" v-bind="props" size="40">
                         <v-avatar size="35">
@@ -14,10 +14,6 @@
                 <v-list>
                     <v-list-item @click="personalcenter">
                         <v-list-item-title>个人中心</v-list-item-title>
-                    </v-list-item>
-                    <v-divider></v-divider>
-                    <v-list-item @click="messagecenter">
-                        <v-list-item-title>消息中心</v-list-item-title>
                     </v-list-item>
                     <v-divider></v-divider>
                     <v-list-item @click="accountcenter">
@@ -55,9 +51,6 @@ export default {
         personalcenter() {
             this.$router.push({ name: 'personalcenter' });  // 跳转到PersonalCenter组件
         },
-        messagecenter() {
-            this.$router.push({ name: 'messagecenter' });  // 跳转到MessageCenter组件
-        },
         accountcenter() {
             this.$router.push({ name: 'accountcenter' });  // 跳转到AccountCenter组件
         },
@@ -67,6 +60,7 @@ export default {
                 await apiClient.post('/users/Account/Logout');
 
                 await this.$store.dispatch('checkAuthenticationStatus');  // Add this line
+                // await this.$store.dispatch('disconnectSignalR');
 
                 // 可选：跳转到登录页面或首页
                 this.$router.push('/');

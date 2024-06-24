@@ -63,9 +63,12 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <!-- 显示当前用户的用户名 -->
+        <!-- 显示当前用户的用户名及消息提示等 -->
         <div class="navbar-right">
           <LogInPartial></LogInPartial>
+        </div>
+        <div>
+          <MessageAlert />
         </div>
         <!-- 夜间模式切换 -->
         <div class="dark-mode-switch">
@@ -95,6 +98,7 @@
 <script>
 import LogInPartial from './LogInPartial.vue';
 import LearningPlanner from './LearningPlanner.vue';
+import MessageAlert from '@/components/MessageAlert.vue';  // 导入MessageAlert组件
 // import debounce from 'lodash/debounce';
 // import { apiClient } from '@/api';
 // import { useStore } from 'vuex';
@@ -149,10 +153,10 @@ export default {
         this.searchResults = [];
         return;
       }
-      
+
       this.isLoading = true;
       try {
-        const path = this.$router.resolve({ name: 'searchList', query: { q: this.searchQuery } }).href; 
+        const path = this.$router.resolve({ name: 'searchList', query: { q: this.searchQuery } }).href;
         window.open(path, '_blank');
       } catch (error) {
         console.error('Error searching:', error);
@@ -180,7 +184,7 @@ export default {
     },
   },
 
-  components: { LogInPartial, LearningPlanner }
+  components: { LogInPartial, LearningPlanner, MessageAlert },
 }
 </script>
 

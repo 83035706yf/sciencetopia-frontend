@@ -59,6 +59,7 @@ export default {
                 // 在登陆成功后跳转到首页
                 this.$router.push('/');
                 this.$store.dispatch('checkAuthenticationStatus');
+                // this.$store.dispatch('connectSignalR');
 
                 // Handle the response as needed
                 console.log('Login successful:', response.config.data);

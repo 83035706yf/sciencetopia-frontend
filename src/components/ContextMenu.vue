@@ -2,7 +2,7 @@
     <div v-if="visible" :style="styleObject" class="context-menu" @click.stop>
         <ul class="menu-list">
             <li @click="createNode">创建节点</li>
-            <li @click="createLink">创建边</li>
+            <li v-if="this.$store.state.selectedNodes.length === 2" @click="createLink">创建边</li>
             <!-- Add more menu items here as needed -->
         </ul>
     </div>
@@ -36,7 +36,8 @@ export default {
             // console.log('createNode');
         },
         createLink() {
-            this.$emit('createLink');
+            this.$store.dispatch('toggleLinkCreationForm', true); // Or true, depending on the context
+            this.$emit('update:visible', false);
         },
         handleClickOutside(event) {
             if (!this.$el.contains(event.target)) {

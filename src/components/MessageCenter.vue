@@ -1,14 +1,17 @@
 <template>
     <v-container class="message-center">
         <v-row>
-            <v-col cols="2">
+            <v-col cols="2" class="sidebar">
                 <v-card outlined>
                     <v-list>
-                        <v-list-item @click="activeTab = 'directMessages'"
+                        <v-list-item :to="{ name: 'directMessages' }" exact
                             :class="{ 'active': activeTab === 'directMessages' }">
                             <v-list-item-title>私信</v-list-item-title>
+                            <div v-if="messageCount > 0" class="alert-badge">
+                                {{ messageCount > 99 ? '99+' : messageCount }}
+                            </div>
                         </v-list-item>
-                        <v-list-item @click="activeTab = 'notifications'"
+                        <v-list-item :to="{ name: 'notifications' }" exact
                             :class="{ 'active': activeTab === 'notifications' }">
                             <v-list-item-title>系统消息</v-list-item-title>
                         </v-list-item>
@@ -19,56 +22,36 @@
                 <v-card v-if="activeTab === 'directMessages'">
                     <v-card-text>
                         <v-row>
-                            <!-- Left part: List of conversations -->
                             <v-col cols="3">
                                 <v-list dense>
-                                    <v-list-item v-for="conversation in conversations" :key="conversation.conversationId"
-                                        @click="selectConversation(conversation)"
-                                        :class="{ 'grey-background': conversation.conversationId === selectedConversation.conversationId }">
-                                        <v-list-item-content>
+                                    <v-list-item v-for="conversation in sortedConversations"
+                                        :key="conversation.conversationId" @click="selectConversation(conversation)"
+                                        :class="{ 'grey-background': isSelectedConversation(conversation) }">
+                                        <div>
                                             <v-avatar>
-                                                <img :src="conversation.messages[0].sender.avatarUrl" alt="Avatar">
+                                                <img :src="conversation.partnerAvatarUrl" alt="Avatar" />
                                             </v-avatar>
-                                            <v-list-item-title>{{ conversation.messages[0].sender.userName
-                                            }}</v-list-item-title>
-                                            <v-list-item-subtitle>{{ conversation.messages.length > 0 ?
-                                                conversation.messages[conversation.messages.length - 1].content : null
-                                            }}</v-list-item-subtitle>
-                                        </v-list-item-content>
+                                            <v-list-item-title>{{ conversation.partnerName }}</v-list-item-title>
+                                            <v-list-item-subtitle>{{ getLastMessage(conversation)
+                                                }}</v-list-item-subtitle>
+                                            <div v-if="conversationMessageCount[conversation.conversationId] > 0"
+                                                class="alert-badge">
+                                                {{ conversationMessageCount[conversation.conversationId] }}
+                                            </div>
+                                        </div>
                                     </v-list-item>
                                 </v-list>
                             </v-col>
-
-                            <!-- Divider -->
                             <v-divider vertical></v-divider>
-
-                            <!-- Right part: Conversation messages -->
-                            <v-col cols="9">
-                                <div v-if="selectedConversation">
-                                    <v-list dense>
-                                        <v-list-item v-for="message in selectedConversation.messages" :key="message.id"
-                                            :class="{ 'my-message': isMyMessage(message), 'their-message': !isMyMessage(message) }">
-                                            <v-list-item-content v-if="message.sender.id !== undefined"
-                                                class="d-flex align-center">
-                                                <v-avatar v-if="!isMyMessage(message)">
-                                                    <img :src="message.sender.avatarUrl" alt="Avatar">
-                                                </v-avatar>
-                                                <div class="message-bubble" :class="{ 'ml-2': !isMyMessage(message) }">
-                                                    {{ message.content }}
-                                                </div>
-                                                <v-avatar v-if="isMyMessage(message)">
-                                                    <img :src="this.$store.state.avatarUrl" alt="Avatar">
-                                                </v-avatar>
-                                            </v-list-item-content>
-                                        </v-list-item>
-                                    </v-list>
-
-                                    <v-textarea variant="outlined" v-model="selectedConversation.newMessage" label="编辑消息..." outlined
-                                        dense></v-textarea>
-                                    <v-card-actions class="justify-end">
-                                        <v-btn variant="text" @click="sendMessage(selectedConversation)">发送</v-btn>
-                                    </v-card-actions>
-                                </div>
+                            <v-col cols="9" v-if="selectedConversation">
+                                <MessageList ref="messageList" :messages="selectedConversation.messages"
+                                    :userId="userId" :userAvatarUrl="userAvatarUrl" />
+                                <v-divider></v-divider>
+                                <v-textarea v-model="selectedConversation.newMessage" label="编辑消息..." outlined
+                                    dense></v-textarea>
+                                <v-card-actions class="justify-end">
+                                    <v-btn @click="sendMessage(selectedConversation)">发送</v-btn>
+                                </v-card-actions>
                             </v-col>
                         </v-row>
                     </v-card-text>
@@ -80,9 +63,7 @@
                     <v-card-text>
                         <v-list>
                             <v-list-item v-for="notification in notifications" :key="notification.id">
-                                <v-list-item-content>
-                                    {{ notification.content }}
-                                </v-list-item-content>
+                                <div>{{ notification.content }}</div>
                             </v-list-item>
                         </v-list>
                     </v-card-text>
@@ -91,80 +72,144 @@
         </v-row>
     </v-container>
 </template>
-  
+
 <script>
-import { HubConnectionBuilder } from '@microsoft/signalr';
 import { apiClient } from '@/api';
+import { connection, initializeSignalRConnection } from '@/services/signalr-service';
+import MessageList from '@/components/MessageList.vue';
+import { mapState } from 'vuex';
 
 export default {
+    components: { MessageList },
     data() {
         return {
             activeTab: 'directMessages',
-            conversations: [], // Initially empty, will be filled with fetched data
-            selectedConversation: null, // Placeholder for selected conversation details
-            notifications: [], // Initially empty, will be filled with fetched data
-            connection: null,
-            userId: null, // Placeholder for actual user ID
+            conversations: [],
+            selectedConversation: null,
+            notifications: [],
+            userId: null,
+            userAvatarUrl: null,
         };
     },
+    computed: {
+        ...mapState(['messageCount', 'conversationMessageCount']),
+        sortedConversations() {
+            return this.conversations.slice().sort((a, b) => {
+                const lastMessageA = a.messages[a.messages.length - 1];
+                const lastMessageB = b.messages[b.messages.length - 1];
+                return new Date(lastMessageB.sentTime) - new Date(lastMessageA.sentTime);
+            });
+        }
+    },
+    watch: {
+        $route(to) {
+            if (to.name === 'directMessages') {
+                this.activeTab = 'directMessages';
+                if (this.selectedConversation) {
+                    this.markMessagesAsRead(this.selectedConversation.conversationId);
+                }
+            } else if (to.name === 'notifications') {
+                this.activeTab = 'notifications';
+            }
+        },
+        selectedConversation(conversation) {
+            if (conversation) {
+                this.markMessagesAsRead(conversation.conversationId);
+            }
+        },
+    },
     created() {
-        this.fetchConversations(); // Method to fetch conversation data
-        this.initializeSignalRConnection(); // Method to initialize SignalR connection
+        this.fetchConversations();
+        this.updateActiveTab();
+        this.initializeSignalR();
     },
     methods: {
+        updateActiveTab() {
+            if (this.$route.name === 'directMessages') {
+                this.activeTab = 'directMessages';
+                if (this.selectedConversation) {
+                    this.markMessagesAsRead(this.selectedConversation.conversationId);
+                }
+                console.log('Updated active tab to directMessages');
+            } else if (this.$route.name === 'notifications') {
+                this.activeTab = 'notifications';
+                console.log('Updated active tab to notifications');
+            }
+        },
         async fetchConversations() {
-            // Placeholder: Fetch conversations and their messages from your API
-            // Update this.conversations with the fetched data
-            // Also, set this.userId to the actual user ID
             const userId = this.$store.state.currentUserID;
-            const response = await apiClient.get(`Message/GetMessageByReceiver/${userId}`);
+            const response = await apiClient.get(`Message/GetGroupedMessagesByUser/${userId}`);
             this.conversations = response.data;
             this.selectedConversation = this.conversations[0];
+            this.userId = userId;
+            this.userAvatarUrl = this.$store.state.avatarUrl;
         },
-
         selectConversation(conversation) {
-            console.log(conversation);
             this.selectedConversation = conversation;
         },
-
-        isMyMessage(message) {
-            return message.sender.id === this.$store.state.currentUserID;
+        isSelectedConversation(conversation) {
+            return conversation.conversationId === this.selectedConversation.conversationId;
         },
-        initializeSignalRConnection() {
-            this.connection = new HubConnectionBuilder()
-                .withUrl('http://localhost:5085/chathub')
-                .build();
-
-            this.connection.on('ReceiveMessage', (conversationId, message) => {
-                const conversation = this.conversations.find((c) => c.id === conversationId);
-                if (conversation) {
-                    conversation.messages.push(message);
-                } else {
-                    // Handle new conversation or fetch missing conversation details
-                    this.fetchConversations(); // Optionally refetch conversations to get the new one
-                }
+        getLastMessage(conversation) {
+            return conversation.messages.length > 0 ? conversation.messages[conversation.messages.length - 1].content : null;
+        },
+        handleReceiveMessage(conversationId, message) {
+            const conversation = this.conversations.find((c) => c.conversationId === conversationId);
+            if (conversation) {
+                conversation.messages.push(message);
+            } else {
+                this.fetchConversations();
+            }
+        },
+        async markMessagesAsRead(conversationId) {
+            await apiClient.post('Message/MarkAsRead', {
+                conversationId,
+                userId: this.userId,
             });
-
-            this.connection.start().catch((err) => console.error('SignalR Connection Error:', err));
+            const conversation = this.conversations.find(c => c.conversationId === conversationId);
+            if (conversation) {
+                conversation.messages.forEach(message => {
+                    message.isRead = true;
+                });
+            }
+            connection.invoke('MarkMessagesAsRead', conversationId, this.userId);
+            console.log('Marked messages as read, conversationId:', conversationId);
         },
         sendMessage(conversation) {
             if (conversation.newMessage.trim() === '') return;
 
-            const receiverId = conversation.messages[0].sender.id; // Assuming you have partnerId in your conversation object
-            this.connection
-                .invoke('SendMessage', conversation.conversationId, this.$store.state.currentUserID, receiverId, conversation.newMessage)
+            const receiverId = conversation.partnerId;
+            connection
+                .invoke('SendMessage', conversation.conversationId, this.userId, receiverId, conversation.newMessage)
                 .then(() => {
-                    conversation.messages.push({
-                        id: Date.now().toString(), // Temporary ID; the server should generate a real ID
+                    const newMessage = {
+                        id: Date.now().toString(),
                         senderName: 'You',
                         content: conversation.newMessage,
                         sender: {
-                            avatarUrl: this.$store.state.avatarUrl
-                        },
-                    });
+                            id: this.userId,
+                            avatarUrl: this.userAvatarUrl,
+                        }
+                    };
+                    conversation.messages.push(newMessage);
                     conversation.newMessage = '';
+                    this.$refs.messageList.scrollToBottom();
                 })
                 .catch((err) => console.error('Error sending message:', err));
+        },
+        initializeSignalR() {
+            initializeSignalRConnection(this.handleReceiveMessage, null, null, this.updateConversationDetails);
+            console.log('SignalR connection initialized');
+        },
+        updateConversationDetails(conversationId, lastMessageSentTime) {
+            const conversation = this.conversations.find(c => c.conversationId === conversationId);
+            if (conversation) {
+                conversation.lastMessageSentTime = lastMessageSentTime;
+                this.sortConversations();
+            } else {
+                this.fetchConversations();
+            }
+            console.log('Updated conversation details:', conversationId, lastMessageSentTime);
         },
     },
 };
@@ -175,51 +220,27 @@ export default {
     display: flex;
 }
 
+.sidebar {
+    height: 100%;
+    overflow-y: auto;
+}
+
 .grey-background {
     background-color: #eeeeee;
-    /* This is approximately the color for 'grey lighten-2' */
-}
-
-
-.their-message .d-flex .message-bubble {
-    padding: 8px 12px;
-    border-radius: 16px;
-    background-color: #1976D2;
-    color: white;
-    max-width: 80%;
-    word-break: break-word;
-    /* Ensure text wraps inside the bubble */
-}
-
-.my-message {
-    justify-content: flex-end;
-    /* Align my messages to the right */
-}
-
-.my-message .d-flex .message-bubble {
-    padding: 8px 12px;
-    border-radius: 16px;
-    background-color: green;
-    color: white;
-    max-width: 80%;
-    word-break: break-word;
-    /* Ensure text wraps inside the bubble */
 }
 
 .active {
     background-color: #f0f0f0;
 }
 
-.v-card {
-    margin-bottom: 1rem;
+.alert-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #ff6666;
+    color: white;
+    border-radius: 50%;
+    padding: 0.3em 0.8em;
+    font-size: 0.7em;
 }
-
-.v-card-title {
-    background-color: #f0f0f0;
-    padding: 1rem;
-}
-
-.v-card-text {
-    padding: 1rem;
-}</style>
-  
+</style>

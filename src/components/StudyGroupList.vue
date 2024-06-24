@@ -1,5 +1,6 @@
 <template>
-    <v-container>
+    <LoadingSpinner v-if="isLoading" />
+    <v-container v-if="isLoading == false">
         <div v-if="groups.length == 0">
             <p class="pb-6">暂时没有学习小组，去
                 <button @click="toCreateGroupPage()">创建</button>
@@ -42,17 +43,23 @@
   
 <script>
 import { apiClient } from '@/api';
+import LoadingSpinner from './LoadingSpinner.vue'; // Import the Spinner component
 
 export default {
     name: 'StudyGroupList',
+    components: {
+        LoadingSpinner
+    },
 
     data() {
         return {
-            groups: [] // This will be filled with data fetched from the backend
+            groups: [], // This will be filled with data fetched from the backend
+            isLoading: false,  // Add a loading state
         };
     },
     methods: {
         async fetchGroups() {
+            this.isLoading = true;  // Set loading to true when fetching starts
             try {
                 const response = await apiClient.get('/StudyGroup/GetAllStudyGroups');
                 const groupsWithAvatars = await Promise.all(response.data.map(async group => {
@@ -67,6 +74,8 @@ export default {
                 this.groups = groupsWithAvatars;
             } catch (error) {
                 console.error('Error fetching groups:', error);
+            } finally {
+                this.isLoading = false;  // Set loading to false when fetching ends
             }
         },
         toCreateGroupPage() {

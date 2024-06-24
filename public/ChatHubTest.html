@@ -12,31 +12,41 @@
     <button onclick="joinConversation()">Join Conversation</button>
     <button onclick="sendMessage()">Send Message</button>
     <div id="messages"></div>
+    <div id="messageCountContainer">
+        <strong>Unread Messages: </strong><span id="messageCount">0</span>
+    </div>
 
     <script>
         var connection = new signalR.HubConnectionBuilder()
             .withUrl("http://localhost:5085/chathub")
             .build();
 
+        var messageCount = 0;
+
         connection.start().then(function () {
             console.log("Connected!");
+
+            // Register the user after connection starts
+            var userId = document.getElementById("userId").value;
+            if (userId) {
+                connection.invoke("RegisterUser", userId).catch(function (err) {
+                    return console.error(err.toString());
+                });
+            }
         }).catch(function (err) {
             return console.error(err.toString());
         });
 
         connection.on("ReceiveMessage", function (message) {
-            // Assuming message is an object with senderId and content properties
             var msg = document.createElement("div");
-            msg.textContent = message.senderId + ": " + message.content; // Adjust this line
+            msg.textContent = message.senderId + ": " + message.content;
             document.getElementById("messages").appendChild(msg);
         });
 
-        connection.on("LoadHistory", function (messages) {
-            messages.forEach((message) => {
-                var msg = document.createElement("div");
-                msg.textContent = message.senderId + ": " + message.content; // Adjust this line
-                document.getElementById("messages").appendChild(msg);
-            });
+        connection.on("NewMessageNotification", function (count) {
+            console.log("NewMessageNotification received with count: " + count); // Debugging line
+            messageCount = count;
+            document.getElementById("messageCount").textContent = messageCount;
         });
 
         function joinConversation() {

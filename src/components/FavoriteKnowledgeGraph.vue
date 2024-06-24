@@ -1,7 +1,7 @@
 <template>
   <div ref="svgRef" id="cy" :style="{ width: width + 'px', height: height + 'px' }">
     <!-- 选中节点时显示的按钮 -->
-    <div v-if="selectedNode" class="node-actions">
+    <div v-if="selectedNodes" class="node-actions">
       <button @click="showAdjacentNodes">
         <font-awesome-icon :icon="['fas', 'circle-nodes']" />
       </button>
@@ -28,7 +28,7 @@ export default {
   name: 'FavoriteKnowledgeGraph',
   setup() {
     const { svgRef,
-            selectedNode,
+            selectedNodes,
             fetchData,
             showAdjacentNodes,
             showPrerequisiteNodes,
@@ -42,14 +42,14 @@ export default {
     // ... 你可以添加或覆盖一些逻辑 ...
     // 删除选中的节点
     const removeSelectedNode = async () => {
-      if (selectedNode.value) {
+      if (selectedNodes.value) {
         try {
-          const response = await apiClient.delete(`/Favorites/${selectedNode.value.id}`);
+          const response = await apiClient.delete(`/Favorites/${selectedNodes.value.id}`);
           if (response.data.success) {
             // 从图中删除节点
-            svgRef.value.elements(`node[id = "${selectedNode.value.id}"]`).remove();
+            svgRef.value.elements(`node[id = "${selectedNodes.value.id}"]`).remove();
             // 重置选中的节点
-            selectedNode.value = null;
+            selectedNodes.value = null;
             // 刷新图数据
             await fetchData();
           } else {
@@ -64,7 +64,7 @@ export default {
 
     return {
       svgRef,
-      selectedNode,
+      selectedNodes,
       fetchData,
       showAdjacentNodes,
       showPrerequisiteNodes,

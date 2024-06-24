@@ -1,6 +1,7 @@
 // src/store.js or src/store/index.js
 import { createStore } from 'vuex';
 import { apiClient } from '@/api';  // Adjust the path to your api.js file
+import { initializeSignalRConnection, startConnection, stopConnection } from '@/services/signalr-service';
 
 export default createStore({
   state: {
@@ -16,10 +17,12 @@ export default createStore({
       selfIntroduction: '',
       originalUsername: '',
     },
-    selectedNode: null,
-    linkPreviews: [],
+    selectedNodes: [],
     isEditing: false,
     displayNodeCreationForm: false,
+    displayLinkCreationForm: false,
+    messageCount: 0,
+    conversationMessageCount: {},
   },
   mutations: {
     SET_AUTHENTICATED(state, value) {
@@ -40,17 +43,25 @@ export default createStore({
     updateUserInfo(state, updatedInfo) {
       Object.assign(state.userInfo, updatedInfo);
     },
-    setSelectedNode(state, node) {
-      state.selectedNode = node;
+    setSelectedNodes(state, node) {
+      state.selectedNodes = [node];
     },
-    resetSelectedNode(state) {
-      state.selectedNode = null;
+    addSelectedNode(state, node) {
+      // Only add or modify the second node if the first node already exists
+      if (state.selectedNodes.length > 0 && state.selectedNodes[0].id !== node.id) {
+        if (state.selectedNodes.length === 1) {
+          state.selectedNodes.push(node); // Add as the second node
+        } else {
+          // If there is already a second node, replace it
+          state.selectedNodes[1] = node;
+        }
+      }
     },
-    setLinkPreviews(state, previews) {
-      state.linkPreviews = previews;
+    removeSelectedNode(state, node) {
+      state.selectedNodes = state.selectedNodes.filter(n => n.id !== node.id);
     },
-    resetLinkPreviews(state) {
-      state.linkPreviews = null;
+    resetSelectedNodes(state) {
+      state.selectedNodes = [];
     },
     // Mutation to toggle the isEditing state
     TOGGLE_EDIT_MODE(state) {
@@ -63,8 +74,47 @@ export default createStore({
     SET_DISPLAY_NODE_CREATION_FORM(state, newValue) {
       state.displayNodeCreationForm = newValue;
     },
+    SET_DISPLAY_LINK_CREATION_FORM(state, newValue) {
+      state.displayLinkCreationForm = newValue;
+    },
+    setMessageCount(state, count) {
+      state.messageCount = count;
+    },
+    incrementMessageCount(state) {
+      state.messageCount++;
+    },
+    resetMessageCount(state) {
+      state.messageCount = 0;
+    },
+    setConversationMessageCount(state, { conversationId, conversationMessageCount }) {
+      state.conversationMessageCount[conversationId] = conversationMessageCount;
+    },
+    incrementConversationMessageCount(state, conversationId) {
+      if (state.conversationMessageCount[conversationId] !== undefined) {
+        state.conversationMessageCount[conversationId]++;
+      } else {
+        state.conversationMessageCount[conversationId] = 1;
+      }
+    },
+    resetConversationMessageCount(state, conversationId) {
+      state.conversationMessageCount[conversationId] = 0;
+    },
   },
   actions: {
+    connectSignalR({ commit, dispatch }) {
+      initializeSignalRConnection(
+        (conversationId, message) => dispatch('handleReceiveMessage', { conversationId, message }),
+        (messageCount) => commit('setMessageCount', messageCount),
+        (conversationId, conversationMessageCount) => commit('setConversationMessageCount', { conversationId, conversationMessageCount }),
+        (conversationId, lastMessageSentTime) => commit('updateConversationDetails', { conversationId, lastMessageSentTime })
+      );
+      startConnection();
+    },
+    disconnectSignalR({ commit }) {
+      stopConnection();
+      commit('resetMessageCount');
+    },
+
     async checkAuthenticationStatus({ commit }) {
       try {
         const response = await apiClient.get('/users/Account/AuthStatus');
@@ -72,8 +122,6 @@ export default createStore({
         const userId = response.data.userId;
         commit('SET_AUTHENTICATED', isAuthenticated);
         commit('SET_CURRENT_USER_ID', userId);
-        console.log('UserId:', userId, 'IsAuthenticated:', isAuthenticated);
-        console.log('state.currentUserID:', this.state.currentUserID, 'state.isAuthenticated:', this.state.isAuthenticated);
         if (isAuthenticated) {
           await this.dispatch('fetchUserAvatar');
         }
@@ -132,26 +180,6 @@ export default createStore({
         }
       }
     },
-    async fetchLinkPreviews({ commit }, resources) {
-      const previews = [];
-      for (const resource of resources) {
-        try {
-          const response = await apiClient.get('/LinkPreview', { params: { url: resource.link } });
-          previews.push({
-            url: resource.link,
-            title: response.data.title,
-            image: response.data.image,
-            description: response.data.description,
-          });
-        } catch (error) {
-          console.error('Error fetching link preview:', error);
-        }
-      }
-      commit('setLinkPreviews', previews);
-    },
-    clearLinkPreviews({ commit }) {
-      commit('resetLinkPreviews');
-    },
     async fetchAvatarUrl(_, userId) {
       try {
         const response = await apiClient.get(`/AllUsers/GetUserAvatarById/${userId}`);
@@ -167,6 +195,28 @@ export default createStore({
     },
     toggleNodeCreationForm({ commit }, newValue) {
       commit('SET_DISPLAY_NODE_CREATION_FORM', newValue);
+    },
+    toggleLinkCreationForm({ commit }, newValue) {
+      commit('SET_DISPLAY_LINK_CREATION_FORM', newValue);
+      console.log('Link creation form:', newValue);
+    },
+    updateMessageCount({ commit }, messageCount) {
+      commit('setMessageCount', messageCount);
+    },
+    updateConversationMessageCount({ commit }, { conversationId, conversationMessageCount }) {
+      commit('setConversationMessageCount', { conversationId, conversationMessageCount });
+    },
+    incrementMessageCount({ commit } ) {
+      commit('incrementMessageCount');
+    },
+    incrementConversationMessageCount({ commit }, conversationId) {
+      commit('incrementConversationMessageCount', conversationId);
+    },
+    resetMessageCount({ commit }) {
+      commit('resetMessageCount');
+    },
+    markMessagesAsRead({ commit }, conversationId) {
+      commit('resetConversationMessageCount', conversationId);
     },
   },
 

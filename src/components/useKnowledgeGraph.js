@@ -1,9 +1,10 @@
 // useKnowledgeGraph.js
-import { ref, computed, onMounted, reactive } from 'vue';
+import { ref, computed, onMounted, reactive, watch } from 'vue';
 // import useGraphEditMode from './useGraphEditMode';
 import { useStore } from 'vuex';
 import { apiClient } from '@/api';
 import * as d3 from 'd3';
+import { useGlobalLoading } from './GlobalLoader.vue';
 // import { eventBus } from '../eventBus';
 
 // Context menu state
@@ -18,10 +19,12 @@ export default function useKnowledgeGraph(endpoint) {
     const store = useStore();
     const svgRef = ref(null);
     let link, node, svg, labels, zoom, simulation;
-    const selectedNode = computed(() => store.state.selectedNode);
+    const selectedNodes = computed(() => store.state.selectedNodes);
     const width = 860;  // Example fixed width
     const height = 860; // Example fixed height
     let currentZoomLevel = 1;
+
+    const { showLoading, hideLoading } = useGlobalLoading();
 
     // Directly use Vuex store to access and modify isEditing
     const isEditing = computed(() => store.state.isEditing);
@@ -54,7 +57,9 @@ export default function useKnowledgeGraph(endpoint) {
     };
 
     // Function to create the force-directed graph
-    const createForceDirectedGraph = () => {
+    const createForceDirectedGraph = async () => {
+        showLoading(); // Show the loader
+        
         zoom = d3.zoom()
             .scaleExtent([0.2, 4]) // Adjust these values as needed
             .on('zoom', (event) => {
@@ -68,12 +73,14 @@ export default function useKnowledgeGraph(endpoint) {
             .attr('height', height)
             .call(zoom)
             .on('contextmenu', handleSvgRightClick)
-            .on('click', handleNodeClick);
+        // .on('click', handleNodeClick);
 
         simulation = d3.forceSimulation()
             .force('link', d3.forceLink().id(d => d.id))
             .force('charge', d3.forceManyBody())
-            .force('center', d3.forceCenter(width / 2, height / 2));
+            .force('center', d3.forceCenter(width / 2, height / 2))
+            .force("x", d3.forceX())
+            .force("y", d3.forceY());
 
         link = svg.append('g')
             .attr('stroke', '#999')
@@ -87,7 +94,9 @@ export default function useKnowledgeGraph(endpoint) {
             .attr("class", "labels")
             .selectAll("text")
 
-        fetchData(); // Fetch data from the backend
+        await fetchData(); // Fetch data from the backend
+
+        hideLoading(); // Hide the global loading indicator
     };
 
     // Function to update the graph with fetched data
@@ -160,29 +169,51 @@ export default function useKnowledgeGraph(endpoint) {
                 return (d.labels.includes('Topic') || d.labels.includes('Field')) ? (10 + (isNaN(d.degree) ? 0 : d.degree)) * 0.8 : 5 + (isNaN(d.degree) ? 0 : d.degree) * 0.5;
             })
             .attr('fill', d => {
-                if (d.labels.includes('Subject')) return '#c5282a';
-                if (d.labels.includes('Keyword')) return '#C6A969';
-                if (d.labels.includes('Topic')) return '#d5282a';
-                if (d.labels.includes('Field')) return '#c5282a';
-                if (d.labels.includes('People')) return '#597E52';
-                if (d.labels.includes('Works')) return '#4CB9E7';
-                if (d.labels.includes('Event')) return '#5C469C';
-                return '#ccc'; // Default color
+                if (d.labels.includes('pending_approval')) return '#848482';
+                else {
+                    if (d.labels.includes('Subject')) return '#c5282a';
+                    if (d.labels.includes('Keyword')) return '#C6A969';
+                    if (d.labels.includes('Topic')) return '#d5282a';
+                    if (d.labels.includes('Field')) return '#c5282a';
+                    if (d.labels.includes('People')) return '#597E52';
+                    if (d.labels.includes('Works')) return '#4CB9E7';
+                    if (d.labels.includes('Event')) return '#5C469C';
+                    return '#ccc'; // Default color
+                }
             })
             .call(drag(simulation))
             .on('click', (event, d) => {
-                if (store.state.displayNodeCreationForm) {
-                    // 弹出确认对话框
-                    if (confirm("确定离开创建节点页面？创建的节点将不会被保存！")) {
-                        // 用户点击确认
-                        store.dispatch('toggleNodeCreationForm', false);
-                        store.commit('setSelectedNode', d);
+                if (store.state.isEditing) {
+                    if (store.state.displayNodeCreationForm) {
+                        // 弹出确认对话框
+                        if (confirm("确定离开创建节点页面？创建的节点将不会被保存！")) {
+                            // 用户点击确认
+                            store.dispatch('toggleNodeCreationForm', false);
+                            store.commit('setSelectedNodes', d);
+                        }
+                    }
+                    else if (store.state.displayLinkCreationForm) {
+                        // 弹出确认对话框
+                        if (confirm("确定离开创建关系页面？创建的关系将不会被保存！")) {
+                            // 用户点击确认
+                            store.dispatch('toggleLinkCreationForm', false);
+                            store.commit('setSelectedNodes', d);
+                        }
+                    }
+                    else if (event.shiftKey) {
+                        // Check if the node is already selected
+                        const isSelected = store.state.selectedNodes.includes(d);
+                        if (isSelected) {
+                            store.commit('removeSelectedNode', d);
+                        } else {
+                            store.commit('addSelectedNode', d);
+                        }
                     } else {
-                        // 用户点击取消，什么也不做
+                        // Reset selection to just this node
+                        store.commit('setSelectedNodes', d);
                     }
                 } else {
-                    // 正常处理点击事件
-                    store.commit('setSelectedNode', d);
+                    store.commit('setSelectedNodes', d);
                 }
             });
 
@@ -229,22 +260,24 @@ export default function useKnowledgeGraph(endpoint) {
             })
             .on('mouseout', function (event, d) {
                 if (currentZoomLevel <= topicLabelThreshold) labels.filter(l => l === d && !l.labels.includes('Subject')).text('') // Hide name on mouseout, except for 'Field' nodes
-                else if (currentZoomLevel <= keywordLabelThreshold) labels.filter(l => l === d && (!l.labels.includes('Topic') && !l.labels.includes('Field'))).text('') // Hide name on mouseout, except for 'Field' and 'Topic' nodes
-                // return labels.filter(l => l === d && !l.labels.includes('Field')).text('');
+                else if (currentZoomLevel <= keywordLabelThreshold) labels.filter(l => l === d && (!l.labels.includes('Topic') && !l.labels.includes('Field') && !l.labels.includes('Subject'))).text('') // Hide name on mouseout, except for 'Field' and 'Topic' nodes
             });
 
         labels
             // .style('visibility', d => {
-            //     if (d.labels.includes('Field')) return 'visible';
+            //     if (d.labels.includes('Subject')) return 'visible';
             //     if (currentZoomLevel > topicLabelThreshold && d.labels.includes('Topic')) return 'visible';
             //     return currentZoomLevel > keywordLabelThreshold ? 'visible' : 'hidden';
             // })
             .style("font-size", 16 / currentZoomLevel)
             .style("stroke", d => {
-                if (d.labels.includes('Subject')) return "#d5282a"
-                else if (currentZoomLevel > topicThreshold && d.labels.includes('Field')) return "#d5282a"
-                else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return "#d5282a"
-                else return 'black'
+                if (d.labels.includes('pending_approval')) return '#848482';
+                else {
+                    if (d.labels.includes('Subject')) return "#d5282a"
+                    else if (currentZoomLevel > topicThreshold && d.labels.includes('Field')) return "#d5282a"
+                    else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return "#d5282a"
+                    else return 'black'
+                }
             })
             .style("stroke-width", d => {
                 if (d.labels.includes('Subject')) return 1 / currentZoomLevel
@@ -316,7 +349,7 @@ export default function useKnowledgeGraph(endpoint) {
             // Prepare nodes and links for D3
             const newNodes = [], newLinks = [];
 
-            backendData.forEach(item => {
+            backendData.data.forEach(item => {
                 // Process source nodes
                 if (!newNodes.some(n => n.id === item.source.identity)) {
                     newNodes.push({
@@ -352,6 +385,29 @@ export default function useKnowledgeGraph(endpoint) {
                 }
             });
 
+            backendData.data_pending.forEach(item => {
+                // Process all pending nodes
+                if (!newNodes.some(n => n.id === item.identity)) {
+                    newNodes.push({
+                        id: item.node.identity,
+                        labels: item.node.labels,
+                        name: item.node.properties.name,
+                        // Removed the direct link property handling
+                        description: item.node.properties.description,
+                        resources: item.node.resources // Assuming resources are now passed as an array of links
+                    });
+                }
+                // Process all pending links
+                if (item.relationship && item.relationship.type !== 'LINKS_TO') {
+                    newLinks.push({
+                        id: item.relationship.identity,
+                        source: newNodes.find(n => n.id === item.relationship.start),
+                        target: newNodes.find(n => n.id === item.relationship.end),
+                        relationshipType: item.relationship.type
+                    });
+                }
+            });
+
             links.value = newLinks; // Update the reactive reference
             nodes.value = newNodes;
 
@@ -362,9 +418,36 @@ export default function useKnowledgeGraph(endpoint) {
         }
     };
 
+    function highlightSelectedNodes(selectedNodes) {
+        if (node && node.style) {
+            // Reset styles for all nodes to remove any previous highlights
+            node
+                .style('stroke', '#ccc')  // Reset stroke color for all nodes
+                .style('stroke-width', 0)  // Reset stroke width to none for all nodes
+
+            // Highlight all selected nodes with a white stroke
+            node
+                .filter(d => selectedNodes.some(n => n.id === d.id))  // Filter nodes to find those that are selected
+                .style('stroke', '#00ffff')  // Set stroke color to white for selected nodes
+                .style('stroke-width', 4)  // Set stroke width to make it visible
+
+            // Update the visualization to reflect changes
+            node.raise();  // Bring the selected nodes to the front if overlapping
+        } else {
+            console.error('Node selection is undefined.');
+        }
+    }
+
+    // Watch for changes in the selectedNodes
+    watch(() => selectedNodes.value, (newNodes) => {
+        highlightSelectedNodes(newNodes);
+    }, { deep: true, immediate: true });
+
     onMounted(() => {
         createForceDirectedGraph();
-        // console.log("zoom:", zoom)
+        if (selectedNodes.value.length > 0) {
+            highlightSelectedNodes(selectedNodes);
+        }
     });
 
     // Assuming `nodes` and `links` are your D3 data arrays
@@ -387,24 +470,33 @@ export default function useKnowledgeGraph(endpoint) {
     };
 
     const showAdjacentNodes = () => {
-        const adjacentNodeIds = getAdjacentNodes(selectedNode.value.id).map(node => node.id);
-        node.style('opacity', d => adjacentNodeIds.includes(d.id) ? 1 : 0.1);
-        labels.style('opacity', d => adjacentNodeIds.includes(d.id) ? 1 : 0.1);
-        link.style('opacity', d => adjacentNodeIds.includes(d.source.id) || adjacentNodeIds.includes(d.target.id) ? 1 : 0.1);
+        const adjacentNodeIds = selectedNodes.value.flatMap(node =>
+            getAdjacentNodes(node.id).map(n => n.id)
+        );
+        const uniqueAdjacentNodeIds = [...new Set(adjacentNodeIds)]; // Remove duplicates
+        node.style('opacity', d => uniqueAdjacentNodeIds.includes(d.id) ? 1 : 0.1);
+        labels.style('opacity', d => uniqueAdjacentNodeIds.includes(d.id) ? 1 : 0.1);
+        link.style('opacity', d => uniqueAdjacentNodeIds.includes(d.source.id) || uniqueAdjacentNodeIds.includes(d.target.id) ? 1 : 0.1);
     };
 
     const showPrerequisiteNodes = () => {
-        const prerequisiteNodeIds = getPrerequisiteNodes(selectedNode.value.id).map(node => node.id);
-        node.style('opacity', d => prerequisiteNodeIds.includes(d.id) ? 1 : 0.1);
-        labels.style('opacity', d => prerequisiteNodeIds.includes(d.id) ? 1 : 0.1);
-        link.style('opacity', d => prerequisiteNodeIds.includes(d.source.id) ? 1 : 0.1);
+        const prerequisiteNodeIds = selectedNodes.value.flatMap(node =>
+            getPrerequisiteNodes(node.id).map(n => n.id)
+        );
+        const uniquePrerequisiteNodeIds = [...new Set(prerequisiteNodeIds)]; // Remove duplicates
+        node.style('opacity', d => uniquePrerequisiteNodeIds.includes(d.id) ? 1 : 0.1);
+        labels.style('opacity', d => uniquePrerequisiteNodeIds.includes(d.id) ? 1 : 0.1);
+        link.style('opacity', d => uniquePrerequisiteNodeIds.includes(d.source.id) ? 1 : 0.1);
     };
 
     const showSubsequentNodes = () => {
-        const subsequentNodeIds = getSubsequentNodes(selectedNode.value.id).map(node => node.id);
-        node.style('opacity', d => subsequentNodeIds.includes(d.id) ? 1 : 0.1);
-        labels.style('opacity', d => subsequentNodeIds.includes(d.id) ? 1 : 0.1);
-        link.style('opacity', d => subsequentNodeIds.includes(d.target.id) ? 1 : 0.1);
+        const subsequentNodeIds = selectedNodes.value.flatMap(node =>
+            getSubsequentNodes(node.id).map(n => n.id)
+        );
+        const uniqueSubsequentNodeIds = [...new Set(subsequentNodeIds)]; // Remove duplicates
+        node.style('opacity', d => uniqueSubsequentNodeIds.includes(d.id) ? 1 : 0.1);
+        labels.style('opacity', d => uniqueSubsequentNodeIds.includes(d.id) ? 1 : 0.1);
+        link.style('opacity', d => uniqueSubsequentNodeIds.includes(d.target.id) ? 1 : 0.1);
     };
 
     const resetView = () => {
@@ -419,7 +511,7 @@ export default function useKnowledgeGraph(endpoint) {
         // svg.transition().duration(750).call(zoom.transform, resetTransform);
 
         // Release vuex stored variable: selected node
-        store.commit('setSelectedNode', null);
+        store.commit('resetSelectedNodes');
     };
 
     const highlightAndCenterNode = (nodeId, svgElement) => {
@@ -453,7 +545,7 @@ export default function useKnowledgeGraph(endpoint) {
             .call(zoom.transform, transform);
 
         // Update the Vuex store if needed
-        store.commit('setSelectedNode', nodeData);
+        store.commit('setSelectedNodes', nodeData);
     };
 
     async function searchNode(searchQuery) {
@@ -497,23 +589,9 @@ export default function useKnowledgeGraph(endpoint) {
         // and eventually call addNode() with the necessary node data
     };
 
-    let selectedNodesForLink = [];
-
-    const handleNodeClick = (event, d) => {
-        if (!isEditing.value) return;
-
-        selectedNodesForLink.push(d);
-        if (selectedNodesForLink.length === 2) {
-            // Here, you would show a context menu or Vue component to create a link
-            console.log(`Creating link between ${selectedNodesForLink[0].id} and ${selectedNodesForLink[1].id}`);
-            // Reset selected nodes for next operation
-            selectedNodesForLink = [];
-        }
-    };
-
     return {
         svgRef,
-        selectedNode,
+        selectedNodes,
         fetchData,
         showAdjacentNodes,
         showPrerequisiteNodes,

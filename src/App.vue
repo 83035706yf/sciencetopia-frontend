@@ -1,5 +1,6 @@
 <template>
   <LayOut>
+    <GlobalLoader />
     <div class="container custom-width">
       <router-view></router-view>
     </div>
@@ -8,6 +9,7 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
 import LayOut from './components/LayOut.vue';
 // import './assets/css/site.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -17,7 +19,27 @@ export default {
   name: 'App',
   components: {
     LayOut
-  }
+  },
+  computed: {
+    ...mapState(['isAuthenticated']),
+  },
+  watch: {
+    isAuthenticated(newValue) {
+      if (newValue) {
+        this.connectSignalR();
+      } else {
+        this.disconnectSignalR();
+      }
+    }
+  },
+  created() {
+    if (this.isAuthenticated) {
+      this.connectSignalR();
+    }
+  },
+  methods: {
+    ...mapActions(['connectSignalR', 'disconnectSignalR']),
+  },
 }
 </script>
 
@@ -31,7 +53,8 @@ export default {
 }
 
 .custom-width {
-  max-width: 1800px; /* Example custom width */
+  max-width: 1800px;
+  /* Example custom width */
 }
 
 @font-face {

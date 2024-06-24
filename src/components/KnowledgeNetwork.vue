@@ -1,7 +1,7 @@
 <template>
     <div ref="svgRef" id="cy" :style="{ width: width + 'px', height: height + 'px' }">
         <!-- 选中节点时显示的按钮 -->
-        <div v-if="selectedNode" class="node-actions">
+        <div v-if="selectedNodes" class="node-actions">
             <button @click="showAdjacentNodes">
                 <i class="fas fa-circle-nodes action-icon"></i>
             </button>
@@ -75,7 +75,7 @@ export default {
         const dialogVisible = ref(false);
 
         const { svgRef,
-            selectedNode,
+            selectedNodes,
             fetchData,
             showAdjacentNodes,
             showPrerequisiteNodes,
@@ -90,7 +90,7 @@ export default {
 
         const addToFavorites = async () => {
             try {
-                const nodeId = selectedNode.value.id;
+                const nodeId = selectedNodes.value.id;
                 const response = await apiClient.post(`/Favorites/${nodeId}`);
                 if (response.data.success) {
                     alert('Node added to favorites successfully!');
@@ -139,7 +139,7 @@ export default {
 
         return {
             svgRef,
-            selectedNode,
+            selectedNodes,
             fetchData,
             showAdjacentNodes,
             showPrerequisiteNodes,

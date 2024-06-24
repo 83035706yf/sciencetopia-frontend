@@ -2,6 +2,7 @@
 import { createApp } from 'vue'
 import store from './store';  // Import the store
 import App from './App.vue'
+import GlobalLoader from './components/GlobalLoader.vue';
 
 /* import router */
 import router from './router'
@@ -45,8 +46,7 @@ const vuetify = createVuetify({
 router.beforeEach((to, from, next) => {
   // Check if the URL has changed
   if (to.path !== from.path) {
-    store.commit('resetSelectedNode');
-    store.commit('resetLinkPreviews');
+    store.commit('resetSelectedNodes');
     store.commit('RESET_EDIT_MODE');
   }
   next();
@@ -54,6 +54,7 @@ router.beforeEach((to, from, next) => {
 
 /* Create Vue app */
 const app = createApp(App)
+app.component('GlobalLoader', GlobalLoader);
 
 // app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)
