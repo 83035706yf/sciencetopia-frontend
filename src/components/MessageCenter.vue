@@ -24,7 +24,7 @@
                         <v-row>
                             <v-col cols="3">
                                 <v-list dense>
-                                    <v-list-item v-for="conversation in sortedConversations"
+                                    <v-list-item v-for="conversation in conversations"
                                         :key="conversation.conversationId" @click="selectConversation(conversation)"
                                         :class="{ 'grey-background': isSelectedConversation(conversation) }">
                                         <div>
@@ -75,9 +75,10 @@
 
 <script>
 import { apiClient } from '@/api';
-import { connection, initializeSignalRConnection } from '@/services/signalr-service';
+import { connection } from '@/services/signalr-service';
 import MessageList from '@/components/MessageList.vue';
 import { mapState } from 'vuex';
+import { DateTime } from 'luxon';
 
 export default {
     components: { MessageList },
@@ -93,13 +94,6 @@ export default {
     },
     computed: {
         ...mapState(['messageCount', 'conversationMessageCount']),
-        sortedConversations() {
-            return this.conversations.slice().sort((a, b) => {
-                const lastMessageA = a.messages[a.messages.length - 1];
-                const lastMessageB = b.messages[b.messages.length - 1];
-                return new Date(lastMessageB.sentTime) - new Date(lastMessageA.sentTime);
-            });
-        }
     },
     watch: {
         $route(to) {
@@ -121,19 +115,25 @@ export default {
     created() {
         this.fetchConversations();
         this.updateActiveTab();
-        this.initializeSignalR();
+        this.setupSignalREvents();
     },
     methods: {
+        setupSignalREvents() {
+            const connection = this.$root.$signalRConnection;
+            if (connection) {
+                connection.on('ReceiveMessage', this.handleReceiveMessage);
+            } else {
+                console.error('SignalR connection is not defined');
+            }
+        },
         updateActiveTab() {
             if (this.$route.name === 'directMessages') {
                 this.activeTab = 'directMessages';
                 if (this.selectedConversation) {
                     this.markMessagesAsRead(this.selectedConversation.conversationId);
                 }
-                console.log('Updated active tab to directMessages');
             } else if (this.$route.name === 'notifications') {
                 this.activeTab = 'notifications';
-                console.log('Updated active tab to notifications');
             }
         },
         async fetchConversations() {
@@ -153,14 +153,28 @@ export default {
         getLastMessage(conversation) {
             return conversation.messages.length > 0 ? conversation.messages[conversation.messages.length - 1].content : null;
         },
-        handleReceiveMessage(conversationId, message) {
+
+        async handleReceiveMessage(conversationId, message) {
+            // Check if conversationId is valid
+            if (!conversationId) {
+                console.error('conversationId is undefined or null');
+                return;
+            }
             const conversation = this.conversations.find((c) => c.conversationId === conversationId);
             if (conversation) {
-                conversation.messages.push(message);
+                if (message.sender.id !== this.userId) {
+                    conversation.messages.push(message);
+                    this.sortConversations(conversationId); // Sort conversations after receiving a message
+                }
+                // Mark the message as read if the conversation is currently selected
+                if (this.isSelectedConversation(conversation)) {
+                    await this.markMessagesAsRead(conversationId);
+                }
             } else {
                 this.fetchConversations();
             }
         },
+
         async markMessagesAsRead(conversationId) {
             await apiClient.post('Message/MarkAsRead', {
                 conversationId,
@@ -173,7 +187,6 @@ export default {
                 });
             }
             connection.invoke('MarkMessagesAsRead', conversationId, this.userId);
-            console.log('Marked messages as read, conversationId:', conversationId);
         },
         sendMessage(conversation) {
             if (conversation.newMessage.trim() === '') return;
@@ -186,6 +199,7 @@ export default {
                         id: Date.now().toString(),
                         senderName: 'You',
                         content: conversation.newMessage,
+                        sentTime: DateTime.utc().toISO(),
                         sender: {
                             id: this.userId,
                             avatarUrl: this.userAvatarUrl,
@@ -194,22 +208,16 @@ export default {
                     conversation.messages.push(newMessage);
                     conversation.newMessage = '';
                     this.$refs.messageList.scrollToBottom();
+                    this.sortConversations(conversation.conversationId); // Sort conversations after sending a message
                 })
                 .catch((err) => console.error('Error sending message:', err));
         },
-        initializeSignalR() {
-            initializeSignalRConnection(this.handleReceiveMessage, null, null, this.updateConversationDetails);
-            console.log('SignalR connection initialized');
-        },
-        updateConversationDetails(conversationId, lastMessageSentTime) {
-            const conversation = this.conversations.find(c => c.conversationId === conversationId);
-            if (conversation) {
-                conversation.lastMessageSentTime = lastMessageSentTime;
-                this.sortConversations();
-            } else {
-                this.fetchConversations();
+        sortConversations(conversationId) {
+            const conversationIndex = this.conversations.findIndex(c => c.conversationId === conversationId);
+            if (conversationIndex !== -1) {
+                const conversation = this.conversations.splice(conversationIndex, 1)[0];
+                this.conversations.unshift(conversation);
             }
-            console.log('Updated conversation details:', conversationId, lastMessageSentTime);
         },
     },
 };

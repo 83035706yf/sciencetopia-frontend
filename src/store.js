@@ -1,13 +1,14 @@
-// src/store.js or src/store/index.js
+// store.js or src/store/index.js
+
 import { createStore } from 'vuex';
 import { apiClient } from '@/api';  // Adjust the path to your api.js file
-import { initializeSignalRConnection, startConnection, stopConnection } from '@/services/signalr-service';
+import { startConnection, stopConnection } from '@/services/signalr-service';
 
 export default createStore({
   state: {
     isAuthenticated: false,
     avatarUrl: '头像URL',
-    currentUserID: null, // Add this line
+    currentUserID: null,
     userInfo: {
       userName: '',
       email: '',
@@ -101,13 +102,7 @@ export default createStore({
     },
   },
   actions: {
-    connectSignalR({ commit, dispatch }) {
-      initializeSignalRConnection(
-        (conversationId, message) => dispatch('handleReceiveMessage', { conversationId, message }),
-        (messageCount) => commit('setMessageCount', messageCount),
-        (conversationId, conversationMessageCount) => commit('setConversationMessageCount', { conversationId, conversationMessageCount }),
-        (conversationId, lastMessageSentTime) => commit('updateConversationDetails', { conversationId, lastMessageSentTime })
-      );
+    connectSignalR() {
       startConnection();
     },
     disconnectSignalR({ commit }) {
@@ -124,6 +119,9 @@ export default createStore({
         commit('SET_CURRENT_USER_ID', userId);
         if (isAuthenticated) {
           await this.dispatch('fetchUserAvatar');
+          this.dispatch('connectSignalR');  // Connect SignalR when authenticated
+        } else {
+          this.dispatch('disconnectSignalR');  // Disconnect SignalR when not authenticated
         }
       } catch (error) {
         console.error('Error checking authentication status:', error);
@@ -206,7 +204,7 @@ export default createStore({
     updateConversationMessageCount({ commit }, { conversationId, conversationMessageCount }) {
       commit('setConversationMessageCount', { conversationId, conversationMessageCount });
     },
-    incrementMessageCount({ commit } ) {
+    incrementMessageCount({ commit }) {
       commit('incrementMessageCount');
     },
     incrementConversationMessageCount({ commit }, conversationId) {

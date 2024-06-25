@@ -2,7 +2,8 @@
     position: relative;
     /* 添加圆角边框 */
     margin-top: 10px;
-    border: 2px solid #000; /* 这里设置边框的粗细和颜色 */
+    background-color: white;
+    border: 2px solid #000;
     border-radius: 10px; /* 这里设置边框的圆角大小 */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 可选：添加阴影效果以提升视觉效果 */
   }

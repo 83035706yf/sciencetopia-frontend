@@ -3,7 +3,7 @@ import store from '@/store';
 
 let connection = null;
 
-const initializeSignalRConnection = (onReceiveMessage, onUpdateMessages, onUpdateConversationMessages, onUpdateConversationDetails) => {
+const initializeSignalRConnection = (onReceiveMessage, onUpdateMessages, onUpdateConversationMessages) => {
   if (!connection || connection.state === 'Disconnected') {
     connection = new HubConnectionBuilder()
       .withUrl('http://localhost:5085/chathub')
@@ -15,6 +15,7 @@ const initializeSignalRConnection = (onReceiveMessage, onUpdateMessages, onUpdat
       if (onReceiveMessage) {
         onReceiveMessage(conversationId, message);
       }
+      console.log('onReceiveMessage:', onReceiveMessage, 'Received message:', message, 'conversationId:', conversationId);
     });
 
     connection.on('updateMessages', (messageCount) => {
@@ -23,6 +24,7 @@ const initializeSignalRConnection = (onReceiveMessage, onUpdateMessages, onUpdat
       if (onUpdateMessages) {
         onUpdateMessages(messageCount);
       }
+      console.log('Updated message count:', messageCount);
     });
 
     connection.on('updateConversationMessages', (conversationId, conversationMessageCount) => {
@@ -31,14 +33,6 @@ const initializeSignalRConnection = (onReceiveMessage, onUpdateMessages, onUpdat
       if (onUpdateConversationMessages) {
         onUpdateConversationMessages(conversationId, conversationMessageCount);
       }
-    });
-
-    connection.on('updateConversationDetails', (conversationId, lastMessageSentTime) => {
-      if (onUpdateConversationDetails) {
-        onUpdateConversationDetails(conversationId, lastMessageSentTime);
-        console.log('Conversation details update received:', conversationId, lastMessageSentTime, 'onUpdateConversationDetails:', onUpdateConversationDetails);
-      }
-      console.log('Conversation details update received:', conversationId, lastMessageSentTime);
     });
 
     connection

@@ -3,6 +3,7 @@ import { createApp } from 'vue'
 import store from './store';  // Import the store
 import App from './App.vue'
 import GlobalLoader from './components/GlobalLoader.vue';
+import { initializeSignalRConnection, connection } from './services/signalr-service';
 
 /* import router */
 import router from './router'
@@ -55,6 +56,11 @@ router.beforeEach((to, from, next) => {
 /* Create Vue app */
 const app = createApp(App)
 app.component('GlobalLoader', GlobalLoader);
+
+// Initialize SignalR connection
+initializeSignalRConnection();
+
+app.config.globalProperties.$signalRConnection = connection;
 
 // app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)

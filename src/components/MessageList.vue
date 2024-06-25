@@ -31,6 +31,7 @@ export default {
   },
   computed: {
     groupedMessages() {
+      console.log(this.messages);
       const groups = [];
       let currentGroup = { messages: [], firstMessageSentTime: null };
 
