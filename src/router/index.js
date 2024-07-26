@@ -12,6 +12,9 @@ import StudyGroupList from '@/components/StudyGroupList.vue'
 import StudyGroupPage from '@/components/StudyGroupPage.vue'
 import StudyGroupSpace from '@/components/StudyGroupSpace.vue'
 import CreateStudyGroup from '@/components/CreateStudyGroup.vue'
+import SponsorShip from '@/components/SponsorShip.vue'
+import AboutUs from '@/components/AboutUs.vue'
+import ContactUs from '@/components/ContactUs.vue'
 
 const routes = [
   {
@@ -87,6 +90,21 @@ const routes = [
     name: 'studyGroupSpace',
     component: StudyGroupSpace,
     props: true, // Enables the route parameter to be passed as a prop to the component
+  },
+  {
+    path: '/support',
+    name: 'support',
+    component: SponsorShip
+  },
+  {
+    path: '/about',
+    name: '/about',
+    component: AboutUs
+  },
+  {
+    path: '/contact',
+    name: '/contact',
+    component: ContactUs
   }
 ]
 

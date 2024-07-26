@@ -385,28 +385,30 @@ export default function useKnowledgeGraph(endpoint) {
                 }
             });
 
-            backendData.data_pending.forEach(item => {
-                // Process all pending nodes
-                if (!newNodes.some(n => n.id === item.identity)) {
-                    newNodes.push({
-                        id: item.node.identity,
-                        labels: item.node.labels,
-                        name: item.node.properties.name,
-                        // Removed the direct link property handling
-                        description: item.node.properties.description,
-                        resources: item.node.resources // Assuming resources are now passed as an array of links
-                    });
-                }
-                // Process all pending links
-                if (item.relationship && item.relationship.type !== 'LINKS_TO') {
-                    newLinks.push({
-                        id: item.relationship.identity,
-                        source: newNodes.find(n => n.id === item.relationship.start),
-                        target: newNodes.find(n => n.id === item.relationship.end),
-                        relationshipType: item.relationship.type
-                    });
-                }
-            });
+            if (backendData.data_pending && backendData.data_pending.length > 0) {
+                backendData.data_pending.forEach(item => {
+                    // Process all pending nodes
+                    if (!newNodes.some(n => n.id === item.identity)) {
+                        newNodes.push({
+                            id: item.node.identity,
+                            labels: item.node.labels,
+                            name: item.node.properties.name,
+                            // Removed the direct link property handling
+                            description: item.node.properties.description,
+                            resources: item.node.resources // Assuming resources are now passed as an array of links
+                        });
+                    }
+                    // Process all pending links
+                    if (item.relationship && item.relationship.type !== 'LINKS_TO') {
+                        newLinks.push({
+                            id: item.relationship.identity,
+                            source: newNodes.find(n => n.id === item.relationship.start),
+                            target: newNodes.find(n => n.id === item.relationship.end),
+                            relationshipType: item.relationship.type
+                        });
+                    }
+                });
+            }
 
             links.value = newLinks; // Update the reactive reference
             nodes.value = newNodes;

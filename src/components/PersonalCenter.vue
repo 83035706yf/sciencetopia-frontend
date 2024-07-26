@@ -4,7 +4,7 @@
     <PersonalInformation></PersonalInformation>
 
     <!-- 已收藏的知识网络图 -->
-    <v-container class="knowledgegraph-container">
+    <!-- <v-container class="knowledgegraph-container">
       <h3>我的收藏</h3>
       <v-row>
         <v-col cols="6" class="knowledge-graph">
@@ -14,7 +14,7 @@
           <NodeInfo></NodeInfo>
         </v-col>
       </v-row>
-    </v-container>
+    </v-container> -->
 
     <!-- 已制定的学习计划 -->
     <v-container>
@@ -41,9 +41,12 @@
       <h3>我的学习小组</h3>
       <p v-if="studyGroupList.length === 0">你还没有加入任何学习小组哦！</p>
       <v-row v-else>
-        <v-col v-for="group in studyGroupList" :key="group.id" cols="12">
+        <v-col v-for="group in studyGroupList" :key="group.id" cols="12"  sm="6" md="4">
           <v-card class="mb-3">
-            <v-card-title>{{ group.name }}</v-card-title>
+            <v-card-title>
+              {{ group.name }}
+              <v-chip class="ml-auto" color="primary" label>{{ group.role }}</v-chip>
+            </v-card-title>
             <v-card-text>{{ group.description }}</v-card-text>
             <v-card-actions>
               <v-btn text @click="toGroupPage(group.id)">查看详情</v-btn>
@@ -54,20 +57,20 @@
     </v-container>
   </div>
 </template>
-  
+
 <script>
-import FavoriteKnowledgeGraph from './FavoriteKnowledgeGraph.vue';
+// import FavoriteKnowledgeGraph from './FavoriteKnowledgeGraph.vue';
 import PersonalInformation from './PersonalInformation.vue';
 import StudyPlan from './StudyPlan.vue';
 import { apiClient } from '@/api';
-import NodeInfo from './NodeInfo.vue';
+// import NodeInfo from './NodeInfo.vue';
 
 export default {
   components: {
-    FavoriteKnowledgeGraph,
+    // FavoriteKnowledgeGraph,
     PersonalInformation,
     StudyPlan,
-    NodeInfo
+    // NodeInfo
   },
   data() {
     return {
@@ -142,4 +145,10 @@ export default {
   position: relative !important;
   margin: auto !important;
 } */
+
+.v-chip {
+  margin-left: auto;
+  margin-right: 16px;
+  font-weight: bold;
+}
 </style>

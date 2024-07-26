@@ -87,8 +87,9 @@
         <ul>
           <li><a href="/about">关于我们</a></li>
           <li><a href="/contact">联系我们</a></li>
-          <li><a href="/privacy">隐私政策</a></li>
-          <li><a href="/terms">服务条款</a></li>
+          <!-- <li><a href="/privacy">隐私政策</a></li>
+          <li><a href="/terms">服务条款</a></li> -->
+          <li><a href="/support">赞助</a></li>
         </ul>
       </nav>
     </footer>

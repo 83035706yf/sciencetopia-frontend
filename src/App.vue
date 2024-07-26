@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="global-background">
     <LayOut>
-      <GlobalLoader />
+      <!-- <GlobalLoader /> -->
       <div class="container custom-width">
         <router-view></router-view>
       </div>

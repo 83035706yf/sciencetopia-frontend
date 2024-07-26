@@ -16,6 +16,10 @@
                     <p>性别：{{ userInfo.gender }}</p>
                     <p>出生日期：{{ userInfo.formattedBirthDate }}</p>
                     <p>简介：{{ userInfo.selfIntroduction }}</p>
+                    <v-divider class="border-opacity-0"></v-divider>
+                    <p>完成了 {{ completedStudyPlanCount }} 个学习计划</p>
+                    <p>为Sciencetopia知识网络贡献了 {{ contributedNodeCount }} 个知识节点， {{ contributedLinkCount }} 条边</p>
+                    <v-divider></v-divider>
                 </v-col>
             </v-row>
         </div>
@@ -59,11 +63,10 @@
         </v-form>
     </v-container>
 </template>
-  
+
 <script>
 import { apiClient } from '@/api';
 import { mapState, mapActions } from 'vuex';
-// import { VDatePicker } from 'vuetify/components';
 
 export default {
     name: 'PersonalInformation',
@@ -76,6 +79,9 @@ export default {
                 v => (v && v.length <= 20) || 'Username must be less than 20 characters'
             ],
             menu: false,
+            completedStudyPlanCount: 0,
+            contributedNodeCount: 0,
+            contributedLinkCount: 0,
         }
     },
     computed: {
@@ -84,22 +90,27 @@ export default {
         }),
         avatarUrl() {
             return this.$store.state.avatarUrl;
-        }
+        },
     },
-    // components: {
-    //     VDatePicker,
-    // },
     methods: {
         ...mapActions(['fetchUserInfo', 'updateUserInfo']),
-
+        async fetchUserStatistics() {
+            try {
+                const userId = this.$store.state.userInfo.userId;
+                const response = await apiClient.get(`/users/${userId}/statistics`);
+                this.completedStudyPlanCount = response.data.completedStudyPlanCount;
+                this.contributedNodeCount = response.data.contributedNodeCount;
+                this.contributedLinkCount = response.data.contributedLinkCount;
+            } catch (error) {
+                console.error('Error fetching user statistics:', error);
+            }
+        },
         toggleMenu() {
             this.menu = !this.menu;
         },
-
         editProfile() {
             this.$router.push({ name: 'EditProfile' });  // Assuming you have an EditProfile route
         },
-
         enterEditMode() {
             this.isEditMode = true;
         },
@@ -109,7 +120,6 @@ export default {
         openFilePicker() {
             this.$refs.fileInput.click();
         },
-
         onFileSelected(event) {
             const file = event.target.files[0];
             if (file) {
@@ -117,7 +127,6 @@ export default {
                 this.uploadAvatar();
             }
         },
-
         async uploadAvatar() {
             if (!this.selectedFile) {
                 this.$emit('show-snackbar', { text: 'Please select a file to upload.', color: 'error' });
@@ -148,8 +157,9 @@ export default {
             }
         }
     },
-    mounted() {
-        this.fetchUserInfo();
+    async mounted() {
+        await this.fetchUserInfo();
+        await this.fetchUserStatistics();
     }
 }
 </script>

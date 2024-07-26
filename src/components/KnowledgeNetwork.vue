@@ -1,4 +1,5 @@
 <template>
+    <GlobalLoader />
     <div ref="svgRef" id="cy" :style="{ width: width + 'px', height: height + 'px' }">
         <!-- 选中节点时显示的按钮 -->
         <div v-if="selectedNodes" class="node-actions">
