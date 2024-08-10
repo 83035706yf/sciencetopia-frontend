@@ -8,10 +8,11 @@ import ReGister from '@/components/ReGister.vue'
 import PersonalCenter from '@/components/PersonalCenter.vue'
 import MessageCenter from '@/components/MessageCenter.vue'
 import AccountCenter from '@/components/AccountCenter.vue'
-import StudyGroupList from '@/components/StudyGroupList.vue'
-import StudyGroupPage from '@/components/StudyGroupPage.vue'
-import StudyGroupSpace from '@/components/StudyGroupSpace.vue'
-import CreateStudyGroup from '@/components/CreateStudyGroup.vue'
+import StudyGroupList from '@/components/StudyGroup/StudyGroupList.vue'
+import StudyGroupPage from '@/components/StudyGroup/StudyGroupPage.vue'
+import StudyGroupSpace from '@/components/StudyGroup/StudyGroupSpace.vue'
+import CreateStudyGroup from '@/components/StudyGroup/CreateStudyGroup.vue'
+import ManagePanel from '@/components/StudyGroup/ManagePanel.vue'; // Update with the correct path
 import SponsorShip from '@/components/SponsorShip.vue'
 import AboutUs from '@/components/AboutUs.vue'
 import ContactUs from '@/components/ContactUs.vue'
@@ -84,6 +85,12 @@ const routes = [
     name: 'studyGroupPage',
     component: StudyGroupPage,
     props: true, // Enables the route parameter to be passed as a prop to the component
+  },
+  {
+    path: '/group/:groupId/manage',
+    name: 'managePanel',
+    component: ManagePanel,
+    props: true
   },
   {
     path: '/studygroup/:groupId/space',

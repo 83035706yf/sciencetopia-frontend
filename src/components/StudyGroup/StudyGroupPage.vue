@@ -1,10 +1,10 @@
 <template>
   <div class="group-page">
-    <v-tabs v-model="activeTab">
+    <v-tabs v-model="activeTab" @change="onTabChange">
       <v-tab>小组信息</v-tab>
       <v-tab>小组动态</v-tab>
       <v-tab>学习路径</v-tab>
-      <v-tab v-if="group.role='manager'">管理</v-tab>
+      <v-tab v-if="role === 'manager'">管理面板</v-tab>
     </v-tabs>
 
     <v-tab-item v-if="activeTab === 0">
@@ -30,7 +30,7 @@
           </v-row>
         </v-card-text>
         <v-card-actions>
-          <v-btn v-if="group.isMember" color="primary" text disabled>已加入</v-btn>
+          <v-btn v-if="isMember" color="primary" text disabled>已加入</v-btn>
           <template v-else>
             <v-btn color="primary" text @click="applyToJoin(group.id)">申请加入</v-btn>
             <v-btn color="primary" text @click="follow(group.id)">关注</v-btn>
@@ -42,10 +42,8 @@
     <v-tab-item v-if="activeTab === 1">
       <v-card>
         <v-card-title>小组动态</v-card-title>
-        <!-- Admin board content goes here -->
         <v-card-text>
           <p>学习小组的动态空间。</p>
-          <!-- Add your admin board controls and details here -->
         </v-card-text>
       </v-card>
     </v-tab-item>
@@ -53,29 +51,21 @@
     <v-tab-item v-if="activeTab === 2">
       <v-card>
         <v-card-title>学习路径共享</v-card-title>
-        <!-- Admin board content goes here -->
         <v-card-text>
           <p>学习小组共享的学习路径。</p>
-          <!-- Add your admin board controls and details here -->
         </v-card-text>
       </v-card>
     </v-tab-item>
 
-    <v-tab-item v-if="activeTab === 3 && group.role === 'manager'">
-      <v-card>
-        <v-card-title>管理面板</v-card-title>
-        <!-- Admin board content goes here -->
-        <v-card-text>
-          <p>管理小组成员、设置权限等。</p>
-          <!-- Add your admin board controls and details here -->
-        </v-card-text>
-      </v-card>
+    <v-tab-item v-if="activeTab === 3 && role === 'manager'">
+      <ManagePanel :groupId="groupId" />
     </v-tab-item>
   </div>
 </template>
-  
+
 <script>
 import { apiClient } from '@/api';
+import ManagePanel from './ManagePanel.vue';
 
 export default {
   props: {
@@ -84,6 +74,8 @@ export default {
   data() {
     return {
       group: {}, // Group details fetched based on groupId
+      role: '', // Role of the current user in the group
+      isMember: false, // Whether the current user is a member
       activeTab: 0 // Track the active tab
     };
   },
@@ -97,24 +89,39 @@ export default {
           id: memberId.id,
           avatarUrl: await this.$store.dispatch('fetchAvatarUrl', memberId.id)
         })));
-        const isMember = group.memberIds.some(memberId => memberId.id === this.$store.state.currentUserID);
-        this.group = { ...group, members, isMember }; // Replace memberIds with members including avatars
+        this.group = { ...group, members };
+        this.isMember = group.memberIds.some(memberId => memberId.id === this.$store.state.currentUserID);
       } catch (error) {
-        console.error('Error fetching groups:', error);
+        console.error('Error fetching group details:', error);
       }
     },
-    goToAdminBoard(groupId) {
-      // Logic to navigate to the admin board page
-      this.$router.push({ name: 'adminBoardPage', params: { groupId } });
+    // Fetch user role in the group from the backend
+    async fetchUserRole(groupId) {
+      try {
+        const response = await apiClient.get(`/StudyGroup/GetUserRoleInGroup/${groupId}`);
+        this.role = response.data;
+      } catch (error) {
+        console.error('Error fetching user role:', error);
+      }
     },
+    onTabChange(tabIndex) {
+      this.activeTab = tabIndex;
+      if (this.activeTab === 3 && this.role === 'manager') {
+        this.$router.push({ name: 'managePanel', params: { groupId: this.groupId } });
+      }
+    }
   },
   mounted() {
-    // Fetch group details from the backend on component mount
+    // Fetch group details and user role from the backend on component mount
     this.fetchGroupDetails(this.groupId);
+    this.fetchUserRole(this.groupId);
+  },
+  components: {
+    ManagePanel
   }
 };
 </script>
-  
+
 <style scoped>
 .v-img {
   max-width: 1600px;

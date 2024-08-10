@@ -50,7 +50,7 @@
   
   <script>
   import { apiClient } from '@/api';
-  import { useGlobalLoading } from './GlobalLoader.vue';
+  import { useGlobalLoading } from '../GlobalLoader.vue';
   
   export default {
     name: 'StudyGroupList',

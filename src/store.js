@@ -187,6 +187,15 @@ export default createStore({
         return require('@/assets/images/default_avatar.png'); // Fallback avatar
       }
     },
+    async fetchUserInfoById(_, userId) {
+      try {
+        const response = await apiClient.get(`/AllUsers/GetUserInfoById/${userId}`);
+        return response.data;
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+        return null;
+      }
+    },
     // Action to commit the toggle mutation
     toggleEditMode({ commit }) {
       commit('TOGGLE_EDIT_MODE');
