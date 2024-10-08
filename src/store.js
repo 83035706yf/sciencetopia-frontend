@@ -24,6 +24,7 @@ export default createStore({
     displayLinkCreationForm: false,
     messageCount: 0,
     conversationMessageCount: {},
+    notificationCount: 0,
   },
   mutations: {
     SET_AUTHENTICATED(state, value) {
@@ -87,6 +88,15 @@ export default createStore({
     resetMessageCount(state) {
       state.messageCount = 0;
     },
+    setNotificationCount(state, count) {
+      state.notificationCount = count;
+    },
+    incrementNotificationCount(state) {
+      state.notificationCount++;
+    },
+    resetNotificationCount(state) {
+      state.notificationCount = 0;
+    },
     setConversationMessageCount(state, { conversationId, conversationMessageCount }) {
       state.conversationMessageCount[conversationId] = conversationMessageCount;
     },
@@ -108,6 +118,7 @@ export default createStore({
     disconnectSignalR({ commit }) {
       stopConnection();
       commit('resetMessageCount');
+      commit('resetNotificationCount');
     },
 
     async checkAuthenticationStatus({ commit }) {
@@ -225,6 +236,18 @@ export default createStore({
     markMessagesAsRead({ commit }, conversationId) {
       commit('resetConversationMessageCount', conversationId);
     },
+    updateNotificationCount({ commit }, notificationCount) {
+      commit('setNotificationCount', notificationCount);
+    },
+    incrementNotificationCount({ commit }) {
+      commit('incrementNotificationCount');
+    },
+    resetNotificationCount({ commit }) {
+      commit('resetNotificationCount');
+    },
+    markNotificationsAsRead({ commit }) {
+      commit('resetNotificationCount');
+    }
   },
 
   getters: {

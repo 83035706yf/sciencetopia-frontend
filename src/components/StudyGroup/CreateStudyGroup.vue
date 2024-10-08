@@ -62,8 +62,11 @@ export default {
         // API call logic here
         await apiClient.post('/StudyGroup/CreateStudyGroup', payload);
         // 创建成功后的处理，例如跳转到小组列表或显示成功消息
+        alert('学习小组创建成功!');
+        router.push({ name: 'studyGroupList' });
       } catch (error) {
         console.error("创建学习小组失败:", error);
+        alert('学习小组创建失败!');
       }
     };
 

@@ -29,9 +29,6 @@
               <JoinRequests :groupId="groupId" />
             </v-tab-item>
             <v-tab-item v-if="isManager && activeTab === 3">
-              <GroupSettings :groupId="groupId" />
-            </v-tab-item>
-            <v-tab-item v-if="isManager && activeTab === 4">
               <ActivityLogs :groupId="groupId" />
             </v-tab-item>
           </v-col>
@@ -44,7 +41,6 @@
   import GroupOverview from './GroupOverview.vue';
   import MemberManagement from './MemberManagement.vue';
   import JoinRequests from './JoinRequests.vue';
-  import GroupSettings from './GroupSettings.vue';
   import ActivityLogs from './ActivityLogs.vue';
   import { apiClient } from '@/api';
   
@@ -57,10 +53,9 @@
         isManager: false,
         activeTab: 0, // Default active tab
         tabs: [
-          { title: '小组概览', component: GroupOverview },
+          { title: '基础信息', component: GroupOverview },
           { title: '成员管理', component: MemberManagement },
           { title: '加入请求', component: JoinRequests },
-          { title: '小组设置', component: GroupSettings },
           { title: '活动日志', component: ActivityLogs }
         ]
       };
@@ -77,7 +72,6 @@
       GroupOverview,
       MemberManagement,
       JoinRequests,
-      GroupSettings,
       ActivityLogs
     }
   };

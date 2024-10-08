@@ -14,6 +14,9 @@
                         <v-list-item :to="{ name: 'notifications' }" exact
                             :class="{ 'active': activeTab === 'notifications' }">
                             <v-list-item-title>系统消息</v-list-item-title>
+                            <div v-if="notificationCount > 0" class="alert-badge">
+                                {{ notificationCount > 99 ? '99+' : notificationCount }}
+                            </div>
                         </v-list-item>
                     </v-list>
                 </v-card>
@@ -43,7 +46,7 @@
                                 </v-list>
                             </v-col>
                             <v-divider vertical></v-divider>
-                            <v-col cols="9" v-if="selectedConversation">
+                            <v-col cols="8" v-if="selectedConversation">
                                 <MessageList ref="messageList" :messages="selectedConversation.messages"
                                     :userId="userId" :userAvatarUrl="userAvatarUrl" />
                                 <v-divider></v-divider>
@@ -56,18 +59,7 @@
                         </v-row>
                     </v-card-text>
                 </v-card>
-                <v-card v-else>
-                    <v-card-title>
-                        <h2>系统消息</h2>
-                    </v-card-title>
-                    <v-card-text>
-                        <v-list>
-                            <v-list-item v-for="notification in notifications" :key="notification.id">
-                                <div>{{ notification.content }}</div>
-                            </v-list-item>
-                        </v-list>
-                    </v-card-text>
-                </v-card>
+                <SystemNotifications v-else />
             </v-col>
         </v-row>
     </v-container>
@@ -77,23 +69,23 @@
 import { apiClient } from '@/api';
 import { connection } from '@/services/signalr-service';
 import MessageList from '@/components/MessageList.vue';
+import SystemNotifications from '@/components/SystemNotifications.vue'; // Import the new component
 import { mapState } from 'vuex';
 import { DateTime } from 'luxon';
 
 export default {
-    components: { MessageList },
+    components: { MessageList, SystemNotifications }, // Include the new component
     data() {
         return {
             activeTab: 'directMessages',
             conversations: [],
             selectedConversation: null,
-            notifications: [],
             userId: null,
             userAvatarUrl: null,
         };
     },
     computed: {
-        ...mapState(['messageCount', 'conversationMessageCount']),
+        ...mapState(['messageCount', 'conversationMessageCount', 'notificationCount']),
     },
     watch: {
         $route(to) {
@@ -104,6 +96,9 @@ export default {
                 }
             } else if (to.name === 'notifications') {
                 this.activeTab = 'notifications';
+                // if (this.notificationCount > 0) {
+                this.markNotificationsAsRead();
+                // }
             }
         },
         selectedConversation(conversation) {
@@ -153,9 +148,7 @@ export default {
         getLastMessage(conversation) {
             return conversation.messages.length > 0 ? conversation.messages[conversation.messages.length - 1].content : null;
         },
-
         async handleReceiveMessage(conversationId, message) {
-            // Check if conversationId is valid
             if (!conversationId) {
                 console.error('conversationId is undefined or null');
                 return;
@@ -164,9 +157,8 @@ export default {
             if (conversation) {
                 if (message.sender.id !== this.userId) {
                     conversation.messages.push(message);
-                    this.sortConversations(conversationId); // Sort conversations after receiving a message
+                    this.sortConversations(conversationId);
                 }
-                // Mark the message as read if the conversation is currently selected
                 if (this.isSelectedConversation(conversation)) {
                     await this.markMessagesAsRead(conversationId);
                 }
@@ -174,7 +166,6 @@ export default {
                 this.fetchConversations();
             }
         },
-
         async markMessagesAsRead(conversationId) {
             await apiClient.post('Message/MarkAsRead', {
                 conversationId,
@@ -208,7 +199,7 @@ export default {
                     conversation.messages.push(newMessage);
                     conversation.newMessage = '';
                     this.$refs.messageList.scrollToBottom();
-                    this.sortConversations(conversation.conversationId); // Sort conversations after sending a message
+                    this.sortConversations(conversation.conversationId);
                 })
                 .catch((err) => console.error('Error sending message:', err));
         },
@@ -218,6 +209,11 @@ export default {
                 const conversation = this.conversations.splice(conversationIndex, 1)[0];
                 this.conversations.unshift(conversation);
             }
+        },
+        async markNotificationsAsRead() {
+            await apiClient.post(`Notification/MarkAsReadByUser/${this.userId}`);
+            connection.invoke('MarkAllNotificationsAsRead', this.userId);
+            // console.log('Marked all notifications as read');
         },
     },
 };

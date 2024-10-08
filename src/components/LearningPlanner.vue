@@ -9,7 +9,7 @@
   
 <script>
 import StudyPlan from './StudyPlan.vue';
-import studyPlanData from '@/data/mockStudyPlan.json';
+import studyPlanData from '@/assets/data/mockStudyPlan.json';
 import { apiClient } from '@/api';
 
 export default {

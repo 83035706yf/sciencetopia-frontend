@@ -1,0 +1,13 @@
+.full-width-table {
+    width: 100%; /* Ensure the table takes the full width of the card */
+  }
+  
+  th, td {
+    padding: 10px;
+  }
+  
+  .actions-column {
+    text-align: center; /* Align content of the last column to the right */
+    width: 1%; /* Shrink this column to fit the content */
+    white-space: nowrap; /* Prevent wrapping and keep buttons in a single line */
+  }

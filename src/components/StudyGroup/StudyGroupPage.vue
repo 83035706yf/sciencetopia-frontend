@@ -20,7 +20,7 @@
         <v-card-text>
           小组成员:
           <v-row>
-            <v-col v-for="member in group.members" :key="member.id" cols="auto">
+            <v-col v-for="member in group.memberIds" :key="member.id" cols="auto">
               <v-btn icon="dots-vertical" size="40">
                 <v-avatar size="35">
                   <img :src="member.avatarUrl" alt="用户头像">
@@ -84,13 +84,8 @@ export default {
     async fetchGroupDetails(groupId) {
       try {
         const response = await apiClient.get(`/StudyGroup/GetStudyGroupById/${groupId}`);
-        const group = response.data;
-        const members = await Promise.all(group.memberIds.map(async memberId => ({
-          id: memberId.id,
-          avatarUrl: await this.$store.dispatch('fetchAvatarUrl', memberId.id)
-        })));
-        this.group = { ...group, members };
-        this.isMember = group.memberIds.some(memberId => memberId.id === this.$store.state.currentUserID);
+        this.group = response.data;
+        this.isMember = this.group.memberIds.some(memberId => memberId.id === this.$store.state.currentUserID);
       } catch (error) {
         console.error('Error fetching group details:', error);
       }

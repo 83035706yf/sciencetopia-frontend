@@ -35,7 +35,7 @@
   
   <style scoped>
   .activity-logs {
-    max-width: 800px;
+    max-width: 1200px;
     margin: auto;
   }
   </style>

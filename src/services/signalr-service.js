@@ -3,7 +3,7 @@ import store from '@/store';
 
 let connection = null;
 
-const initializeSignalRConnection = (onReceiveMessage, onUpdateMessages, onUpdateConversationMessages) => {
+const initializeSignalRConnection = (onReceiveMessage, onUpdateMessages, onUpdateConversationMessages, onReceiveNotification, onUpdateNotification) => {
   if (!connection || connection.state === 'Disconnected') {
     connection = new HubConnectionBuilder()
       .withUrl('http://localhost:5085/chathub')
@@ -33,6 +33,24 @@ const initializeSignalRConnection = (onReceiveMessage, onUpdateMessages, onUpdat
       if (onUpdateConversationMessages) {
         onUpdateConversationMessages(conversationId, conversationMessageCount);
       }
+    });
+
+    connection.on('ReceiveNotification', (notification) => {
+      // Update notification count in Vuex store
+      store.dispatch('incrementNotificationCount');
+      if (onReceiveNotification) {
+        onReceiveNotification(notification);
+      }
+      console.log('onReceiveNotification:', onReceiveNotification, 'Received notification:', notification);
+    });
+
+    connection.on('updateNotifications', (notificationCount) => {
+      // Update notification count in Vuex store
+      store.dispatch('updateNotificationCount', notificationCount);
+      if (onUpdateNotification) {
+        onUpdateNotification(notificationCount);
+      }
+      console.log('Updated notification count:', notificationCount);
     });
 
     connection

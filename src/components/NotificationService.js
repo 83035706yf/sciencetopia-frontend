@@ -5,7 +5,7 @@ export default {
 
   startConnection() {
     this.connection = new signalR.HubConnectionBuilder()
-      .withUrl("/notificationhub") // Adjust this URL to where your NotificationHub is accessible
+      .withUrl("/chathub") // Adjust this URL to where your NotificationHub is accessible
       .configureLogging(signalR.LogLevel.Information)
       .build();
 

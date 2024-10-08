@@ -8,6 +8,7 @@
           <div v-if="messageCount > 0" class="alert-badge">
             {{ messageCount > 99 ? '99+' : messageCount }}
           </div>
+          <div v-else-if="notificationCount > 0" class="alert-badge-dot"></div>
         </v-btn>
       </template>
 
@@ -37,7 +38,7 @@ import { mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['messageCount']),
+    ...mapState(['messageCount', 'notificationCount']),
     isAuthenticated() {
       return this.$store.state.isAuthenticated;
     },
@@ -80,5 +81,19 @@ export default {
   border-radius: 50%;
   padding: 0.3em 0.3em;
   font-size: 0.7em;
+}
+
+.alert-badge-dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: #ff6666;
+  /* Milder red color */
+  color: white;
+  border-radius: 50%;
+  padding: 0.3em 0.3em;
+  font-size: 0.7em;
+  width: 10px;
+  height: 10px;
 }
 </style>
