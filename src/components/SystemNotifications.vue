@@ -12,6 +12,7 @@
               <v-list-item-content>
                 <v-list-item-title class="notification-bubble">{{ notification.content }}</v-list-item-title>
                 <v-list-item-subtitle>{{ formatDate(notification.createdAt) }}</v-list-item-subtitle>
+                <v-btn v-if="notification.data" @click="viewDetails(notification.data)" text small>查看详情</v-btn>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -77,6 +78,10 @@ export default {
         // Add more types as needed
       };
       return typeLabels[type] || '未知类型';
+    },
+    viewDetails(data) {
+      // Route to the appropriate page based on the notification data (url)
+      this.$router.push(data);
     }
   }
 };

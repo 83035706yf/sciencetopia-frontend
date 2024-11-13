@@ -4,10 +4,10 @@
       <div class="header">
         <!-- 显示网站Logo -->
         <div class="logo-container">
-          <button class="btn" @click="backToHomePage">
+          <v-btn variant="text" class="btn" @click="backToHomePage">
             <i><img src="../assets/images/logo.png" alt="Logo" /></i>
             <i><img src="../assets/images/ciencetopia.svg" alt="ciencetopia"></i>
-          </button>
+          </v-btn>
         </div>
         <!-- 显示网站标语 -->
         <div class="site-description">
@@ -72,9 +72,9 @@
         </div>
         <!-- 夜间模式切换 -->
         <div class="dark-mode-switch">
-          <button class="btn" id="theme-toggler" @click="toggleTheme">
+          <v-btn variant="text" class="btn" id="theme-toggler" @click="toggleTheme">
             <i class="fas fa-sun" style="color: #000000;"></i>
-          </button>
+          </v-btn>
         </div>
         <link :href="themePath" rel="stylesheet">
       </div>

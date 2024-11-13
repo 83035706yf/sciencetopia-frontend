@@ -25,13 +25,13 @@
             <td class="actions-column">
               <v-tooltip text="提升为管理员" location="bottom">
                 <template v-slot:activator="{ props }">
-                  <v-btn icon v-bind="props" @click="promoteToManager(member.id)">👆</v-btn>
+                  <v-btn icon v-bind="props" @click="promoteToManager(member.id)">👨‍🎓</v-btn>
                 </template>
               </v-tooltip>
 
               <v-tooltip text="设为普通成员" location="bottom">
                 <template v-slot:activator="{ props }">
-                  <v-btn icon v-bind="props" @click="demoteToMember(member.id)">👇</v-btn>
+                  <v-btn icon v-bind="props" @click="demoteToMember(member.id)">🧑</v-btn>
                 </template>
               </v-tooltip>
 

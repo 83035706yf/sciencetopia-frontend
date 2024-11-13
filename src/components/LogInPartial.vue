@@ -4,7 +4,7 @@
         <div v-if="isAuthenticated">
             <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
-                    <v-btn icon="dots-vertical" v-bind="props" size="40">
+                    <v-btn icon="dots-vertical" v-bind="props" size="40" @click="personalcenter">
                         <v-avatar size="35">
                             <img :src="avatarUrl" alt="用户头像">
                         </v-avatar>
@@ -49,10 +49,12 @@ export default {
             this.$router.push({ name: 'register' });  // 跳转到LogIn组件
         },
         personalcenter() {
-            this.$router.push({ name: 'personalcenter' });  // 跳转到PersonalCenter组件
+            const userId = this.$store.state.currentUserID;  // Get the userId from Vuex store
+            this.$router.push({ name: 'personalcenter', params: { userId: userId } });  // Pass userId as route parameter
         },
         accountcenter() {
-            this.$router.push({ name: 'accountcenter' });  // 跳转到AccountCenter组件
+            const userId = this.$store.state.currentUserID;  // Get the userId from Vuex store
+            this.$router.push({ name: 'accountcenter', params: { userId: userId } });  // 跳转到AccountCenter组件
         },
         async logout() {
             try {

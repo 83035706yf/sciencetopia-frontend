@@ -7,9 +7,11 @@
       <v-list-item v-for="message in group.messages" :key="message.id"
         :class="{ 'my-message': isMyMessage(message), 'their-message': !isMyMessage(message) }">
         <div v-if="message.sender.id !== undefined" class="d-flex align-center">
-          <v-avatar v-if="!isMyMessage(message)">
+          <v-btn v-if="!isMyMessage(message)" icon="dots-vertical" variant="text" size="40" @click="navigateToProfile(message.sender.id)">
+            <v-avatar>
             <img :src="message.sender.avatarUrl" alt="Avatar" />
           </v-avatar>
+          </v-btn>
           <div class="message-bubble" :class="{ 'ml-2': !isMyMessage(message) }">
             {{ message.content }}
           </div>
@@ -23,6 +25,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   props: {
     messages: Array,
@@ -60,6 +64,8 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['goToProfile']),  // Map the Vuex action
+
     isMyMessage(message) {
       return message.sender.id === this.userId;
     },
@@ -87,6 +93,9 @@ export default {
       } else {
         return time.toLocaleString();
       }
+    },
+    async navigateToProfile(userId) {
+      this.goToProfile({ userId, router: this.$router });  // Dispatch the action
     },
   },
   watch: {

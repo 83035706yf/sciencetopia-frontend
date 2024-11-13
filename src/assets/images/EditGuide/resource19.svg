@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_图层_2" data-name="图层 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300.65 131.56">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke: #231815;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-10 {
+        font-family: FangSong, FangSong;
+        font-size: 8.77px;
+      }
+
+      .cls-10, .cls-11, .cls-12 {
+        fill: #231815;
+      }
+
+      .cls-2 {
+        opacity: .97;
+        stroke: #dbdbdb;
+      }
+
+      .cls-13, .cls-12 {
+        font-family: SimHei, SimHei;
+        font-size: 10.65px;
+      }
+
+      .cls-3 {
+        fill: #50afd8;
+      }
+
+      .cls-3, .cls-4, .cls-6, .cls-7, .cls-8 {
+        stroke: #1b2c73;
+      }
+
+      .cls-14 {
+        fill: #040000;
+        stroke-width: 0px;
+      }
+
+      .cls-4 {
+        fill: #e2d6be;
+      }
+
+      .cls-15 {
+        font-family: Dubai-Regular, Dubai;
+        font-size: 12.42px;
+      }
+
+      .cls-5 {
+        fill: #fff;
+        stroke: #040000;
+        stroke-width: .6px;
+      }
+
+      .cls-6, .cls-9 {
+        fill: #e03d64;
+      }
+
+      .cls-7 {
+        fill: #574392;
+      }
+
+      .cls-8 {
+        fill: #577b51;
+      }
+
+      .cls-9 {
+        stroke: #6fc6ce;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <g id="_图层_1-2" data-name="图层 1">
+    <text class="cls-12" transform="translate(0 9.15)"><tspan x="0" y="0">常态节点之间的连接</tspan></text>
+    <circle class="cls-9" cx="182.52" cy="78.9" r="13.94"/>
+    <circle class="cls-9" cx="182.62" cy="28.63" r="13.94"/>
+    <line class="cls-2" x1="103.64" y1="53.6" x2="39.35" y2="52.89"/>
+    <line class="cls-2" x1="25.41" y1="113.32" x2="24.52" y2="66.84"/>
+    <line class="cls-2" x1="104.07" y1="90.66" x2="37.07" y2="60.34"/>
+    <text class="cls-10" transform="translate(214.45 62.84)"><tspan x="0" y="0">重复选择节点</tspan></text>
+    <text class="cls-11" transform="translate(215.3 77.17)"><tspan class="cls-15" x="0" y="0">Shift + </tspan><tspan class="cls-13" x="37.15" y="0">左键点击</tspan></text>
+    <line class="cls-1" x1="200.09" y1="28.63" x2="209.68" y2="28.63"/>
+    <line class="cls-1" x1="200.09" y1="79.69" x2="209.68" y2="79.69"/>
+    <line class="cls-1" x1="208.92" y1="79.69" x2="300.65" y2="79.69"/>
+    <line class="cls-1" x1="209.92" y1="28.13" x2="209.92" y2="78.9"/>
+    <line class="cls-2" x1="104.33" y1="16.77" x2="37.83" y2="46.54"/>
+    <circle class="cls-6" cx="25.41" cy="52.89" r="13.94"/>
+    <circle class="cls-4" cx="112.4" cy="13.1" r="8.87"/>
+    <circle class="cls-7" cx="112.4" cy="53.25" r="8.87"/>
+    <circle class="cls-3" cx="112.4" cy="93.39" r="8.87"/>
+    <circle class="cls-8" cx="25.41" cy="122.19" r="8.87"/>
+    <g>
+      <rect class="cls-14" x="188.86" y="89.4" width=".63" height="3.67" transform="translate(163.83 299.73) rotate(-108.81)"/>
+      <rect class="cls-14" x="189.34" y="86.27" width=".63" height="3.67" transform="translate(74.27 262.5) rotate(-81.43)"/>
+      <rect class="cls-14" x="191.06" y="83.3" width=".63" height="3.67" transform="translate(-12.71 132.27) rotate(-36.99)"/>
+      <rect class="cls-14" x="199.25" y="86.33" width=".63" height="3.67" transform="translate(151.47 300.97) rotate(-101.1)"/>
+      <rect class="cls-14" x="197.27" y="83.85" width=".63" height="3.67" transform="translate(253.49 293.67) rotate(-128.49)"/>
+      <rect class="cls-14" x="194.3" y="82.14" width=".63" height="3.67" transform="translate(377.41 191.26) rotate(-172.93)"/>
+      <polygon class="cls-5" points="194.68 103.01 193.63 87.88 204.88 98.08 201.39 99.67 201.01 99.85 204.19 105.81 202.17 106.89 198.98 100.89 197.26 101.72 194.68 103.01"/>
+    </g>
+  </g>
+</svg>

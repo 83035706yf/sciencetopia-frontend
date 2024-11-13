@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="160" height="87" viewBox="0 0 160 87" xml:space="preserve">
+<desc>Created with Fabric.js 3.6.6</desc>
+<defs>
+</defs>
+<g transform="matrix(1 0 0 1 14.94 65.21)"  >
+<circle style="stroke: rgb(111,198,206); stroke-width: 2; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(224,61,100); fill-rule: nonzero; opacity: 1;"  cx="0" cy="0" r="13.94" />
+</g>
+<g transform="matrix(1 0 0 1 15.04 14.94)"  >
+<circle style="stroke: rgb(111,198,206); stroke-width: 2; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(224,61,100); fill-rule: nonzero; opacity: 1;"  cx="0" cy="0" r="13.94" />
+</g>
+<g transform="matrix(1 0 0 1 73.18 46.41)" style=""  >
+		<text xml:space="preserve" font-family="FangSong, FangSong" font-size="8.77" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(35,24,21); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-26.31" y="2.76" >重复选择节点</tspan></text>
+</g>
+<g transform="matrix(1 0 0 1 103.79 58.47)" style=""  >
+		<text xml:space="preserve" font-family="Times New Roman" font-size="16" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(35,24,21); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-56.07" y="5.03" >Shift + 左键点击</tspan></text>
+</g>
+<g transform="matrix(1 0 0 1 37.3 14.94)"  >
+<line style="stroke: rgb(35,24,21); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"  x1="-4.795000000000002" y1="0" x2="4.795000000000002" y2="0" />
+</g>
+<g transform="matrix(1 0 0 1 37.3 66)"  >
+<line style="stroke: rgb(35,24,21); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"  x1="-4.795000000000002" y1="0" x2="4.795000000000002" y2="0" />
+</g>
+<g transform="matrix(1 0 0 1 87.19 66)"  >
+<line style="stroke: rgb(35,24,21); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"  x1="-45.864999999999995" y1="0" x2="45.864999999999995" y2="0" />
+</g>
+<g transform="matrix(1 0 0 1 42.33 39.82)"  >
+<line style="stroke: rgb(35,24,21); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"  x1="0" y1="-25.385000000000005" x2="0" y2="25.385000000000005" />
+</g>
+<g transform="matrix(1 0 0 1 31.46 80.33)"  >
+<polygon style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;"  points="-4.47,-7.49 -4.46,5.4 -1.22,2.63 1.04,7.49 1.99,7.05 -0.15,2.22 4.47,2.28 -4.47,-7.49 " />
+</g>
+<g transform="matrix(-0.32 -0.95 0.95 -0.32 22.13 74.54)"  >
+<rect style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(4,0,0); fill-rule: nonzero; opacity: 1;"  x="-0.29" y="-1.675" rx="0" ry="0" width="0.58" height="3.35" />
+</g>
+<g transform="matrix(0.15 -0.99 0.99 0.15 22.55 71.66)"  >
+<rect style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(4,0,0); fill-rule: nonzero; opacity: 1;"  x="-0.29" y="-1.675" rx="0" ry="0" width="0.58" height="3.35" />
+</g>
+<g transform="matrix(0.8 -0.6 0.6 0.8 24.13 68.95)"  >
+<rect style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(4,0,0); fill-rule: nonzero; opacity: 1;"  x="-0.29" y="-1.675" rx="0" ry="0" width="0.58" height="3.35" />
+</g>
+<g transform="matrix(-0.19 -0.98 0.98 -0.19 31.62 71.74)"  >
+<rect style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(4,0,0); fill-rule: nonzero; opacity: 1;"  x="-0.29" y="-1.675" rx="0" ry="0" width="0.58" height="3.35" />
+</g>
+<g transform="matrix(-0.62 -0.78 0.78 -0.62 29.8 69.47)"  >
+<rect style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(4,0,0); fill-rule: nonzero; opacity: 1;"  x="-0.29" y="-1.675" rx="0" ry="0" width="0.58" height="3.35" />
+</g>
+<g transform="matrix(-0.99 -0.12 0.12 -0.99 27.09 67.9)"  >
+<rect style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(4,0,0); fill-rule: nonzero; opacity: 1;"  x="-0.29" y="-1.675" rx="0" ry="0" width="0.58" height="3.35" />
+</g>
+</svg>

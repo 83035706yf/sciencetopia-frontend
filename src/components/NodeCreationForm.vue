@@ -112,5 +112,12 @@ export default {
 </script>
 
 <style scoped>
+.v-menu__content--active {
+  visibility: visible !important;
+  display: block !important;
+  z-index: 99999 !important; /* Ensure it's on top of full-screen overlay */
+  position: absolute !important;
+}
+
 /* Additional styling to make the form match your app's theme */
 </style>

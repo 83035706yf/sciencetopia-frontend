@@ -14,7 +14,7 @@
         <tbody>
           <tr v-for="request in requests" :key="request.id">
             <td>
-              <v-btn icon="dots-vertical" size="40">
+              <v-btn icon="dots-vertical" size="40" @click="navigateToProfile(request.userId)">
                 <v-avatar size="35">
                   <img :src="request.avatarUrl" alt="用户头像">
                 </v-avatar>
@@ -35,6 +35,7 @@
 
 <script>
 import { apiClient } from '@/api';
+import { mapActions } from 'vuex';
 
 export default {
   props: {
@@ -50,6 +51,8 @@ export default {
     this.requests = response.data;
   },
   methods: {
+    ...mapActions(['goToProfile']),  // Map the Vuex action
+
     async approveRequest(requestId) {
       await apiClient.post(`/StudyGroupManage/ApproveJoinRequest/${this.groupId}`, { requestId });
       this.fetchRequests();
@@ -61,6 +64,9 @@ export default {
     async fetchRequests() {
       const response = await apiClient.get(`/StudyGroup/GetJoinRequests/${this.groupId}`);
       this.requests = response.data;
+    },
+    async navigateToProfile(userId) {
+      this.goToProfile({ userId, router: this.$router });  // Dispatch the action
     }
   }
 };

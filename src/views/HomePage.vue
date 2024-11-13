@@ -3,10 +3,16 @@
     <!-- 知识网络 -->
     <v-row>
       <v-col cols="6" class="knowledge-graph">
-        <KnowledgeNetwork></KnowledgeNetwork>
+        <KnowledgeNetwork> <!-- Slot content for full-screen overlay -->
+          <div class="fullscreen-overlay-content">
+            <NodeCreationForm v-if="this.$store.state.displayNodeCreationForm"></NodeCreationForm>
+            <LinkCreationForm v-else-if="this.$store.state.displayLinkCreationForm"></LinkCreationForm>
+            <NodeInfo v-else></NodeInfo>
+          </div>
+        </KnowledgeNetwork>
         <!-- <p>一个可以查询节点内容和生成学习路径的知识网络</p> -->
       </v-col>
-      <v-col cols="6">
+      <v-col cols="6" v-if="!isFullScreen">
         <!-- <h3>知识描述</h3> -->
         <NodeCreationForm v-if="this.$store.state.displayNodeCreationForm"></NodeCreationForm>
         <LinkCreationForm v-else-if="this.$store.state.displayLinkCreationForm"></LinkCreationForm>
@@ -61,6 +67,7 @@ export default {
   data() {
     return {
       displayNodeCreationForm: false,
+      isFullScreen: false,
       mediaList: [
         {
           id: 1,
@@ -83,4 +90,20 @@ export default {
   margin: 20px;
   padding: 10px;
 }
+
+.fullscreen-overlay-content {
+  position: fixed;
+  top: 6vh; /* Offset from the top */
+  right: 2vw; /* Offset from the right */
+  width: 20vw; /* Fixed width */
+  height: auto; /* Allows content to adjust based on its own size */
+  max-height: 40vh; /* Restrict height if needed */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Align items to the right */
+  justify-content: flex-start; /* Align items to the top */
+  z-index: 100000; /* Ensures it's always on top */
+  pointer-events: auto; /* Allows interactions */
+}
+
 </style>

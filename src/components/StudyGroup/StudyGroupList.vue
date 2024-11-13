@@ -23,7 +23,7 @@
             <v-card-text>
               小组成员:
               <v-col v-for="member in group.members" :key="member.id">
-                <v-btn icon="dots-vertical" size="40">
+                <v-btn icon="dots-vertical" size="40" @click="navigateToProfile(member.id)">
                   <v-avatar size="35">
                     <img :src="member.avatarUrl" alt="用户头像">
                   </v-avatar>
@@ -48,6 +48,7 @@
 <script>
 import { apiClient } from '@/api';
 import { useGlobalLoading } from '../GlobalLoader.vue';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'StudyGroupList',
@@ -66,6 +67,8 @@ export default {
     };
   },
   methods: {
+    ...mapActions(['goToProfile']),  // Map the Vuex action
+
     async fetchGroups() {
       this.showLoading(); // Show loading spinner
       try {
@@ -137,7 +140,10 @@ export default {
           console.error('Error applying to join group:', error);
           alert('Failed to submit application');
         });
-    }
+    },
+    async navigateToProfile(userId) {
+      this.goToProfile({ userId, router: this.$router });  // Dispatch the action
+    },
   },
   mounted() {
     // Fetch groups from the backend on component mount

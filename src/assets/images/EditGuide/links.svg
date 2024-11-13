@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="121" height="131" viewBox="0 0 121 131" xml:space="preserve">
+<desc>Created with Fabric.js 3.6.6</desc>
+<defs>
+</defs>
+<g transform="matrix(1 0 0 1 60.13 65.13)"  >
+<g style=""   >
+		<g transform="matrix(1 0 0 1 -12.71 -59.61)" style="" id="_图层_1-2"  >
+		<text xml:space="preserve" font-family="SimHei, SimHei" font-size="10.65" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(35,24,21); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-47.93" y="3.35" >常态节点之间的连接</tspan></text>
+</g>
+		<g transform="matrix(1 0 0 1 10.86 -12.18)" id="_图层_1-2"  >
+<line style="stroke: rgb(219,219,219); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 0.97;"  x1="32.144999999999996" y1="0.3550000000000004" x2="-32.144999999999996" y2="-0.3550000000000004" />
+</g>
+		<g transform="matrix(1 0 0 1 -35.67 24.65)" id="_图层_1-2"  >
+<line style="stroke: rgb(219,219,219); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 0.97;"  x1="0.4450000000000003" y1="23.239999999999995" x2="-0.4450000000000003" y2="-23.239999999999995" />
+</g>
+		<g transform="matrix(1 0 0 1 9.94 10.07)" id="_图层_1-2"  >
+<line style="stroke: rgb(219,219,219); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 0.97;"  x1="33.5" y1="15.159999999999997" x2="-33.5" y2="-15.159999999999997" />
+</g>
+		<g transform="matrix(1 0 0 1 10.44 -33.77)" id="_图层_1-2"  >
+<line style="stroke: rgb(219,219,219); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 0.97;"  x1="33.25" y1="-14.885" x2="-33.25" y2="14.885" />
+</g>
+		<g transform="matrix(1 0 0 1 -35.22 -12.54)" id="_图层_1-2"  >
+<circle style="stroke: rgb(27,44,115); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(224,61,100); fill-rule: nonzero; opacity: 1;"  cx="0" cy="0" r="13.94" />
+</g>
+		<g transform="matrix(1 0 0 1 51.77 -52.33)" id="_图层_1-2"  >
+<circle style="stroke: rgb(27,44,115); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(226,214,190); fill-rule: nonzero; opacity: 1;"  cx="0" cy="0" r="8.87" />
+</g>
+		<g transform="matrix(1 0 0 1 51.77 -12.18)" id="_图层_1-2"  >
+<circle style="stroke: rgb(27,44,115); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(87,67,146); fill-rule: nonzero; opacity: 1;"  cx="0" cy="0" r="8.87" />
+</g>
+		<g transform="matrix(1 0 0 1 51.77 27.96)" id="_图层_1-2"  >
+<circle style="stroke: rgb(27,44,115); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(80,175,216); fill-rule: nonzero; opacity: 1;"  cx="0" cy="0" r="8.87" />
+</g>
+		<g transform="matrix(1 0 0 1 -35.23 56.76)" id="_图层_1-2"  >
+<circle style="stroke: rgb(27,44,115); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(87,123,81); fill-rule: nonzero; opacity: 1;"  cx="0" cy="0" r="8.87" />
+</g>
+</g>
+</g>
+</svg>

@@ -40,9 +40,18 @@ export default {
         placeholder: '在帕鲁岛工人夜校，你可以学到...', // Specify placeholder
         modules: {
           toolbar: [
-            [{ header: [1, 2, false] }],
-            ['bold', 'italic', 'underline'],
-            ['image', 'code-block'],
+            [{ header: [1, 2, 3, 4] }], // 标题
+            ['bold', 'italic', 'underline', 'strike'], // 加粗 斜体 下划线 删除线
+            ['blockquote', 'code-block'], // 引用  代码块
+            [{ list: 'ordered' }, { list: 'bullet' }], // 有序、无序列表
+            [{ script: 'sub' }, { script: 'super' }], // 上标/下标
+            [{ indent: '-1' }, { indent: '+1' }], // 缩进
+            // [{ direction: 'rtl' }], // 文本方向
+            [{ color: [] }, { background: [] }], // 字体颜色、字体背景颜色
+            // [{ font: ['songti'] }], // 字体种类
+            [{ align: [] }], // 对齐方式
+            // ['clean'], // 清除文本格式
+            ['link', 'image', 'video'] // 链接、图片、视频
           ],
         },
       });
@@ -62,7 +71,7 @@ export default {
         // API call logic here
         await apiClient.post('/StudyGroup/CreateStudyGroup', payload);
         // 创建成功后的处理，例如跳转到小组列表或显示成功消息
-        alert('学习小组创建成功!');
+        alert('学习小组创建的请求已提交审核，请耐心等待。');
         router.push({ name: 'studyGroupList' });
       } catch (error) {
         console.error("创建学习小组失败:", error);
@@ -72,7 +81,7 @@ export default {
 
     const cancel = () => {
       // Cancel logic here
-      if (confirm("确定取消学习小组创建?")) {
+      if (confirm("确定要取消学习小组创建吗?")) {
         router.push({ name: 'studyGroupList' });
       }
     };

@@ -1,5 +1,5 @@
 // useKnowledgeGraph.js
-import { ref, computed, onMounted, reactive, watch } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, reactive, watch } from 'vue';
 // import useGraphEditMode from './useGraphEditMode';
 import { useStore } from 'vuex';
 import { apiClient } from '@/api';
@@ -18,16 +18,48 @@ export default function useKnowledgeGraph(endpoint) {
     const nodes = ref([]);  // Reactive reference for nodes
     const store = useStore();
     const svgRef = ref(null);
+    const isFullScreen = ref(false);
     let link, node, svg, labels, zoom, simulation;
     const selectedNodes = computed(() => store.state.selectedNodes);
-    const width = 860;  // Example fixed width
-    const height = 860; // Example fixed height
     let currentZoomLevel = 1;
+
+    const strokeColor = '#000';  // Default stroke color for nodes
+    const strokeWidth = 0.5;  // Default stroke width for nodes
+    const linkColor = '#999';  // Default link color
+    const highlightColor = '#00ffff';  // Highlight color for selected nodes
+    const highlightStrokeWidth = 4;  // Highlight stroke width for selected nodes
+
+    // Make `width` and `height` reactive
+    const width = ref(0);
+    const height = ref(0);
 
     const { showLoading, hideLoading } = useGlobalLoading();
 
     // Directly use Vuex store to access and modify isEditing
     const isEditing = computed(() => store.state.isEditing);
+
+    // Define resizeObserver at a higher scope
+    let resizeObserver;
+
+    // Update the resizeSvg function to handle full-screen mode
+    const resizeSvg = (entries) => {
+        for (let entry of entries) {
+            if (isFullScreen.value) {
+                // In full-screen mode, set width and height to window dimensions
+                width.value = window.innerWidth;
+                height.value = window.innerHeight;
+            } else {
+                // Otherwise, set dimensions based on the container's dimensions
+                width.value = entry.contentRect.width;
+                height.value = entry.contentRect.height;
+            }
+
+            if (svg) {
+                svg.attr('width', width.value).attr('height', height.value);
+                simulation.force('center', d3.forceCenter(width.value / 2, height.value / 2)).alpha(1).restart();
+            }
+        }
+    };
 
     // D3 Drag behavior
     const drag = simulation => {
@@ -59,7 +91,7 @@ export default function useKnowledgeGraph(endpoint) {
     // Function to create the force-directed graph
     const createForceDirectedGraph = async () => {
         showLoading(); // Show the loader
-        
+
         zoom = d3.zoom()
             .scaleExtent([0.2, 4]) // Adjust these values as needed
             .on('zoom', (event) => {
@@ -78,13 +110,13 @@ export default function useKnowledgeGraph(endpoint) {
         simulation = d3.forceSimulation()
             .force('link', d3.forceLink().id(d => d.id))
             .force('charge', d3.forceManyBody())
-            .force('center', d3.forceCenter(width / 2, height / 2))
+            .force('center', d3.forceCenter(width.value / 2, height.value / 2))
             .force("x", d3.forceX())
             .force("y", d3.forceY());
 
         link = svg.append('g')
-            .attr('stroke', '#999')
-            .attr('stroke-opacity', 0.6)
+            .attr('stroke', linkColor)
+            // .attr('stroke-opacity', 0.6)
             .selectAll('line');
 
         node = svg.append('g')
@@ -126,9 +158,9 @@ export default function useKnowledgeGraph(endpoint) {
 
                 // Check if both connected nodes are topics
                 if (sourceNode && targetNode && targetNode.labels.includes('Field')) {
-                    return 2; // Thicker line for links between a Subject and a field
+                    return 1.5; // Thicker line for links between a Subject and a field
                 } else if (sourceNode && targetNode && targetNode.labels.includes('Topic')) {
-                    return 1.5; // Thicker line for links between a field and a topic or two topics
+                    return 1.2; // Thicker line for links between a field and a topic or two topics
                 } else {
                     return Math.sqrt(d.value || 1); // Normal width for other links
                 }
@@ -140,9 +172,9 @@ export default function useKnowledgeGraph(endpoint) {
                 // Determine color based on node label combinations
                 if (sourceNode && targetNode) {
                     if (sourceNode.labels.includes('Subject') && targetNode.labels.includes('Field')) {
-                        return '#c5282a'; // Red for links between a subject and a field
+                        return '#999'; // Red for links between a subject and a field
                     } else if (targetNode.labels.includes('Topic')) {
-                        return '#d5282a'; // Red for links between two topics or a field and a topic
+                        return '#999'; // Red for links between two topics or a field and a topic
                     } else if ((sourceNode.labels.includes('Topic') && targetNode.labels.includes('Keyword')) ||
                         (sourceNode.labels.includes('Keyword') && targetNode.labels.includes('Topic'))) {
                         return '#999'; // Pink for links between a topic and a keyword
@@ -158,15 +190,14 @@ export default function useKnowledgeGraph(endpoint) {
             })
             .attr('stroke-opacity', 0.6);
 
-        // Update nodes with color based on labels
-        node = node.data(nodes, d => d.id)
-            .join('circle')
         // Update nodes
         node = node.data(nodes, d => d.id)
             .join('circle')
+            .attr('stroke', strokeColor)  // Add white stroke to nodes
+            .attr('stroke-width', strokeWidth)  // Adjust stroke width as needed
             .attr('r', d => {
                 // Adjust node size
-                return (d.labels.includes('Topic') || d.labels.includes('Field')) ? (10 + (isNaN(d.degree) ? 0 : d.degree)) * 0.8 : 5 + (isNaN(d.degree) ? 0 : d.degree) * 0.5;
+                return (d.labels.includes('Topic') || d.labels.includes('Field') || d.labels.includes('Subject')) ? (6 + (isNaN(d.degree) ? 0 : d.degree)) * 0.4 : 3 + (isNaN(d.degree) ? 0 : d.degree) * 0.3;
             })
             .attr('fill', d => {
                 if (d.labels.includes('pending_approval')) return '#848482';
@@ -248,10 +279,15 @@ export default function useKnowledgeGraph(endpoint) {
         const fieldThreshold = 0.2;
         const topicThreshold = 0.5;
         const keywordThreshold = 0.9;
-        const topicLabelThreshold = 0.7;
-        const keywordLabelThreshold = 2;
+        const fieldLabelThreshold = 0.9;
+        const topicLabelThreshold = 1.5;
+        const keywordLabelThreshold = 3.5;
 
         node
+            // .attr('r', d => {
+            //     // Adjust node size
+            //     return (d.labels.includes('Topic') || d.labels.includes('Field')) ? ((5 + (isNaN(d.degree) ? 0 : d.degree)) * 0.5) / currentZoomLevel ** 0.5 : (4 + (isNaN(d.degree) ? 0 : d.degree) * 0.4) / currentZoomLevel ** 0.5;
+            // })
             .style('visibility', d => {
                 if (d.labels.includes('Subject')) return 'visible';
                 else if (currentZoomLevel > fieldThreshold && d.labels.includes('Field')) return 'visible';
@@ -259,7 +295,8 @@ export default function useKnowledgeGraph(endpoint) {
                 return currentZoomLevel > keywordThreshold ? 'visible' : 'hidden';
             })
             .on('mouseout', function (event, d) {
-                if (currentZoomLevel <= topicLabelThreshold) labels.filter(l => l === d && !l.labels.includes('Subject')).text('') // Hide name on mouseout, except for 'Field' nodes
+                if (currentZoomLevel <= fieldLabelThreshold) labels.filter(l => l === d && !l.labels.includes('Subject')).text('') // Hide name on mouseout, except for 'Field' nodes
+                else if (currentZoomLevel <= topicLabelThreshold) labels.filter(l => l === d && (!l.labels.includes('Subject') && !l.labels.includes('Field'))).text('') // Hide name on mouseout, except for 'Field' and 'Topic' nodes
                 else if (currentZoomLevel <= keywordLabelThreshold) labels.filter(l => l === d && (!l.labels.includes('Topic') && !l.labels.includes('Field') && !l.labels.includes('Subject'))).text('') // Hide name on mouseout, except for 'Field' and 'Topic' nodes
             });
 
@@ -270,24 +307,28 @@ export default function useKnowledgeGraph(endpoint) {
             //     return currentZoomLevel > keywordLabelThreshold ? 'visible' : 'hidden';
             // })
             .style("font-size", 16 / currentZoomLevel)
-            .style("stroke", d => {
-                if (d.labels.includes('pending_approval')) return '#848482';
-                else {
-                    if (d.labels.includes('Subject')) return "#d5282a"
-                    else if (currentZoomLevel > topicThreshold && d.labels.includes('Field')) return "#d5282a"
-                    else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return "#d5282a"
-                    else return 'black'
-                }
-            })
-            .style("stroke-width", d => {
-                if (d.labels.includes('Subject')) return 1 / currentZoomLevel
-                else if (currentZoomLevel > topicThreshold && d.labels.includes('Field')) return 1 / currentZoomLevel
-                else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return 1 / currentZoomLevel
-                else return 0.5 / currentZoomLevel
-            })// Adjust stroke width as needed
+            .style("fill", 'black')
+            .style("font-weight", "bold")
+            .style("stroke", 'white')
+            .style("stroke-width", 0.5 / currentZoomLevel)
+            // .style("stroke", d => {
+            //     if (d.labels.includes('pending_approval')) return '#848482';
+            //     else {
+            //         if (d.labels.includes('Subject')) return "#d5282a"
+            //         else if (currentZoomLevel > topicThreshold && d.labels.includes('Field')) return "#d5282a"
+            //         else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return "#d5282a"
+            //         else return 'black'
+            //     }
+            // })
+            // .style("stroke-width", d => {
+            //     if (d.labels.includes('Subject')) return 1 / currentZoomLevel
+            //     else if (currentZoomLevel > topicThreshold && d.labels.includes('Field')) return 1 / currentZoomLevel
+            //     else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return 1 / currentZoomLevel
+            //     else return 0.5 / currentZoomLevel
+            // })// Adjust stroke width as needed
             .text(d => {
                 if (d.labels.includes('Subject')) return d.name;
-                else if (currentZoomLevel > fieldThreshold && d.labels.includes('Field')) return d.name;
+                else if (currentZoomLevel > fieldLabelThreshold && d.labels.includes('Field')) return d.name;
                 else if (currentZoomLevel > topicLabelThreshold && d.labels.includes('Topic')) return d.name;
                 return currentZoomLevel > keywordLabelThreshold ? d.name : '';
             })
@@ -305,21 +346,35 @@ export default function useKnowledgeGraph(endpoint) {
             }); // Adjust vertical position;
 
 
-        link.style('visibility', d => {
-            const sourceNode = nodes.value.find(n => n.id === d.source.id);
-            const targetNode = nodes.value.find(n => n.id === d.target.id);
-            if (!sourceNode || !targetNode) return 'hidden';
+        link
+            .attr('stroke-width', d => {
+                const sourceNode = nodes.value.find(n => n.id === d.source.id);
+                const targetNode = nodes.value.find(n => n.id === d.target.id);
 
-            if (currentZoomLevel <= fieldThreshold) {
-                return (targetNode.labels.includes('Subject')) ? 'visible' : 'hidden';
-            } else if (currentZoomLevel <= topicThreshold) {
-                return (targetNode.labels.includes('Field')) ? 'visible' : 'hidden';
-            } else if (currentZoomLevel <= keywordThreshold) {
-                return targetNode.labels.includes('Topic') ? 'visible' : 'hidden';
-            } else {
-                return 'visible';
-            }
-        });
+                // Check if both connected nodes are topics
+                if (sourceNode && targetNode && targetNode.labels.includes('Field')) {
+                    return 1.5 / currentZoomLevel ** 0.5; // Thicker line for links between a Subject and a field
+                } else if (sourceNode && targetNode && targetNode.labels.includes('Topic')) {
+                    return 1.2 / currentZoomLevel ** 0.5; // Thicker line for links between a field and a topic or two topics
+                } else {
+                    return Math.sqrt(d.value || 1) / currentZoomLevel ** 0.5; // Normal width for other links
+                }
+            })
+            .style('visibility', d => {
+                const sourceNode = nodes.value.find(n => n.id === d.source.id);
+                const targetNode = nodes.value.find(n => n.id === d.target.id);
+                if (!sourceNode || !targetNode) return 'hidden';
+
+                if (currentZoomLevel <= fieldThreshold) {
+                    return (targetNode.labels.includes('Subject')) ? 'visible' : 'hidden';
+                } else if (currentZoomLevel <= topicThreshold) {
+                    return (targetNode.labels.includes('Field')) ? 'visible' : 'hidden';
+                } else if (currentZoomLevel <= keywordThreshold) {
+                    return targetNode.labels.includes('Topic') ? 'visible' : 'hidden';
+                } else {
+                    return 'visible';
+                }
+            });
     };
 
     // Ticked function for updating node and link positions
@@ -424,14 +479,14 @@ export default function useKnowledgeGraph(endpoint) {
         if (node && node.style) {
             // Reset styles for all nodes to remove any previous highlights
             node
-                .style('stroke', '#ccc')  // Reset stroke color for all nodes
-                .style('stroke-width', 0)  // Reset stroke width to none for all nodes
+                .style('stroke', strokeColor)  // Reset stroke color for all nodes
+                .style('stroke-width', strokeWidth)  // Reset stroke width to none for all nodes
 
             // Highlight all selected nodes with a white stroke
             node
                 .filter(d => selectedNodes.some(n => n.id === d.id))  // Filter nodes to find those that are selected
-                .style('stroke', '#00ffff')  // Set stroke color to white for selected nodes
-                .style('stroke-width', 4)  // Set stroke width to make it visible
+                .style('stroke', highlightColor)  // Set stroke color to white for selected nodes
+                .style('stroke-width', highlightStrokeWidth / currentZoomLevel ** 0.5)  // Set stroke width to make it visible
 
             // Update the visualization to reflect changes
             node.raise();  // Bring the selected nodes to the front if overlapping
@@ -446,10 +501,23 @@ export default function useKnowledgeGraph(endpoint) {
     }, { deep: true, immediate: true });
 
     onMounted(() => {
+        resizeObserver = new ResizeObserver(resizeSvg);
+        const container = svgRef.value?.closest('.knowledge-graph');
+        if (container) resizeObserver.observe(container);
+
         createForceDirectedGraph();
+
         if (selectedNodes.value.length > 0) {
             highlightSelectedNodes(selectedNodes);
         }
+
+        document.addEventListener('fullscreenchange', handleFullScreenChange);
+    });
+
+    onBeforeUnmount(() => {
+        resizeObserver.disconnect();
+
+        document.removeEventListener('fullscreenchange', handleFullScreenChange);
     });
 
     // Assuming `nodes` and `links` are your D3 data arrays
@@ -505,12 +573,13 @@ export default function useKnowledgeGraph(endpoint) {
         // Reset opacity of nodes and links
         node.style('opacity', 1);
         labels.style('opacity', 1);
-        link.style('opacity', 1);
-
-        // // Apply changes from the external state manager to D3
-        // // Define the reset transformation
-        // const resetTransform = d3.zoomIdentity;
-        // svg.transition().duration(750).call(zoom.transform, resetTransform);
+        link.style('opacity', 1)
+            .attr('stroke', '#999')  // Reset link color
+            .attr('stroke-width', 1);  // Reset link width
+        // Apply changes from the external state manager to D3
+        // Define the reset transformation
+        const resetTransform = d3.zoomIdentity;
+        svg.transition().duration(750).call(zoom.transform, resetTransform);
 
         // Release vuex stored variable: selected node
         store.commit('resetSelectedNodes');
@@ -591,6 +660,67 @@ export default function useKnowledgeGraph(endpoint) {
         // and eventually call addNode() with the necessary node data
     };
 
+    // Function to show only favorited nodes
+    const showFavoritedNodes = async () => {
+        try {
+            // Fetch favorited nodes from the backend API (only nodes, no links)
+            const response = await apiClient.get('/KnowledgeGraph/Favorites/MyFavorites');
+            const favoriteData = response.data;
+
+            // Extract favorite node IDs
+            const favoritedNodeIds = new Set(favoriteData.map(node => node.identity));
+
+            // Update D3 graph to highlight only favorited nodes and their interconnections
+            node.style('opacity', d => favoritedNodeIds.has(d.id) ? 1 : 0.1)
+
+            labels.style('opacity', d => favoritedNodeIds.has(d.id) ? 1 : 0.1);
+
+            // Highlight links only if both connected nodes are favorites
+            link.style('opacity', d =>
+                favoritedNodeIds.has(d.source.id) && favoritedNodeIds.has(d.target.id) ? 1 : 0.1
+            );
+
+        } catch (error) {
+            console.error("Error fetching favorite nodes:", error);
+        }
+    };
+
+    // Toggle full-screen mode and trigger a resize
+    const toggleFullScreen = () => {
+        if (!svgRef.value) return;  // Ensure svgRef is defined
+
+        if (!document.fullscreenElement) {
+            // Enter full-screen mode
+            svgRef.value.requestFullscreen().then(() => {
+                isFullScreen.value = true;
+                resizeSvg([{ contentRect: { width: window.innerWidth, height: window.innerHeight } }]); // Trigger resize for full screen
+                svg.style('background-color', 'white');  // Set background color in full screen mode
+            }).catch((err) => {
+                console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+            });
+        } else {
+            // Exit full-screen mode
+            document.exitFullscreen().then(() => {
+                isFullScreen.value = false;
+                const container = svgRef.value?.parentElement;
+                if (container) resizeSvg([{ contentRect: container.getBoundingClientRect() }]); // Trigger resize for container dimensions
+                svg.style('background-color', null);  // Remove background color
+            }).catch((err) => {
+                console.error(`Error attempting to exit full-screen mode: ${err.message}`);
+            });
+        }
+    };
+
+    const handleFullScreenChange = () => {
+        isFullScreen.value = !!document.fullscreenElement;
+        if (!isFullScreen.value) {
+            // Update width and height to the container size upon exiting full screen
+            const container = svgRef.value?.parentElement;
+            if (container) resizeSvg([{ contentRect: container.getBoundingClientRect() }]); // Trigger resize for container dimensions
+            svg.style('background-color', null);  // Remove background color
+        }
+    };
+
     return {
         svgRef,
         selectedNodes,
@@ -603,9 +733,12 @@ export default function useKnowledgeGraph(endpoint) {
         searchNode,
         width,
         height,
+        toggleFullScreen,
+        isFullScreen,
         isEditing,
         contextMenuState,
         hideContextMenu,
-        showContextMenu
+        showContextMenu,
+        showFavoritedNodes
     };
 }

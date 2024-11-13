@@ -2,13 +2,14 @@
     <v-container>
         <!-- Display Mode -->
         <div v-if="!isEditMode">
-            <v-row>
-                <v-col>
-                    <v-avatar size="120">
-                        <img :src="avatarUrl" alt="Avatar">
-                    </v-avatar>
-                    <v-icon large @click="enterEditMode">mdi-pencil</v-icon>
-                </v-col>
+            <v-row no-gutters style="align-items: center;">
+                <v-avatar size="120">
+                    <img :src="avatarUrl" alt="Avatar">
+                </v-avatar>
+                <div style="width: 20px;"></div>
+                <!-- Show edit button only if it's the current user's profile -->
+                <v-btn v-if="isCurrentUser" icon variant="text" @click="enterEditMode">✏️</v-btn>
+                <slot v-if="!isCurrentUser"></slot>
             </v-row>
             <v-row>
                 <v-col>
@@ -26,7 +27,7 @@
 
         <!-- Edit Mode -->
         <v-form v-else ref="form" v-model="valid">
-            <v-card>
+            <v-card style="max-width: 600px; margin: 0 auto;">
                 <v-card-text>
                     <v-container>
                         <v-row>
@@ -34,22 +35,28 @@
                                 <v-avatar size="120" class="mb-2">
                                     <img :src="avatarUrl" alt="Avatar">
                                 </v-avatar>
-                                <v-icon large class="edit-avatar-icon" @click="openFilePicker">mdi-camera</v-icon>
+                                <v-btn icon variant="text" @click="openFilePicker">📷</v-btn>
                                 <input type="file" ref="fileInput" hidden @change="onFileSelected" accept="image/*">
-                                <v-text-field label="Username" v-model="userInfo.userName"
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-text-field variant="outlined" label="Username" v-model="userInfo.userName"
                                     :rules="usernameRules"></v-text-field>
-                                <v-select label="Gender" v-model="userInfo.gender"
+                                <v-select variant="outlined" label="Gender" v-model="userInfo.gender"
                                     :items="['Male', 'Female', 'Others', 'Secret']"></v-select>
                                 <v-menu ref="menu" v-model="menu" :close-on-content-click="false"
                                     transition="scale-transition" offset-y min-width="auto">
                                     <template v-slot:activator="{ on, attrs }">
-                                        <v-text-field v-model="userInfo.formattedBirthDate" label="Date of Birth"
-                                            prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on">
+                                        <v-text-field variant="outlined" v-model="userInfo.formattedBirthDate"
+                                            label="Date of Birth" prepend-icon="mdi-calendar" readonly v-bind="attrs"
+                                            v-on="on">
                                         </v-text-field>
                                     </template>
                                     <!-- Your date picker and other content here -->
                                 </v-menu>
-                                <v-textarea label="Self-Introduction" v-model="userInfo.selfIntroduction"></v-textarea>
+                                <v-textarea variant="outlined" label="Self-Introduction"
+                                    v-model="userInfo.selfIntroduction"></v-textarea>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -70,6 +77,12 @@ import { mapState, mapActions } from 'vuex';
 
 export default {
     name: 'PersonalInformation',
+    props: {
+        userId: {
+            type: String,
+            required: true
+        }
+    },
     data() {
         return {
             valid: true,
@@ -82,21 +95,27 @@ export default {
             completedStudyPlanCount: 0,
             contributedNodeCount: 0,
             contributedLinkCount: 0,
+            userInfo: {}  // Holds user info when fetching for other users
         }
     },
     computed: {
         ...mapState({
-            userInfo: state => state.userInfo
+            currentUserInfo: state => state.userInfo,  // Vuex store for current user
+            currentUserId: state => state.currentUserID  // Vuex store for current user's ID
         }),
         avatarUrl() {
-            return this.$store.state.avatarUrl;
+            return this.isCurrentUser ? this.$store.state.avatarUrl : this.userInfo.avatarUrl;
         },
+        isCurrentUser() {
+            // Check if the userId passed as a prop matches the current authenticated user
+            return this.userId === this.currentUserId;
+        }
     },
     methods: {
         ...mapActions(['fetchUserInfo', 'updateUserInfo']),
         async fetchUserStatistics() {
             try {
-                const userId = this.$store.state.userInfo.userId;
+                const userId = this.isCurrentUser ? this.currentUserId : this.userId;
                 const response = await apiClient.get(`/users/${userId}/statistics`);
                 this.completedStudyPlanCount = response.data.completedStudyPlanCount;
                 this.contributedNodeCount = response.data.contributedNodeCount;
@@ -105,14 +124,20 @@ export default {
                 console.error('Error fetching user statistics:', error);
             }
         },
-        toggleMenu() {
-            this.menu = !this.menu;
-        },
-        editProfile() {
-            this.$router.push({ name: 'EditProfile' });  // Assuming you have an EditProfile route
+        async fetchOtherUserInfo() {
+            try {
+                const response = await apiClient.get(`/AllUsers/GetUserInfoById/${this.userId}`);
+                const avatarResponse = await apiClient.get(`/AllUsers/GetUserAvatarById/${this.userId}`);
+                this.userInfo = response.data;  // Set the userInfo to the fetched data for another user
+                this.userInfo.avatarUrl = avatarResponse.data.avatarUrl;
+            } catch (error) {
+                console.error('Error fetching user information:', error);
+            }
         },
         enterEditMode() {
-            this.isEditMode = true;
+            if (this.isCurrentUser) {
+                this.isEditMode = true;
+            }
         },
         exitEditMode() {
             this.isEditMode = false;
@@ -158,8 +183,12 @@ export default {
         }
     },
     async mounted() {
-        await this.fetchUserInfo();
-        await this.fetchUserStatistics();
+        if (this.isCurrentUser) {
+            await this.fetchUserInfo();  // Use Vuex to fetch the current user's info
+        } else {
+            await this.fetchOtherUserInfo();  // Fetch another user's info via API
+        }
+        await this.fetchUserStatistics();  // Fetch the statistics (common for both cases)
     }
 }
 </script>

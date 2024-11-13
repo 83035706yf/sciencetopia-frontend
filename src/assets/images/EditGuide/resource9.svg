@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_图层_2" data-name="图层 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 121.28 124.43">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 8.77px;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill: #231815;
+      }
+
+      .cls-1, .cls-3 {
+        font-family: FangSong, FangSong;
+      }
+
+      .cls-2, .cls-4, .cls-5 {
+        stroke-width: 0px;
+      }
+
+      .cls-6 {
+        stroke: #6fc6ce;
+      }
+
+      .cls-6, .cls-7 {
+        fill: #e03d64;
+      }
+
+      .cls-6, .cls-7, .cls-8 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-4 {
+        fill: #040000;
+      }
+
+      .cls-3 {
+        font-size: 10.03px;
+      }
+
+      .cls-5 {
+        fill: #fff;
+      }
+
+      .cls-7 {
+        stroke: #1b2c73;
+      }
+
+      .cls-8 {
+        fill: none;
+        stroke: #9b9b9b;
+      }
+    </style>
+  </defs>
+  <g id="_图层_1-2" data-name="图层 1">
+    <line class="cls-8" x1="33.88" y1="80.32" x2="28.5" y2="80.32"/>
+    <line class="cls-8" x1="41.14" y1="80.32" x2="35.75" y2="80.32"/>
+    <line class="cls-8" x1="48.4" y1="80.32" x2="43.01" y2="80.32"/>
+    <line class="cls-8" x1="55.66" y1="80.32" x2="50.27" y2="80.32"/>
+    <line class="cls-8" x1="62.92" y1="80.32" x2="57.53" y2="80.32"/>
+    <line class="cls-8" x1="70.18" y1="80.32" x2="64.79" y2="80.32"/>
+    <line class="cls-8" x1="77.44" y1="80.32" x2="72.05" y2="80.32"/>
+    <line class="cls-8" x1="84.7" y1="80.32" x2="79.31" y2="80.32"/>
+    <line class="cls-8" x1="91.96" y1="80.32" x2="86.57" y2="80.32"/>
+    <text class="cls-1" transform="translate(33.15 112.47)"><tspan x="0" y="0">右键点击空白处</tspan><tspan x="0" y="10.52">创建节点连接</tspan></text>
+    <text class="cls-3" transform="translate(34.64 8.62)"><tspan x="0" y="0">未编辑状态</tspan></text>
+    <circle class="cls-6" cx="14.44" cy="80.71" r="13.94"/>
+    <circle class="cls-6" cx="106.84" cy="80.71" r="13.94"/>
+    <circle class="cls-7" cx="14.44" cy="28.3" r="13.94"/>
+    <circle class="cls-7" cx="106.84" cy="28.3" r="13.94"/>
+    <polygon class="cls-5" points="58.98 25.31 58.99 37.38 62.03 34.79 64.14 39.33 65.03 38.93 63.02 34.4 67.35 34.46 58.98 25.31"/>
+    <g>
+      <polygon class="cls-5" points="63.02 77.3 63.03 90.2 66.27 87.43 68.52 92.28 69.48 91.85 67.34 87.01 71.96 87.07 63.02 77.3"/>
+      <rect class="cls-4" x="57.87" y="77.33" width=".58" height="3.35" transform="translate(2.14 159.54) rotate(-108.81)"/>
+      <rect class="cls-4" x="58.31" y="74.47" width=".58" height="3.35" transform="translate(-25.43 122.73) rotate(-81.43)"/>
+      <rect class="cls-4" x="59.88" y="71.76" width=".58" height="3.35" transform="translate(-32.07 50.98) rotate(-36.99)"/>
+      <rect class="cls-4" x="67.35" y="74.53" width=".58" height="3.35" transform="translate(5.89 157.25) rotate(-101.1)"/>
+      <rect class="cls-4" x="65.55" y="72.26" width=".58" height="3.35" transform="translate(48.94 171.48) rotate(-128.49)"/>
+      <rect class="cls-4" x="62.83" y="70.7" width=".58" height="3.35" transform="translate(116.85 151.97) rotate(-172.93)"/>
+    </g>
+    <circle class="cls-2" cx="31.65" cy="5.59" r="1.49"/>
+    <circle class="cls-2" cx="28.5" cy="109.82" r="1.49"/>
+  </g>
+</svg>

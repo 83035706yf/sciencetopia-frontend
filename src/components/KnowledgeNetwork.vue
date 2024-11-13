@@ -1,46 +1,102 @@
 <template>
     <GlobalLoader />
-    <div ref="svgRef" id="cy" :style="{ width: width + 'px', height: height + 'px' }">
+    <div ref="svgRef" id="cy" :class="{ 'fullscreen-mode': isFullScreen }"
+        :style="{ width: width + 'px', height: height + 'px' }">
         <!-- 选中节点时显示的按钮 -->
-        <div v-if="selectedNodes" class="node-actions">
-            <button @click="showAdjacentNodes">
-                <i class="fas fa-circle-nodes action-icon"></i>
-            </button>
-            <button @click="showPrerequisiteNodes">
-                <i class="fas fa-share-nodes action-icon"></i>
-            </button>
-            <button @click="showSubsequentNodes">
-                <i class="fas fa-share-nodes action-icon"></i>
-            </button>
-            <button @click="resetView">
-                <i class="fas fa-arrows-rotate action-icon"></i>
-            </button>
-            <button @click="addToFavorites">
-                <i class="fas fa-heart-circle-plus action-icon"></i>
-            </button>
+        <div class="node-actions">
+            <v-tooltip v-if="selectedNodes.length > 0" text="相邻节点" location="top">
+                <template v-slot:activator="{ props }">
+                    <button class="action-button" v-bind="props" @click="showAdjacentNodes">
+                        <i class="fas fa-circle-nodes action-icon"></i>
+                    </button>
+                </template>
+            </v-tooltip>
+
+            <v-tooltip v-if="selectedNodes.length > 0" text="前置节点" location="top">
+                <template v-slot:activator="{ props }">
+                    <button class="action-button" v-bind="props" @click="showPrerequisiteNodes">
+                        <i class="fas fa-share-nodes action-icon"></i>
+                    </button>
+                </template>
+            </v-tooltip>
+
+            <v-tooltip v-if="selectedNodes.length > 0" text="后置节点" location="top">
+                <template v-slot:activator="{ props }">
+                    <button class="action-button" v-bind="props" v-on="on" @click="showSubsequentNodes">
+                        <i class="fas fa-share-nodes action-icon"></i> </button>
+                </template>
+            </v-tooltip>
+
+            <v-tooltip v-if="selectedNodes.length > 0 & !isEditing" :text="isFavorited ? '删除收藏' : '收藏节点'"
+                location="top">
+                <template v-slot:activator="{ props }">
+                    <button class="action-button" v-bind="props" @click="toggleFavorites">
+                        <i :class="isFavorited ? 'fas fa-heart-circle-minus' : 'fas fa-heart-circle-plus'"></i>
+                    </button>
+                </template>
+            </v-tooltip>
+
+            <v-tooltip text="收藏夹" location="top">
+                <template v-slot:activator="{ props }">
+                    <button class="action-button" v-bind="props" v-on="on" @click="showFavoritedNodes">
+                        <i class="fas fa-star action-icon"></i> <!-- Use a star icon for favorites -->
+                    </button>
+                </template>
+            </v-tooltip>
+
+            <v-tooltip text="重置" location="top">
+                <template v-slot:activator="{ props }">
+                    <button class="action-button" v-bind="props" v-on="on" @click="resetView">
+                        <i class="fas fa-arrows-rotate action-icon"></i> </button>
+                </template>
+            </v-tooltip>
         </div>
+
+        <!-- Edit action buttons -->
         <div class="edit-action">
-            <button v-if="!isEditing" @click="startEditing">
-                <i class="fas fa-pen action-icon"></i>
-            </button>
-            <button v-else @click="submitEditing">
-                <i class="fa-solid fa-right-from-bracket highlight-icon"></i>
-            </button>
-            <EditGuideDialog v-model="dialogVisible" @confirmed="confirmGuide"></EditGuideDialog>
+            <v-tooltip text="编辑" location="top">
+                <template v-slot:activator="{ props }">
+                    <button class="action-button" v-bind="props" v-on="on" @click="startEditing" v-if="!isEditing">
+                        <i class="fas fa-pen action-icon"></i>
+                    </button>
+                </template>
+            </v-tooltip>
+            <v-tooltip text="退出编辑" location="top" v-if="isEditing">
+                <template v-slot:activator="{ props }">
+                    <button class="action-button" v-bind="props" v-on="on" @click="submitEditing">
+                        <i class="fa-solid fa-right-from-bracket highlight-icon"></i>
+                    </button>
+                </template>
+            </v-tooltip>
         </div>
-        <div class="map-actions">
-            <!-- 容器包裹按钮和输入栏 -->
-            <div @mouseover="showInput(), overContainer = true" @mouseleave="overContainer = false; hideInput()"
-                class="action-container">
-                <!-- 定位器按钮 -->
-                <button @click="handleSearch" class="locator-btn">
-                    <svg-icon type="mdi" :path="path"></svg-icon>
-                </button>
-                <!-- 输入栏 -->
-                <input v-if="inputVisible" v-model="searchQuery" type="text" placeholder="定位到..." @input="handleInput"
-                    ref="searchInput" class="search-input" />
+
+        <div class="bottom-right-actions">
+            <div class="map-actions">
+                <!-- 容器包裹按钮和输入栏 -->
+                <div @mouseover="showInput(), overContainer = true" @mouseleave="overContainer = false; hideInput()"
+                    class="action-container">
+                    <!-- 定位器按钮 -->
+                    <button @click="handleSearch" class="locator-btn">
+                        <svg-icon type="mdi" :path="path"></svg-icon>
+                    </button>
+                    <!-- 输入栏 -->
+                    <input v-if="inputVisible" v-model="searchQuery" type="text" placeholder="定位到..."
+                        @input="handleInput" ref="searchInput" class="search-input" />
+                </div>
             </div>
+
+            <!-- Full-Screen Toggle Button -->
+            <v-tooltip :text="isFullScreen ? '退出全屏' : '全屏'" location="top">
+                <template v-slot:activator="{ props }">
+                    <button class="fullscreen-button" v-bind="props" @click="toggleFullScreen">
+                        <i :class="isFullScreen ? 'fas fa-compress' : 'fas fa-expand'"></i>
+                    </button>
+                </template>
+            </v-tooltip>
         </div>
+        <!-- Slot for overlay content -->
+        <slot v-if="isFullScreen"></slot>
+        <EditGuideDialog v-model="dialogVisible" @confirmed="confirmGuide"></EditGuideDialog>
         <ContextMenu :visible="contextMenuState.visible" :position="contextMenuState.position"
             @update:visible="contextMenuState.visible = $event" @close="hideContextMenu" />
     </div>
@@ -50,7 +106,7 @@
 import useKnowledgeGraph from './useKnowledgeGraph';
 import EditGuideDialog from './EditGuideDialog.vue'
 import ContextMenu from './ContextMenu.vue';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { apiClient } from '@/api';
 import { useStore } from 'vuex';
 import SvgIcon from '@jamescoyle/vue-icon';
@@ -86,22 +142,52 @@ export default {
             searchNode,
             width,
             height,
+            isFullScreen,
+            toggleFullScreen,
             contextMenuState,
-            hideContextMenu } = useKnowledgeGraph('/KnowledgeGraph/GetNodes');
+            hideContextMenu,
+            showFavoritedNodes } = useKnowledgeGraph('/KnowledgeGraph/GetNodes');
 
-        const addToFavorites = async () => {
+        const isFavorited = ref(false);
+
+        const toggleFavorites = async () => {
             try {
-                const nodeId = selectedNodes.value.id;
-                const response = await apiClient.post(`/Favorites/${nodeId}`);
+                // Assuming the first node in selectedNodes is the target
+                const nodeId = selectedNodes.value[0].id;
+                const response = await apiClient.post(`/KnowledgeGraph/Favorites/${nodeId}`);
+
                 if (response.data.success) {
-                    alert('Node added to favorites successfully!');
+                    // Update isFavorited based on the toggled status from the response
+                    isFavorited.value = response.data.favorited;
+
+                    // Show different alert messages based on the new favorite status
+                    if (isFavorited.value) {
+                        alert('Node added to favorites successfully!');
+                    } else {
+                        alert('Node removed from favorites successfully!');
+                    }
                 } else {
-                    alert('Failed to add node to favorites.');
+                    alert('Failed to toggle favorite status.');
                 }
             } catch (error) {
-                console.error('Error adding node to favorites:', error);
+                console.error('Error toggling favorite status:', error);
             }
         };
+
+        // Fetch favorite status when a node is selected
+        watch(selectedNodes, async (newVal) => {
+            if (newVal) {
+                try {
+                    const nodeId = newVal[0].id;
+                    console.log(newVal[0].id);
+                    const response = await apiClient.get(`/KnowledgeGraph/Favorites/Status/${nodeId}`);
+                    isFavorited.value = response.data.favorited;
+                    console.log(isFavorited);
+                } catch (error) {
+                    console.error('Error fetching favorite status:', error);
+                }
+            }
+        });
 
         const handleSearch = async () => {
             const foundNodeId = await searchNode(searchQuery.value);
@@ -146,7 +232,7 @@ export default {
             showPrerequisiteNodes,
             showSubsequentNodes,
             resetView,
-            addToFavorites,
+            toggleFavorites,
             handleSearch,
             searchQuery,
             inputVisible,
@@ -162,7 +248,11 @@ export default {
             isEditing,
             toggleEditMode,
             hideContextMenu,
+            showFavoritedNodes,
             contextMenuState,
+            isFavorited,
+            toggleFullScreen,
+            isFullScreen,
         };
     },
 
@@ -192,6 +282,11 @@ export default {
     margin: 0px;
 }
 
+#cy svg {
+    width: 100%;
+    height: 100%;
+}
+
 .node-actions {
     z-index: 1000;
     position: absolute;
@@ -199,6 +294,22 @@ export default {
     right: 80px;
     display: flex;
     gap: 10px;
+}
+
+.action-button {
+    color: black;
+    background-color: transparent;
+}
+
+.action-button:hover {
+    color: #ff8080;
+    /* Change icon color to a color between #ff4d4d and pink on hover */
+    background-color: transparent;
+}
+
+.action-button:active {
+    color: #ff4d4d;
+    /* A color between pink and red */
 }
 
 .edit-action {
@@ -221,13 +332,27 @@ export default {
     box-shadow: 0 0 10px red; */
 }
 
-.map-actions {
-    z-index: 1000;
+.fullscreen-mode {
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: white;
+}
+
+/* Modular bottom-right corner styling */
+.bottom-right-actions {
     position: absolute;
     bottom: 20px;
-    right: 80px;
+    right: 20px;
     display: flex;
+    align-items: center;
     gap: 10px;
+    z-index: 1000;
+}
+
+.map-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .action-container {
@@ -235,7 +360,6 @@ export default {
     align-items: center;
     /* 垂直居中对齐 */
 }
-
 
 .locator-btn {
     padding: 10px 15px;
@@ -258,11 +382,18 @@ export default {
     /* 水平居中内容 */
 }
 
-.locator-btn:focus {
-    outline: none;
-    /* 移除焦点时的轮廓 */
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
-    /* 焦点时的阴影 */
+.locator-btn:hover,
+.fullscreen-button:hover {
+    color: #ff8080;
+    /* Change icon color to a color between #ff4d4d and pink on hover */
+    /* 鼠标悬停时的背景色 */
+}
+
+.locator-btn:active,
+.fullscreen-button:active {
+    color: #ff4d4d;
+    /* A color between pink and red */
+    /* 鼠标按下时的背景色 */
 }
 
 .search-input {

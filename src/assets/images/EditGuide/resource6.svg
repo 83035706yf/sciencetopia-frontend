@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_图层_2" data-name="图层 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 82.84 136.04">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: FangSong, FangSong;
+        font-size: 8.77px;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill: #231815;
+      }
+
+      .cls-2, .cls-4, .cls-5, .cls-6, .cls-7 {
+        stroke-width: 0px;
+      }
+
+      .cls-4 {
+        fill: #f7f7f7;
+      }
+
+      .cls-5 {
+        fill: #040000;
+      }
+
+      .cls-8 {
+        fill: none;
+        stroke: #ddd;
+        stroke-miterlimit: 10;
+        stroke-width: .5px;
+      }
+
+      .cls-6 {
+        fill: #fff;
+      }
+
+      .cls-3 {
+        font-family: SimHei, SimHei;
+        font-size: 15.28px;
+      }
+
+      .cls-7 {
+        fill: #f9d4d4;
+        opacity: .9;
+      }
+    </style>
+  </defs>
+  <g id="_图层_1-2" data-name="图层 1">
+    <rect class="cls-7" x="0" y="0" width="82.84" height="37.51"/>
+    <text class="cls-1" transform="translate(7.48 124.08)"><tspan x="0" y="0">右键点击创建节点</tspan><tspan x="0" y="10.52">或者创建边</tspan></text>
+    <text class="cls-3" transform="translate(10.04 14.63)"><tspan x="0" y="0">右键空白</tspan><tspan x="0" y="18.33">处选择</tspan></text>
+    <polygon class="cls-4" points="79.35 79.92 18.4 79.92 9.72 85.61 11.2 71.53 11.14 50.75 79.49 50.75 79.35 79.92"/>
+    <text class="cls-1" transform="translate(35.87 62.13)"><tspan x="0" y="0">创建节点</tspan></text>
+    <text class="cls-1" transform="translate(35.22 75.02)"><tspan x="0" y="0">创建边</tspan></text>
+    <circle class="cls-2" cx="31.04" cy="59.26" r="1.49"/>
+    <circle class="cls-2" cx="31.04" cy="72.3" r="1.49"/>
+    <g>
+      <polygon class="cls-6" points="11.11 87.25 11.12 101.39 14.67 98.35 17.14 103.67 18.19 103.2 15.84 97.9 20.9 97.97 11.11 87.25"/>
+      <rect class="cls-5" x="5.47" y="87.28" width=".63" height="3.67" transform="translate(-76.71 123.34) rotate(-108.81)"/>
+      <rect class="cls-5" x="5.94" y="84.15" width=".63" height="3.67" transform="translate(-79.7 79.35) rotate(-81.43)"/>
+      <rect class="cls-5" x="7.67" y="81.18" width=".63" height="3.67" transform="translate(-48.34 21.51) rotate(-36.99)"/>
+      <rect class="cls-5" x="15.85" y="84.21" width=".63" height="3.67" transform="translate(-65.15 118.48) rotate(-101.1)"/>
+      <rect class="cls-5" x="13.88" y="81.73" width=".63" height="3.67" transform="translate(-42.38 146.68) rotate(-128.49)"/>
+      <rect class="cls-5" x="10.9" y="80.02" width=".63" height="3.67" transform="translate(12.28 164.47) rotate(-172.93)"/>
+    </g>
+    <line class="cls-8" x1="11.18" y1="65.73" x2="79.42" y2="65.73"/>
+  </g>
+</svg>

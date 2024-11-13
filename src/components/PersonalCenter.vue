@@ -1,54 +1,88 @@
 <template>
   <div>
-    <!-- 其他的个人中心内容 -->
-    <PersonalInformation></PersonalInformation>
+    <!-- Personal Information -->
+    <PersonalInformation :userId="userId">
+      <v-btn variant="outlined" :style="{ backgroundColor: 'white' }" prepend-icon="mdi-email-outline"
+        @click="startOrLoadConversation(userId)">
+        <template v-slot:prepend>
+          <v-icon color="#ff4d4d"></v-icon>
+        </template>
+        发消息
+      </v-btn>
+    </PersonalInformation>
 
-    <!-- 已收藏的知识网络图 -->
-    <!-- <v-container class="knowledgegraph-container">
-      <h3>我的收藏</h3>
-      <v-row>
-        <v-col cols="6" class="knowledge-graph">
-          <FavoriteKnowledgeGraph />
+    <!-- Study Plans Section -->
+    <v-container>
+      <v-row class="d-flex align-center">
+        <v-col cols="auto">
+          <h3>{{ isCurrentUser ? '我的学习计划' : 'TA的学习计划' }}</h3>
         </v-col>
-        <v-col cols="6">
-          <NodeInfo></NodeInfo>
+        <v-col>
+          <v-tabs v-model="activeTab" background-color="primary" dark>
+            <v-tab>进行中</v-tab>
+            <v-tab>已完成</v-tab>
+          </v-tabs>
         </v-col>
       </v-row>
-    </v-container> -->
 
-    <!-- 已制定的学习计划 -->
-    <v-container>
-      <h3>我的学习计划</h3>
-      <p v-if="studyPlanDataList.length === 0">你还没有创建任何学习计划</p>
-      <v-col v-else v-for="item in studyPlanDataList" :key="item.studyPlan.title" cols="12">
-        <v-card class="mb-3">
-          <v-card-item>
-            <v-row>
-              <v-col cols="11">
-                <study-plan :studyPlan="item.studyPlan" @resourceUpdated="handleResourceUpdated"></study-plan>
-              </v-col>
-              <v-col cols="1" class="d-flex justify-end pt-4 pr-4">
-                <v-btn small variant="text" color="red" @click="deleteStudyPlan(item.studyPlan.title)">删除</v-btn>
-              </v-col>
-            </v-row>
-          </v-card-item>
-        </v-card>
-      </v-col>
+      <!-- Active Study Plans -->
+      <v-tab-item v-if="activeTab === 0">
+        <v-col v-for="item in activeStudyPlans" :key="item.studyPlan.id" cols="12">
+          <v-card class="mb-3">
+            <v-card-item>
+              <v-row>
+                <v-col cols="11">
+                  <study-plan :userId="userId" :studyPlan="item.studyPlan"
+                    @resourceUpdated="handleResourceUpdated"></study-plan>
+                </v-col>
+                <v-col cols="1" class="d-flex justify-end pt-4 pr-4">
+                  <v-btn small variant="text" color="red" @click="deleteStudyPlan(item.studyPlan.title)">删除</v-btn>
+                </v-col>
+              </v-row>
+            </v-card-item>
+          </v-card>
+        </v-col>
+        <p v-if="activeStudyPlans.length === 0">{{ isCurrentUser ? '你还没有进行中的学习计划' : 'TA还没有进行中的学习计划' }}</p>
+      </v-tab-item>
+
+      <!-- Completed Study Plans -->
+      <v-tab-item v-if="activeTab === 1">
+        <v-col v-for="item in completedStudyPlans" :key="item.studyPlan.id" cols="12">
+          <v-card class="mb-3">
+            <v-card-item>
+              <v-row>
+                <v-col cols="11">
+                  <study-plan :userId="userId" :studyPlan="item.studyPlan"
+                    @resourceUpdated="handleResourceUpdated"></study-plan>
+                </v-col>
+                <v-col cols="1" class="d-flex justify-end pt-4 pr-4">
+                  <v-btn small variant="text" color="red" @click="deleteStudyPlan(item.studyPlan.title)">删除</v-btn>
+                </v-col>
+              </v-row>
+            </v-card-item>
+          </v-card>
+        </v-col>
+        <div v-if="completedStudyPlans.length === 0">
+          <p>{{ isCurrentUser ? '你还没有完成的学习计划' : 'TA还没有完成的学习计划' }}</p>
+        </div>
+      </v-tab-item>
     </v-container>
 
-    <!-- 已加入的学习小组 -->
+    <!-- Study Groups Section -->
     <v-container>
-      <h3>我的学习小组</h3>
-      <p v-if="studyGroupList.length === 0">你还没有加入任何学习小组哦！</p>
+      <h3>{{ isCurrentUser ? '我的学习小组' : 'TA的学习小组' }}</h3>
+      <v-spacer style="height: 10px;"></v-spacer>
+      <p v-if="studyGroupList.length === 0">{{ isCurrentUser ? '你还没有加入任何学习小组哦！' : 'TA还没有加入任何学习小组哦！' }}</p>
       <v-row v-else>
-        <v-col v-for="group in studyGroupList" :key="group.id" cols="12"  sm="6" md="4">
+        <v-col v-for="group in studyGroupList" :key="group.id" cols="12" sm="6" md="4">
           <v-card class="mb-3">
             <v-card-title>
               {{ group.name }}
               <v-chip class="ml-auto" color="primary" label>{{ group.role }}</v-chip>
-                <v-chip v-if="group.status === 'pending_approval'" class="ml-auto" color="primary" label>{{ group.status }}</v-chip>
+              <v-chip v-if="group.status === 'pending_approval'" class="ml-auto" color="primary" label>{{ group.status
+                }}</v-chip>
             </v-card-title>
-            <v-card-text>{{ group.description }}</v-card-text>
+            <v-card-subtitle v-html="group.description"></v-card-subtitle>
             <v-card-actions>
               <v-btn text @click="toGroupPage(group.id)">查看详情</v-btn>
             </v-card-actions>
@@ -56,41 +90,67 @@
         </v-col>
       </v-row>
     </v-container>
+
+    <!-- Scroll to Top Button -->
+    <ScrollToTopButton />
   </div>
 </template>
 
 <script>
-// import FavoriteKnowledgeGraph from './FavoriteKnowledgeGraph.vue';
 import PersonalInformation from './PersonalInformation.vue';
 import StudyPlan from './StudyPlan.vue';
 import { apiClient } from '@/api';
-// import NodeInfo from './NodeInfo.vue';
+import ScrollToTopButton from "@/components/ScrollToTopButton.vue";
 
 export default {
   components: {
-    // FavoriteKnowledgeGraph,
     PersonalInformation,
     StudyPlan,
-    // NodeInfo
+    ScrollToTopButton
+  },
+  props: {
+    userId: {
+      type: String,
+      default: null
+    }
   },
   data() {
     return {
       studyPlanDataList: [],
-      studyGroupList: []
-    }
+      studyGroupList: [],
+      activeTab: 0,
+      currentUserId: this.$store.state.currentUserID  // Get the current user's ID from Vuex store
+    };
   },
   created() {
-    this.fetchStudyPlans();
-    this.fetchStudyGroups();
+    this.fetchDataForUser(); // Fetch data for the current or other user based on userId
+  },
+  computed: {
+    isCurrentUser() {
+      return this.userId === this.currentUserId;
+    },
+    activeStudyPlans() {
+      // Filter active (incomplete) study plans
+      return this.studyPlanDataList.filter(item => !item.studyPlan.completed);
+    },
+    completedStudyPlans() {
+      // Filter completed study plans
+      return this.studyPlanDataList.filter(item => item.studyPlan.completed);
+    }
+  },
+  watch: {
+    userId: 'fetchDataForUser'  // Watch for changes in userId to fetch data for the correct user
   },
   methods: {
-    async fetchStudyPlans() {
+    async fetchDataForUser() {
       try {
-        const response = await apiClient.get('/StudyPlan/FetchStudyPlan');
-        this.studyPlanDataList = response.data;
+        const studyPlanResponse = await apiClient.get(`/StudyPlan/FetchStudyPlans`, { params: { targetUserId: this.userId } });
+        this.studyPlanDataList = studyPlanResponse.data;
+
+        const studyGroupResponse = await apiClient.get(`/StudyGroup/GetStudyGroup`, { params: { targetUserId: this.userId } });
+        this.studyGroupList = studyGroupResponse.data;
       } catch (error) {
-        console.error('Error fetching study plans:', error);
-        // Handle error as needed (e.g., show a notification to the user)
+        console.error('Error fetching data:', error);
       }
     },
 
@@ -100,7 +160,7 @@ export default {
           const response = await apiClient.delete(`/StudyPlan/DeleteStudyPlan`, { params: { studyPlanTitle: planTitle } });
           if (response.status === 200) {
             alert('Study plan deleted successfully.');
-            this.fetchStudyPlans(); // Refresh the list of study plans
+            this.fetchDataForUser(); // Refresh the list of study plans
           } else {
             throw new Error('Failed to delete study plan.');
           }
@@ -112,44 +172,58 @@ export default {
     },
 
     async handleResourceUpdated() {
-      await this.fetchStudyPlans();
-    },
-
-    async fetchStudyGroups() {
-      try {
-        const response = await apiClient.get('/StudyGroup/GetMyStudyGroup');
-        this.studyGroupList = response.data;
-      } catch (error) {
-        console.error('Error fetching study groups:', error);
-        // Handle error as needed (e.g., show a notification to the user)
-      }
+      await this.fetchDataForUser();
     },
 
     toGroupPage(groupId) {
-      // Logic to navigate to the group page
       this.$router.push({ name: 'studyGroupPage', params: { groupId } });
     },
+
+    async startOrLoadConversation(otherUserId) {
+      const currentUserId = this.currentUserId;
+
+      try {
+        // Call the SignalR hub to get or create a conversation
+        const conversationData = await this.$root.$signalRConnection.invoke("GetOrStartConversation", currentUserId, otherUserId);
+
+        // Navigate to MessageCenter with the conversation ID in the query
+        this.$router.push({
+          name: 'directMessages',
+          params: { userId: currentUserId },
+          query: { conversationId: conversationData.ConversationId }
+        });
+      } catch (error) {
+        console.error("Error starting or loading conversation:", error);
+      }
+    }
   }
-}
+};
 </script>
 
 <style scoped>
-/* @import "../assets/css/layout.css"; */
-@import "../assets/css/knowledge-graph.css";
-/* #cy {
-  width: 800px;
-  height: 500px;
-  border: 1px solid #ccc;
-} */
-
-/* #cy canvas {
-  position: relative !important;
-  margin: auto !important;
-} */
-
 .v-chip {
   margin-left: auto;
   margin-right: 16px;
   font-weight: bold;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.pt-4 {
+  padding-top: 16px;
+}
+
+.pr-4 {
+  padding-right: 16px;
+}
+
+.mb-3 {
+  margin-bottom: 16px;
 }
 </style>

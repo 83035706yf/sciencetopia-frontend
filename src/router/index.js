@@ -40,35 +40,40 @@ const routes = [
     component: ReGister
   },
   {
-    path: '/personalurl',
+    path: '/:userId',
     name: 'personalcenter',
-    component: PersonalCenter
+    component: PersonalCenter,
+    props: true,
   },
   {
-    path: '/personalurl/message',
+    path: '/:userId/message',
     name: 'messagecenter',
     component: MessageCenter,
+    props: true,
     children: [
       {
         path: 'directMessages',
         name: 'directMessages',
         component: MessageCenter,
+        props: route => ({ userId: route.params.userId })  // Pass userId explicitly
       },
       {
         path: 'notifications',
         name: 'notifications',
         component: MessageCenter,
+        props: route => ({ userId: route.params.userId })  // Pass userId explicitly
       }
     ]
-  },
+  },  
   {
     path: '/:catchAll(.*)',
     redirect: '/messages/directMessages'
   },
   {
-    path: '/personalurl/account',
+    path: '/:userId/account',
     name: 'accountcenter',
-    component: AccountCenter
+    component: AccountCenter,
+    props: true,
   },
   {
     path: '/allstudygroups',

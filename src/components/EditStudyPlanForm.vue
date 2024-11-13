@@ -1,0 +1,234 @@
+<template>
+    <v-form @submit.prevent="saveStudyPlan">
+        <!-- Title Input -->
+        <v-text-field v-model="localStudyPlan.title" label="Title" variant="outlined" density="compact"
+            :rules="[rules.required]"></v-text-field>
+
+        <!-- Introduction Input -->
+        <v-textarea v-model="localStudyPlan.introduction" label="Introduction" :rules="[rules.required]"
+            :auto-grow="true" rows="1" max-rows="5" variant="outlined" density="compact"></v-textarea>
+
+        <!-- Prerequisites Section -->
+        <v-divider></v-divider>
+        <div class="section-header">
+            <h4>Prerequisites</h4>
+            <v-btn size="small" icon variant="text" @click="addLesson('prerequisite')"
+                :disabled="localStudyPlan.prerequisite.length >= maxPrerequisiteLength">➕️</v-btn>
+        </div>
+
+        <!-- Scrollable container for prerequisites -->
+        <div class="scrollable-section" v-if="localStudyPlan.prerequisite.length">
+            <div v-for="(lesson, index) in localStudyPlan.prerequisite" :key="index" class="lesson-section">
+                <div class="lesson-header">
+                    <v-ico>📚️</v-ico>
+                    <v-text-field v-model="lesson.name" label="Lesson Name" variant="outlined" density="compact"
+                        :rules="[rules.required]"></v-text-field>
+                    <v-btn size="small" icon variant="text" @click="removeLesson('prerequisite', index)">➖️</v-btn>
+                </div>
+                <v-textarea class="lesson-description" v-model="lesson.description" label="Lesson Description" :auto-grow="true" rows="1"
+                    max-rows="5" variant="outlined" density="compact"></v-textarea>
+
+                <!-- Resources Management -->
+                <div class="resource-section">
+                    <div class="section-header">
+                        <h5>Resources</h5> <h5 v-if="lesson.resources[0] == null">（暂无）</h5>
+                        <v-btn size="small" icon variant="text" @click="addResource('prerequisite', index)">➕️</v-btn>
+                    </div>
+                    <div v-for="(resource, rIndex) in lesson.resources" :key="rIndex" class="resource-content">
+                        <div class="resource-header">
+                            <v-ico>📙</v-ico>
+                            <v-text-field v-model="resource.name" label="Resource Name" variant="outlined"
+                                density="compact"></v-text-field>
+                            <v-btn size="small" icon variant="text"
+                                @click="removeResource('prerequisite', index, rIndex)">➖️</v-btn>
+                        </div>
+                        <v-text-field class="lesson-description" v-model="resource.link" label="Resource Link" variant="outlined"
+                            density="compact"></v-text-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <v-helper-text v-if="localStudyPlan.prerequisite.length >= maxPrerequisiteLength">
+            Maximum number of prerequisite lessons reached.
+        </v-helper-text>
+
+        <!-- Main Curriculum Section -->
+        <v-divider></v-divider>
+        <div class="section-header">
+            <h4>Main Curriculum</h4>
+            <v-btn size="small" icon variant="text" @click="addLesson('mainCurriculum')"
+                :disabled="localStudyPlan.mainCurriculum.length >= maxMainCurriculumLength">➕️</v-btn>
+        </div>
+
+        <!-- Scrollable container for main curriculum -->
+        <div class="scrollable-section" v-if="localStudyPlan.mainCurriculum.length">
+            <div v-for="(lesson, index) in localStudyPlan.mainCurriculum" :key="index" class="lesson-section">
+                <div class="lesson-header">
+                    <v-ico>📚️</v-ico>
+                    <v-text-field v-model="lesson.name" label="Lesson Name" variant="outlined" density="compact"
+                        :rules="[rules.required]"></v-text-field>
+                    <v-btn size="small" icon variant="text" @click="removeLesson('mainCurriculum', index)">➖️</v-btn>
+                </div>
+                <v-textarea class="lesson-description" v-model="lesson.description" label="Lesson Description"
+                    :auto-grow="true" rows="1" max-rows="5" variant="outlined" density="compact"></v-textarea>
+
+                <!-- Resources Management -->
+                <div class="resource-section">
+                    <div class="section-header">
+                        <h5>Resources</h5><h5 v-if="lesson.resources[0] == null">（暂无）</h5>
+                        <v-btn size="small" icon variant="text" @click="addResource('mainCurriculum', index)">➕️</v-btn>
+                    </div>
+                    <div v-for="(resource, rIndex) in lesson.resources" :key="rIndex" class="resource-content">
+                        <div class="resource-header">
+                            <v-ico>📙</v-ico>
+                            <v-text-field v-model="resource.name" label="Resource Name" variant="outlined"
+                                density="compact"></v-text-field>
+                            <v-btn size="small" icon variant="text"
+                                @click="removeResource('mainCurriculum', index, rIndex)">➖️</v-btn>
+                        </div>
+                        <v-text-field class="lesson-description" v-model="resource.link" label="Resource Link" variant="outlined"
+                            density="compact"></v-text-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <v-helper-text v-if="localStudyPlan.mainCurriculum.length >= maxMainCurriculumLength">
+            Maximum number of main curriculum lessons reached.
+        </v-helper-text>
+
+        <!-- Advanced Topics Section -->
+        <v-divider></v-divider>
+        <div class="section-header">
+            <h4>Advanced Topics</h4>
+            <v-btn size="small" icon variant="text" @click="addLesson('advancedTopics')"
+                :disabled="localStudyPlan.advancedTopics.length >= maxAdvancedTopicsLength">➕️</v-btn>
+        </div>
+
+        <!-- Scrollable container for advanced topics -->
+        <div class="scrollable-section" v-if="localStudyPlan.advancedTopics.length">
+            <div v-for="(lesson, index) in localStudyPlan.advancedTopics" :key="index" class="lesson-section">
+                <div class="lesson-header">
+                    <v-ico>📚️</v-ico>
+                    <v-text-field v-model="lesson.name" label="Lesson Name" variant="outlined" density="compact"
+                        :rules="[rules.required]"></v-text-field>
+                    <v-btn size="small" icon variant="text" @click="removeLesson('advancedTopics', index)">➖️</v-btn>
+                </div>
+                <v-textarea class="lesson-description" v-model="lesson.description" label="Lesson Description"
+                    :auto-grow="true" rows="1" max-rows="5" variant="outlined" density="compact"></v-textarea>
+
+                <!-- Resources Management -->
+                <div class="resource-section">
+                    <div class="section-header">
+                        <h5>Resources</h5><h5 v-if="lesson.resources[0] == null">（暂无）</h5>
+                        <v-btn size="small" icon variant="text" @click="addResource('advancedTopics', index)">➕️</v-btn>
+                    </div>
+                    <div v-for="(resource, rIndex) in lesson.resources" :key="rIndex" class="resource-content">
+                        <div class="resource-header">
+                            <v-ico>📙</v-ico>
+                            <v-text-field v-model="resource.name" label="Resource Name" variant="outlined"
+                                density="compact"></v-text-field>
+                            <v-btn size="small" icon variant="text"
+                                @click="removeResource('advancedTopics', index, rIndex)">➖️</v-btn>
+                        </div>
+                        <v-text-field class="lesson-description" v-model="resource.link" label="Resource Link" variant="outlined"
+                            density="compact"></v-text-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <v-helper-text v-if="localStudyPlan.advancedTopics.length >= maxAdvancedTopicsLength">
+            Maximum number of advanced topic lessons reached.
+        </v-helper-text>
+
+        <!-- Save Button -->
+        <v-actions>
+            <v-btn size="small" variant="text" color="blue" @click="saveStudyPlan">保存学习计划</v-btn>
+        </v-actions>
+    </v-form>
+</template>
+
+<script>
+export default {
+    props: {
+        studyPlan: {
+            type: Object,
+            required: true,
+        },
+    },
+    data() {
+        return {
+            localStudyPlan: JSON.parse(JSON.stringify(this.studyPlan)),
+            maxPrerequisiteLength: 10,  // Max number of prerequisites
+            maxMainCurriculumLength: 10,  // Max number of main curriculum lessons
+            maxAdvancedTopicsLength: 10,  // Max number of advanced topics lessons
+            rules: {
+                required: (value) => !!value || 'Required.',
+            },
+        };
+    },
+    methods: {
+        addLesson(type) {
+            if (this.localStudyPlan[type].length >= this[`max${this.capitalize(type)}Length`]) return;
+            this.localStudyPlan[type].push({ name: '', description: '', resources: [] });
+        },
+        removeLesson(type, index) {
+            this.localStudyPlan[type].splice(index, 1);
+        },
+        addResource(type, lessonIndex) {
+            this.localStudyPlan[type][lessonIndex].resources.push({ name: '', link: '' });
+        },
+        removeResource(type, lessonIndex, resourceIndex) {
+            this.localStudyPlan[type][lessonIndex].resources.splice(resourceIndex, 1);
+        },
+        capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        },
+        async saveStudyPlan() {
+            try {
+                await this.$emit('save', this.localStudyPlan);
+            } catch (error) {
+                console.error(error);
+            }
+        },
+    },
+};
+</script>
+
+<style scoped>
+.scrollable-section {
+    max-height: 400px;
+    /* Adjust the max height as needed */
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.lesson-section {
+    margin-bottom: 20px;
+}
+
+.resource-section {
+    margin-left: 80px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+}
+
+.lesson-header,
+.resource-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.lesson-description {
+    margin-left: 30px;
+}
+
+.resource-content {
+    margin-left: 10px;
+}
+</style>

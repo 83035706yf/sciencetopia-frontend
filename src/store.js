@@ -121,6 +121,11 @@ export default createStore({
       commit('resetNotificationCount');
     },
 
+    async goToProfile(_, {userId, router }) {
+      // Perform route navigation using the router instance
+      router.push({ name: 'personalcenter', params: { userId } });
+    },
+
     async checkAuthenticationStatus({ commit }) {
       try {
         const response = await apiClient.get('/users/Account/AuthStatus');

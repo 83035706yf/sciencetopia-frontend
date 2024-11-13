@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_图层_2" data-name="图层 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 98.58 141.27">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ecc7de;
+        opacity: .9;
+      }
+
+      .cls-1, .cls-2 {
+        stroke-width: 0px;
+      }
+
+      .cls-3 {
+        fill: none;
+        stroke: #231815;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-4 {
+        font-size: 8.77px;
+      }
+
+      .cls-4, .cls-5 {
+        font-family: FangSong, FangSong;
+      }
+
+      .cls-4, .cls-5, .cls-6 {
+        fill: #231815;
+      }
+
+      .cls-5 {
+        font-size: 10.06px;
+      }
+
+      .cls-6 {
+        font-family: SimHei, SimHei;
+        font-size: 15.35px;
+      }
+
+      .cls-2 {
+        fill: #f4f4f4;
+      }
+    </style>
+  </defs>
+  <g id="_图层_1-2" data-name="图层 1">
+    <rect class="cls-1" x="8.55" y="0" width="82.84" height="22.52"/>
+    <text class="cls-4" transform="translate(0 35.36)"><tspan x="0" y="0">右键点击创建节点</tspan><tspan x="0" y="10.52">后打开右侧创建节点界面</tspan></text>
+    <text class="cls-4" transform="translate(14.17 139.83)"><tspan x="0" y="0">补充相关节点信息</tspan></text>
+    <text class="cls-6" transform="translate(19.5 16.74)"><tspan x="0" y="0">创建节点</tspan></text>
+    <rect class="cls-2" x="3.46" y="51.34" width="95.12" height="20.86"/>
+    <rect class="cls-2" x="3.46" y="75.09" width="95.12" height="20.86"/>
+    <rect class="cls-2" x="3.46" y="98.84" width="95.12" height="20.86"/>
+    <text class="cls-5" transform="translate(29.35 66.27)"><tspan x="0" y="0">知识类型</tspan></text>
+    <text class="cls-5" transform="translate(29.35 88.81)"><tspan x="0" y="0">知识名称</tspan></text>
+    <text class="cls-5" transform="translate(29.35 112.49)"><tspan x="0" y="0">知识描述</tspan></text>
+    <line class="cls-3" x1="49.5" y1="120.72" x2="49.5" y2="132.04"/>
+  </g>
+</svg>

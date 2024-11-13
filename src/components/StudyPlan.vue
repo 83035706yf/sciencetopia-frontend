@@ -4,54 +4,115 @@
             :style="{ animationDelay: `${n * 10}ms`, backgroundColor: getConfettiColor(n) }"></div>
     </div>
     <div class="study-plan">
-        <h2>{{ studyPlan.title }}</h2>
-        <h2>Prerequisite</h2>
-        <ul class="prerequisite-list">
-            <div v-for="(lesson, key) in studyPlan.prerequisite" :key="key" class="item-box"
-                @click="toggleDetails(key, 'prerequisite')">
-                <v-progress-linear :model-value="lesson.progressPercentage" color="light-green-darken-4" height="10"
-                    striped></v-progress-linear>
-                <div class="title">{{ lesson.name }}</div>
-                <div v-if="detailsVisible.prerequisite[key]" class="description">
-                    {{ lesson.description }}
-                    <!-- Resource Link Previews for Prerequisite Lessons -->
-                    <div v-if="lesson.resources[0].link != null" class="link-previews-container">
-                        <v-card v-for="resource in lesson.resources" :key="resource" class="link-preview-container">
-                            <v-card-item>
-                                <LinkPreview :url="resource.link" />
-                                <!-- Checkbox to mark the resource as learned -->
-                                <v-checkbox v-model="resource.learned"
-                                    @change.prevent="() => markResourceAsLearned(resource, lesson)"
-                                    :label="resource.learned ? '已完成' : '未完成'">
-                                </v-checkbox>
-                            </v-card-item>
-                        </v-card>
+        <div class="edit-button-container">
+            <!-- Edit Button -->
+            <!-- Edit Button: only show if the user is the owner -->
+            <v-btn v-if="isOwner" small variant="text" color="blue" @click="toggleEditMode">
+                {{ isEditMode ? '取消编辑' : '编辑' }}
+            </v-btn>
+        </div>
+
+        <!-- Render the new form component in edit mode -->
+        <EditStudyPlanForm v-if="isEditMode" :studyPlan="studyPlan" @save-study-plan="saveStudyPlan" />
+        <div v-else>
+            <v-tooltip :text="`学习进度：${studyPlan.progressPercentage} %`" location="up">
+                <template v-slot:activator="{ props }">
+                    <v-progress-linear v-bind="props" :model-value="studyPlan.progressPercentage"
+                        color="light-green-darken-4" height="15" striped></v-progress-linear>
+                </template>
+            </v-tooltip>
+            <!-- <v-spacer style="height: 5px;"></v-spacer> -->
+            <v-tooltip :text="`额外学习了${studyPlan.advancedTopicProgressPercentage} %的进阶内容`" location="up">
+                <template v-slot:activator="{ props }">
+                    <v-progress-linear v-if="studyPlan.advancedTopicProgressPercentage > 0" v-bind="props"
+                        :model-value="studyPlan.advancedTopicProgressPercentage" color="orange-darken-4" height="15"
+                        striped></v-progress-linear></template></v-tooltip>
+            <v-spacer style="height: 20px;"></v-spacer>
+            <h2>{{ studyPlan.title }}</h2>
+            <p>{{ studyPlan.introduction }}</p>
+
+            <h2>Prerequisite</h2>
+            <ul class="prerequisite-list">
+                <div v-for="(lesson, key) in studyPlan.prerequisite" :key="key" class="item-box"
+                    @click="toggleDetails(key, 'prerequisite')">
+                    <v-progress-linear :model-value="lesson.progressPercentage" v-if="lesson.resources[0] != null"
+                        color="light-green-darken-4" height="10" striped></v-progress-linear>
+                    <div class="title">{{ lesson.name }}</div>
+                    <div v-if="detailsVisible.prerequisite[key]" class="description">
+                        {{ lesson.description }}
+                        <!-- Resource Link Previews for Prerequisite Lessons -->
+                        <div v-if="lesson.resources[0] != null" class="link-previews-container">
+                            <v-card v-for="resource in lesson.resources" :key="resource" class="link-preview-container">
+                                <v-card-item>
+                                    <LinkPreview :url="resource.link" />
+                                    <!-- Checkbox to mark the resource as learned -->
+                                    <!-- Checkbox: disable if the user is not the owner -->
+                                    <v-checkbox v-model="resource.learned" :disabled="!isOwner"
+                                        @click.stop="() => markResourceAsLearned(resource, lesson)"
+                                        :label="resource.learned ? '已完成' : '未完成'">
+                                    </v-checkbox>
+                                </v-card-item>
+                            </v-card>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+            <div class="py-3"></div>
+            <h2>Main Curriculum</h2>
+            <div class="main-curriculum">
+                <div v-for="(lesson, key) in studyPlan.mainCurriculum" :key="key" class="module-wrapper">
+                    <div v-if="!isFirstKey(key)" class="arrow"
+                        :style="{ backgroundImage: 'url(' + rightArrowUrl + ')' }">
+                    </div>
+                    <div class="module item-box" @click="toggleDetails(key, 'mainCurriculum')">
+                        <v-progress-linear :model-value="lesson.progressPercentage" v-if="lesson.resources[0] != null"
+                            color="light-green-darken-4" height="10" striped></v-progress-linear>
+                        <div class="title">{{ lesson.name }}</div>
+                        <div v-if="detailsVisible.mainCurriculum[key]" class="description">
+                            {{ lesson.description }}
+                            <!-- Flex container for link previews -->
+                            <div class="link-previews-container">
+                                <!-- Resource Link Previews for Main Curriculum Lessons -->
+                                <div v-if="lesson.resources[0] != null" class="link-previews-container">
+                                    <v-card v-for="resource in lesson.resources" :key="resource"
+                                        class="link-preview-container">
+                                        <v-card-item>
+                                            <LinkPreview :url="resource.link" />
+                                            <!-- Checkbox to mark the resource as learned -->
+                                            <!-- Checkbox: disable if the user is not the owner -->
+                                            <v-checkbox v-model="resource.learned" :disabled="!isOwner"
+                                                @click.stop="() => markResourceAsLearned(resource, lesson)"
+                                                :label="resource.learned ? '已完成' : '未完成'">
+                                            </v-checkbox>
+                                        </v-card-item>
+                                    </v-card>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </ul>
-        <div class="py-3"></div>
-        <h2>Main Curriculum</h2>
-        <div class="main-curriculum">
-            <div v-for="(lesson, key) in studyPlan.mainCurriculum" :key="key" class="module-wrapper">
-                <div v-if="!isFirstKey(key)" class="arrow" :style="{ backgroundImage: 'url(' + rightArrowUrl + ')' }">
-                </div>
-                <div class="module item-box" @click="toggleDetails(key, 'mainCurriculum')">
-                    <v-progress-linear :model-value="lesson.progressPercentage" color="light-green-darken-4" height="10"
-                        striped></v-progress-linear>
+            <div class="py-3"></div>
+            <h2 v-if="studyPlan.advancedTopics && studyPlan.advancedTopics.length > 0">Advanced topics</h2>
+            <div class="advanced-topics">
+                <div v-for="(lesson, key) in studyPlan.advancedTopics" :key="key" class="item-box"
+                    @click="toggleDetails(key, 'advancedTopics')">
+                    <v-progress-linear :model-value="lesson.progressPercentage" v-if="lesson.resources[0] != null"
+                        color="orange-darken-4" height="10" striped></v-progress-linear>
                     <div class="title">{{ lesson.name }}</div>
-                    <div v-if="detailsVisible.mainCurriculum[key]" class="description">
+                    <div v-if="detailsVisible.advancedTopics[key]" class="description">
                         {{ lesson.description }}
                         <!-- Flex container for link previews -->
                         <div class="link-previews-container">
                             <!-- Resource Link Previews for Main Curriculum Lessons -->
-                            <div v-if="lesson.resources[0].link != null" class="link-previews-container">
+                            <div v-if="lesson.resources[0] != null" class="link-previews-container">
                                 <v-card v-for="resource in lesson.resources" :key="resource"
                                     class="link-preview-container">
                                     <v-card-item>
                                         <LinkPreview :url="resource.link" />
                                         <!-- Checkbox to mark the resource as learned -->
-                                        <v-checkbox v-model="resource.learned"
+                                        <!-- Checkbox: disable if the user is not the owner -->
+                                        <v-checkbox v-model="resource.learned" :disabled="!isOwner"
                                             @click.stop="() => markResourceAsLearned(resource, lesson)"
                                             :label="resource.learned ? '已完成' : '未完成'">
                                         </v-checkbox>
@@ -70,28 +131,60 @@
 import rightArrow from '@/assets/images/right-arrow-next.svg';
 import { apiClient } from '@/api';
 import LinkPreview from '@/components/LinkPreview.vue'; // Assuming you have a LinkPreview component
+import EditStudyPlanForm from './EditStudyPlanForm.vue';
 
 export default {
     props: {
         studyPlan: {
             type: Object,
-            // required: true
-        }
+            required: true
+        },
+        userId: {
+            type: String,
+            required: true
+        },
     },
     components: {
         LinkPreview,
+        EditStudyPlanForm
     },
+    computed: {
+        isOwner() {
+            return this.userId === this.$store.state.currentUserID; // Assuming the study plan object contains an ownerId field
+        }
+    },
+
     data() {
         return {
+            isEditMode: false, // Track edit mode state
+            localStudyPlan: JSON.parse(JSON.stringify(this.studyPlan)), // Local copy for editing
             detailsVisible: {
                 prerequisite: {},
-                mainCurriculum: {}
+                mainCurriculum: {},
+                advancedTopics: {},
             },
             rightArrowUrl: rightArrow,
             isCelebrating: false,
         };
     },
     methods: {
+        toggleEditMode() {
+            this.isEditMode = !this.isEditMode;
+        },
+
+        async saveStudyPlan() {
+            try {
+                // API call to save the updated study plan
+                await apiClient.post(`/StudyPlan/UpdateStudyPlan`, {
+                    studyPlan: this.localStudyPlan,
+                });
+                alert('Study plan updated successfully!');
+            } catch (error) {
+                console.error('Failed to update study plan:', error);
+                alert('Failed to update study plan');
+            }
+        },
+
         async toggleDetails(lessonIndex, lessonType) {
             // Toggle visibility
             this.detailsVisible[lessonType][lessonIndex] = !this.detailsVisible[lessonType][lessonIndex];
@@ -115,7 +208,7 @@ export default {
                 const confirmed = confirm('确定要将它重新标记为未完成吗?');
                 if (!confirmed) {
                     // If the user cancels, revert the learned status and exit the method
-                    resource.learned = !wasLearned;
+                    // resource.learned = !wasLearned;
                     return;
                 }
             } else {
@@ -176,7 +269,8 @@ export default {
 @import "../assets/css/link-preview.css";
 
 .prerequisite-list,
-.main-curriculum {
+.main-curriculum,
+.advanced-topics {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -291,5 +385,11 @@ export default {
     height: 10px;
     background-color: red;
     animation: celebration-animation 1.5s linear forwards;
+}
+
+.edit-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
 }
 </style>

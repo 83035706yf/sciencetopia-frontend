@@ -6,4 +6,6 @@
     border: 2px solid #000;
     border-radius: 10px; /* 这里设置边框的圆角大小 */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 可选：添加阴影效果以提升视觉效果 */
+    width: 860px;
+    height: 860px;
   }

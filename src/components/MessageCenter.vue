@@ -4,14 +4,14 @@
             <v-col cols="2" class="sidebar">
                 <v-card outlined>
                     <v-list>
-                        <v-list-item :to="{ name: 'directMessages' }" exact
+                        <v-list-item :to="{ name: 'directMessages', params: { userId: userId } }" exact
                             :class="{ 'active': activeTab === 'directMessages' }">
                             <v-list-item-title>私信</v-list-item-title>
                             <div v-if="messageCount > 0" class="alert-badge">
                                 {{ messageCount > 99 ? '99+' : messageCount }}
                             </div>
                         </v-list-item>
-                        <v-list-item :to="{ name: 'notifications' }" exact
+                        <v-list-item :to="{ name: 'notifications', params: { userId: userId } }" exact
                             :class="{ 'active': activeTab === 'notifications' }">
                             <v-list-item-title>系统消息</v-list-item-title>
                             <div v-if="notificationCount > 0" class="alert-badge">
@@ -101,6 +101,14 @@ export default {
                 // }
             }
         },
+        '$route.query.conversationId': {
+            immediate: true,
+            handler(newConversationId) {
+                if (newConversationId) {
+                    this.loadConversation(newConversationId);
+                }
+            }
+        },
         selectedConversation(conversation) {
             if (conversation) {
                 this.markMessagesAsRead(conversation.conversationId);
@@ -138,6 +146,30 @@ export default {
             this.selectedConversation = this.conversations[0];
             this.userId = userId;
             this.userAvatarUrl = this.$store.state.avatarUrl;
+        },
+        async loadConversation(conversationId, partnerId = null, partnerName = '') {
+            try {
+                // Fetch the full conversation details from the backend
+                const response = await apiClient.get(`/Message/GetConversation/${conversationId}`);
+
+                // If the backend returns data, use it; otherwise, initialize a new conversation
+                this.selectedConversation = response.data || {
+                    conversationId: conversationId,
+                    messages: [],
+                    partnerId: partnerId,       // Use the partnerId passed in
+                    partnerName: partnerName    // Use the partnerName passed in
+                };
+            } catch (error) {
+                console.error("Unable to retrieve conversation data. Initializing new conversation.");
+
+                // Initialize an empty conversation structure as a fallback
+                this.selectedConversation = {
+                    conversationId: conversationId,
+                    messages: [],
+                    partnerId: partnerId,
+                    partnerName: partnerName
+                };
+            }
         },
         selectConversation(conversation) {
             this.selectedConversation = conversation;

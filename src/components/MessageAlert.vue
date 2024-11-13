@@ -51,11 +51,13 @@ export default {
       if (!this.isAuthenticated) {
         return; // Do nothing if user is not authenticated
       } else {
-        this.$router.push({ name: 'directMessages' }); // Navigate to DirectMessages tab}
+        const userId = this.$store.state.currentUserID;  // Get the userId from Vuex store
+        this.$router.push({ name: 'directMessages', params: { userId: userId } }); // Navigate to DirectMessages tab}
       }
     },
     notifications() {
-      this.$router.push({ name: 'notifications' }); // Navigate to Notifications tab
+      const userId = this.$store.state.currentUserID;  // Get the userId from Vuex store
+      this.$router.push({ name: 'notifications', params: { userId: userId } }); // Navigate to Notifications tab
     },
   },
 };
