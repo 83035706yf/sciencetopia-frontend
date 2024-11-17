@@ -56,7 +56,7 @@
           </v-row>
         </v-container>
         <v-card-text style="padding-left: 8%; padding-right: 8%; padding-top: 2%;">
-            请确保您已经阅读并理解了为知识网络添加新节点和节点间的边的操作。Scienetopia知识网络是公开的、共享的知识网络，您所添加的节点和边将会被录入这个知识库里，向所有学习者公开。请对您所添加的知识节点和边负有责任，我们期待您做出高质量的贡献，让我们一起把营造一个更好的Sicentopia共享知识网络和更好的Sciencetopia社区。
+            请确保您已经阅读并理解了为知识网络添加新节点和节点间的边的操作。Scienetopia知识网络是公开的、共享的知识网络，您所添加的节点和边将会被录入这个知识库里，向所有学习者公开。请对您所添加的知识节点和边负有责任，我们期待您做出高质量的贡献，让我们一起营造一个更好的Sicentopia共享知识网络和更好的Sciencetopia社区。
           <v-checkbox v-model="agreed" label="我已阅读、知晓并同意"></v-checkbox>
         </v-card-text>
       </v-card-text>

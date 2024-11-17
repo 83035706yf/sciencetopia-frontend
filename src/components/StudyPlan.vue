@@ -29,7 +29,7 @@
                         striped></v-progress-linear></template></v-tooltip>
             <v-spacer style="height: 20px;"></v-spacer>
             <h2>{{ studyPlan.title }}</h2>
-            <p>{{ studyPlan.introduction }}</p>
+            <p>{{ studyPlan.introduction.description }}</p>
 
             <h2>Prerequisite</h2>
             <ul class="prerequisite-list">
@@ -42,7 +42,7 @@
                         {{ lesson.description }}
                         <!-- Resource Link Previews for Prerequisite Lessons -->
                         <div v-if="lesson.resources[0] != null" class="link-previews-container">
-                            <v-card v-for="resource in lesson.resources" :key="resource" class="link-preview-container">
+                            <v-card max-width="300px" v-for="resource in lesson.resources" :key="resource" class="link-preview-container">
                                 <v-card-item>
                                     <LinkPreview :url="resource.link" />
                                     <!-- Checkbox to mark the resource as learned -->
@@ -74,7 +74,7 @@
                             <div class="link-previews-container">
                                 <!-- Resource Link Previews for Main Curriculum Lessons -->
                                 <div v-if="lesson.resources[0] != null" class="link-previews-container">
-                                    <v-card v-for="resource in lesson.resources" :key="resource"
+                                    <v-card max-width="300px" v-for="resource in lesson.resources" :key="resource"
                                         class="link-preview-container">
                                         <v-card-item>
                                             <LinkPreview :url="resource.link" />
@@ -106,7 +106,7 @@
                         <div class="link-previews-container">
                             <!-- Resource Link Previews for Main Curriculum Lessons -->
                             <div v-if="lesson.resources[0] != null" class="link-previews-container">
-                                <v-card v-for="resource in lesson.resources" :key="resource"
+                                <v-card max-width="300px" v-for="resource in lesson.resources" :key="resource"
                                     class="link-preview-container">
                                     <v-card-item>
                                         <LinkPreview :url="resource.link" />

@@ -52,12 +52,17 @@
                         <tr>
                             <td style="border: 1px solid black;">@大法师猫定谔</td>
                             <td style="border: 1px solid black;">全栈开发</td>
-                            <td style="border: 1px solid black;">负责网站的前后端设计和实现</td>
+                            <td style="border: 1px solid black;">负责网站的前后端开发和实现</td>
                         </tr>
                         <tr>
                             <td style="border: 1px solid black;">@狐灵</td>
                             <td style="border: 1px solid black;">数据库开发</td>
                             <td style="border: 1px solid black;">参与知识网络数据库搭建</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;">@木之子</td>
+                            <td style="border: 1px solid black;">美术设计</td>
+                            <td style="border: 1px solid black;">参与了网站的美术设计和插图制作</td>
                         </tr>
                         <tr>
                             <td style="border: 1px solid black;">@</td>
