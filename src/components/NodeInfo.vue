@@ -9,7 +9,7 @@
     </v-card>
     <v-card v-if="selectedNodes.length === 0" class="pb-6">
       <v-card-text style="color: grey;">
-        获取知识，从点击一个节点开始。
+        {{ $t('knowledgeGraph.defaultmessage') }}
       </v-card-text>
     </v-card>
   </div>

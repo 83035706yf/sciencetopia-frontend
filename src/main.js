@@ -2,6 +2,7 @@
 import { createApp } from 'vue'
 import store from './store';  // Import the store
 import App from './App.vue'
+import i18n from './i18n'; // Import the i18n plugin
 import GlobalLoader from './components/GlobalLoader.vue';
 import { initializeSignalRConnection, connection } from './services/signalr-service';
 
@@ -66,5 +67,6 @@ app.config.globalProperties.$signalRConnection = connection;
 app.use(router)
 app.use(store)
 app.use(vuetify)
+app.use(i18n);
 
 app.mount('#app')

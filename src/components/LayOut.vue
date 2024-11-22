@@ -14,30 +14,33 @@
           <img src="../assets/images/red_arrow.svg" alt="Red arrow">
         </div>
         <div class="scrollToSection-container">
-          <v-btn class="Chinese-text-btn" variant="text" @click="scrollToSection">全部动态</v-btn>
+          <v-btn class="Chinese-text-btn" variant="text" @click="scrollToSection">{{ $t('header.trend') }}</v-btn>
         </div>
         <v-row>
           <v-col cols="1">
-            <v-btn style="min-width: 0px;" class="Chinese-text-btn" variant="text" @click="scrollToSection">产</v-btn>
+            <v-btn style="min-width: 0px;" class="Chinese-text-btn" variant="text" @click="scrollToSection">{{
+              $t('header.production')}}</v-btn>
           </v-col>
           <v-col cols="1" class="dot-col">
             <div class="dot">•</div>
           </v-col>
           <v-col cols="1">
-            <v-btn style="min-width: 0px;" class="Chinese-text-btn" variant="text" @click="scrollToSection">学</v-btn>
+            <v-btn style="min-width: 0px;" class="Chinese-text-btn" variant="text" @click="scrollToSection">{{
+              $t('header.Learning')}}</v-btn>
           </v-col>
           <v-col cols="1" class="dot-col">
             <div class="dot">•</div>
           </v-col>
           <v-col cols="1">
-            <v-btn style="min-width: 0px;" class="Chinese-text-btn" variant="text" @click="scrollToSection">研</v-btn>
+            <v-btn style="min-width: 0px;" class="Chinese-text-btn" variant="text" @click="scrollToSection">{{
+              $t('header.research')}}</v-btn>
           </v-col>
         </v-row>
         <div class="header-bottom">
           <!-- 搜索栏 -->
           <div class="search-container">
             <div class="search-form">
-              <input v-model="searchQuery" type="text" placeholder="我想要了解..." @keyup.enter="globalSearch" />
+              <input v-model="searchQuery" type="text" :placeholder="$t('searchbar.iwanttolearn')" @keyup.enter="globalSearch" />
               <button @click="globalSearch" class="search-btn">
                 <i class="fas fa-search" />
               </button>
@@ -45,21 +48,22 @@
           </div>
         </div>
         <!-- 显示学习小组按钮 -->
-        <v-btn class="Chinese-text-btn" variant="text" @click="RouteToStudyGroup">学习小组</v-btn>
+        <v-btn class="Chinese-text-btn" variant="text" @click="RouteToStudyGroup">{{ $t('header.studygroup') }}</v-btn>
         <!-- 显示学习规划按钮 -->
-        <v-btn class="Chinese-text-btn" variant="text" @click="dialog = true">学习计划</v-btn>
+        <v-btn class="Chinese-text-btn" variant="text" @click="dialog = true">{{ $t('header.studyplan') }}</v-btn>
 
         <v-dialog v-model="dialog" persistent max-width="1600px">
           <v-card>
-            <v-card-title>学习计划</v-card-title>
+            <v-card-title>{{$t('header.studyplan')}}</v-card-title>
             <v-card-text>
               <LearningPlanner ref="learningPlanner" @update:showStudyPlan="handleShowStudyPlanUpdate">
               </LearningPlanner>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="red darken-1" text v-if="showStudyPlan" @click="triggerSavePlan">保存学习计划</v-btn>
-              <v-btn color="blue darken-1" text @click="closeDialog">关闭</v-btn>
+              <v-btn color="red darken-1" text v-if="showStudyPlan" @click="triggerSavePlan">{{ $t('save') }}{{ $t('wordbreaker') }}{{
+                $t('header.studyplan')}}</v-btn>
+              <v-btn color="blue darken-1" text @click="closeDialog">{{ $t('close') }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -76,20 +80,24 @@
             <i class="fas fa-sun" style="color: #000000;"></i>
           </v-btn>
         </div>
+        <select v-model="$i18n.locale">
+          <option value="en">English</option>
+          <option value="zh">中文</option>
+        </select>
         <link :href="themePath" rel="stylesheet">
       </div>
     </header>
 
     <slot></slot>
     <footer>
-      <p>&copy; 2023 sciencetopia.org 版权所有。</p>
+      <p>&copy; {{ $t('footer.copy') }}</p>
       <nav>
         <ul>
-          <li><a href="/about">关于我们</a></li>
-          <li><a href="/contact">联系我们</a></li>
+          <li><a href="/about">{{ $t('footer.about') }}</a></li>
+          <li><a href="/contact">{{ $t('footer.contact') }}</a></li>
           <!-- <li><a href="/privacy">隐私政策</a></li>
           <li><a href="/terms">服务条款</a></li> -->
-          <li><a href="/support">赞助</a></li>
+          <li><a href="/support">{{ $t('footer.donate') }}</a></li>
         </ul>
       </nav>
     </footer>

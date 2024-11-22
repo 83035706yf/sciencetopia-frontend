@@ -29,16 +29,16 @@
   <v-container id="feed-section">
     <v-row>
       <v-btn variant="text">
-        <h3>全部动态</h3>
+        <h3>{{ $t('header.trend')}}</h3>
       </v-btn>
       <v-btn variant="text">
-        <h3>产</h3>
+        <h3>{{ $t('header.production')}}</h3>
       </v-btn>•
       <v-btn variant="text">
-        <h3>学</h3>
+        <h3>{{ $t('header.Learning')}}</h3>
       </v-btn>•
       <v-btn variant="text">
-        <h3>研</h3>
+        <h3>{{ $t('header.research')}}</h3>
       </v-btn>
       <v-btn variant="text">
         <v-icon>mdi-refresh</v-icon>

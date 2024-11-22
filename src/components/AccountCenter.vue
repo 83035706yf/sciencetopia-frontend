@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <h3>账号设置</h3>
+        <h3>{{ $t('user.accountsetting') }}</h3>
     </v-container>
     <v-divider></v-divider>
 
@@ -9,11 +9,12 @@
         <v-row align='center'>
             <h1>🔐</h1>
             <v-col>
-                <h4>当前密码强度:</h4>
+                <h4>{{ $t('accountsetting.strengthofpassword') }}</h4>
                 <p> <strong>{{ currentPasswordStrength }}</strong></p>
             </v-col>
             <v-col class="d-flex justify-end">
-                <v-btn variant="outlined" @click="toggleChangePasswordForm">更改密码</v-btn>
+                <v-btn variant="outlined" @click="toggleChangePasswordForm">{{
+                    $t('accountsetting.changepassword') }}</v-btn>
             </v-col>
         </v-row>
     </v-container>
@@ -24,23 +25,22 @@
             <div class="text-danger">{{ changePasswordSummary }}</div>
             <v-form ref="passwordForm" v-model="valid">
                 <v-card-text>
-                    <v-text-field label="当前密码" type="password" v-model="currentPassword"
-                        :rules="[rules.required]"></v-text-field>
-                    <v-text-field label="新密码" type="password" v-model="newPassword"
-                        :rules="[rules.required, rules.passwordStrength]"
-                        @input="updateNewPasswordStrength"></v-text-field>
-                    <v-text-field label="重复新密码" type="password" v-model="newPasswordRepeat"
-                        :rules="[rules.required, rules.passwordMatch]"></v-text-field>
+                    <v-text-field :label="$t('accountsetting.currentpassword')" type="password"
+                        v-model="currentPassword" :rules="[rules.required]"></v-text-field>
+                    <v-text-field :label="$t('accountsetting.newpassword')" type="password" v-model="newPassword"
+                        :rules="[rules.required, rules.passwordStrength]"></v-text-field>
+                    <v-text-field :label="$t('accountsetting.repeatnewpassword')" type="password"
+                        v-model="newPasswordRepeat" :rules="[rules.required, rules.passwordMatch]"></v-text-field>
                     <!-- 显示新密码强度 -->
-                    <p>新密码强度: <strong>{{ newPasswordStrength }}</strong></p>
+                    <p>{{ $t('accountsetting.strengthofnewpassword') }}: <strong>{{ newPasswordStrength }}</strong></p>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" :disabled="!valid || loading" @click="changePassword">
                         <v-progress-circular v-if="loading" indeterminate color="white" size="20"></v-progress-circular>
-                        更改密码
+                        {{ $t('accountsetting.changepassword') }}
                     </v-btn>
-                    <v-btn color="grey" @click="hideChangePasswordForm">取消</v-btn>
+                    <v-btn color="grey" @click="hideChangePasswordForm">{{ $t('cancel') }}</v-btn>
                 </v-card-actions>
             </v-form>
         </v-card>
@@ -52,11 +52,12 @@
         <v-row align='center'>
             <h1>✉️</h1>
             <v-col>
-                <h4>当前绑定的电子邮箱：</h4>
-                <p>{{ userInfo.email == null ? '尚未绑定电子邮箱噢！点击“更改邮箱”去绑定吧。' : userInfo.email }}</p>
+                <h4>{{ $t('accountsetting.currentemail') }}</h4>
+                <p>{{ userInfo.email == null ? $t('accountsetting.noemail') : userInfo.email }}</p>
             </v-col>
             <v-col class="d-flex justify-end">
-                <v-btn class="ml-auto" variant="outlined" @click="toggleChangeEmailForm">更改邮箱</v-btn>
+                <v-btn class="ml-auto" variant="outlined" @click="toggleChangeEmailForm">{{
+                    $t('accountsetting.changenewemail') }}</v-btn>
             </v-col>
         </v-row>
     </v-container>
@@ -65,16 +66,16 @@
             <div class="text-danger">{{ changeEmailSummary }}</div>
             <v-form ref="emailForm" v-model="valid">
                 <v-card-text>
-                    <v-text-field label="新邮箱" type="email" v-model="newEmail"
+                    <v-text-field :label="$t('accountsetting.newemail')" type="email" v-model="newEmail"
                         :rules="[rules.required, rules.emailFormat]"></v-text-field>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" :disabled="!valid || loading" @click="changeEmail">
                         <v-progress-circular v-if="loading" indeterminate color="white" size="20"></v-progress-circular>
-                        更改邮箱
+                        {{ $t('accountsetting.changenewemail') }}
                     </v-btn>
-                    <v-btn color="grey" @click="hideChangeEmailForm">取消</v-btn>
+                    <v-btn color="grey" @click="hideChangeEmailForm">{{ $t('cancel') }}</v-btn>
                 </v-card-actions>
             </v-form>
         </v-card>
@@ -88,9 +89,8 @@
                 邮箱确认链接已发送，请检查您的邮箱！
                 <br />
                 没有收到邮件？
-                <v-btn :color="!resendDisabled ? 'blue-darken-3' : ''"
-                    :variant="!resendDisabled ? 'outlined' : ''" :disabled="resendDisabled"
-                    @click="resendVerificationEmail">
+                <v-btn :color="!resendDisabled ? 'blue-darken-3' : ''" :variant="!resendDisabled ? 'outlined' : ''"
+                    :disabled="resendDisabled" @click="resendVerificationEmail">
                     {{ resendDisabled ? `重新发送 (${countdown}s)` : '重新发送' }}
                 </v-btn>
             </v-card-text>
@@ -108,10 +108,11 @@
         <v-row align='center'>
             <h1>📱</h1>
             <v-col>
-                <h4>当前绑定的手机号：</h4>
-                <p>{{ userInfo.phoneNumber === null ? '尚未绑定手机号噢！点击“更改手机号”去绑定吧。' : userInfo.phoneNumber }}</p>
+                <h4>{{ $t('accountsetting.currentphone') }}</h4>
+                <p>{{ userInfo.phoneNumber === null ? $t('accountsetting.nophone') : userInfo.phoneNumber }}</p>
             </v-col>
-            <v-btn class="ml-auto" variant="outlined" @click="toggleChangePhoneNumberForm">更改手机号</v-btn>
+            <v-btn class="ml-auto" variant="outlined" @click="toggleChangePhoneNumberForm">{{
+                $t('accountsetting.changephone') }}</v-btn>
         </v-row>
     </v-container>
     <v-container v-if="showChangePhoneNumberForm">
@@ -122,11 +123,11 @@
                     <v-row>
                         <v-col cols="4">
                             <v-select v-model="selectedCountryCode" :items="countryCodes" item-text="title"
-                                item-value="value" label="区号" outlined>
+                                item-value="value" :label="$t('accountsetting.areacode')" outlined>
                             </v-select>
                         </v-col>
                         <v-col cols="8">
-                            <v-text-field label="手机号" type="tel" v-model="newPhoneNumber"
+                            <v-text-field :label="$t('accountsetting.phonenumber')" type="tel" v-model="newPhoneNumber"
                                 :rules="[rules.required, rules.phoneFormat]"></v-text-field>
                         </v-col>
                     </v-row>
@@ -135,9 +136,9 @@
                     <v-spacer></v-spacer>
                     <v-btn color="primary" :disabled="!valid || loading" @click="changePhoneNumber">
                         <v-progress-circular v-if="loading" indeterminate color="white" size="20"></v-progress-circular>
-                        更改手机号
+                        {{ $t('accountsetting.changephone') }}
                     </v-btn>
-                    <v-btn color="grey" @click="hideChangePhoneNumberForm">取消</v-btn>
+                    <v-btn color="grey" @click="hideChangePhoneNumberForm">{{ $t('cancel') }}</v-btn>
                 </v-card-actions>
             </v-form>
         </v-card>
@@ -165,10 +166,10 @@
                 <g id="Layer_1" />
             </svg>
             <v-col>
-                <h4>当前绑定的微信：</h4>
-                <p>{{ userInfo.weChatOpenId ? '已绑定' : '尚未绑定微信' }}</p>
+                <h4>{{ $t('accountsetting.currentwechat') }}</h4>
+                <p>{{ userInfo.weChatOpenId ? $t('accountsetting.bound') : $t('accountsetting.nowechat') }}</p>
             </v-col>
-            <v-btn class="ml-auto" variant="outlined" @click="bindWeChat">绑定微信</v-btn>
+            <v-btn class="ml-auto" variant="outlined" @click="bindWeChat">{{ $t('accountsetting.bindwechat') }}</v-btn>
         </v-row>
     </v-container>
     <v-divider></v-divider>
@@ -199,25 +200,45 @@ export default {
             resendDisabled: true, // 控制重新发送按钮
             countdown: 30, // 倒计时初始值 30 秒
             countdownTimer: null, // 存储倒计时的定时器
-            currentPasswordStrength: '未知', // 当前密码强度
-            newPasswordStrength: '未知', // 新密码强度
             rules: {
-                required: (value) => !!value || '此项为必填项',
-                emailFormat: (value) => /.+@.+\..+/.test(value) || '邮箱格式不正确',
-                passwordStrength: (value) => value.length >= 8 || '密码至少需包含8个字符',
-                passwordMatch: () => (this.newPassword === this.newPasswordRepeat) || '两次输入的密码不匹配',
-                phoneFormat: (value) => /^\d{10,15}$/.test(value) || '手机号格式不正确',
+                required: (value) => !!value || this.$t('validation.required'),
+                emailFormat: (value) => /.+@.+\..+/.test(value) || this.$t('validation.incorrectemailFormat'),
+                passwordStrength: (value) => value.length >= 8 || this.$t('validation.passwordrequirement'),
+                passwordMatch: () => (this.newPassword === this.newPasswordRepeat) || this.$t('validation.inconsistentpassword'),
+                phoneFormat: (value) => /^\d{10,15}$/.test(value) || this.$t('validation.incorrectphoneFormat'),
             },
             changePasswordSummary: '',
             changeEmailSummary: '',
             changePhoneNumberSummary: '',
+            fetchedPasswordStrength: '', // 从API获取的当前密码强度
         };
     },
     computed: {
         ...mapState(['userInfo']),
+        currentPasswordStrength() {
+            if (this.fetchedPasswordStrength === '强') {
+                return this.$t('strong');
+            } else if (this.fetchedPasswordStrength === '中') {
+                return this.$t('medium');
+            } else if (this.fetchedPasswordStrength === '弱') {
+                return this.$t('weak');
+            }
+            return this.$t('unknown');
+        },
+        newPasswordStrength() {
+            const length = this.newPassword.length;
+            if (length >= 12) {
+                return this.$t('strong');
+            } else if (length >= 8) {
+                return this.$t('medium');
+            } else if (length > 0) {
+                return this.$t('weak');
+            }
+            return this.$t('unknown');
+        },
         cleanSelectedCountryCode() {
             return this.selectedCountryCode.split('-')[0];
-        }
+        },
     },
     methods: {
         ...mapActions(['fetchUserInfo', 'updateUserInfo']),
@@ -243,7 +264,7 @@ export default {
                 await this.$apiClient.post('/users/Account/ResendVerificationEmail');
                 this.startCountdown(); // 重置倒计时
             } catch (error) {
-                console.error('重新发送验证邮件失败', error);
+                console.error(this.$t('accountsetting.emailvalidationresentfailedmsg'), error);
             } finally {
                 this.loading = false;
             }
@@ -257,19 +278,19 @@ export default {
         async fetchCurrentPasswordStrength() {
             // 假设 API 返回当前密码的强度
             const response = await apiClient.get('/users/Account/GetPasswordStrength');
-            this.currentPasswordStrength = response.data.strength || '未知';
+            this.fetchedPasswordStrength  = response.data.strength;
         },
-        updateNewPasswordStrength() {
+        // updateNewPasswordStrength() {
             // 使用简单的逻辑计算新密码强度，这里仅作示例，实际应用中可以使用更复杂的规则
-            const length = this.newPassword.length;
-            if (length >= 12) {
-                this.newPasswordStrength = '强';
-            } else if (length >= 8) {
-                this.newPasswordStrength = '中';
-            } else {
-                this.newPasswordStrength = '弱';
-            }
-        },
+            // const length = this.newPassword.length;
+            // if (length >= 12) {
+            //     this.newPasswordStrength = '强';
+            // } else if (length >= 8) {
+            //     this.newPasswordStrength = '中';
+            // } else {
+            //     this.newPasswordStrength = '弱';
+            // }
+        // },
         async changePassword() {
             if (this.$refs.passwordForm.validate()) {
                 this.loading = true;
@@ -279,11 +300,11 @@ export default {
                         newPassword: this.newPassword,
                     });
 
-                    alert('更改密码成功！');
+                    alert(this.$t('accountsetting.changepasswordsuccessmsg'));
                     this.hideChangePasswordForm();
                     this.clearPasswordFields();
                 } catch (error) {
-                    this.handleError(error, 'changePasswordSummary', '更改密码失败，请检查密码输入是否正确');
+                    this.handleError(error, 'changePasswordSummary', this.$t('accountsetting.changepasswordfailedmsg'));
                 } finally {
                     this.loading = false;
                 }
@@ -324,10 +345,10 @@ export default {
                 try {
                     const fullPhoneNumber = `${this.selectedCountryCode}${this.newPhoneNumber}`;
                     await apiClient.post('/users/Account/ChangePhoneNumber', { newPhoneNumber: fullPhoneNumber });
-                    alert('更改手机号成功！');
+                    alert(this.$t('accountsetting.changephonesuccessmsg'));
                     this.hideChangePhoneNumberForm();
                 } catch (error) {
-                    this.handleError(error, 'changePhoneNumberSummary', '更改手机号失败');
+                    this.handleError(error, 'changePhoneNumberSummary', this.$t('accountsetting.changephonefailedmsg'));
                 } finally {
                     this.loading = false;
                 }

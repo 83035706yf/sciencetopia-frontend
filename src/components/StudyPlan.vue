@@ -8,7 +8,7 @@
             <!-- Edit Button -->
             <!-- Edit Button: only show if the user is the owner -->
             <v-btn v-if="isOwner" small variant="text" color="blue" @click="toggleEditMode">
-                {{ isEditMode ? '取消编辑' : '编辑' }}
+                {{ isEditMode ? $t('canceledit') : $t('edit') }}
             </v-btn>
         </div>
 
@@ -31,7 +31,7 @@
             <h2>{{ studyPlan.title }}</h2>
             <p>{{ studyPlan.introduction.description }}</p>
 
-            <h2>Prerequisite</h2>
+            <h2>{{ $t('studyplan.prerequisites') }}</h2>
             <ul class="prerequisite-list">
                 <div v-for="(lesson, key) in studyPlan.prerequisite" :key="key" class="item-box"
                     @click="toggleDetails(key, 'prerequisite')">
@@ -58,7 +58,7 @@
                 </div>
             </ul>
             <div class="py-3"></div>
-            <h2>Main Curriculum</h2>
+            <h2>{{ $t('studyplan.maincurriculum') }}</h2>
             <div class="main-curriculum">
                 <div v-for="(lesson, key) in studyPlan.mainCurriculum" :key="key" class="module-wrapper">
                     <div v-if="!isFirstKey(key)" class="arrow"
@@ -93,7 +93,7 @@
                 </div>
             </div>
             <div class="py-3"></div>
-            <h2 v-if="studyPlan.advancedTopics && studyPlan.advancedTopics.length > 0">Advanced topics</h2>
+            <h2 v-if="studyPlan.advancedTopics && studyPlan.advancedTopics.length > 0">{{ $t('studyplan.advancedtopics') }}</h2>
             <div class="advanced-topics">
                 <div v-for="(lesson, key) in studyPlan.advancedTopics" :key="key" class="item-box"
                     @click="toggleDetails(key, 'advancedTopics')">

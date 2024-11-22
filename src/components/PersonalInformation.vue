@@ -14,12 +14,12 @@
             <v-row>
                 <v-col>
                     <h3>{{ userInfo.userName }}</h3>
-                    <p>性别：{{ userInfo.gender }}</p>
-                    <p>出生日期：{{ userInfo.formattedBirthDate }}</p>
-                    <p>简介：{{ userInfo.selfIntroduction }}</p>
+                    <p>{{ $t('userprofile.gender') }}{{ $t(':') }}{{ userInfo.gender }}</p>
+                    <p>{{ $t('userprofile.dateofbirth') }}{{ $t(':') }}{{ userInfo.formattedBirthDate }}</p>
+                    <p>{{ $t('userprofile.aboutme') }}{{ $t(':') }}{{ userInfo.selfIntroduction }}</p>
                     <v-divider class="border-opacity-0"></v-divider>
-                    <p>完成了 {{ completedStudyPlanCount }} 个学习计划</p>
-                    <p>为Sciencetopia知识网络贡献了 {{ contributedNodeCount }} 个知识节点， {{ contributedLinkCount }} 条边</p>
+                    <p>{{ $t('userprofile.completedStudyPlanCountmsg', { completedStudyPlanCount }) }}</p>
+                    <p>{{ $t('userprofile.contributeNodemsg', { contributedNodeCount, contributedLinkCount }) }}</p>
                     <v-divider></v-divider>
                 </v-col>
             </v-row>
@@ -41,21 +41,21 @@
                         </v-row>
                         <v-row>
                             <v-col>
-                                <v-text-field variant="outlined" label="Username" v-model="userInfo.userName"
+                                <v-text-field variant="outlined" :label="$t('username')" v-model="userInfo.userName"
                                     :rules="usernameRules"></v-text-field>
-                                <v-select variant="outlined" label="Gender" v-model="userInfo.gender"
+                                <v-select variant="outlined" :label="$t('userprofile.gender')" v-model="userInfo.gender"
                                     :items="['Male', 'Female', 'Others', 'Secret']"></v-select>
                                 <v-menu ref="menu" v-model="menu" :close-on-content-click="false"
                                     transition="scale-transition" offset-y min-width="auto">
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-text-field variant="outlined" v-model="userInfo.formattedBirthDate"
-                                            label="Date of Birth" prepend-icon="mdi-calendar" readonly v-bind="attrs"
+                                            :label="$t('userprofile.dateofbirth')" prepend-icon="mdi-calendar" readonly v-bind="attrs"
                                             v-on="on">
                                         </v-text-field>
                                     </template>
                                     <!-- Your date picker and other content here -->
                                 </v-menu>
-                                <v-textarea variant="outlined" label="Self-Introduction"
+                                <v-textarea variant="outlined" :label="$t('userprofile.aboutme')"
                                     v-model="userInfo.selfIntroduction"></v-textarea>
                             </v-col>
                         </v-row>
@@ -63,8 +63,8 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary" :disabled="!valid" @click="updateUserInfo">Save</v-btn>
-                    <v-btn color="grey" @click="exitEditMode">Cancel</v-btn>
+                    <v-btn color="primary" :disabled="!valid" @click="updateUserInfo">{{ $t('save') }}</v-btn>
+                    <v-btn color="grey" @click="exitEditMode">{{ $t('cancel') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-form>

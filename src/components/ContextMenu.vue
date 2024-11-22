@@ -1,8 +1,8 @@
 <template>
     <div v-if="visible" :style="styleObject" class="context-menu" @click.stop>
         <ul class="menu-list">
-            <li @click="createNode">创建节点</li>
-            <li v-if="this.$store.state.selectedNodes.length === 2" @click="createLink">创建边</li>
+            <li @click="createNode">{{ $t('knowledgeGraph.createnode') }}</li>
+            <li v-if="this.$store.state.selectedNodes.length === 2" @click="createLink">{{ $t('knowledgeGraph.createlink') }}</li>
             <!-- Add more menu items here as needed -->
         </ul>
     </div>

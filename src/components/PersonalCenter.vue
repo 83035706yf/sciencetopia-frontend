@@ -7,7 +7,7 @@
         <template v-slot:prepend>
           <v-icon color="#ff4d4d"></v-icon>
         </template>
-        发消息
+        {{ $t('message.sendmessage') }}
       </v-btn>
     </PersonalInformation>
 
@@ -15,12 +15,12 @@
     <v-container>
       <v-row class="d-flex align-center">
         <v-col cols="auto">
-          <h3>{{ isCurrentUser ? '我的学习计划' : 'TA的学习计划' }}</h3>
+          <h3>{{ isCurrentUser ? $t('usercenter.my') : $t('usercenter.their') }}{{ $t('wordbreaker') }}{{ $t('usercenter.studyplan') }}</h3>
         </v-col>
         <v-col>
           <v-tabs v-model="activeTab" background-color="primary" dark>
-            <v-tab>进行中</v-tab>
-            <v-tab>已完成</v-tab>
+            <v-tab>{{ $t('studyplan.inprogress') }}</v-tab>
+            <v-tab>{{ $t('studyplan.completed') }}</v-tab>
           </v-tabs>
         </v-col>
       </v-row>
@@ -36,7 +36,7 @@
                     @resourceUpdated="handleResourceUpdated"></study-plan>
                 </v-col>
                 <v-col cols="1" class="d-flex justify-end pt-4 pr-4">
-                  <v-btn small variant="text" color="red" @click="deleteStudyPlan(item.studyPlan.title)">删除</v-btn>
+                  <v-btn small variant="text" color="red" @click="deleteStudyPlan(item.studyPlan.title)">{{ $t('delete') }}</v-btn>
                 </v-col>
               </v-row>
             </v-card-item>
@@ -56,7 +56,7 @@
                     @resourceUpdated="handleResourceUpdated"></study-plan>
                 </v-col>
                 <v-col cols="1" class="d-flex justify-end pt-4 pr-4">
-                  <v-btn small variant="text" color="red" @click="deleteStudyPlan(item.studyPlan.title)">删除</v-btn>
+                  <v-btn small variant="text" color="red" @click="deleteStudyPlan(item.studyPlan.title)">{{ $t('delete') }}</v-btn>
                 </v-col>
               </v-row>
             </v-card-item>
@@ -70,7 +70,7 @@
 
     <!-- Study Groups Section -->
     <v-container>
-      <h3>{{ isCurrentUser ? '我的学习小组' : 'TA的学习小组' }}</h3>
+      <h3>{{ isCurrentUser ? $t('usercenter.my') : $t('usercenter.their') }}{{ $t('wordbreaker') }}{{ $t('usercenter.studygroup') }}</h3>
       <v-spacer style="height: 10px;"></v-spacer>
       <p v-if="studyGroupList.length === 0">{{ isCurrentUser ? '你还没有加入任何学习小组哦！' : 'TA还没有加入任何学习小组哦！' }}</p>
       <v-row v-else>
@@ -84,7 +84,7 @@
             </v-card-title>
             <v-card-subtitle v-html="group.description"></v-card-subtitle>
             <v-card-actions>
-              <v-btn text @click="toGroupPage(group.id)">查看详情</v-btn>
+              <v-btn text @click="toGroupPage(group.id)">{{ $t('showdetail') }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>

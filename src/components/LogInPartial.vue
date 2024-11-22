@@ -6,22 +6,22 @@
                 <template v-slot:activator="{ props }">
                     <v-btn icon="dots-vertical" v-bind="props" size="40" @click="personalcenter">
                         <v-avatar size="35">
-                            <img :src="avatarUrl" alt="用户头像">
+                            <img :src="avatarUrl" :alt="$t('user.useravatar')">
                         </v-avatar>
                     </v-btn>
                 </template>
 
                 <v-list>
                     <v-list-item @click="personalcenter">
-                        <v-list-item-title>个人中心</v-list-item-title>
+                        <v-list-item-title>{{ $t('user.personalcenter')}}</v-list-item-title>
                     </v-list-item>
                     <v-divider></v-divider>
                     <v-list-item @click="accountcenter">
-                        <v-list-item-title>账号设置</v-list-item-title>
+                        <v-list-item-title>{{ $t('user.accountsetting')}}</v-list-item-title>
                     </v-list-item>
                     <v-divider></v-divider>
                     <v-list-item @click="logout">
-                        <v-list-item-title>登出</v-list-item-title>
+                        <v-list-item-title>{{ $t('user.logout')}}</v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>
@@ -29,9 +29,9 @@
 
         <!-- 如果用户未登录 -->
         <div v-else>
-            <button type="word" class="btn" @click="login">登录</button>
+            <button type="word" class="btn" @click="login">{{ $t('header.login')}}</button>
             <img src="../assets/images/avatar.svg" alt="Red arrow" style="width: 50px; height: 50px; border-radius: 50%;">
-            <button type="word" class="btn" @click="register">注册</button>
+            <button type="word" class="btn" @click="register">{{ $t('header.register')}}</button>
         </div>
     </div>
 </template>
@@ -67,7 +67,7 @@ export default {
                 // 可选：跳转到登录页面或首页
                 this.$router.push('/');
             } catch (error) {
-                console.error('登出过程中出现错误:', error);
+                console.error(this.$t('user.erroroccur'), error);
             }
         },
     },

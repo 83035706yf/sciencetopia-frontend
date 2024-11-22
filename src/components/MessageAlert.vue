@@ -14,18 +14,18 @@
 
       <v-list v-if="isAuthenticated">
         <v-list-item @click="directMessages">
-          <v-list-item-title>私信</v-list-item-title>
+          <v-list-item-title>{{ $t('message.privatemessage')}}</v-list-item-title>
         </v-list-item>
         <v-divider></v-divider>
         <v-list-item @click="notifications">
-          <v-list-item-title>系统消息</v-list-item-title>
+          <v-list-item-title>{{ $t('message.notification')}}</v-list-item-title>
         </v-list-item>
       </v-list>
 
       <v-card v-else>
         <v-card-title>
           <v-list>
-          <v-list-item-title>请 <v-btn @click="login" variant="outlined">登录</v-btn> 以查看消息</v-list-item-title>
+          <v-list-item-title>{{ $t('please')}} <v-btn @click="login" variant="outlined">{{ $t('header.login')}}</v-btn> {{ $t('header.toseemessage')}}</v-list-item-title>
         </v-list>
         </v-card-title>
       </v-card>

@@ -6,14 +6,14 @@
                     <v-list>
                         <v-list-item :to="{ name: 'directMessages', params: { userId: userId } }" exact
                             :class="{ 'active': activeTab === 'directMessages' }">
-                            <v-list-item-title>私信</v-list-item-title>
+                            <v-list-item-title>{{ $t('message.privatemessage')}}</v-list-item-title>
                             <div v-if="messageCount > 0" class="alert-badge">
                                 {{ messageCount > 99 ? '99+' : messageCount }}
                             </div>
                         </v-list-item>
                         <v-list-item :to="{ name: 'notifications', params: { userId: userId } }" exact
                             :class="{ 'active': activeTab === 'notifications' }">
-                            <v-list-item-title>系统消息</v-list-item-title>
+                            <v-list-item-title>{{ $t('message.notification')}}</v-list-item-title>
                             <div v-if="notificationCount > 0" class="alert-badge">
                                 {{ notificationCount > 99 ? '99+' : notificationCount }}
                             </div>
@@ -50,10 +50,10 @@
                                 <MessageList ref="messageList" :messages="selectedConversation.messages"
                                     :userId="userId" :userAvatarUrl="userAvatarUrl" />
                                 <v-divider></v-divider>
-                                <v-textarea v-model="selectedConversation.newMessage" label="编辑消息..." outlined
+                                <v-textarea v-model="selectedConversation.newMessage" :label="$t('message.editing')" outlined
                                     dense></v-textarea>
                                 <v-card-actions class="justify-end">
-                                    <v-btn @click="sendMessage(selectedConversation)">发送</v-btn>
+                                    <v-btn @click="sendMessage(selectedConversation)">{{$t('message.send')}}</v-btn>
                                 </v-card-actions>
                             </v-col>
                         </v-row>

@@ -108,11 +108,14 @@ export default function useKnowledgeGraph(endpoint) {
         // .on('click', handleNodeClick);
 
         simulation = d3.forceSimulation()
-            .force('link', d3.forceLink().id(d => d.id))
-            .force('charge', d3.forceManyBody())
-            .force('center', d3.forceCenter(width.value / 2, height.value / 2))
-            .force("x", d3.forceX())
-            .force("y", d3.forceY());
+        .force('link', d3.forceLink().id(d => d.id).strength(1)) // Default link strength
+        .force('charge', d3.forceManyBody()
+            .strength(d => -50 - (d.degree || 0) * 10) // Increase repulsion for low-degree nodes
+        )
+        .force('center', d3.forceCenter(width.value / 2, height.value / 2)) // Centering force
+        // .force('collision', d3.forceCollide().radius(30)) // Prevent overlapping
+        .force("x", d3.forceX())
+        .force("y", d3.forceY());
 
         link = svg.append('g')
             .attr('stroke', linkColor)
@@ -196,19 +199,37 @@ export default function useKnowledgeGraph(endpoint) {
             .attr('stroke', strokeColor)  // Add white stroke to nodes
             .attr('stroke-width', strokeWidth)  // Adjust stroke width as needed
             .attr('r', d => {
-                // Adjust node size
-                return (d.labels.includes('Topic') || d.labels.includes('Field') || d.labels.includes('Subject')) ? (6 + (isNaN(d.degree) ? 0 : d.degree)) * 0.4 : 3 + (isNaN(d.degree) ? 0 : d.degree) * 0.3;
-            })
+                const degree = isNaN(d.degree) ? 0 : d.degree;
+            
+                if (d.labels.includes('Subject')) {
+                    return 10 + degree * 0.5; // Base size with minimal scaling
+                } else if (d.labels.includes('Field')) {
+                    return 8 + degree * 0.4;
+                } else if (d.labels.includes('Topic')) {
+                    return 5 + degree * 0.2;
+                } else {
+                    return 3 + degree * 0.2; // Small scaling for other nodes
+                }
+            })                                   
             .attr('fill', d => {
                 if (d.labels.includes('pending_approval')) return '#848482';
                 else {
-                    if (d.labels.includes('Subject')) return '#c5282a';
-                    if (d.labels.includes('Keyword')) return '#C6A969';
-                    if (d.labels.includes('Topic')) return '#d5282a';
-                    if (d.labels.includes('Field')) return '#c5282a';
-                    if (d.labels.includes('People')) return '#597E52';
-                    if (d.labels.includes('Works')) return '#4CB9E7';
-                    if (d.labels.includes('Event')) return '#5C469C';
+                    if (d.labels.includes('Subject')) return 'black';
+                    if (d.labels.includes('Field')) return '#D5282A';
+                    if (d.labels.includes('Topic')) return '#e4d8c0';
+                    if (d.labels.includes('TheoriesAndConcept')) return '#4DB9E6';
+                    if (d.labels.includes('ModelsAndSystems')) return '#597E52';
+                    if (d.labels.includes('MethodsAndProcesses')) return '#F06292';
+                    if (d.labels.includes('PhenomenaAndEvents')) return '#5C469C';
+                    if (d.labels.includes('ArtefactsAndTechnologies')) return '#8C564B';
+                    if (d.labels.includes('FiguresAndInstitutions')) return '#C6A969';
+                    if (d.labels.includes('PublicationsAndStandards')) return '#BCBD22';
+                    if (d.labels.includes('LawsEthicsAndPrinciples')) return '#AEC6CF';
+                    if (d.labels.includes('DataMetricsAndAlgorithms')) return '#E377C2';
+                    if (d.labels.includes('PracticesFrameworkAndParadigms')) return '#FFDD44';
+                    if (d.labels.includes('QuestionsAndProblems')) return '#FFB347';
+                    if (d.labels.includes('LanguagesAndCultures')) return '#FF33CC';
+                    else if (d.labels.includes('Keyword')) return '#ccc';
                     return '#ccc'; // Default color
                 }
             })
@@ -278,8 +299,8 @@ export default function useKnowledgeGraph(endpoint) {
         // Define thresholds for zoom levels
         const fieldThreshold = 0.2;
         const topicThreshold = 0.5;
-        const keywordThreshold = 0.9;
-        const fieldLabelThreshold = 0.9;
+        const keywordThreshold = 1.2;
+        const fieldLabelThreshold = 0.6;
         const topicLabelThreshold = 1.5;
         const keywordLabelThreshold = 3.5;
 
@@ -368,9 +389,9 @@ export default function useKnowledgeGraph(endpoint) {
                 if (currentZoomLevel <= fieldThreshold) {
                     return (targetNode.labels.includes('Subject')) ? 'visible' : 'hidden';
                 } else if (currentZoomLevel <= topicThreshold) {
-                    return (targetNode.labels.includes('Field')) ? 'visible' : 'hidden';
+                    return (targetNode.labels.includes('Field')) || (targetNode.labels.includes('Subject')) ? 'visible' : 'hidden';
                 } else if (currentZoomLevel <= keywordThreshold) {
-                    return targetNode.labels.includes('Topic') ? 'visible' : 'hidden';
+                    return targetNode.labels.includes('Topic') || (targetNode.labels.includes('Field')) || (targetNode.labels.includes('Subject'))? 'visible' : 'hidden';
                 } else {
                     return 'visible';
                 }

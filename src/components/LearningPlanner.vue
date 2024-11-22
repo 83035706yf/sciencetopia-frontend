@@ -1,11 +1,11 @@
 <!-- Planner.vue -->
 <template>
   <div>
-    <input type="text" v-model="learningObjective" placeholder="输入你的学习目标，订制一个学习计划" />
-    <button :disabled="!learningObjective" @click="generateStudyPlan">开始定制</button>
+    <input type="text" v-model="learningObjective" :placeholder="$t('studyplan.placeholder')" />
+    <button :disabled="!learningObjective" @click="generateStudyPlan">{{ $t('studyplan.startcustomizing') }}</button>
     
     <!-- Loader Spinner -->
-    <div v-if="loading" class="loader">AI小助手为您生成学习计划中...</div>
+    <div v-if="loading" class="loader">{{ $t('studyplan.AIplaceholder') }}</div>
 
     <study-plan v-if="showStudyPlan" :studyPlan="studyPlanData" @save-plan="savePlan"></study-plan>
   </div>
@@ -77,7 +77,7 @@ export default {
 
           if (response.status === 200) {
             // Handle successful save
-            alert('学习计划保存成功!');
+            alert(this.$t('studyplan.savesuccessmsg'));
             // Check if the current route is the user's personal center
             if (this.$route.name === 'personalcenter') {
               // Refresh the page
@@ -86,14 +86,14 @@ export default {
             // If not on the personal center page, do nothing
           } else {
             // Handle failure
-            alert('学习计划保存失败。');
+            alert(this.$t('studyplan.savefailedmsg'));
             console.error('Failed to save the study plan:', response);
           }
         } catch (error) {
           if (error.response && error.response.status === 400) {
             alert(error.response.data); // Alert the message from backend
           } else {
-            alert('学习计划保存失败。');
+            alert(this.$t('studyplan.savefailedmsg'));
             console.error('Failed to save the study plan:', error);
           }
         } finally {

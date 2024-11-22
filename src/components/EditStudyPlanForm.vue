@@ -1,17 +1,17 @@
 <template>
     <v-form @submit.prevent="saveStudyPlan">
         <!-- Title Input -->
-        <v-text-field v-model="localStudyPlan.title" label="Title" variant="outlined" density="compact"
+        <v-text-field v-model="localStudyPlan.title" :label="$t('studyplan.title')" variant="outlined" density="compact"
             :rules="[rules.required]"></v-text-field>
 
         <!-- Introduction Input -->
-        <v-textarea v-model="localStudyPlan.introduction" label="Introduction" :rules="[rules.required]"
+        <v-textarea v-model="localStudyPlan.introduction.description" :label="$t('studyplan.introduction')" :rules="[rules.required]"
             :auto-grow="true" rows="1" max-rows="5" variant="outlined" density="compact"></v-textarea>
 
         <!-- Prerequisites Section -->
         <v-divider></v-divider>
         <div class="section-header">
-            <h4>Prerequisites</h4>
+            <h4>{{ $t('studyplan.prerequisites') }}</h4>
             <v-btn size="small" icon variant="text" @click="addLesson('prerequisite')"
                 :disabled="localStudyPlan.prerequisite.length >= maxPrerequisiteLength">➕️</v-btn>
         </div>
@@ -21,41 +21,41 @@
             <div v-for="(lesson, index) in localStudyPlan.prerequisite" :key="index" class="lesson-section">
                 <div class="lesson-header">
                     <v-ico>📚️</v-ico>
-                    <v-text-field v-model="lesson.name" label="Lesson Name" variant="outlined" density="compact"
+                    <v-text-field v-model="lesson.name" :label="$t('studyplan.lessonname')" variant="outlined" density="compact"
                         :rules="[rules.required]"></v-text-field>
                     <v-btn size="small" icon variant="text" @click="removeLesson('prerequisite', index)">➖️</v-btn>
                 </div>
-                <v-textarea class="lesson-description" v-model="lesson.description" label="Lesson Description" :auto-grow="true" rows="1"
+                <v-textarea class="lesson-description" v-model="lesson.description" :label="$t('studyplan.lessondescription')" :auto-grow="true" rows="1"
                     max-rows="5" variant="outlined" density="compact"></v-textarea>
 
                 <!-- Resources Management -->
                 <div class="resource-section">
                     <div class="section-header">
-                        <h5>Resources</h5> <h5 v-if="lesson.resources[0] == null">（暂无）</h5>
+                        <h5>{{ $t('studyplan.resouces') }}</h5> <h5 v-if="lesson.resources[0] == null">（暂无）</h5>
                         <v-btn size="small" icon variant="text" @click="addResource('prerequisite', index)">➕️</v-btn>
                     </div>
                     <div v-for="(resource, rIndex) in lesson.resources" :key="rIndex" class="resource-content">
                         <div class="resource-header">
                             <v-ico>📙</v-ico>
-                            <v-text-field v-model="resource.name" label="Resource Name" variant="outlined"
+                            <v-text-field v-model="resource.name" :label="$t('studyplan.resourcename')" variant="outlined"
                                 density="compact"></v-text-field>
                             <v-btn size="small" icon variant="text"
                                 @click="removeResource('prerequisite', index, rIndex)">➖️</v-btn>
                         </div>
-                        <v-text-field class="lesson-description" v-model="resource.link" label="Resource Link" variant="outlined"
+                        <v-text-field class="lesson-description" v-model="resource.link" :label="$t('studyplan.resourcelink')" variant="outlined"
                             density="compact"></v-text-field>
                     </div>
                 </div>
             </div>
         </div>
         <v-helper-text v-if="localStudyPlan.prerequisite.length >= maxPrerequisiteLength">
-            Maximum number of prerequisite lessons reached.
+            {{ $t('studyplan.prerequisitelimitmsg') }}
         </v-helper-text>
 
         <!-- Main Curriculum Section -->
         <v-divider></v-divider>
         <div class="section-header">
-            <h4>Main Curriculum</h4>
+            <h4>{{ $t('studyplan.maincurriculum') }}</h4>
             <v-btn size="small" icon variant="text" @click="addLesson('mainCurriculum')"
                 :disabled="localStudyPlan.mainCurriculum.length >= maxMainCurriculumLength">➕️</v-btn>
         </div>
@@ -65,41 +65,41 @@
             <div v-for="(lesson, index) in localStudyPlan.mainCurriculum" :key="index" class="lesson-section">
                 <div class="lesson-header">
                     <v-ico>📚️</v-ico>
-                    <v-text-field v-model="lesson.name" label="Lesson Name" variant="outlined" density="compact"
+                    <v-text-field v-model="lesson.name" :label="$t('studyplan.lessonname')" variant="outlined" density="compact"
                         :rules="[rules.required]"></v-text-field>
                     <v-btn size="small" icon variant="text" @click="removeLesson('mainCurriculum', index)">➖️</v-btn>
                 </div>
-                <v-textarea class="lesson-description" v-model="lesson.description" label="Lesson Description"
+                <v-textarea class="lesson-description" v-model="lesson.description" :label="$t('studyplan.lessondescription')"
                     :auto-grow="true" rows="1" max-rows="5" variant="outlined" density="compact"></v-textarea>
 
                 <!-- Resources Management -->
                 <div class="resource-section">
                     <div class="section-header">
-                        <h5>Resources</h5><h5 v-if="lesson.resources[0] == null">（暂无）</h5>
+                        <h5>{{ $t('studyplan.resouces') }}</h5><h5 v-if="lesson.resources[0] == null">（暂无）</h5>
                         <v-btn size="small" icon variant="text" @click="addResource('mainCurriculum', index)">➕️</v-btn>
                     </div>
                     <div v-for="(resource, rIndex) in lesson.resources" :key="rIndex" class="resource-content">
                         <div class="resource-header">
                             <v-ico>📙</v-ico>
-                            <v-text-field v-model="resource.name" label="Resource Name" variant="outlined"
+                            <v-text-field v-model="resource.name" :label="$t('studyplan.resourcename')" variant="outlined"
                                 density="compact"></v-text-field>
                             <v-btn size="small" icon variant="text"
                                 @click="removeResource('mainCurriculum', index, rIndex)">➖️</v-btn>
                         </div>
-                        <v-text-field class="lesson-description" v-model="resource.link" label="Resource Link" variant="outlined"
+                        <v-text-field class="lesson-description" v-model="resource.link" :label="$t('studyplan.resourcelink')" variant="outlined"
                             density="compact"></v-text-field>
                     </div>
                 </div>
             </div>
         </div>
         <v-helper-text v-if="localStudyPlan.mainCurriculum.length >= maxMainCurriculumLength">
-            Maximum number of main curriculum lessons reached.
+            {{ $t('studyplan.maincurriculumlimitmsg') }}
         </v-helper-text>
 
         <!-- Advanced Topics Section -->
         <v-divider></v-divider>
         <div class="section-header">
-            <h4>Advanced Topics</h4>
+            <h4>{{ $t('studyplan.advancedtopics') }}</h4>
             <v-btn size="small" icon variant="text" @click="addLesson('advancedTopics')"
                 :disabled="localStudyPlan.advancedTopics.length >= maxAdvancedTopicsLength">➕️</v-btn>
         </div>
@@ -109,40 +109,40 @@
             <div v-for="(lesson, index) in localStudyPlan.advancedTopics" :key="index" class="lesson-section">
                 <div class="lesson-header">
                     <v-ico>📚️</v-ico>
-                    <v-text-field v-model="lesson.name" label="Lesson Name" variant="outlined" density="compact"
+                    <v-text-field v-model="lesson.name" :label="$t('studyplan.lessonname')" variant="outlined" density="compact"
                         :rules="[rules.required]"></v-text-field>
                     <v-btn size="small" icon variant="text" @click="removeLesson('advancedTopics', index)">➖️</v-btn>
                 </div>
-                <v-textarea class="lesson-description" v-model="lesson.description" label="Lesson Description"
+                <v-textarea class="lesson-description" v-model="lesson.description" :label="$t('studyplan.lessondescription')"
                     :auto-grow="true" rows="1" max-rows="5" variant="outlined" density="compact"></v-textarea>
 
                 <!-- Resources Management -->
                 <div class="resource-section">
                     <div class="section-header">
-                        <h5>Resources</h5><h5 v-if="lesson.resources[0] == null">（暂无）</h5>
+                        <h5>{{ $t('studyplan.resouces') }}</h5><h5 v-if="lesson.resources[0] == null">{{ $t('studyplan.empty') }}</h5>
                         <v-btn size="small" icon variant="text" @click="addResource('advancedTopics', index)">➕️</v-btn>
                     </div>
                     <div v-for="(resource, rIndex) in lesson.resources" :key="rIndex" class="resource-content">
                         <div class="resource-header">
                             <v-ico>📙</v-ico>
-                            <v-text-field v-model="resource.name" label="Resource Name" variant="outlined"
+                            <v-text-field v-model="resource.name" :label="$t('studyplan.resourcename')" variant="outlined"
                                 density="compact"></v-text-field>
                             <v-btn size="small" icon variant="text"
                                 @click="removeResource('advancedTopics', index, rIndex)">➖️</v-btn>
                         </div>
-                        <v-text-field class="lesson-description" v-model="resource.link" label="Resource Link" variant="outlined"
+                        <v-text-field class="lesson-description" v-model="resource.link" :label="$t('studyplan.resourcelink')" variant="outlined"
                             density="compact"></v-text-field>
                     </div>
                 </div>
             </div>
         </div>
         <v-helper-text v-if="localStudyPlan.advancedTopics.length >= maxAdvancedTopicsLength">
-            Maximum number of advanced topic lessons reached.
+            {{ $t('studyplan.advancedtopicslimitmsg') }}
         </v-helper-text>
 
         <!-- Save Button -->
         <v-actions>
-            <v-btn size="small" variant="text" color="blue" @click="saveStudyPlan">保存学习计划</v-btn>
+            <v-btn size="small" variant="text" color="blue" @click="saveStudyPlan">{{ $t('studyplan.save') }}</v-btn>
         </v-actions>
     </v-form>
 </template>

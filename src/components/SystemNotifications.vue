@@ -1,6 +1,6 @@
 <template>
   <v-card class="system-notifications">
-    <v-card-title>系统消息</v-card-title>
+    <v-card-title>{{ $t('message.notification')}}</v-card-title>
     <v-card-text>
       <v-accordion>
         <v-accordion-item v-for="(groupedNotifications, type) in groupedNotificationsByType" :key="type">
@@ -12,7 +12,7 @@
               <v-list-item-content>
                 <v-list-item-title class="notification-bubble">{{ notification.content }}</v-list-item-title>
                 <v-list-item-subtitle>{{ formatDate(notification.createdAt) }}</v-list-item-subtitle>
-                <v-btn v-if="notification.data" @click="viewDetails(notification.data)" text small>查看详情</v-btn>
+                <v-btn v-if="notification.data" @click="viewDetails(notification.data)" text small>{{ $t('showdetail')}}</v-btn>
               </v-list-item-content>
             </v-list-item>
           </v-list>
