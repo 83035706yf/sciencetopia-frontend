@@ -42,6 +42,7 @@
         "research": "研",
         "studygroup": "学习小组",
         "studyplan": "学习计划",
+        "messages": "消息",
         "toseemessage": "以查看消息"
     },
     "searchbar": {
@@ -52,7 +53,7 @@
         "contact": "联系我们",
         "privacy": "隐私政策",
         "terms": "服务条款",
-        "copy": "2023 Sciencetopia. 版权所有",
+        "copy": "2024 Sciencetopia.org 开发者团队",
         "donate": "赞助"
     },
     "user": {
@@ -82,9 +83,36 @@
         "their": "TA的",
         "studygroup": "学习小组"
     },
+    "register": {
+        "title": "注册",
+        "username": "用户名",
+        "email": "邮箱",
+        "password": "密码",
+        "confirmPassword": "确认密码",
+        "register": "注册",
+        "passwordMismatch": "密码和确认密码不匹配!",
+        "success": "注册成功",
+        "failed": "注册失败"
+    },
+    "login": {
+        "title": "登录",
+        "userNameLabel": "用户名",
+        "passwordLabel": "密码",
+        "rememberMeLabel": "记住我",
+        "success": "登录成功",
+        "failed": "登录失败",
+        "changetoregister": "没有账号？点击这里注册"
+    },
     "studyplan": {
         "inprogress": "进行中",
         "completed": "已完成",
+        "noprogress_my": "你还没有进行中的学习计划",
+        "noprogress_their": "TA还没有进行中的学习计划",
+        "nocompleted_my": "你还没有完成的学习计划",
+        "nocompleted_their": "TA还没有完成的学习计划",
+        "confirmdelete": "确定要删除这个学习计划吗?",
+        "deletesuccess": "学习计划删除成功。",
+        "deletefailed": "删除学习计划失败。",
         "studyprogress": "学习进度",
         "title": "标题",
         "introduction": "介绍",
@@ -159,7 +187,12 @@
         "invite": "邀请成员",
         "joinrequest": "加入请求",
         "requestdate": "申请日期",
-        "activitylog": "活动日志"
+        "activitylog": "活动日志",
+        "nogroup_my": "你还没有加入任何学习小组哦！",
+        "nogroup_their": "TA还没有加入任何学习小组哦！",
+        "groupDissolveMessage": "你确定要解散该学习小组吗？此操作不可撤销。",
+        "groupLeaveMessage": "你确定要退出该学习小组吗？此操作不可撤销。",
+        "confirmGroupName": "请输入小组名称以继续:"
     },
     "knowledgeGraph": {
         "knowledgeGraph": "知识图谱",
@@ -177,13 +210,37 @@
         "createlink": "创建边",
         "submitnode": "创建新节点",
         "submitlink": "创建新关系",
+        "addResource": "添加知识资源",
         "linktype": "关系类型",
-        "items": {
+        "linktype_items": {
             "CONTAINS": "包含",
             "RELATES_TO": "关联",
             "CREATE": "创造了",
             "LEADS": "领导了"
-        }
+        },
+        "node": {
+            "name": "知识名称",
+            "description": "知识描述",
+            "type": "节点类型",
+            "author": "作者",
+            "source": "来源",
+            "created": "创建时间",
+            "updated": "更新时间",
+            "resource": "知识资源"
+        },
+        "nodetype_items": {
+            "Subject": "学科",
+            "Field": "领域",
+            "Topic": "主题",
+            "Keyword": "关键词"
+        },
+        "nodeSubmitted": "节点已提交并等待审核。",
+        "submitFailed": "提交失败：{error}",
+        "confirmCancel": "您确定要取消吗？未保存的更改将会丢失。",
+        "selecttwonodes": "请选择两个节点以创建关系。",
+        "linkSubmitted": "关系已提交并等待审核。",
+        "confirmLinkCancel": "确定离开创建关系页面？创建的关系将不会被保存！",
+        "confirmNodeCancel": "确定离开创建节点页面？创建的节点将不会被保存！"
     },
     "validation": {
         "required": "此项为必填项",

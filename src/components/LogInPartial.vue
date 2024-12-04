@@ -4,24 +4,24 @@
         <div v-if="isAuthenticated">
             <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
-                    <v-btn icon="dots-vertical" v-bind="props" size="40" @click="personalcenter">
-                        <v-avatar size="35">
+                    <v-btn icon="dots-vertical" class="header-btn default-avatar" v-bind="props" size="50" @click="personalcenter">
+                        <v-avatar size="48">
                             <img :src="avatarUrl" :alt="$t('user.useravatar')">
                         </v-avatar>
                     </v-btn>
                 </template>
 
-                <v-list>
-                    <v-list-item @click="personalcenter">
-                        <v-list-item-title>{{ $t('user.personalcenter')}}</v-list-item-title>
+                <v-list class="header-list">
+                    <v-list-item variant="plain" @click="personalcenter">
+                        <v-list-item-title>{{ $t('user.personalcenter') }}</v-list-item-title>
                     </v-list-item>
                     <v-divider></v-divider>
-                    <v-list-item @click="accountcenter">
-                        <v-list-item-title>{{ $t('user.accountsetting')}}</v-list-item-title>
+                    <v-list-item variant="plain" @click="accountcenter">
+                        <v-list-item-title>{{ $t('user.accountsetting') }}</v-list-item-title>
                     </v-list-item>
                     <v-divider></v-divider>
-                    <v-list-item @click="logout">
-                        <v-list-item-title>{{ $t('user.logout')}}</v-list-item-title>
+                    <v-list-item variant="plain" @click="logout">
+                        <v-list-item-title>{{ $t('user.logout') }}</v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>
@@ -29,18 +29,50 @@
 
         <!-- 如果用户未登录 -->
         <div v-else>
-            <button type="word" class="btn" @click="login">{{ $t('header.login')}}</button>
-            <img src="../assets/images/avatar.svg" alt="Red arrow" style="width: 50px; height: 50px; border-radius: 50%;">
-            <button type="word" class="btn" @click="register">{{ $t('header.register')}}</button>
+            <div class="two-rows-btn">
+                <v-btn v-if="!scrolledPastHeader" icon="dots-vertical" class="default-avatar" size="50" @click="register">
+                    <v-avatar size="48" style="background-color: #E8DABD; box-shadow: none;">
+                        <img src="../assets/images/avatar.svg" alt="Red arrow"
+                            style="width: 50px; height: 50px; border-radius: 50%;">
+                    </v-avatar>
+                </v-btn>
+                <div class="btn-content">
+                    <v-row align="center" dense class="btn-row">
+                        <v-col cols="auto" style="max-width: 30px; margin-left: -40px;">
+                            <v-btn variant="plain" class="header-btn no-padding" @click="login">{{ $t('header.login') }}</v-btn>
+                        </v-col>
+                        <v-col cols="auto">
+                            <span class="divider">/</span>
+                        </v-col>
+                        <v-col cols="auto" style="max-width: 30px; margin-left: -20px;">
+                            <v-btn variant="plain" class="header-btn" @click="register">{{ $t('header.register') }}</v-btn>
+                        </v-col>
+                    </v-row>
+                </div>
+            </div>
+            <!-- <v-btn icon="dots-vertical" class="header-btn" v-bind="props" size="50" @click="personalcenter">
+                        <v-avatar size="48" style="background-color: #E8DABD;">
+                            <img src="../assets/images/avatar.svg" alt="Red arrow"
+                                style="width: 50px; height: 50px; border-radius: 50%;">
+                        </v-avatar>
+                    </v-btn> -->
+
+            <!-- <button type="word" class="btn" @click="login">{{ $t('header.login') }}</button>
+            <img src="../assets/images/avatar.svg" alt="Red arrow"
+                style="width: 50px; height: 50px; border-radius: 50%;">
+            <button type="word" class="btn" @click="register">{{ $t('header.register') }}</button> -->
         </div>
     </div>
 </template>
-  
+
 <script>
 import { apiClient } from '@/api'; // 根据api.js的实际路径进行调整
 
 export default {
     name: 'LogInPartial',
+    props: {
+        scrolledPastHeader: Boolean,
+    },
     methods: {
         login() {
             this.$router.push({ name: 'login' });  // 跳转到LogIn组件
@@ -85,8 +117,47 @@ export default {
     },
 }
 </script>
-  
+
 <style scoped>
+@import "../assets/css/header.css";
+
 /* 你可以在这里添加CSS样式 */
+.default-avatar {
+    background-color: black;
+    box-shadow: none;
+
+    &:hover {
+        box-shadow: none;
+    }
+
+    &:focus {
+        box-shadow: none;
+    }
+
+    &:active {
+        box-shadow: none;
+    }
+}
+
+.btn-content {
+  display: flex; /* Ensures the row layout */
+  justify-content: flex-start; /* Align items to the left */
+  align-items: center; /* Vertically align buttons and divider */
+}
+
+.btn-row {
+  display: flex; /* Ensure v-row remains in one row */
+  gap: 5px; /* Add space between buttons and the divider */
+}
+
+.divider {
+  font-size: 16px; /* Adjust divider font size */
+  margin-left: 20px; /* Add spacing around the "/" */
+  font-weight: bold; /* Make divider bold */
+}
+
+.no-padding {
+  padding: 0;
+  min-width: none;
+}
 </style>
-  

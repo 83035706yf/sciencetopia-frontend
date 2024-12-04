@@ -117,7 +117,7 @@ export default {
 
 <style scoped>
 .message-list {
-  height: 700px;
+  height: 550px;
   overflow-y: auto;
 }
 

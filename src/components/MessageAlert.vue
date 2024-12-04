@@ -3,30 +3,45 @@
     <v-menu open-on-hover>
       <template v-slot:activator="{ props }">
         <!-- {{ this.$store.state.messageCount }} -->
-        <v-btn @click="directMessages" icon="dots-vertical" variant="text" class="profile-icon" v-bind="props">
+        <v-btn class="header-btn two-rows-btn" variant="plain" @click="directMessages" v-bind="props">
+          <div class="btn-content">
+            <img v-if="!scrolledPastHeader" width="32" height="32"
+              src="https://img.icons8.com/ios/50/filled-message.png" alt="filled-message" />
+            <img v-else width="30" height="30" src="https://img.icons8.com/ios/50/filled-message.png"
+              alt="secured-letter--v1" /> <span v-if="!scrolledPastHeader" class="btn-title">{{ $t('header.messages')
+              }}</span>
+            <div v-if="messageCount > 0" class="alert-badge">
+              {{ messageCount > 99 ? '99+' : messageCount }}
+            </div>
+            <div v-else-if="notificationCount > 0" class="alert-badge-dot"></div>
+          </div>
+        </v-btn>
+        <!-- <v-btn @click="directMessages" icon="dots-vertical" variant="text" class="profile-icon" v-bind="props">
           <i class="fas fa-envelope"></i>
           <div v-if="messageCount > 0" class="alert-badge">
             {{ messageCount > 99 ? '99+' : messageCount }}
           </div>
           <div v-else-if="notificationCount > 0" class="alert-badge-dot"></div>
-        </v-btn>
+        </v-btn> -->
       </template>
 
-      <v-list v-if="isAuthenticated">
-        <v-list-item @click="directMessages">
-          <v-list-item-title>{{ $t('message.privatemessage')}}</v-list-item-title>
+      <v-list class="header-list" v-if="isAuthenticated">
+        <v-list-item variant="plain" @click="directMessages">
+          <v-list-item-title>{{ $t('message.privatemessage') }}</v-list-item-title>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item @click="notifications">
-          <v-list-item-title>{{ $t('message.notification')}}</v-list-item-title>
+        <v-list-item variant="plain" @click="notifications">
+          <v-list-item-title>{{ $t('message.notification') }}</v-list-item-title>
         </v-list-item>
       </v-list>
 
-      <v-card v-else>
+      <v-card class="header-list" v-else>
         <v-card-title>
           <v-list>
-          <v-list-item-title>{{ $t('please')}} <v-btn @click="login" variant="outlined">{{ $t('header.login')}}</v-btn> {{ $t('header.toseemessage')}}</v-list-item-title>
-        </v-list>
+            <v-list-item-title>{{ $t('please') }} <v-btn @click="login" variant="outlined">{{
+              $t('header.login') }}</v-btn> {{
+                  $t('header.toseemessage') }}</v-list-item-title>
+          </v-list>
         </v-card-title>
       </v-card>
     </v-menu>
@@ -42,6 +57,9 @@ export default {
     isAuthenticated() {
       return this.$store.state.isAuthenticated;
     },
+  },
+  props: {
+    scrolledPastHeader: Boolean,
   },
   methods: {
     login() {
@@ -64,6 +82,8 @@ export default {
 </script>
 
 <style scoped>
+@import '../assets/css/header.css';
+
 .alert-container {
   position: relative;
   margin: 10px;
@@ -97,5 +117,27 @@ export default {
   font-size: 0.7em;
   width: 10px;
   height: 10px;
+}
+
+.two-rows-btn {
+  display: flex;
+  flex-direction: column;
+  /* Arrange content vertically */
+  align-items: center;
+  /* Center align items horizontally */
+  justify-content: center;
+  /* Center content vertically */
+  text-align: center;
+  /* Center align text */
+  padding: 10px;
+  /* Add some spacing inside the button */
+}
+
+.btn-content {
+  display: flex;
+  flex-direction: column;
+  /* Arrange icon and title in two rows */
+  align-items: center;
+  /* Center align both rows */
 }
 </style>

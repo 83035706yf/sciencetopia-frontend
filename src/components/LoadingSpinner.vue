@@ -5,7 +5,7 @@
         <div class="center-dot"></div>
       </div>
     </div>
-    <p>加载中...</p>
+    <p>{{ $t('loading') }}</p>
   </div>
 </template>
 

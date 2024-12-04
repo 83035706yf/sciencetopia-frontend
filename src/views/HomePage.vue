@@ -1,24 +1,22 @@
 <template>
   <v-container class="knowledgegraph-container">
     <!-- 知识网络 -->
-    <v-row>
-      <v-col cols="6" class="knowledge-graph">
-        <KnowledgeNetwork> <!-- Slot content for full-screen overlay -->
-          <div class="fullscreen-overlay-content">
-            <NodeCreationForm v-if="this.$store.state.displayNodeCreationForm"></NodeCreationForm>
-            <LinkCreationForm v-else-if="this.$store.state.displayLinkCreationForm"></LinkCreationForm>
-            <NodeInfo v-else></NodeInfo>
-          </div>
-        </KnowledgeNetwork>
-        <!-- <p>一个可以查询节点内容和生成学习路径的知识网络</p> -->
-      </v-col>
-      <v-col cols="6" v-if="!isFullScreen">
-        <!-- <h3>知识描述</h3> -->
+    <v-row class="knowledge-graph">
+      <!-- <v-col cols="8" class="knowledge-graph"> -->
+      <KnowledgeNetwork> <!-- Slot content for full-screen overlay -->
+        <div class="fullscreen-overlay-content">
+          <NodeCreationForm v-if="this.$store.state.displayNodeCreationForm"></NodeCreationForm>
+          <LinkCreationForm v-else-if="this.$store.state.displayLinkCreationForm"></LinkCreationForm>
+          <NodeInfo v-else></NodeInfo>
+        </div>
+      </KnowledgeNetwork>
+      <!-- <p>一个可以查询节点内容和生成学习路径的知识网络</p> -->
+      <!-- </v-col> -->
+      <div class="non-fullscreen-content">
         <NodeCreationForm v-if="this.$store.state.displayNodeCreationForm"></NodeCreationForm>
         <LinkCreationForm v-else-if="this.$store.state.displayLinkCreationForm"></LinkCreationForm>
         <NodeInfo v-else></NodeInfo>
-        <!-- <p>当查询某一知识节点内容时，显示该节点内容的描述；当查询学习路径时，显示学习路径内容</p> -->
-      </v-col>
+      </div>
     </v-row>
   </v-container>
 
@@ -28,19 +26,19 @@
   <!-- 动态推送 -->
   <v-container id="feed-section">
     <v-row>
-      <v-btn variant="text">
-        <h3>{{ $t('header.trend')}}</h3>
+      <v-btn variant="plain">
+        <h3>{{ $t('header.trend') }}</h3>
       </v-btn>
-      <v-btn variant="text">
-        <h3>{{ $t('header.production')}}</h3>
+      <v-btn variant="plain">
+        <h3>{{ $t('header.production') }}</h3>
       </v-btn>•
-      <v-btn variant="text">
-        <h3>{{ $t('header.Learning')}}</h3>
+      <v-btn variant="plain">
+        <h3>{{ $t('header.Learning') }}</h3>
       </v-btn>•
-      <v-btn variant="text">
-        <h3>{{ $t('header.research')}}</h3>
+      <v-btn variant="plain">
+        <h3>{{ $t('header.research') }}</h3>
       </v-btn>
-      <v-btn variant="text">
+      <v-btn variant="plain">
         <v-icon>mdi-refresh</v-icon>
       </v-btn>
     </v-row>
@@ -87,23 +85,55 @@ export default {
 @import "../assets/css/knowledge-graph.css";
 
 .knowledgegraph-container {
-  margin: 20px;
+  margin-left: 0px;
   padding: 10px;
 }
 
 .fullscreen-overlay-content {
   position: fixed;
-  top: 6vh; /* Offset from the top */
-  right: 2vw; /* Offset from the right */
-  width: 20vw; /* Fixed width */
-  height: auto; /* Allows content to adjust based on its own size */
-  max-height: 40vh; /* Restrict height if needed */
+  top: 6vh;
+  /* Offset from the top */
+  right: 2vw;
+  /* Offset from the right */
+  width: 20vw;
+  /* Fixed width */
+  height: auto;
+  /* Allows content to adjust based on its own size */
+  max-height: 40vh;
+  /* Restrict height if needed */
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* Align items to the right */
-  justify-content: flex-start; /* Align items to the top */
-  z-index: 100000; /* Ensures it's always on top */
-  pointer-events: auto; /* Allows interactions */
+  align-items: flex-end;
+  /* Align items to the right */
+  justify-content: flex-start;
+  /* Align items to the top */
+  z-index: 100000;
+  /* Ensures it's always on top */
+  pointer-events: auto;
+  /* Allows interactions */
 }
 
+.non-fullscreen-content {
+  position: relative;
+  top: -800px;
+  /* Offset from the top */
+  right: -78vw;
+  /* Offset from the right */
+  width: 20vw;
+  /* Fixed width */
+  height: auto;
+  /* Allows content to adjust based on its own size */
+  max-height: 40vh;
+  /* Restrict height if needed */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  /* Align items to the right */
+  justify-content: flex-start;
+  /* Align items to the top */
+  z-index: 1000000;
+  /* Ensures it's always on top */
+  pointer-events: auto;
+  /* Allows interactions */
+}
 </style>

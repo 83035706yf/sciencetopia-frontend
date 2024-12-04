@@ -258,7 +258,7 @@ export default {
 
         getConfettiColor(index) {
             // Return a random color for the confetti
-            const colors = ['#D5282A', '#01FFF7', '#E4D8C0', '#000000'];
+            const colors = ['#D5282A', '#01FFF7', '#E9DBBE', '#000000'];
             return colors[index % colors.length];
         }
     },
@@ -283,11 +283,11 @@ export default {
     /* Ensure the pseudo-element doesn't extend outside the box */
     flex: 0 0 auto;
     /* Adjust this to control the size of the boxes */
-    background-color: #ffffff;
+    background-color: #F5F0E4;
     /* Example background color */
     border: 1px solid #ccc;
     /* Example border */
-    border-radius: 8px;
+    border-radius: 0px;
     /* Rounded corners */
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

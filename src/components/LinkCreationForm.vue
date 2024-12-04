@@ -44,7 +44,7 @@ export default {
     // Translate the relationship types
     const translatedRelationshipTypes = computed(() =>
       relationshipTypes.map((type) => ({
-        text: proxy.$t(`knowledgeGraph.items.${type.text}`),
+        text: proxy.$t(`knowledgeGraph.linktype_items.${type.text}`),
         value: type.value,
       }))
     );
@@ -70,7 +70,7 @@ export default {
     };
 
     const cancelLinkCreation = () => {
-      if (confirm(proxy.$t("knowledgeGraph.confirmCancel"))) {
+      if (confirm(proxy.$t("knowledgeGraph.confirmLinkCancel"))) {
         store.dispatch("toggleLinkCreationForm", false);
       }
     };

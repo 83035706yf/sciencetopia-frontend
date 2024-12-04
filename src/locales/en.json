@@ -42,6 +42,7 @@
         "research": "Research",
         "studygroup": "Study Group",
         "studyplan": "Study Plan",
+        "messages": "Messages",
         "toseemessage": "to see messages"
     },
     "searchbar": {
@@ -52,7 +53,7 @@
         "contact": "Contact Us",
         "privacy": "Privacy Policy",
         "terms": "Terms of Service",
-        "copy": "2023 Sciencetopia. All rights reserved",
+        "copy": "2024 Sciencetopia.org Development Team",
         "donate": "Donate"
     },
     "user": {
@@ -82,9 +83,36 @@
         "their": "Their",
         "studygroup": "Study Group"
     },
+    "register": {
+        "title": "Register",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "register": "Register",
+        "passwordMismatch": "Password and Confirm Password do not match!",
+        "success": "Registration successful",
+        "failed": "Registration failed"
+    },
+    "login": {
+        "title": "Log In",
+        "userNameLabel": "Username",
+        "passwordLabel": "Password",
+        "rememberMeLabel": "Remember Me",
+        "success": "Login successful",
+        "failed": "Login failed",
+        "changetoregister": "Don't have an account? Click here to register"
+    },
     "studyplan": {
         "inprogress": "In Progress",
         "completed": "Completed",
+        "noprogress_my": "You have no study plans in progress",
+        "noprogress_their": "They have no study plans in progress",
+        "nocompleted_my": "You have no completed study plans",
+        "nocompleted_their": "They have no completed study plans",
+        "confirmdelete": "Are you sure you want to delete this study plan?",
+        "deletesuccess": "Study plan deleted successfully.",
+        "deletefailed": "Failed to delete study plan.",
         "studyprogress": "Study Progress",
         "title": "Title",
         "introduction": "Introduction",
@@ -92,7 +120,7 @@
         "lessonname": "Lesson Name",
         "lessondescription": "Lesson Description",
         "resouces": "Resources",
-        "resourcename": "Resource Name", 
+        "resourcename": "Resource Name",
         "resourcelink": "Resource Link",
         "maincurriculum": "Main Curriculum",
         "advancedtopics": "Advanced Topics",
@@ -159,7 +187,12 @@
         "invite": "Invite",
         "joinrequest": "Join Request",
         "requestdate": "Request Date",
-        "activitylog": "Activity Log"
+        "activitylog": "Activity Log",
+        "nogroup_my": "You haven't joined any study group yet!",
+        "nogroup_their": "This user hasn't joined any study group yet!",
+        "groupDissolveMessage": "Are you sure you want to dissolve this study group? This action cannot be undone.",
+        "groupLeaveMessage": "Are you sure you want to leave this study group? This action cannot be undone.",
+        "confirmGroupName": "Please enter the group name to continue:"
     },
     "knowledgeGraph": {
         "knowledgeGraph": "Knowledge Graph",
@@ -177,13 +210,36 @@
         "createlink": "Create Link",
         "submitnode": "Submit Node Creation",
         "submitlink": "Submit Link Creation",
+        "addResource": "Add Knowledge Resource",
         "linktype": "Link Type",
-        "items": {
+        "linktype_items": {
             "CONTAINS": "Contains",
             "RELATES_TO": "Relates To",
             "CREATE": "Create",
             "LEADS": "Leads"
-        }
+        },
+        "node": {
+            "name": "Node Name",
+            "description": "Node Description",
+            "type": "Node Type",
+            "author": "Author",
+            "source": "Source",
+            "created": "Created Time",
+            "updated": "Updated Time",
+            "resource": "Knowledge Resource"
+        },
+        "nodetype_items": {
+            "Subject": "Subject",
+            "Field": "Field",
+            "Topic": "Topic",
+            "Keyword": "Keyword"
+        },
+        "nodeSubmitted": "Node has been submitted and is awaiting approval.",
+        "submitFailed": "Submission failed: {error}",
+        "confirmCancel": "Are you sure you want to cancel? Unsaved changes will be lost.",
+        "selecttwonodes": "Please select two nodes to create a relationship.",
+        "linkSubmitted": "The relationship has been submitted and is awaiting approval.",
+        "confirmLinkCancel": "Are you sure you want to leave the create relationship page? The created relationship will not be saved!"
     },
     "validation": {
         "required": "This field is required.",

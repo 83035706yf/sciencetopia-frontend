@@ -1,12 +1,12 @@
 <template>
-  <div id="app" class="global-background">
+  <v-app id="app" class="global-background">
     <LayOut>
       <!-- <GlobalLoader /> -->
-      <div class="container custom-width">
+      <div class="custom-width">
         <router-view></router-view>
       </div>
     </LayOut>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -24,24 +24,25 @@ export default {
 
 <style scoped>
 #app {
-  /* font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Chinese-font, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50; */
-  background-color: #E4D8C0;
+  color: #2c3e50;
+  background-color: #E9DBBE;
+  overflow: visible; /* Ensure footer can move freely */
 }
 
 .custom-width {
   min-height: 1100px;
-  max-width: 1800px;
-  border-radius: 10px;
-  background-color: #f2f2f2;
+  max-width: 100vw;
+  border-radius: 0px;
+  /* background-color: white */
+  /* background-color: #F2ECDE; */
   /* Example custom width */
 }
 
 @font-face {
   font-family: 'Chinese-font';
-  src: url('./assets/fonts/ChillRoundGothic_Regular.otf') format('opentype');
+  src: url('./assets/fonts/SiYuanHeiTiGoogleBan/NotoSansCJK-Regular-1.otf') format('opentype');
 }
 </style>

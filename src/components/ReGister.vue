@@ -1,41 +1,64 @@
 <template>
-  <div>
-    <h2>注册</h2>
-    <form @submit.prevent="register" class="form-container">
-      <div class="form-group">
-        <label for="UserName">用户名</label>
-        <input v-model="userName" id="UserName" class="form-control" />
-      </div>
-      <div class="form-group">
-        <label for="Email">邮箱</label>
-        <input v-model="email" id="Email" type="email" class="form-control" />
-      </div>
-      <div class="form-group">
-        <label for="Password">密码</label>
-        <input type="password" v-model="password" id="Password" class="form-control" />
-      </div>
-      <div class="form-group">
-        <label for="ConfirmPassword">确认密码</label>
-        <input type="password" v-model="confirmPassword" id="ConfirmPassword" class="form-control" />
-      </div>
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary">注册</button>
-      </div>
-    </form>
-  </div>
+  <v-container class="d-flex flex-column justify-center align-center">
+    <v-card class="pa-6" elevation="3" outlined>
+      <v-card-title class="text-h5 text-center">{{ $t('register.title') }}</v-card-title>
+      <v-card-text>
+        <v-form @submit.prevent="register" ref="form" lazy-validation>
+          <v-text-field
+            v-model="userName"
+            :label="$t('register.username')"
+            variant="outlined"
+            dense
+            required
+            class="mb-4"
+          ></v-text-field>
+          <v-text-field
+            v-model="email"
+            :label="$t('register.email')"
+            variant="outlined"
+            dense
+            type="email"
+            required
+            class="mb-4"
+          ></v-text-field>
+          <v-text-field
+            v-model="password"
+            :label="$t('register.password')"
+            variant="outlined"
+            dense
+            type="password"
+            required
+            class="mb-4"
+          ></v-text-field>
+          <v-text-field
+            v-model="confirmPassword"
+            :label="$t('register.confirmPassword')"
+            variant="outlined"
+            dense
+            type="password"
+            required
+            class="mb-4"
+          ></v-text-field>
+          <v-btn type="submit" variant="outlined" color="primary" block class="mt-4">
+            {{ $t('register.register') }}
+          </v-btn>
+        </v-form>
+      </v-card-text>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
-import { apiClient } from '@/api';
+import { apiClient } from "@/api";
 
 export default {
-  name: 'ReGister',
+  name: "ReGister",
   data() {
     return {
-      userName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      userName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     };
   },
   methods: {
@@ -43,37 +66,32 @@ export default {
       try {
         // Check if password and confirmPassword are the same
         if (this.password !== this.confirmPassword) {
-          alert('密码和确认密码不匹配!');
+          alert(this.$t("register.passwordMismatch"));
           return;
         }
 
-        const response = await apiClient.post('/users/Account/Register', {
+        const response = await apiClient.post("/users/Account/Register", {
           userName: this.userName,
           email: this.email,
           password: this.password,
         });
 
         if (response.data.success) {
-          // 注册成功，处理逻辑
-          console.log('注册成功:', response.data);
+          console.log(this.$t("register.success"), response.data);
         } else {
-          // 注册失败，处理逻辑
-          console.error('注册失败:', response.data.error);
+          console.error(this.$t("register.failed"), response.data.error);
         }
       } catch (error) {
-        console.error('注册失败:', error); // Log the entire error object
+        console.error(this.$t("register.failed"), error);
+
         if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.error('Response data:', error.response.data);
-          console.error('Response status:', error.response.status);
-          console.error('Response headers:', error.response.headers);
+          console.error("Response data:", error.response.data);
+          console.error("Response status:", error.response.status);
+          console.error("Response headers:", error.response.headers);
         } else if (error.request) {
-          // The request was made but no response was received
-          console.error('Request data:', error.request);
+          console.error("Request data:", error.request);
         } else {
-          // Something happened in setting up the request that triggered an Error
-          console.error('Error message:', error.message);
+          console.error("Error message:", error.message);
         }
       }
     },
@@ -82,5 +100,16 @@ export default {
 </script>
 
 <style scoped>
-/* 这里是从site.css复制的CSS内容，您可以选择将其放在这里或全局的CSS文件中 */
+.v-container {
+  min-height: 60vh;
+}
+
+.v-card {
+  max-width: 400px;
+  width: 100%;
+}
+
+.v-btn {
+  font-weight: bold;
+}
 </style>

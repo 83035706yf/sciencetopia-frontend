@@ -1,11 +1,17 @@
 .knowledge-graph {
-    position: relative;
-    /* 添加圆角边框 */
-    margin-top: 10px;
-    background-color: white;
-    border: 2px solid #000;
-    border-radius: 10px; /* 这里设置边框的圆角大小 */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 可选：添加阴影效果以提升视觉效果 */
-    width: 860px;
-    height: 860px;
-  }
+  position: relative;
+  /* 添加圆角边框 */
+  margin-top: 10px;
+  background-color: white;
+  /* border: 2px solid #000; */
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); */
+  width: 100vw;
+  height: 860px;
+  /* Ensure relative positioning for pseudo-elements */
+  z-index: 1;
+  /* Ensure card content is above pseudo-elements */
+  overflow: visible;
+  /* Allow pseudo-elements to extend outside */
+
+  
+}

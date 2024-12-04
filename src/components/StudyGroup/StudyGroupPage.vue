@@ -1,10 +1,11 @@
 <template>
   <div class="group-page">
     <v-tabs v-model="activeTab" @change="onTabChange">
-      <v-tab>小组信息</v-tab>
-      <v-tab>小组动态</v-tab>
-      <v-tab>学习路径</v-tab>
-      <v-tab v-if="role === 'manager'">管理面板
+      <v-tab>{{ $t('studygroup.groupinfo') }}</v-tab>
+      <v-tab>{{ $t('studygroup.grouptrend') }}</v-tab>
+      <v-tab>{{ $t('studygroup.studypath') }}</v-tab>
+      <v-tab v-if="role === 'manager'">
+        {{ $t('studygroup.managerboard') }}
         <v-badge style="margin-left: 20px; margin-bottom: 5px;" v-if="pendingJoinRequests > 0" color="red"
           :content="pendingJoinRequests" overlap></v-badge>
       </v-tab>
@@ -18,7 +19,7 @@
         <v-img aspect-ratio="16/9" cover
           :src="group.imageurl ? group.imageurl : require('@/assets/images/default_study_group.png')"></v-img>
         <v-card-text>
-          小组成员:
+          {{ $t('studygroup.groupmember') }}:
           <v-row>
             <v-col v-for="member in group.memberIds" :key="member.id" cols="auto">
               <v-btn icon="dots-vertical" size="40" @click="navigateToProfile(member.id)">
@@ -31,68 +32,68 @@
         </v-card-text>
         <v-card-actions>
           <template v-if="isMember">
-            <v-btn color="primary" text disabled>已加入</v-btn>
+            <v-btn color="primary" text disabled>{{ $t('studygroup.joined') }}</v-btn>
 
           </template>
           <template v-else>
-            <v-btn color="primary" text @click="applyToJoin(group.id)">申请加入</v-btn>
-            <v-btn color="primary" text @click="follow(group.id)">关注</v-btn>
+            <v-btn color="primary" text @click="applyToJoin(group.id)">{{ $t('studygroup.applytojoin') }}</v-btn>
+            <v-btn color="primary" text @click="follow(group.id)">{{ $t('studygroup.follow') }}</v-btn>
           </template>
           <template v-if="isMember & role === 'manager'">
-            <v-btn color="red" variant="outlined" @click="promptDissoveGroup(groupId)">解散小组</v-btn>
+            <v-btn color="red" variant="outlined" @click="promptDissoveGroup(groupId)">{{ $t('studygroup.disolve') }}</v-btn>
             <!-- Confirmation Dialog -->
             <v-dialog v-model="DissolveDialog" max-width="600px">
               <v-card>
                 <!-- Dialog Title with Warning Icon -->
                 <v-card-title class="headline" style="color: red;">
-                  <v-icon left color="red">mdi-alert-circle</v-icon> 危险操作
+                  <v-icon left color="red">mdi-alert-circle</v-icon> {{ $t('operation') }}
                 </v-card-title>
 
                 <!-- Dialog Content -->
                 <v-card-text>
-                  <p>你确定要解散该学习小组吗？此操作不可撤销。</p>
+                  <p>{{ $t('studygroup.groupDissolveMessage') }}</p>
                   <v-spacer style="height: 20px;"></v-spacer>
-                  <p>请输入小组名称以继续:</p>
+                  <p>{{ $t('studygroup.confirmGroupName') }}</p>
                   <v-spacer style="height: 10px;"></v-spacer>
-                  <v-text-field v-model="enteredGroupName" label="小组名称" variant="outlined" required
+                  <v-text-field v-model="enteredGroupName" :label="$t('studygroup.groupname')" variant="outlined" required
                     color="red"></v-text-field>
                 </v-card-text>
 
                 <!-- Dialog Actions with Warning Styling -->
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="red darken-1" text @click="confirmDissolveGroup">确定</v-btn>
-                  <v-btn color="grey darken-1" text @click="cancelDissolveGroup">取消</v-btn>
+                  <v-btn color="red darken-1" text @click="confirmDissolveGroup">{{ $t('confirm') }}</v-btn>
+                  <v-btn color="grey darken-1" text @click="cancelDissolveGroup">{{ $t('cancel') }}</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
           </template>
           <template v-else-if="isMember">
-            <v-btn color="red" variant="outlined" @click="promptLeaveGroup(groupId)">退出小组</v-btn>
+            <v-btn color="red" variant="outlined" @click="promptLeaveGroup(groupId)">{{ $t('cancel') }}</v-btn>
 
             <!-- Confirmation Dialog -->
             <v-dialog v-model="leaveDialog" max-width="600px">
               <v-card>
                 <!-- Dialog Title with Warning Icon -->
                 <v-card-title class="headline" style="color: red;">
-                  <v-icon left color="red">mdi-alert-circle</v-icon> 危险操作
+                  <v-icon left color="red">mdi-alert-circle</v-icon> {{ $t('operation') }}
                 </v-card-title>
 
                 <!-- Dialog Content -->
                 <v-card-text>
-                  <p>你确定要退出该学习小组吗？此操作不可撤销。</p>
+                  <p>{{ $t('studygroup.groupLeaveMessage') }}</p>
                   <v-spacer style="height: 20px;"></v-spacer>
-                  <p>请输入小组名称以继续:</p>
+                  <p>{{ $t('studygroup.confirmGroupName') }}</p>
                   <v-spacer style="height: 10px;"></v-spacer>
-                  <v-text-field v-model="enteredGroupName" label="小组名称" variant="outlined" required
+                  <v-text-field v-model="enteredGroupName" :label="$t('studygroup.groupname')" variant="outlined" required
                     color="red"></v-text-field>
                 </v-card-text>
 
                 <!-- Dialog Actions with Warning Styling -->
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="red darken-1" text @click="confirmLeaveGroup">确定</v-btn>
-                  <v-btn color="grey darken-1" text @click="cancelLeaveGroup">取消</v-btn>
+                  <v-btn color="red darken-1" text @click="confirmLeaveGroup">{{ $t('confirm') }}</v-btn>
+                  <v-btn color="grey darken-1" text @click="cancelLeaveGroup">{{ $t('cancel') }}</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -103,18 +104,18 @@
 
     <v-tab-item v-if="activeTab === 1">
       <v-card>
-        <v-card-title>小组动态</v-card-title>
+        <v-card-title>{{ $t('studygroup.grouptrend') }}</v-card-title>
         <v-card-text>
-          <p>学习小组的动态空间。</p>
+          <p>{{ $t('studygroup.grouptrenddefault') }}</p>
         </v-card-text>
       </v-card>
     </v-tab-item>
 
     <v-tab-item v-if="activeTab === 2">
       <v-card>
-        <v-card-title>学习路径共享</v-card-title>
+        <v-card-title>{{ $t('studygroup.studypath') }}</v-card-title>
         <v-card-text>
-          <p>学习小组共享的学习路径。</p>
+          <p>{{ $t('studygroup.studypathdefault') }}</p>
         </v-card-text>
       </v-card>
     </v-tab-item>

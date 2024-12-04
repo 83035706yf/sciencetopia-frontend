@@ -131,6 +131,10 @@ export default function useKnowledgeGraph(endpoint) {
 
         await fetchData(); // Fetch data from the backend
 
+        // Set initial zoom level to 1.5 and position to center
+        const initialTransform = d3.zoomIdentity.translate(- width.value / 4, - height.value / 4).scale(1.5);
+        svg.call(zoom.transform, initialTransform);
+
         hideLoading(); // Hide the global loading indicator
     };
 
@@ -216,7 +220,7 @@ export default function useKnowledgeGraph(endpoint) {
                 else {
                     if (d.labels.includes('Subject')) return 'black';
                     if (d.labels.includes('Field')) return '#D5282A';
-                    if (d.labels.includes('Topic')) return '#e4d8c0';
+                    if (d.labels.includes('Topic')) return '#E9DBBE';
                     if (d.labels.includes('TheoriesAndConcept')) return '#4DB9E6';
                     if (d.labels.includes('ModelsAndSystems')) return '#597E52';
                     if (d.labels.includes('MethodsAndProcesses')) return '#F06292';
@@ -275,7 +279,7 @@ export default function useKnowledgeGraph(endpoint) {
             .attr("text-anchor", "middle")
             .attr("alignment-baseline", "central")
             .style('font-weight', 'bold')
-            .style("fill", d => d.labels.includes('Topic') ? "#fff" : '#fff')
+            .style("fill", '#fff')
             .style("pointer-events", "none") // To prevent interference with node interactivity
 
         node.on('mouseover', function (event, d) {
@@ -328,8 +332,9 @@ export default function useKnowledgeGraph(endpoint) {
             //     return currentZoomLevel > keywordLabelThreshold ? 'visible' : 'hidden';
             // })
             .style("font-size", 16 / currentZoomLevel)
+            .style('font-family', 'Arial')
             .style("fill", 'black')
-            .style("font-weight", "bold")
+            .style("font-weight", 'bold')
             .style("stroke", 'white')
             .style("stroke-width", 0.5 / currentZoomLevel)
             // .style("stroke", d => {

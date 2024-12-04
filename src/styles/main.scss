@@ -1,0 +1,169 @@
+// Override Vuetify settings before importing Vuetify styles
+@use 'vuetify/settings' with ($card-border-radius: 0);
+
+.v-card {
+  border-radius: 0 !important;
+  /* Remove border radius */
+  box-shadow: none !important;
+  /* Remove box shadow */
+  position: relative !important;
+  /* Ensure relative positioning for pseudo-elements */
+  z-index: 1 !important;
+  /* Ensure card content is above pseudo-elements */
+  overflow: visible !important;
+  /* Allow pseudo-elements to extend outside */
+  // opacity: 0.9 !important; /* Set transparency to 50% */
+
+  // /* Right border as a parallelogram */
+  // &::before {
+  //   content: '' !important;
+  //   position: absolute !important;
+  //   top: -6px !important; /* Extend slightly outside the top */
+  //   right: -15px !important; /* Move to the right of the box */
+  //   width: 15px !important; /* Thickness of the right border */
+  //   height: calc(100% + 2px) !important; /* Extend vertically beyond the box */
+  //   background-color: #C2AF87 !important; /* Right border color */
+  //   transform: skewY(-30deg) !important; /* Skew to create a parallelogram */
+  //   z-index: -1 !important; /* Place behind the box content */
+  // }
+
+  // /* Top border as a parallelogram */
+  // &::after {
+  //   content: '' !important;
+  //   position: absolute !important;
+  //   top: -12px !important; /* Move above the box */
+  //   left: 0px !important; /* Extend slightly outside the left */
+  //   width: calc(100% + 100px) !important; /* Extend horizontally beyond the box */
+  //   height: 12px !important; /* Thickness of the top border */
+  //   background-color: #E9B138 !important; /* Top border color */
+  //   z-index: -1 !important; /* Place behind the box content */
+  // }
+}
+
+.v-toolbar__content {
+  height: 100% !important;
+  /* Force it to match the parent height */
+  overflow: visible !important;
+  /* Prevent content clipping */
+}
+
+.v-field__input {
+  min-height: 22px !important;
+  background-color: none !important;
+}
+
+.v-field--variant-outlined {
+  border-radius: 0 !important;
+  /* Remove border radius */
+  border: none !important;
+  /* Add border */
+  background-color: transparent;
+  /* Set background color */
+  padding: 4px 8px !important;
+  /* Adjust padding */
+  height: 50px !important;
+  /* Set height */
+  box-shadow: none !important;
+
+}
+
+// Define a custom variant for v-text-field
+.v-text-field--plainfield {
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  height: 40px !important; // Set your desired height
+  padding: 4px 8px !important;
+  background-color: #f9f9f9 !important;
+
+  // Style for the control
+  .v-input__control {
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  // Style for the append icon
+  .v-icon {
+    color: #666 !important; // Adjust icon color if needed
+    display: flex !important;
+    align-items: center !important;
+  }
+}
+
+.v-btn--variant-plain {
+  color: black !important; // Set text color
+  opacity: 1 !important; // Ensure full opacity
+  background-color: transparent !important; // Ensure button background is transparent
+  font-family: 'Chinese-font', sans-serif !important;
+  font-size: 16px !important;
+
+  &:hover {
+    background-color: transparent !important; // Prevent dark shade on hover
+    box-shadow: none !important; // Remove any shadow
+    color: #304E75 !important; // Change text color on hover
+  }
+
+  &:focus {
+    background-color: transparent !important; // Prevent focus background
+    box-shadow: none !important; // Remove any shadow
+  }
+
+  &:active {
+    background-color: transparent !important; // Prevent active background
+    box-shadow: none !important; // Remove any shadow
+  }
+
+  /* Remove ripple and any pseudo-elements */
+  .v-ripple__container {
+    display: none !important;
+  }
+}
+
+.v-btn--variant-outlined {
+  border-radius: 0 !important; // Remove border radius
+  border: 2px solid #000000 !important; // Add border
+  background-color: none !important; // Set background color
+  padding: 4px 8px !important; // Adjust padding
+  height: 50px !important; // Set height
+
+  &:hover {
+    background-color: #000000 !important; // Set background color on hover
+    color: #ffffff !important; // Set text color on hover
+  }
+}
+
+:root {
+  --v-pressed-opacity: 0 !important;
+    --v-theme-surface: transparent !important;
+  --v-field-outlined-background: transparent !important;
+  /* Completely remove click shade */
+}
+
+.v-menu {
+  .v-list {
+    border-radius: 0 !important; // Remove border radius
+    box-shadow: none !important; // Remove box shadow
+    background-color: #E8DABD !important; // Set background color
+  }
+  .v-list-item--variant-plain {
+    font-family: 'Chinese-font', sans-serif !important; // Set font family for menu items
+    color: black !important; // Set color for menu items
+
+    &:hover {
+      color: #EC0017 !important; // Set text color on hover
+    }
+  }
+
+  .v-list-item__title {
+    font-weight: 500 !important; // Set font weight for menu item titles
+  }
+
+  .v-list-item__icon {
+    color: #666 !important; // Set color for menu item icons
+    margin-right: 8px !important; // Add margin to the right of icons
+  }
+
+  .v-list-item--active {
+    box-sizing: none !important; // Remove box sizing
+  }
+}

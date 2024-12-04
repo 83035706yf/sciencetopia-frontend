@@ -2,9 +2,9 @@
     <GlobalLoader />
     <div ref="svgRef" id="cy" :class="{ 'fullscreen-mode': isFullScreen }"
         :style="{ width: width + 'px', height: height + 'px' }">
-        <!-- 选中节点时显示的按钮 -->
+        <!-- Actions for selected nodes -->
         <div class="node-actions">
-            <v-tooltip v-if="selectedNodes.length > 0" text="相邻节点" location="top">
+            <v-tooltip v-if="selectedNodes.length > 0" :text="$t('knowledgeGraph.adjacentnodes')" location="top">
                 <template v-slot:activator="{ props }">
                     <button class="action-button" v-bind="props" @click="showAdjacentNodes">
                         <i class="fas fa-circle-nodes action-icon"></i>
@@ -12,7 +12,7 @@
                 </template>
             </v-tooltip>
 
-            <v-tooltip v-if="selectedNodes.length > 0" text="前置节点" location="top">
+            <v-tooltip v-if="selectedNodes.length > 0" :text="$t('knowledgeGraph.frontnodes')" location="top">
                 <template v-slot:activator="{ props }">
                     <button class="action-button" v-bind="props" @click="showPrerequisiteNodes">
                         <i class="fas fa-share-nodes action-icon"></i>
@@ -20,15 +20,19 @@
                 </template>
             </v-tooltip>
 
-            <v-tooltip v-if="selectedNodes.length > 0" text="后置节点" location="top">
+            <v-tooltip v-if="selectedNodes.length > 0" :text="$t('knowledgeGraph.backnodes')" location="top">
                 <template v-slot:activator="{ props }">
                     <button class="action-button" v-bind="props" v-on="on" @click="showSubsequentNodes">
-                        <i class="fas fa-share-nodes action-icon"></i> </button>
+                        <i class="fas fa-share-nodes action-icon"></i>
+                    </button>
                 </template>
             </v-tooltip>
 
-            <v-tooltip v-if="selectedNodes.length > 0 & !isEditing" :text="isFavorited ? '删除收藏' : '收藏节点'"
-                location="top">
+            <v-tooltip
+                v-if="selectedNodes.length > 0 && !isEditing"
+                :text="isFavorited ? $t('knowledgeGraph.removenode') : $t('knowledgeGraph.savenode')"
+                location="top"
+            >
                 <template v-slot:activator="{ props }">
                     <button class="action-button" v-bind="props" @click="toggleFavorites">
                         <i :class="isFavorited ? 'fas fa-heart-circle-minus' : 'fas fa-heart-circle-plus'"></i>
@@ -36,32 +40,33 @@
                 </template>
             </v-tooltip>
 
-            <v-tooltip text="收藏夹" location="top">
+            <v-tooltip :text="$t('knowledgeGraph.saved')" location="top">
                 <template v-slot:activator="{ props }">
                     <button class="action-button" v-bind="props" v-on="on" @click="showFavoritedNodes">
-                        <i class="fas fa-star action-icon"></i> <!-- Use a star icon for favorites -->
+                        <i class="fas fa-star action-icon"></i>
                     </button>
                 </template>
             </v-tooltip>
 
-            <v-tooltip text="重置" location="top">
+            <v-tooltip :text="$t('knowledgeGraph.reset')" location="top">
                 <template v-slot:activator="{ props }">
                     <button class="action-button" v-bind="props" v-on="on" @click="resetView">
-                        <i class="fas fa-arrows-rotate action-icon"></i> </button>
+                        <i class="fas fa-arrows-rotate action-icon"></i>
+                    </button>
                 </template>
             </v-tooltip>
         </div>
 
         <!-- Edit action buttons -->
         <div class="edit-action">
-            <v-tooltip text="编辑" location="top">
+            <v-tooltip :text="$t('edit')" location="top">
                 <template v-slot:activator="{ props }">
                     <button class="action-button" v-bind="props" v-on="on" @click="startEditing" v-if="!isEditing">
                         <i class="fas fa-pen action-icon"></i>
                     </button>
                 </template>
             </v-tooltip>
-            <v-tooltip text="退出编辑" location="top" v-if="isEditing">
+            <v-tooltip :text="$t('canceledit')" location="top" v-if="isEditing">
                 <template v-slot:activator="{ props }">
                     <button class="action-button" v-bind="props" v-on="on" @click="submitEditing">
                         <i class="fa-solid fa-right-from-bracket highlight-icon"></i>
@@ -72,21 +77,24 @@
 
         <div class="bottom-right-actions">
             <div class="map-actions">
-                <!-- 容器包裹按钮和输入栏 -->
                 <div @mouseover="showInput(), overContainer = true" @mouseleave="overContainer = false; hideInput()"
                     class="action-container">
-                    <!-- 定位器按钮 -->
                     <button @click="handleSearch" class="locator-btn">
                         <svg-icon type="mdi" :path="path"></svg-icon>
                     </button>
-                    <!-- 输入栏 -->
-                    <input v-if="inputVisible" v-model="searchQuery" type="text" placeholder="定位到..."
-                        @input="handleInput" ref="searchInput" class="search-input" />
+                    <input
+                        v-if="inputVisible"
+                        v-model="searchQuery"
+                        type="text"
+                        :placeholder="$t('knowledgeGraph.locateto')"
+                        @input="handleInput"
+                        ref="searchInput"
+                        class="search-input"
+                    />
                 </div>
             </div>
 
-            <!-- Full-Screen Toggle Button -->
-            <v-tooltip :text="isFullScreen ? '退出全屏' : '全屏'" location="top">
+            <v-tooltip :text="isFullScreen ? $t('exitfullscreen') : $t('knowledgeGraph.fullscreen')" location="top">
                 <template v-slot:activator="{ props }">
                     <button class="fullscreen-button" v-bind="props" @click="toggleFullScreen">
                         <i :class="isFullScreen ? 'fas fa-compress' : 'fas fa-expand'"></i>
@@ -94,7 +102,7 @@
                 </template>
             </v-tooltip>
         </div>
-        <!-- Slot for overlay content -->
+
         <slot v-if="isFullScreen"></slot>
         <EditGuideDialog v-model="dialogVisible" @confirmed="confirmGuide"></EditGuideDialog>
         <ContextMenu :visible="contextMenuState.visible" :position="contextMenuState.position"

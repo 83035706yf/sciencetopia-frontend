@@ -1,7 +1,7 @@
 /* Header */
 .site-header {
-  background-color: #e4d8c0;
-  padding: 0px 20px;
+  background-color: #E9DBBE;
+  padding: 0px 20px 0px 0px;
 }
 
 .header {
@@ -27,16 +27,13 @@
 }
 
 .logo-container .btn {
-  display: flex;
-  align-items: center;  /* 如果需要垂直居中对齐 */
+  /* display: flex; */
+  margin-top: -40px;
+  padding: 0;
 }
 
-.logo-container .btn i:nth-child(1) img {
-  width: 80px;
-}
-
-.logo-container .btn i:nth-child(2) img {
-  width: 320px;
+.logo-container .btn img {
+  width: 600px;
 }
 
 .logo-icon {
@@ -55,12 +52,16 @@
 
 .header-bottom {
   width: 1000px;
+  padding-top: 40px;
 }
 
 .search-container {
-  width: 60%;
-  border-radius: 10px;
-  border: 1px solid black;
+  width: 100%;
+  height: 40px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-color: white;
+  /* border: 1px solid black; */
 }
 
 .search-form {
@@ -69,10 +70,15 @@
 }
 
 .search-form input {
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   margin: 5px;
-  padding: 5px 10px;
+  height: 30px;
+  /* padding: 10px 10px; */
   border-radius: 3px;
+}
+
+.search-form input:focus {
+  outline: none;
 }
 
 .search-btn {
@@ -126,4 +132,95 @@ input:checked+.slider .sun-icon {
 
 input:checked+.slider .moon-icon {
   opacity: 1;
+}
+
+.two-rows-btn {
+  display: flex;
+  flex-direction: column;
+  /* Arrange content vertically */
+  align-items: center;
+  /* Center align items horizontally */
+  justify-content: center;
+  /* Center content vertically */
+  text-align: center;
+  /* Center align text */
+  padding: 10px;
+  /* Add some spacing inside the button */
+}
+
+.btn-content {
+  display: flex;
+  flex-direction: column;
+  /* Arrange icon and title in two rows */
+  align-items: center;
+  /* Center align both rows */
+}
+
+.btn-icon {
+  margin-bottom: 5px;
+  /* Add spacing between the icon and the title */
+}
+
+.header-btn {
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  /* &:hover::before {
+    content: '';
+    position: absolute;
+    top: -100px; 
+    left: 60px; 
+    width: 10%; 
+    height: 180px; 
+    background-color: #EC0017; 
+    transform: skew(-20deg); 
+    z-index: -1; 
+  } */
+}
+
+/* Bounce into effect */
+.header-transition-enter-active {
+  animation: bounce-in 0.4s ease-out;
+}
+
+.header-transition-leave-active {
+  animation: bounce-out 0.4s ease-out;
+}
+
+.header-list {
+  top: 34px;
+  left: -12px;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: translateY(-120%);
+    opacity: 90%;
+  }
+
+  /* 60% {
+    transform: translateY(10px);
+    opacity: 1;
+  } */
+  100% {
+    transform: translateY(0);
+    opacity: 90%;
+  }
+}
+
+@keyframes bounce-out {
+  0% {
+    transform: translateY(0);
+    opacity: 90%;
+  }
+
+  /* 60% {
+    transform: translateY(10px);
+    opacity: 1;
+  } */
+  100% {
+    transform: translateY(-120%);
+    opacity: 0%;
+  }
 }
