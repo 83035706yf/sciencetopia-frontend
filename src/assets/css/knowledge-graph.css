@@ -1,17 +1,8 @@
-.knowledge-graph {
-  position: relative;
-  /* 添加圆角边框 */
-  margin-top: 10px;
-  background-color: white;
-  /* border: 2px solid #000; */
-  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); */
-  width: 100vw;
-  height: 860px;
-  /* Ensure relative positioning for pseudo-elements */
-  z-index: 1;
-  /* Ensure card content is above pseudo-elements */
-  overflow: visible;
-  /* Allow pseudo-elements to extend outside */
-
-  
-}
+.knowledgegraph-container {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    height: 76vh;
+    width: 100vw;
+    background-color: white;
+  }

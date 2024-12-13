@@ -1,6 +1,8 @@
 <template>
   <v-card class="system-notifications">
-    <v-card-title>{{ $t('message.notification')}}</v-card-title>
+    <v-container class="d-flex align-center justify-center" style=" padding: 0; background-color: rgba(48, 78, 117, 0.1);">
+      <v-card-title>{{ $t('message.notification') }}</v-card-title>
+    </v-container>
     <v-card-text>
       <v-accordion>
         <v-accordion-item v-for="(groupedNotifications, type) in groupedNotificationsByType" :key="type">
@@ -12,7 +14,8 @@
               <v-list-item-content>
                 <v-list-item-title class="notification-bubble">{{ notification.content }}</v-list-item-title>
                 <v-list-item-subtitle>{{ formatDate(notification.createdAt) }}</v-list-item-subtitle>
-                <v-btn v-if="notification.data" @click="viewDetails(notification.data)" text small>{{ $t('showdetail')}}</v-btn>
+                <v-btn v-if="notification.data" @click="viewDetails(notification.data)" text small>{{
+                  $t('showdetail')}}</v-btn>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -90,6 +93,8 @@ export default {
 <style scoped>
 .system-notifications {
   margin: auto;
+  height: 87vh;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .v-list-item-title {

@@ -14,8 +14,8 @@
         <tbody>
           <tr v-for="member in members" :key="member.id">
             <td>
-              <v-btn icon="dots-vertical" size="40">
-                <v-avatar size="35">
+              <v-btn icon="dots-vertical" class="justify-center align-center default-avatar" size="40">
+                <v-avatar size="38">
                   <img :src="member.avatarUrl" alt="用户头像">
                 </v-avatar>
               </v-btn>

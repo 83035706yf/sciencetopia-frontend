@@ -1,33 +1,38 @@
 <template>
-    <v-container>
+    <v-container class="d-flex align-center justify-center">
         <!-- Display Mode -->
         <div v-if="!isEditMode">
-            <v-row no-gutters style="align-items: center;">
-                <v-avatar size="120">
-                    <img :src="avatarUrl" alt="Avatar">
-                </v-avatar>
-                <div style="width: 20px;"></div>
-                <!-- Show edit button only if it's the current user's profile -->
-                <v-btn v-if="isCurrentUser" icon variant="text" @click="enterEditMode">✏️</v-btn>
-                <slot v-if="!isCurrentUser"></slot>
-            </v-row>
-            <v-row>
-                <v-col>
-                    <h3>{{ userInfo.userName }}</h3>
-                    <p>{{ $t('userprofile.gender') }}{{ $t(':') }}{{ userInfo.gender }}</p>
-                    <p>{{ $t('userprofile.dateofbirth') }}{{ $t(':') }}{{ userInfo.formattedBirthDate }}</p>
-                    <p>{{ $t('userprofile.aboutme') }}{{ $t(':') }}{{ userInfo.selfIntroduction }}</p>
-                    <v-divider class="border-opacity-0"></v-divider>
-                    <p>{{ $t('userprofile.completedStudyPlanCountmsg', { completedStudyPlanCount }) }}</p>
-                    <p>{{ $t('userprofile.contributeNodemsg', { contributedNodeCount, contributedLinkCount }) }}</p>
-                    <v-divider></v-divider>
-                </v-col>
-            </v-row>
+            <v-card class="st-card" >
+            <v-container>
+                <v-row no-gutters style="align-items: center;">
+                    <v-col cols="auto" style="width: 200px;">
+                        <v-avatar size="120">
+                            <img :src="avatarUrl" alt="Avatar">
+                        </v-avatar>
+                        <div style="height: 20px;"></div>
+                        <v-card-title style="padding: 0px 10px">{{ userInfo.userName }}</v-card-title>
+                    </v-col>
+                    <v-col cols="auto" style="width: 460px;">
+                        <p>{{ $t('userprofile.gender') }}{{ $t(':') }}{{ userInfo.gender }}</p>
+                        <p>{{ $t('userprofile.dateofbirth') }}{{ $t(':') }}{{ userInfo.formattedBirthDate }}</p>
+                        <p>{{ $t('userprofile.aboutme') }}{{ $t(':') }}{{ userInfo.selfIntroduction }}</p>
+                        <v-divider class="border-opacity-0"></v-divider>
+                        <p>{{ $t('userprofile.completedStudyPlanCountmsg', { completedStudyPlanCount }) }}</p>
+                        <p>{{ $t('userprofile.contributeNodemsg', { contributedNodeCount, contributedLinkCount }) }}</p>
+                    </v-col>
+                    <v-col cols="auto" style="align-self:baseline">
+                        <!-- Show edit button only if it's the current user's profile -->
+                        <v-btn v-if="isCurrentUser" icon variant="text" @click="enterEditMode">✏️</v-btn>
+                        <slot v-if="!isCurrentUser"></slot>
+                    </v-col>
+                </v-row>
+            </v-container>
+            </v-card>
         </div>
 
         <!-- Edit Mode -->
         <v-form v-else ref="form" v-model="valid">
-            <v-card style="max-width: 600px; margin: 0 auto;">
+            <v-card style="width: 600px; margin: 0 auto;">
                 <v-card-text>
                     <v-container>
                         <v-row>
@@ -49,8 +54,8 @@
                                     transition="scale-transition" offset-y min-width="auto">
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-text-field variant="outlined" v-model="userInfo.formattedBirthDate"
-                                            :label="$t('userprofile.dateofbirth')" prepend-icon="mdi-calendar" readonly v-bind="attrs"
-                                            v-on="on">
+                                            :label="$t('userprofile.dateofbirth')" prepend-icon="mdi-calendar" readonly
+                                            v-bind="attrs" v-on="on">
                                         </v-text-field>
                                     </template>
                                     <!-- Your date picker and other content here -->
@@ -185,6 +190,7 @@ export default {
     async mounted() {
         if (this.isCurrentUser) {
             await this.fetchUserInfo();  // Use Vuex to fetch the current user's info
+            this.userInfo = this.currentUserInfo;  // Set the userInfo to the current user's info
         } else {
             await this.fetchOtherUserInfo();  // Fetch another user's info via API
         }

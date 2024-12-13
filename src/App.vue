@@ -1,23 +1,34 @@
 <template>
   <v-app id="app" class="global-background">
-    <LayOut>
+    <component :is="layout">
       <!-- <GlobalLoader /> -->
-      <div class="custom-width">
-        <router-view></router-view>
-      </div>
-    </LayOut>
+      <!-- <div class="custom-width"> -->
+      <router-view />
+      <!-- </div> -->
+    </component>
   </v-app>
 </template>
 
 <script>
 import LayOut from './components/LayOut.vue';
+import ThinLayOut from './components/ThinLayOut.vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'quill/dist/quill.snow.css'; // for snow theme
 
 export default {
   name: 'App',
   components: {
-    LayOut
+    LayOut,
+    ThinLayOut,
+  },
+  computed: {
+    layout() {
+      // Determine the layout based on the route meta
+      const layout = this.$route.meta.layout;
+      if (layout === "thin") return "ThinLayOut"; // Thin layout
+      if (layout === "none") return "router-view"; // Render directly without layout
+      return "LayOut"; // Default layout
+    },
   },
 }
 </script>
@@ -29,17 +40,15 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   background-color: #E9DBBE;
-  overflow: visible; /* Ensure footer can move freely */
+  overflow: visible;
+  /* Ensure footer can move freely */
 }
 
-.custom-width {
-  min-height: 1100px;
+/* .custom-width {
+  min-height: 800px;
   max-width: 100vw;
   border-radius: 0px;
-  /* background-color: white */
-  /* background-color: #F2ECDE; */
-  /* Example custom width */
-}
+} */
 
 @font-face {
   font-family: 'Chinese-font';

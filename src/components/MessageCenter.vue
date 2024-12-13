@@ -1,19 +1,21 @@
 <template>
+    <div class="image-background" style="position: absolute;">
+    </div>
     <v-container class="message-center">
         <v-row>
-            <v-col cols="2" class="sidebar">
-                <v-card outlined>
-                    <v-list>
+            <v-col cols="auto" class="sidebar">
+                <v-card outlined style="height: 100%;">
+                    <v-list variant="plain">
                         <v-list-item :to="{ name: 'directMessages', params: { userId: userId } }" exact
                             :class="{ 'active': activeTab === 'directMessages' }">
-                            <v-list-item-title>{{ $t('message.privatemessage')}}</v-list-item-title>
+                            <v-list-item-title>{{ $t('message.privatemessage') }}</v-list-item-title>
                             <div v-if="messageCount > 0" class="alert-badge">
                                 {{ messageCount > 99 ? '99+' : messageCount }}
                             </div>
                         </v-list-item>
                         <v-list-item :to="{ name: 'notifications', params: { userId: userId } }" exact
                             :class="{ 'active': activeTab === 'notifications' }">
-                            <v-list-item-title>{{ $t('message.notification')}}</v-list-item-title>
+                            <v-list-item-title>{{ $t('message.notification') }}</v-list-item-title>
                             <div v-if="notificationCount > 0" class="alert-badge">
                                 {{ notificationCount > 99 ? '99+' : notificationCount }}
                             </div>
@@ -21,11 +23,11 @@
                     </v-list>
                 </v-card>
             </v-col>
-            <v-col cols="10">
-                <v-card v-if="activeTab === 'directMessages'">
+            <v-col cols="auto" style="width: 85%;">
+                <v-card v-if="activeTab === 'directMessages'" class="message-card" style="height: 100%;">
                     <v-card-text>
                         <v-row>
-                            <v-col cols="3">
+                            <v-col cols="auto" style="width: 30%;">
                                 <v-list dense>
                                     <v-list-item v-for="conversation in conversations"
                                         :key="conversation.conversationId" @click="selectConversation(conversation)"
@@ -45,15 +47,33 @@
                                     </v-list-item>
                                 </v-list>
                             </v-col>
-                            <v-divider vertical></v-divider>
-                            <v-col cols="8" v-if="selectedConversation">
+                            <v-divider vertical color="text" opacity="0.2"></v-divider>
+                            <v-col cols="auto" style="width: 70%; height: 86vh;" v-if="selectedConversation">
+                                <v-card class="d-flex align-center justify-center"
+                                    style=" max-height: 36px; border-bottom: 2px solid rgba(48, 78, 117, 0.1); border-radius: 5px 5px 0 0 !important;">
+                                    <v-card-title>{{ selectedConversation.partnerName }}</v-card-title>
+                                </v-card>
                                 <MessageList ref="messageList" :messages="selectedConversation.messages"
                                     :userId="userId" :userAvatarUrl="userAvatarUrl" />
-                                <v-divider></v-divider>
-                                <v-textarea v-model="selectedConversation.newMessage" :label="$t('message.editing')" outlined
+                                <v-divider color="text" opacity="0.2"></v-divider>
+                                <button class="image-picker-btn">
+                                    <img width="24" height="24" src="https://img.icons8.com/fluency/48/full-image.png"
+                                        alt="full-image" />
+                                </button>
+                                <button class="emoji-picker-btn" @click="toggleEmojiPicker">
+                                    😊
+                                </button>
+
+                                <div v-if="showEmojiPicker">
+                                    <emoji-picker class="light emoji-picker" @emoji-click="onEmojiClick"></emoji-picker>
+                                </div>
+
+                                <v-textarea style="height: 25vh" variant="solo-filled"
+                                    v-model="selectedConversation.newMessage" :label="$t('message.editing')" outlined
                                     dense></v-textarea>
                                 <v-card-actions class="justify-end">
-                                    <v-btn @click="sendMessage(selectedConversation)">{{$t('message.send')}}</v-btn>
+                                    <v-btn variant="plain" style="position: absolute; top: 83vh"
+                                        @click="sendMessage(selectedConversation)">{{ $t('message.send') }}</v-btn>
                                 </v-card-actions>
                             </v-col>
                         </v-row>
@@ -72,6 +92,7 @@ import MessageList from '@/components/MessageList.vue';
 import SystemNotifications from '@/components/SystemNotifications.vue'; // Import the new component
 import { mapState } from 'vuex';
 import { DateTime } from 'luxon';
+import 'emoji-picker-element';
 
 export default {
     components: { MessageList, SystemNotifications }, // Include the new component
@@ -82,6 +103,7 @@ export default {
             selectedConversation: null,
             userId: null,
             userAvatarUrl: null,
+            showEmojiPicker: false, // Controls the visibility of the emoji picker
         };
     },
     computed: {
@@ -247,26 +269,81 @@ export default {
             connection.invoke('MarkAllNotificationsAsRead', this.userId);
             // console.log('Marked all notifications as read');
         },
+        toggleEmojiPicker() {
+            this.showEmojiPicker = !this.showEmojiPicker; // Toggle emoji picker visibility
+            if (this.showEmojiPicker) {
+                document.addEventListener('click', this.closeEmojiPickerOnOutsideClick);
+            } else {
+                document.removeEventListener('click', this.closeEmojiPickerOnOutsideClick);
+            }
+        },
+        onEmojiClick(event) {
+            const emoji = event.detail.unicode; // Get the selected emoji
+            if (this.selectedConversation && typeof this.selectedConversation.newMessage === 'string') {
+                // 确保 newMessage 是一个字符串
+                this.selectedConversation.newMessage += emoji; // 拼接表情
+            } else if (this.selectedConversation) {
+                // 如果 newMessage 未初始化，则赋值表情
+                this.selectedConversation.newMessage = emoji;
+            }
+        },
+        closeEmojiPickerOnOutsideClick(event) {
+            const emojiPicker = document.querySelector('.emoji-picker');
+            if (emojiPicker && !emojiPicker.contains(event.target) && !event.target.closest('button')) {
+                this.showEmojiPicker = false;
+                document.removeEventListener('click', this.closeEmojiPickerOnOutsideClick);
+            }
+        },
     },
 };
 </script>
 
 <style scoped>
+@import '../assets/css/image-background.css';
+
 .message-center {
     display: flex;
+    width: 61.8vw;
+    height: 87vh;
+    padding: 0;
+    backdrop-filter: blur(10px); /* 磨砂效果 */
+    -webkit-backdrop-filter: blur(10px); /* 兼容 Safari */
+    /* background-image: url('../assets/images/design.png');
+    background-size: cover; */
 }
 
 .sidebar {
     height: 100%;
+    width: 15%;
     overflow-y: auto;
+    padding-right: 0;
+}
+
+.sidebar .v-card {
+    background-color: rgba(48, 78, 117, 0.1);
+}
+
+.sidebar .v-list {
+    background-color: unset;
+    /* background-color: rgba(48, 78, 117, 0.1); */
+}
+
+.message-card {
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 .grey-background {
-    background-color: #eeeeee;
+    background: radial-gradient(circle, #00FFF7 40%, transparent 40%) !important;
+    /* Button background */
+    background-size: 5px 5px !important;
+    /* color: white; */
 }
 
 .active {
-    background-color: #f0f0f0;
+    background: rgba(0, 255, 247, 0.7);
+    background-size: 5px 5px !important;
+    color: #000 !important;
+    opacity: 1 !important;
 }
 
 .alert-badge {
@@ -278,5 +355,30 @@ export default {
     border-radius: 50%;
     padding: 0.3em 0.8em;
     font-size: 0.7em;
+}
+
+.emoji-picker {
+    position: absolute;
+    bottom: 300px;
+    z-index: 10;
+    max-height: 300px;
+}
+
+.emoji-picker-btn {
+    font-size: 1.2rem;
+    /* Adjust size as needed */
+    line-height: 1;
+    /* Ensure proper alignment */
+    padding-bottom: 10px;
+    padding-left: 5px;
+}
+
+.image-picker-btn {
+    font-size: 1.2rem;
+    /* Adjust size as needed */
+    line-height: 1;
+    /* Ensure proper alignment */
+    padding-bottom: 10px;
+    padding-left: 5px;
 }
 </style>

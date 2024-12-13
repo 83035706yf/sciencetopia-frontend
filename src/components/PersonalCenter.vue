@@ -1,34 +1,41 @@
 <template>
   <div>
     <!-- Personal Information -->
+    <!-- <v-card class="st-card"> -->
     <PersonalInformation :userId="userId">
-      <v-btn
-        variant="outlined"
-        :style="{ backgroundColor: 'white' }"
-        prepend-icon="mdi-email-outline"
-        @click="startOrLoadConversation(userId)"
-      >
+      <v-btn variant="outlined" :style="{ backgroundColor: 'white' }" prepend-icon="mdi-email-outline"
+        @click="startOrLoadConversation(userId)">
         <template v-slot:prepend>
           <v-icon color="#ff4d4d"></v-icon>
         </template>
         {{ $t('message.sendmessage') }}
       </v-btn>
     </PersonalInformation>
+    <!-- </v-card> -->
+
+    <!-- <v-divider inset color="text" opacity="1"></v-divider> -->
 
     <!-- Study Plans Section -->
     <v-container>
-      <v-row class="d-flex align-center">
-        <v-col cols="auto">
-          <h3>
-            {{ isCurrentUser ? $t('usercenter.my') : $t('usercenter.their') }}
-            {{ $t('wordbreaker') }}
-            {{ $t('usercenter.studyplan') }}
-          </h3>
+      <v-row class="d-flex align-center justify-center">
+        <v-col cols="auto" style="position: relative;left: 20vw;">
+          <div class="split-color-container">
+            <h3 class="split-color-text" style="font-size: 48px !important;">
+              {{ isCurrentUser ? $t('usercenter.my') : $t('usercenter.their') }}{{ $t('wordbreaker') }}{{
+                $t('usercenter.studyplan') }}
+            </h3>
+          </div>
         </v-col>
-        <v-col>
-          <v-tabs v-model="activeTab" background-color="primary" dark>
-            <v-tab>{{ $t('studyplan.inprogress') }}</v-tab>
-            <v-tab>{{ $t('studyplan.completed') }}</v-tab>
+        <v-col class="d-flex align-center justify-center">
+          <v-tabs class="dot-lattice-container"
+            style="min-width: 600px !important;height: 100px; align-items: center; justify-content: center; padding: 10px 0px 10px 10px !important;"
+            v-model="activeTab" background-color="primary" dark>
+            <v-tab>
+              <h3 class="plan-tab-text">{{ $t('studyplan.inprogress') }}</h3>
+            </v-tab>
+            <v-tab>
+              <h3 class="plan-tab-text">{{ $t('studyplan.completed') }}</h3>
+            </v-tab>
           </v-tabs>
         </v-col>
       </v-row>
@@ -40,19 +47,11 @@
             <v-card-item>
               <v-row>
                 <v-col cols="11">
-                  <StudyPlan
-                    :userId="userId"
-                    :studyPlan="item.studyPlan"
-                    @resourceUpdated="handleResourceUpdated"
-                  ></StudyPlan>
+                  <StudyPlan :userId="userId" :studyPlan="item.studyPlan" @resourceUpdated="handleResourceUpdated">
+                  </StudyPlan>
                 </v-col>
                 <v-col cols="1" class="d-flex justify-end pt-4 pr-4">
-                  <v-btn
-                    small
-                    variant="text"
-                    color="red"
-                    @click="deleteStudyPlan(item.studyPlan.title)"
-                  >
+                  <v-btn small variant="text" color="red" @click="deleteStudyPlan(item.studyPlan.title)">
                     {{ $t('delete') }}
                   </v-btn>
                 </v-col>
@@ -60,11 +59,17 @@
             </v-card-item>
           </v-card>
         </v-col>
-        <p v-if="activeStudyPlans.length === 0">
-          {{ isCurrentUser
-            ? $t('studyplan.noprogress_my')
-            : $t('studyplan.noprogress_their') }}
-        </p>
+        <div v-if="activeStudyPlans.length === 0">
+          <v-container>
+            <v-card class="d-flex align-center justify-center">
+              <v-card-title>
+                {{ isCurrentUser
+                  ? $t('studyplan.noprogress_my')
+                  : $t('studyplan.noprogress_their') }}
+              </v-card-title>
+            </v-card>
+          </v-container>
+        </div>
       </v-tab-item>
 
       <!-- Completed Study Plans -->
@@ -74,19 +79,11 @@
             <v-card-item>
               <v-row>
                 <v-col cols="11">
-                  <StudyPlan
-                    :userId="userId"
-                    :studyPlan="item.studyPlan"
-                    @resourceUpdated="handleResourceUpdated"
-                  ></StudyPlan>
+                  <StudyPlan :userId="userId" :studyPlan="item.studyPlan" @resourceUpdated="handleResourceUpdated">
+                  </StudyPlan>
                 </v-col>
                 <v-col cols="1" class="d-flex justify-end pt-4 pr-4">
-                  <v-btn
-                    small
-                    variant="text"
-                    color="red"
-                    @click="deleteStudyPlan(item.studyPlan.title)"
-                  >
+                  <v-btn small variant="text" color="red" @click="deleteStudyPlan(item.studyPlan.title)">
                     {{ $t('delete') }}
                   </v-btn>
                 </v-col>
@@ -95,40 +92,48 @@
           </v-card>
         </v-col>
         <div v-if="completedStudyPlans.length === 0">
-          <p>
-            {{ isCurrentUser
-              ? $t('studyplan.nocompleted_my')
-              : $t('studyplan.nocompleted_their') }}
-          </p>
+          <v-container>
+            <v-card class="d-flex align-center justify-center">
+              <v-card-title>
+                {{ isCurrentUser
+                  ? $t('studyplan.nocompleted_my')
+                  : $t('studyplan.nocompleted_their') }}
+              </v-card-title>
+            </v-card>
+          </v-container>
         </div>
       </v-tab-item>
     </v-container>
 
+    <!-- <v-divider inset color="text" opacity="1"></v-divider> -->
+
     <!-- Study Groups Section -->
     <v-container>
-      <h3>
-        {{ isCurrentUser ? $t('usercenter.my') : $t('usercenter.their') }}
-        {{ $t('wordbreaker') }}
-        {{ $t('usercenter.studygroup') }}
-      </h3>
-      <v-spacer style="height: 10px;"></v-spacer>
-      <p v-if="studyGroupList.length === 0">
-        {{ isCurrentUser
-          ? $t('studygroup.nogroup_my')
-          : $t('studygroup.nogroup_their') }}
-      </p>
+      <div class="split-color-container">
+        <h3 class="split-color-text" style="font-size: 48px;">
+          {{ isCurrentUser ? $t('usercenter.my') : $t('usercenter.their') }}{{ $t('wordbreaker') }}{{
+            $t('usercenter.studygroup') }}
+        </h3>
+      </div>
+      <v-spacer style="height: 30px;"></v-spacer>
+      <div v-if="studyGroupList.length === 0">
+        <v-container>
+          <v-card class="d-flex align-center justify-center">
+            <v-card-title>
+              {{ isCurrentUser
+                ? $t('studygroup.nogroup_my')
+                : $t('studygroup.nogroup_their') }}
+            </v-card-title>
+          </v-card>
+        </v-container>
+      </div>
       <v-row v-else>
         <v-col v-for="group in studyGroupList" :key="group.id" cols="12" sm="6" md="4">
-          <v-card class="mb-3">
+          <v-card class="mb-3 st-card" style="width: 400px; height: 300px;">
             <v-card-title>
               {{ group.name }}
               <v-chip class="ml-auto" color="primary" label>{{ group.role }}</v-chip>
-              <v-chip
-                v-if="group.status === 'pending_approval'"
-                class="ml-auto"
-                color="primary"
-                label
-              >
+              <v-chip v-if="group.status === 'pending_approval'" class="ml-auto" color="primary" label>
                 {{ group.status }}
               </v-chip>
             </v-card-title>
@@ -142,23 +147,18 @@
         </v-col>
       </v-row>
     </v-container>
-
-    <!-- Scroll to Top Button -->
-    <ScrollToTopButton />
   </div>
 </template>
 
 <script>
 import PersonalInformation from "./PersonalInformation.vue";
 import StudyPlan from "./StudyPlan.vue";
-import ScrollToTopButton from "@/components/ScrollToTopButton.vue";
 import { apiClient } from "@/api";
 
 export default {
   components: {
     PersonalInformation,
     StudyPlan,
-    ScrollToTopButton,
   },
   props: {
     userId: {

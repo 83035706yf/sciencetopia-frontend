@@ -1,5 +1,5 @@
 <template>
-    <v-card class="media-card" outlined>
+    <v-card class="media-card st-card" outlined>
       <v-img :src="cover" class="cover-image"></v-img>
   
       <v-card-title class="title">{{ title }}</v-card-title>
@@ -33,11 +33,13 @@
   <style scoped>
   .media-card {
     max-width: 400px; /* Adjust the width as needed */
+    height: 305px;
     margin: 10px;
   }
   
   .cover-image {
-    height: 200px; /* Adjust the height as needed */
+    width: 100%;
+    height: 225px; /* Adjust the height as needed */
     object-fit: cover;
   }
   

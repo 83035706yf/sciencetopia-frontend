@@ -1,8 +1,8 @@
 /* Header */
-.site-header {
+/* .site-header {
   background-color: #E9DBBE;
   padding: 0px 20px 0px 0px;
-}
+} */
 
 .header {
   display: flex;
@@ -28,12 +28,7 @@
 
 .logo-container .btn {
   /* display: flex; */
-  margin-top: -40px;
   padding: 0;
-}
-
-.logo-container .btn img {
-  width: 600px;
 }
 
 .logo-icon {

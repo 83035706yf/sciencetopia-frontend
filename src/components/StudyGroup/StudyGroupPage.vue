@@ -1,10 +1,10 @@
 <template>
   <div class="group-page">
-    <v-tabs v-model="activeTab" @change="onTabChange">
-      <v-tab>{{ $t('studygroup.groupinfo') }}</v-tab>
-      <v-tab>{{ $t('studygroup.grouptrend') }}</v-tab>
-      <v-tab>{{ $t('studygroup.studypath') }}</v-tab>
-      <v-tab v-if="role === 'manager'">
+    <v-tabs class="d-flex flex-column align-center justify-center" v-model="activeTab" @change="onTabChange">
+      <v-tab variant="plain" color="primary">{{ $t('studygroup.groupinfo') }}</v-tab>
+      <v-tab variant="plain" color="primary">{{ $t('studygroup.grouptrend') }}</v-tab>
+      <v-tab variant="plain" color="primary">{{ $t('studygroup.studypath') }}</v-tab>
+      <v-tab variant="plain" color="primary" v-if="role === 'manager'">
         {{ $t('studygroup.managerboard') }}
         <v-badge style="margin-left: 20px; margin-bottom: 5px;" v-if="pendingJoinRequests > 0" color="red"
           :content="pendingJoinRequests" overlap></v-badge>
@@ -12,112 +12,140 @@
     </v-tabs>
 
     <v-tab-item v-if="activeTab === 0">
-      <v-card>
-        <v-card-title>{{ group.name }}</v-card-title>
-        <v-card-subtitle v-html="group.description"></v-card-subtitle>
-        <!-- Additional group information -->
-        <v-img aspect-ratio="16/9" cover
-          :src="group.imageurl ? group.imageurl : require('@/assets/images/default_study_group.png')"></v-img>
-        <v-card-text>
-          {{ $t('studygroup.groupmember') }}:
+      <v-container class="framed-container">
+        <v-card>
           <v-row>
-            <v-col v-for="member in group.memberIds" :key="member.id" cols="auto">
-              <v-btn icon="dots-vertical" size="40" @click="navigateToProfile(member.id)">
-                <v-avatar size="35">
-                  <img :src="member.avatarUrl" alt="用户头像">
-                </v-avatar>
-              </v-btn>
+            <v-col cols="3">
+              <v-card style="margin-left: 6vw;">
+                <v-card-title>{{ group.name }}</v-card-title>
+                <v-card-subtitle v-html="group.bio"></v-card-subtitle>
+              </v-card>
+              <!-- <v-divider color="text" opacity="1"></v-divider> -->
+              <v-card style="margin-left: 6vw;">
+                <v-card-title>
+                  {{ $t('studygroup.groupmember') }}:
+                  <v-row>
+                    <v-col v-for="member in group.memberIds" :key="member.id" cols="auto">
+                      <v-btn icon="dots-vertical" size="40" class="justify-center align-center default-avatar" @click="navigateToProfile(member.id)">
+                        <v-avatar size="38">
+                          <img :src="member.avatarUrl" alt="用户头像">
+                        </v-avatar>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card-title>
+              </v-card>
+              <!-- <v-divider color="text" opacity="1"></v-divider> -->
+              <v-card style="position: absolute; bottom: 0; margin-left: 6vw;">
+                <v-card-actions>
+                  <template v-if="isMember">
+                    <v-btn color="primary" text disabled>{{ $t('studygroup.joined') }}</v-btn>
+
+                  </template>
+                  <template v-else>
+                    <v-btn color="primary" text @click="applyToJoin(group.id)">{{ $t('studygroup.applytojoin')
+                      }}</v-btn>
+                    <v-btn color="primary" text @click="follow(group.id)">{{ $t('studygroup.follow') }}</v-btn>
+                  </template>
+                  <template v-if="isMember & role === 'manager'">
+                    <v-btn color="red" variant="outlined" @click="promptDissoveGroup(groupId)">{{
+                      $t('studygroup.disolve')
+                      }}</v-btn>
+                    <!-- Confirmation Dialog -->
+                    <v-dialog v-model="DissolveDialog" max-width="600px">
+                      <v-card>
+                        <!-- Dialog Title with Warning Icon -->
+                        <v-card-title class="headline" style="color: red;">
+                          <v-icon left color="red">mdi-alert-circle</v-icon> {{ $t('operation') }}
+                        </v-card-title>
+
+                        <!-- Dialog Content -->
+                        <v-card-text>
+                          <p>{{ $t('studygroup.groupDissolveMessage') }}</p>
+                          <v-spacer style="height: 20px;"></v-spacer>
+                          <p>{{ $t('studygroup.confirmGroupName') }}</p>
+                          <v-spacer style="height: 10px;"></v-spacer>
+                          <v-text-field v-model="enteredGroupName" :label="$t('studygroup.groupname')"
+                            variant="outlined" required color="red"></v-text-field>
+                        </v-card-text>
+
+                        <!-- Dialog Actions with Warning Styling -->
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn color="red darken-1" text @click="confirmDissolveGroup">{{ $t('confirm') }}</v-btn>
+                          <v-btn color="grey darken-1" text @click="cancelDissolveGroup">{{ $t('cancel') }}</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+                  </template>
+                  <template v-else-if="isMember">
+                    <v-btn color="red" variant="outlined" @click="promptLeaveGroup(groupId)">{{ $t('cancel') }}</v-btn>
+
+                    <!-- Confirmation Dialog -->
+                    <v-dialog v-model="leaveDialog" max-width="600px">
+                      <v-card>
+                        <!-- Dialog Title with Warning Icon -->
+                        <v-card-title class="headline" style="color: red;">
+                          <v-icon left color="red">mdi-alert-circle</v-icon> {{ $t('operation') }}
+                        </v-card-title>
+
+                        <!-- Dialog Content -->
+                        <v-card-text>
+                          <p>{{ $t('studygroup.groupLeaveMessage') }}</p>
+                          <v-spacer style="height: 20px;"></v-spacer>
+                          <p>{{ $t('studygroup.confirmGroupName') }}</p>
+                          <v-spacer style="height: 10px;"></v-spacer>
+                          <v-text-field v-model="enteredGroupName" :label="$t('studygroup.groupname')"
+                            variant="outlined" required color="red"></v-text-field>
+                        </v-card-text>
+
+                        <!-- Dialog Actions with Warning Styling -->
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn color="red darken-1" text @click="confirmLeaveGroup">{{ $t('confirm') }}</v-btn>
+                          <v-btn color="grey darken-1" text @click="cancelLeaveGroup">{{ $t('cancel') }}</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+                  </template>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+            <v-col cols="8">
+              <!-- <v-card-title>{{ group.name }}</v-card-title> -->
+              <!-- Additional group information -->
+              <div style="width: 100%; display: block;">
+                <v-img aspect-ratio="16/9" cover
+                  :src="group.imageurl ? group.imageurl : require('@/assets/images/default_study_group.png')"></v-img>
+              </div>
+              <v-spacer style="height: 40px;"></v-spacer>
+              <span v-html="group.description"></span>
             </v-col>
           </v-row>
-        </v-card-text>
-        <v-card-actions>
-          <template v-if="isMember">
-            <v-btn color="primary" text disabled>{{ $t('studygroup.joined') }}</v-btn>
-
-          </template>
-          <template v-else>
-            <v-btn color="primary" text @click="applyToJoin(group.id)">{{ $t('studygroup.applytojoin') }}</v-btn>
-            <v-btn color="primary" text @click="follow(group.id)">{{ $t('studygroup.follow') }}</v-btn>
-          </template>
-          <template v-if="isMember & role === 'manager'">
-            <v-btn color="red" variant="outlined" @click="promptDissoveGroup(groupId)">{{ $t('studygroup.disolve') }}</v-btn>
-            <!-- Confirmation Dialog -->
-            <v-dialog v-model="DissolveDialog" max-width="600px">
-              <v-card>
-                <!-- Dialog Title with Warning Icon -->
-                <v-card-title class="headline" style="color: red;">
-                  <v-icon left color="red">mdi-alert-circle</v-icon> {{ $t('operation') }}
-                </v-card-title>
-
-                <!-- Dialog Content -->
-                <v-card-text>
-                  <p>{{ $t('studygroup.groupDissolveMessage') }}</p>
-                  <v-spacer style="height: 20px;"></v-spacer>
-                  <p>{{ $t('studygroup.confirmGroupName') }}</p>
-                  <v-spacer style="height: 10px;"></v-spacer>
-                  <v-text-field v-model="enteredGroupName" :label="$t('studygroup.groupname')" variant="outlined" required
-                    color="red"></v-text-field>
-                </v-card-text>
-
-                <!-- Dialog Actions with Warning Styling -->
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="red darken-1" text @click="confirmDissolveGroup">{{ $t('confirm') }}</v-btn>
-                  <v-btn color="grey darken-1" text @click="cancelDissolveGroup">{{ $t('cancel') }}</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </template>
-          <template v-else-if="isMember">
-            <v-btn color="red" variant="outlined" @click="promptLeaveGroup(groupId)">{{ $t('cancel') }}</v-btn>
-
-            <!-- Confirmation Dialog -->
-            <v-dialog v-model="leaveDialog" max-width="600px">
-              <v-card>
-                <!-- Dialog Title with Warning Icon -->
-                <v-card-title class="headline" style="color: red;">
-                  <v-icon left color="red">mdi-alert-circle</v-icon> {{ $t('operation') }}
-                </v-card-title>
-
-                <!-- Dialog Content -->
-                <v-card-text>
-                  <p>{{ $t('studygroup.groupLeaveMessage') }}</p>
-                  <v-spacer style="height: 20px;"></v-spacer>
-                  <p>{{ $t('studygroup.confirmGroupName') }}</p>
-                  <v-spacer style="height: 10px;"></v-spacer>
-                  <v-text-field v-model="enteredGroupName" :label="$t('studygroup.groupname')" variant="outlined" required
-                    color="red"></v-text-field>
-                </v-card-text>
-
-                <!-- Dialog Actions with Warning Styling -->
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="red darken-1" text @click="confirmLeaveGroup">{{ $t('confirm') }}</v-btn>
-                  <v-btn color="grey darken-1" text @click="cancelLeaveGroup">{{ $t('cancel') }}</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </template>
-        </v-card-actions>
-      </v-card>
+        </v-card>
+      </v-container>
     </v-tab-item>
 
     <v-tab-item v-if="activeTab === 1">
-      <v-card>
-        <v-card-title>{{ $t('studygroup.grouptrend') }}</v-card-title>
-        <v-card-text>
-          <p>{{ $t('studygroup.grouptrenddefault') }}</p>
-        </v-card-text>
-      </v-card>
+      <v-container class="framed-container">
+        <v-card class="d-flex flex-column align-center justify-center">
+          <v-card-title>{{ $t('studygroup.grouptrend') }}</v-card-title>
+          <v-card-text>
+            <p>{{ $t('studygroup.grouptrenddefault') }}</p>
+          </v-card-text>
+        </v-card>
+      </v-container>
     </v-tab-item>
 
     <v-tab-item v-if="activeTab === 2">
-      <v-card>
-        <v-card-title>{{ $t('studygroup.studypath') }}</v-card-title>
-        <v-card-text>
-          <p>{{ $t('studygroup.studypathdefault') }}</p>
-        </v-card-text>
-      </v-card>
+      <v-container class="framed-container">
+        <v-card class="d-flex flex-column align-center justify-center">
+          <v-card-title>{{ $t('studygroup.studypath') }}</v-card-title>
+          <v-card-text>
+            <p>{{ $t('studygroup.studypathdefault') }}</p>
+          </v-card-text>
+        </v-card>
+      </v-container>
     </v-tab-item>
 
     <v-tab-item v-if="activeTab === 3 && role === 'manager'">
@@ -153,7 +181,7 @@ export default {
     async navigateToProfile(userId) {
       this.goToProfile({ userId, router: this.$router });  // Dispatch the action
     },
-    
+
     // Fetch group details from the backend
     async fetchGroupDetails(groupId) {
       try {
@@ -258,6 +286,7 @@ export default {
     // Fetch group details and user role from the backend on component mount
     this.fetchGroupDetails(this.groupId);
     this.fetchUserRole(this.groupId);
+    console.log("this.$vuetify.theme.global.name", this.$vuetify.theme.global.name);
   },
   components: {
     ManagePanel

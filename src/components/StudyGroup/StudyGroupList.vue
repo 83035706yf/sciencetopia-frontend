@@ -1,4 +1,5 @@
 <template>
+  <!-- <v-divider color="text" :thickness="2" opacity="1" style="margin: 0; padding: 0;"></v-divider> -->
   <GlobalLoader />
   <v-container v-if="!isLoading">
     <div v-if="groups.length === 0">
@@ -11,7 +12,7 @@
     <div v-else class="group-list">
       <v-row>
         <v-col cols="12" sm="6" md="4" v-for="group in groups" :key="group.id">
-          <v-card class="mx-auto" max-width="344">
+          <v-card class="mx-auto st-card" max-width="344">
             <v-card-title>
               <button @click="toGroupPage(group.id)">{{ group.name }}</button>
             </v-card-title>
@@ -23,8 +24,8 @@
             <v-card-text>
               小组成员:
               <v-col v-for="member in group.members" :key="member.id">
-                <v-btn icon="dots-vertical" size="40" @click="navigateToProfile(member.id)">
-                  <v-avatar size="35">
+                <v-btn icon="dots-vertical" class="default-avatar" size="40" @click="navigateToProfile(member.id)">
+                  <v-avatar size="38">
                     <img :src="member.avatarUrl" alt="用户头像">
                   </v-avatar>
                 </v-btn>
@@ -151,3 +152,7 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+@import "../../assets/css/avatar.css";
+</style>

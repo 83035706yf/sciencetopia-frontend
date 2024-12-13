@@ -1,27 +1,30 @@
 <template>
-  <v-list dense class="message-list" ref="messageList">
-    <template v-for="(group, groupIndex) in groupedMessages" :key="groupIndex">
-      <div v-if="group.firstMessageSentTime" class="sent-time">
-        {{ formatSentTime(group.firstMessageSentTime) }}
-      </div>
-      <v-list-item v-for="message in group.messages" :key="message.id"
-        :class="{ 'my-message': isMyMessage(message), 'their-message': !isMyMessage(message) }">
-        <div v-if="message.sender.id !== undefined" class="d-flex align-center">
-          <v-btn v-if="!isMyMessage(message)" icon="dots-vertical" variant="text" size="40" @click="navigateToProfile(message.sender.id)">
-            <v-avatar>
-            <img :src="message.sender.avatarUrl" alt="Avatar" />
-          </v-avatar>
-          </v-btn>
-          <div class="message-bubble" :class="{ 'ml-2': !isMyMessage(message) }">
-            {{ message.content }}
-          </div>
-          <v-avatar v-if="isMyMessage(message)">
-            <img :src="userAvatarUrl" alt="Avatar" />
-          </v-avatar>
+  <div class="message-list">
+    <v-list dense ref="messageList">
+      <template v-for="(group, groupIndex) in groupedMessages" :key="groupIndex">
+        <div v-if="group.firstMessageSentTime" class="sent-time">
+          {{ formatSentTime(group.firstMessageSentTime) }}
         </div>
-      </v-list-item>
-    </template>
-  </v-list>
+        <v-list-item v-for="message in group.messages" :key="message.id"
+          :class="{ 'my-message d-flex align-end justify-end': isMyMessage(message), 'their-message': !isMyMessage(message) }">
+          <div v-if="message.sender.id !== undefined" class="d-flex align-center">
+            <v-btn v-if="!isMyMessage(message)" icon="dots-vertical" variant="text" size="40"
+              @click="navigateToProfile(message.sender.id)">
+              <v-avatar>
+                <img :src="message.sender.avatarUrl" alt="Avatar" />
+              </v-avatar>
+            </v-btn>
+            <div class="message-bubble" :class="{ 'ml-2': !isMyMessage(message) }">
+              {{ message.content }}
+            </div>
+            <v-avatar v-if="isMyMessage(message)">
+              <img :src="userAvatarUrl" alt="Avatar" />
+            </v-avatar>
+          </div>
+        </v-list-item>
+      </template>
+    </v-list>
+  </div>
 </template>
 
 <script>
@@ -77,6 +80,9 @@ export default {
         const messageList = this.$refs.messageList.$el;
         if (messageList) {
           messageList.scrollTop = messageList.scrollHeight;
+          console.log('scrolling to bottom');
+          console.log('messageList element:', this.$refs.messageList.$el);
+          console.log('scrollHeight:', messageList.scrollHeight, 'scrollTop:', messageList.scrollTop);
         }
       });
     },
@@ -117,14 +123,16 @@ export default {
 
 <style scoped>
 .message-list {
-  height: 550px;
+  height: 52.4vh;
   overflow-y: auto;
+  border-radius: 0 0 5px 5px;
+  background-color: white;
 }
 
 .their-message .d-flex .message-bubble {
   padding: 8px 12px;
-  border-radius: 16px;
-  background-color: #1976d2;
+  border-radius: 0 16px 16px 16px;
+  background-color: #E2B43C;
   color: white;
   max-width: 80%;
   word-break: break-word;
@@ -136,8 +144,8 @@ export default {
 
 .my-message .d-flex .message-bubble {
   padding: 8px 12px;
-  border-radius: 16px;
-  background-color: green;
+  border-radius: 16px 0 16px 16px;
+  background-color: rgba(48, 78, 117, 1);
   color: white;
   max-width: 80%;
   word-break: break-word;

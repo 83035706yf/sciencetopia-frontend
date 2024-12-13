@@ -67,7 +67,7 @@
                         <tr>
                             <td style="border: 1px solid black;">@千古啸</td>
                             <td style="border: 1px solid black;">UI/UX设计</td>
-                            <td style="border: 1px solid black;">参与了网网页的美术设计</td>
+                            <td style="border: 1px solid black;">参与了网站的美术设计</td>
                         </tr>
                     </tbody>
                 </v-simple-table>

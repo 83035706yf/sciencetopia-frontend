@@ -44,6 +44,32 @@ const vuetify = createVuetify({
   },
   components,
   directives,
+  theme: {
+    defaultTheme: 'light', // Set the default theme to light
+    themes: {
+      light: {
+        colors: {
+          primary: '#000', // Ensure valid color values
+          text: '#304E75',
+          background: '#E8DABD',
+          secondary: '#EC0017',
+          yellow: '#E2B43C',
+          accent: '#00FFF7',
+          darkred: '#C8001D',
+          error: '#f44336',
+          border: '#C59F59'
+        },
+      },
+      dark: {
+        colors: {
+          primary: '#ffffff', // Ensure valid color values
+          secondary: '#b0bec5',
+          accent: '#8c9eff',
+          error: '#f44336',
+        },
+      },
+    },
+  },
 })
 
 router.beforeEach((to, from, next) => {

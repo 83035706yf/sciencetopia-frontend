@@ -14,8 +14,8 @@
         <tbody>
           <tr v-for="request in requests" :key="request.id">
             <td>
-              <v-btn icon="dots-vertical" size="40" @click="navigateToProfile(request.userId)">
-                <v-avatar size="35">
+              <v-btn icon="dots-vertical" class="justify-center align-center default-avatar" size="40" @click="navigateToProfile(request.userId)">
+                <v-avatar size="38">
                   <img :src="request.avatarUrl" alt="用户头像">
                 </v-avatar>
               </v-btn>

@@ -18,14 +18,14 @@
             <v-tooltip :text="`学习进度：${studyPlan.progressPercentage} %`" location="up">
                 <template v-slot:activator="{ props }">
                     <v-progress-linear v-bind="props" :model-value="studyPlan.progressPercentage"
-                        color="light-green-darken-4" height="15" striped></v-progress-linear>
+                        color="text" height="15" striped></v-progress-linear>
                 </template>
             </v-tooltip>
             <!-- <v-spacer style="height: 5px;"></v-spacer> -->
             <v-tooltip :text="`额外学习了${studyPlan.advancedTopicProgressPercentage} %的进阶内容`" location="up">
                 <template v-slot:activator="{ props }">
                     <v-progress-linear v-if="studyPlan.advancedTopicProgressPercentage > 0" v-bind="props"
-                        :model-value="studyPlan.advancedTopicProgressPercentage" color="orange-darken-4" height="15"
+                        :model-value="studyPlan.advancedTopicProgressPercentage" color="accent" height="15"
                         striped></v-progress-linear></template></v-tooltip>
             <v-spacer style="height: 20px;"></v-spacer>
             <h2>{{ studyPlan.title }}</h2>
@@ -36,7 +36,7 @@
                 <div v-for="(lesson, key) in studyPlan.prerequisite" :key="key" class="item-box"
                     @click="toggleDetails(key, 'prerequisite')">
                     <v-progress-linear :model-value="lesson.progressPercentage" v-if="lesson.resources[0] != null"
-                        color="light-green-darken-4" height="10" striped></v-progress-linear>
+                        color="text" height="10" striped></v-progress-linear>
                     <div class="title">{{ lesson.name }}</div>
                     <div v-if="detailsVisible.prerequisite[key]" class="description">
                         {{ lesson.description }}
@@ -66,7 +66,7 @@
                     </div>
                     <div class="module item-box" @click="toggleDetails(key, 'mainCurriculum')">
                         <v-progress-linear :model-value="lesson.progressPercentage" v-if="lesson.resources[0] != null"
-                            color="light-green-darken-4" height="10" striped></v-progress-linear>
+                            color="text" height="10" striped></v-progress-linear>
                         <div class="title">{{ lesson.name }}</div>
                         <div v-if="detailsVisible.mainCurriculum[key]" class="description">
                             {{ lesson.description }}
@@ -98,7 +98,7 @@
                 <div v-for="(lesson, key) in studyPlan.advancedTopics" :key="key" class="item-box"
                     @click="toggleDetails(key, 'advancedTopics')">
                     <v-progress-linear :model-value="lesson.progressPercentage" v-if="lesson.resources[0] != null"
-                        color="orange-darken-4" height="10" striped></v-progress-linear>
+                        color="accent" height="10" striped></v-progress-linear>
                     <div class="title">{{ lesson.name }}</div>
                     <div v-if="detailsVisible.advancedTopics[key]" class="description">
                         {{ lesson.description }}
@@ -283,14 +283,14 @@ export default {
     /* Ensure the pseudo-element doesn't extend outside the box */
     flex: 0 0 auto;
     /* Adjust this to control the size of the boxes */
-    background-color: #F5F0E4;
+    background-color: white;
     /* Example background color */
-    border: 1px solid #ccc;
+    border: 1px solid #304E75;
     /* Example border */
     border-radius: 0px;
     /* Rounded corners */
     padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px E8DABD;
     /* Example shadow */
     cursor: pointer;
     transition: transform 0.3s ease;

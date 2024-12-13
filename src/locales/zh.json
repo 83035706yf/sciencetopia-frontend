@@ -43,7 +43,8 @@
         "studygroup": "学习小组",
         "studyplan": "学习计划",
         "messages": "消息",
-        "toseemessage": "以查看消息"
+        "toseemessage": "以查看消息",
+        "tocreateplan": "以创建学习计划"
     },
     "searchbar": {
         "iwanttolearn": "我想要了解..."
@@ -84,7 +85,9 @@
         "studygroup": "学习小组"
     },
     "register": {
-        "title": "注册",
+        "title": "注册Sciencetopia",
+        "alreadyHaveAccount": "已有账号？",
+        "clickHere": "点击这里登录",
         "username": "用户名",
         "email": "邮箱",
         "password": "密码",
@@ -95,13 +98,14 @@
         "failed": "注册失败"
     },
     "login": {
-        "title": "登录",
+        "title": "登录Sciencetopia",
         "userNameLabel": "用户名",
         "passwordLabel": "密码",
         "rememberMeLabel": "记住我",
         "success": "登录成功",
         "failed": "登录失败",
-        "changetoregister": "没有账号？点击这里注册"
+        "dontHaveAccount": "没有账号？",
+        "clickHere": "点击这里注册"
     },
     "studyplan": {
         "inprogress": "进行中",

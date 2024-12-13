@@ -5,10 +5,8 @@
         <!-- {{ this.$store.state.messageCount }} -->
         <v-btn class="header-btn two-rows-btn" variant="plain" @click="directMessages" v-bind="props">
           <div class="btn-content">
-            <img v-if="!scrolledPastHeader" width="32" height="32"
-              src="https://img.icons8.com/ios/50/filled-message.png" alt="filled-message" />
-            <img v-else width="30" height="30" src="https://img.icons8.com/ios/50/filled-message.png"
-              alt="secured-letter--v1" /> <span v-if="!scrolledPastHeader" class="btn-title">{{ $t('header.messages')
+            <img v-if="!scrolledPastHeader" width="40" height="40" src="https://img.icons8.com/pastel-glyph/64/secured-letter--v1.png" alt="letter"/>
+            <img v-else width="36" height="36" src="https://img.icons8.com/pastel-glyph/64/secured-letter--v1.png" alt="letter" /> <span v-if="!scrolledPastHeader" class="btn-title">{{ $t('header.messages')
               }}</span>
             <div v-if="messageCount > 0" class="alert-badge">
               {{ messageCount > 99 ? '99+' : messageCount }}
@@ -25,11 +23,11 @@
         </v-btn> -->
       </template>
 
-      <v-list class="header-list" v-if="isAuthenticated">
+      <v-list class="header-list st-card" v-if="isAuthenticated">
         <v-list-item variant="plain" @click="directMessages">
           <v-list-item-title>{{ $t('message.privatemessage') }}</v-list-item-title>
         </v-list-item>
-        <v-divider></v-divider>
+        <v-divider color="text" style="margin-top: 5px; margin-bottom: 5px;"></v-divider>
         <v-list-item variant="plain" @click="notifications">
           <v-list-item-title>{{ $t('message.notification') }}</v-list-item-title>
         </v-list-item>
@@ -86,7 +84,7 @@ export default {
 
 .alert-container {
   position: relative;
-  margin: 10px;
+  margin: 1vh 1vw 1vh 1vw;
 }
 
 .profile-icon {

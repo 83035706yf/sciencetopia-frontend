@@ -16,8 +16,14 @@ import ManagePanel from '@/components/StudyGroup/ManagePanel.vue'; // Update wit
 import SponsorShip from '@/components/SponsorShip.vue'
 import AboutUs from '@/components/AboutUs.vue'
 import ContactUs from '@/components/ContactUs.vue'
+import TestHeight from '@/components/TestHeight.vue'
 
 const routes = [
+  {
+    path: '/testHeight',
+    name: 'testHeight',
+    component: TestHeight,
+  },
   {
     path: '/',
     name: 'HomePage',
@@ -33,11 +39,13 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LogIn,
+    meta: { layout: "thin"},
   },
   {
     path: '/register',
     name: 'register',
-    component: ReGister
+    component: ReGister,
+    meta: { layout: "thin"},
   },
   {
     path: '/:userId',
@@ -49,6 +57,7 @@ const routes = [
     path: '/:userId/message',
     name: 'messagecenter',
     component: MessageCenter,
+    meta: { layout: "thin"},
     props: true,
     children: [
       {

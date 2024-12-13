@@ -43,7 +43,8 @@
         "studygroup": "Study Group",
         "studyplan": "Study Plan",
         "messages": "Messages",
-        "toseemessage": "to see messages"
+        "toseemessage": "to see messages",
+        "tocreateplan": "to create study plans"
     },
     "searchbar": {
         "iwanttolearn": "I want to learn about..."
@@ -84,7 +85,9 @@
         "studygroup": "Study Group"
     },
     "register": {
-        "title": "Register",
+        "title": "Register Sciencetopia Account",
+        "alreadyHaveAccount": "Already have an account?",
+        "clickHere": "Click here to log in",
         "username": "Username",
         "email": "Email",
         "password": "Password",
@@ -95,13 +98,14 @@
         "failed": "Registration failed"
     },
     "login": {
-        "title": "Log In",
+        "title": "Log In to Sciencetopia",
         "userNameLabel": "Username",
         "passwordLabel": "Password",
         "rememberMeLabel": "Remember Me",
         "success": "Login successful",
         "failed": "Login failed",
-        "changetoregister": "Don't have an account? Click here to register"
+        "dontHaveAccount": "Don't have an account?",
+        "clickHere": "Click here to register"
     },
     "studyplan": {
         "inprogress": "In Progress",

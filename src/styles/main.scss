@@ -91,7 +91,7 @@
 }
 
 .v-btn--variant-plain {
-  color: black !important; // Set text color
+  color: #304E75 !important; // Set text color
   opacity: 1 !important; // Ensure full opacity
   background-color: transparent !important; // Ensure button background is transparent
   font-family: 'Chinese-font', sans-serif !important;
@@ -100,7 +100,7 @@
   &:hover {
     background-color: transparent !important; // Prevent dark shade on hover
     box-shadow: none !important; // Remove any shadow
-    color: #304E75 !important; // Change text color on hover
+    color: black !important; // Change text color on hover
   }
 
   &:focus {
@@ -121,20 +121,20 @@
 
 .v-btn--variant-outlined {
   border-radius: 0 !important; // Remove border radius
-  border: 2px solid #000000 !important; // Add border
+  border: 2px solid #304E75 !important; // Add border
   background-color: none !important; // Set background color
   padding: 4px 8px !important; // Adjust padding
   height: 50px !important; // Set height
 
   &:hover {
-    background-color: #000000 !important; // Set background color on hover
+    background-color: #304E75 !important; // Set background color on hover
     color: #ffffff !important; // Set text color on hover
   }
 }
 
 :root {
   --v-pressed-opacity: 0 !important;
-    --v-theme-surface: transparent !important;
+  --v-theme-surface: transparent !important;
   --v-field-outlined-background: transparent !important;
   /* Completely remove click shade */
 }
@@ -145,15 +145,45 @@
     box-shadow: none !important; // Remove box shadow
     background-color: #E8DABD !important; // Set background color
   }
-  .v-list-item--variant-plain {
-    font-family: 'Chinese-font', sans-serif !important; // Set font family for menu items
-    color: black !important; // Set color for menu items
 
-    &:hover {
-      color: #EC0017 !important; // Set text color on hover
-    }
+  // .v-list-item--variant-plain {
+  //   font-family: 'Chinese-font', sans-serif !important; // Set font family for menu items
+  //   color: black !important; // Set color for menu items
+
+  //   &:hover {
+  //     // color: #C8001D !important; // Set text color on hover
+  //     background: radial-gradient(circle, #00FFF7 30%, transparent 30%) !important;
+  //     /* Button background */
+  //     background-size: 5px 5px !important;
+  //     /* Button background size */
+  //   }
+  // }
+
+  // .v-list-item__title {
+  //   font-weight: 500 !important; // Set font weight for menu item titles
+  // }
+
+  // .v-list-item__icon {
+  //   color: #666 !important; // Set color for menu item icons
+  //   margin-right: 8px !important; // Add margin to the right of icons
+  // }
+
+  // .v-list-item--active {
+  //   box-sizing: none !important; // Remove box sizing
+  // }
+}
+
+.v-list-item--variant-plain {
+  font-family: 'Chinese-font', sans-serif !important; // Set font family for menu items
+  color: black !important; // Set color for menu items
+
+  &:hover {
+    // color: #C8001D !important; // Set text color on hover
+    background: radial-gradient(circle, #00FFF7 30%, transparent 30%) !important;
+    /* Button background */
+    background-size: 5px 5px !important;
+    /* Button background size */
   }
-
   .v-list-item__title {
     font-weight: 500 !important; // Set font weight for menu item titles
   }
@@ -166,4 +196,67 @@
   .v-list-item--active {
     box-sizing: none !important; // Remove box sizing
   }
+}
+
+.v-field--variant-solo-filled  {
+  border-radius: 5px !important; // Remove border radius
+  // border: 1px solid #304E75 !important; // Add border
+  background-color: none !important; // Set background color
+  padding: 4px 8px !important; // Adjust padding
+  height: 100% !important; // Set height
+  box-shadow: none !important;
+
+  .v-field__overlay {
+    background: unset !important;
+    // background: #304E75 !important;
+  }
+}
+
+.framed-container {
+  max-width: unset !important; // Remove max width
+  min-height: 60vh !important; // Set min height
+  width: 100% !important; // Set width
+  padding: 0 200px !important; // Remove padding
+  margin: 0 !important; // Remove margin
+  background-color: white !important; // Set background color
+  // background: linear-gradient(180deg, #1C2B42 0%, #304E75 100%) !important;
+}
+
+.list-on-framed-container {
+  background-color: unset !important; // Remove background color
+  color: #304E75 !important; // Set text color
+  min-height: 400px !important; // Set min height
+  padding-top: 20px !important; // Add padding top
+
+  // &::after {
+  //   content: '';
+  //   position: absolute;
+  //   bottom: 0;
+  //   left: 40px;
+  //   width: 100%;
+  //   height: 2px !important;
+  //   /* Adjust thickness of underline */
+  //   background-color: #EC0017 !important;
+  //   /* Underline color */
+  //   transform: rotate(-30deg) !important;
+  //   /* Initially hidden */
+  //   transform-origin: left !important;
+  //   /* Animate from left to right */
+  //   transition: transform 0.3s ease-in-out !important;
+  // }
+}
+
+.st-card {
+  background-color: #DFCBA4 !important; // Set background color
+  border: 2px solid #C59F59 !important;
+  /* Normal border */
+  box-shadow: 0 0 0 5px #DFCBA4 !important;
+  /* Outer frame */
+}
+
+.custom-language-menu {
+  border-radius: 0px;
+  background-color: none !important;
+  border: 2px solid #C59F59 !important;
+  border-radius: 0 !important;
 }

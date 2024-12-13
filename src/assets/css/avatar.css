@@ -1,0 +1,16 @@
+.default-avatar {
+    background-color: black !important;
+    box-shadow: none !important;
+
+    &:hover {
+        box-shadow: none !important;
+    }
+
+    &:focus {
+        box-shadow: none !important;
+    }
+
+    &:active {
+        box-shadow: none !important;
+    }
+}

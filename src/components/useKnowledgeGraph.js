@@ -24,8 +24,12 @@ export default function useKnowledgeGraph(endpoint) {
     let currentZoomLevel = 1;
 
     const strokeColor = '#000';  // Default stroke color for nodes
-    const strokeWidth = 0.5;  // Default stroke width for nodes
-    const linkColor = '#999';  // Default link color
+    const strokeWidth = 0.6;  // Default stroke width for nodes
+    const linkColor = '#000';  // Default link color
+    const linkWidth = 1;  // Default link width
+    const linkOpacity = 0.4;  // Default link opacity
+    const labelFillColor = '#000';  // Default label fill color
+    const labelStrokeColor = '#fff';  // Default label stroke color
     const highlightColor = '#00ffff';  // Highlight color for selected nodes
     const highlightStrokeWidth = 4;  // Highlight stroke width for selected nodes
 
@@ -172,30 +176,8 @@ export default function useKnowledgeGraph(endpoint) {
                     return Math.sqrt(d.value || 1); // Normal width for other links
                 }
             })
-            .attr('stroke', d => {
-                const sourceNode = nodes.find(n => n.id === d.source.id);
-                const targetNode = nodes.find(n => n.id === d.target.id);
-
-                // Determine color based on node label combinations
-                if (sourceNode && targetNode) {
-                    if (sourceNode.labels.includes('Subject') && targetNode.labels.includes('Field')) {
-                        return '#999'; // Red for links between a subject and a field
-                    } else if (targetNode.labels.includes('Topic')) {
-                        return '#999'; // Red for links between two topics or a field and a topic
-                    } else if ((sourceNode.labels.includes('Topic') && targetNode.labels.includes('Keyword')) ||
-                        (sourceNode.labels.includes('Keyword') && targetNode.labels.includes('Topic'))) {
-                        return '#999'; // Pink for links between a topic and a keyword
-                    } else if ((sourceNode.labels.includes('Keyword') && targetNode.labels.includes('Tag')) ||
-                        (sourceNode.labels.includes('Tag') && targetNode.labels.includes('Keyword'))) {
-                        return '#00fff7'; // Green for links between a keyword and a tag
-                    } else {
-                        return '#999'; // Default color for other links
-                    }
-                } else {
-                    return '#999'; // Default color if nodes are not found
-                }
-            })
-            .attr('stroke-opacity', 0.6);
+            .attr('stroke', 'linkColor')  // Default link color
+            .attr('stroke-opacity', linkOpacity)  // Adjust opacity as needed;
 
         // Update nodes
         node = node.data(nodes, d => d.id)
@@ -212,7 +194,7 @@ export default function useKnowledgeGraph(endpoint) {
                 } else if (d.labels.includes('Topic')) {
                     return 5 + degree * 0.2;
                 } else {
-                    return 3 + degree * 0.2; // Small scaling for other nodes
+                    return 4 + degree * 0.2; // Small scaling for other nodes
                 }
             })                                   
             .attr('fill', d => {
@@ -220,7 +202,7 @@ export default function useKnowledgeGraph(endpoint) {
                 else {
                     if (d.labels.includes('Subject')) return 'black';
                     if (d.labels.includes('Field')) return '#D5282A';
-                    if (d.labels.includes('Topic')) return '#E9DBBE';
+                    if (d.labels.includes('Topic')) return '#DFCBA4';
                     if (d.labels.includes('TheoriesAndConcept')) return '#4DB9E6';
                     if (d.labels.includes('ModelsAndSystems')) return '#597E52';
                     if (d.labels.includes('MethodsAndProcesses')) return '#F06292';
@@ -279,7 +261,7 @@ export default function useKnowledgeGraph(endpoint) {
             .attr("text-anchor", "middle")
             .attr("alignment-baseline", "central")
             .style('font-weight', 'bold')
-            .style("fill", '#fff')
+            // .style("fill", '#fff')
             .style("pointer-events", "none") // To prevent interference with node interactivity
 
         node.on('mouseover', function (event, d) {
@@ -333,9 +315,9 @@ export default function useKnowledgeGraph(endpoint) {
             // })
             .style("font-size", 16 / currentZoomLevel)
             .style('font-family', 'Arial')
-            .style("fill", 'black')
+            .style("fill", labelFillColor)
             .style("font-weight", 'bold')
-            .style("stroke", 'white')
+            .style("stroke", labelStrokeColor)
             .style("stroke-width", 0.5 / currentZoomLevel)
             // .style("stroke", d => {
             //     if (d.labels.includes('pending_approval')) return '#848482';
@@ -528,7 +510,7 @@ export default function useKnowledgeGraph(endpoint) {
 
     onMounted(() => {
         resizeObserver = new ResizeObserver(resizeSvg);
-        const container = svgRef.value?.closest('.knowledge-graph');
+        const container = svgRef.value?.closest('.knowledgegraph-container');
         if (container) resizeObserver.observe(container);
 
         createForceDirectedGraph();
@@ -600,8 +582,8 @@ export default function useKnowledgeGraph(endpoint) {
         node.style('opacity', 1);
         labels.style('opacity', 1);
         link.style('opacity', 1)
-            .attr('stroke', '#999')  // Reset link color
-            .attr('stroke-width', 1);  // Reset link width
+            .attr('stroke', linkColor)  // Reset link color
+            .attr('stroke-width', linkWidth);  // Reset link width
         // Apply changes from the external state manager to D3
         // Define the reset transformation
         const resetTransform = d3.zoomIdentity;

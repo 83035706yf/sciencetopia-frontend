@@ -1,0 +1,8 @@
+.image-background {
+    display: flex;
+    width: 100vw;
+    height: 87vh;
+    padding: 0;
+    background-image: url('../../assets/images/design.png');
+    background-size: cover;
+}
