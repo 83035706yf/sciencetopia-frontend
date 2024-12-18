@@ -1,8 +1,9 @@
 .knowledgegraph-container {
-    position: relative;
+    position: fixed;
+    top: 0;
     margin: 0;
     padding: 0;
-    height: 76vh;
+    height: 100vh;
     width: 100vw;
     background-color: white;
   }

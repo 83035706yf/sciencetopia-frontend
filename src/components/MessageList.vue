@@ -1,27 +1,40 @@
 <template>
   <div class="message-list">
-    <v-list dense ref="messageList">
+    <v-list class="message-window" dense ref="messageList">
       <template v-for="(group, groupIndex) in groupedMessages" :key="groupIndex">
-        <div v-if="group.firstMessageSentTime" class="sent-time">
-          {{ formatSentTime(group.firstMessageSentTime) }}
-        </div>
-        <v-list-item v-for="message in group.messages" :key="message.id"
-          :class="{ 'my-message d-flex align-end justify-end': isMyMessage(message), 'their-message': !isMyMessage(message) }">
-          <div v-if="message.sender.id !== undefined" class="d-flex align-center">
-            <v-btn v-if="!isMyMessage(message)" icon="dots-vertical" variant="text" size="40"
-              @click="navigateToProfile(message.sender.id)">
-              <v-avatar>
-                <img :src="message.sender.avatarUrl" alt="Avatar" />
-              </v-avatar>
-            </v-btn>
-            <div class="message-bubble" :class="{ 'ml-2': !isMyMessage(message) }">
-              {{ message.content }}
-            </div>
-            <v-avatar v-if="isMyMessage(message)">
-              <img :src="userAvatarUrl" alt="Avatar" />
-            </v-avatar>
+        <div class="grouped-message">
+          <div v-if="group.firstMessageSentTime" class="sent-time">
+            {{ formatSentTime(group.firstMessageSentTime) }}
           </div>
-        </v-list-item>
+
+          <template v-for="(message, index) in group.messages" :key="message.id">
+            <v-list-item
+              :class="{ 'my-message d-flex justify-end align-end': isMyMessage(message), 'their-message': !isMyMessage(message) }">
+              <div class="d-flex align-start">
+                <!-- 判断当前消息和前一条消息的发送者是否相同 -->
+                <v-avatar v-if="shouldShowAvatar(group.messages, index)" size="36">
+                  <v-btn v-if="!isMyMessage(message)" icon="dots-vertical" variant="text" size="40"
+                    @click="navigateToProfile(message.sender.id)">
+                    <v-avatar>
+                      <img :src="message.sender.avatarUrl" alt="Avatar" />
+                    </v-avatar>
+                  </v-btn>
+                </v-avatar>
+                <div v-else style="width: 36px"></div>
+
+                <!-- 消息内容 -->
+                <div class="message-bubble" :class="{ 'ml-2': !isMyMessage(message), 'mr-2': isMyMessage(message) }">
+                  {{ message.content }}
+                </div>
+                <v-avatar v-if="shouldShowAvatar(group.messages, index)" size="36"
+                    @click="navigateToProfile(message.sender.id)">
+                      <img v-if="isMyMessage(message)" :src="message.sender.avatarUrl" alt="Avatar" />
+                </v-avatar>
+                <div v-else style="width: 36px"></div>
+              </div>
+            </v-list-item>
+          </template>
+        </div>
       </template>
     </v-list>
   </div>
@@ -71,6 +84,13 @@ export default {
 
     isMyMessage(message) {
       return message.sender.id === this.userId;
+    },
+    shouldShowAvatar(messages, index) {
+      // 如果是第一条消息，始终显示头像
+      if (index === 0) return true;
+
+      // 当前消息和上一条消息的发送者不同，则显示头像
+      return messages[index].sender.id !== messages[index - 1].sender.id;
     },
     markMessagesAsRead() {
       this.$emit('messages-read');
@@ -123,19 +143,47 @@ export default {
 
 <style scoped>
 .message-list {
-  height: 52.4vh;
+  height: 76%;
   overflow-y: auto;
-  border-radius: 0 0 5px 5px;
-  background-color: white;
+  /* border-radius: 16px 0 5px 0; */
+  background-color: unset;
+  /* border-left: 3px solid #000;
+  border-bottom: 2px solid #000; */
+}
+
+.message-window {
+  background-color: unset;
+}
+
+.grouped-message {
+  background-color: #F4EEE1;
+  /* border: 1px solid #C59F59; */
+  margin: 5px;
 }
 
 .their-message .d-flex .message-bubble {
   padding: 8px 12px;
-  border-radius: 0 16px 16px 16px;
-  background-color: #E2B43C;
-  color: white;
-  max-width: 80%;
+  font-size: 16px;
+  margin-left: 22px !important;
+  /* border-radius: 4px; */
+  /* border-radius: 0 16px 16px 16px; */
+  background-color: #ffffff;
+  color: #1C2B42;
+  /* max-width: 80%; */
   word-break: break-word;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 58px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent #ffffff transparent transparent;
+  }
 }
 
 .my-message {
@@ -144,12 +192,27 @@ export default {
 
 .my-message .d-flex .message-bubble {
   padding: 8px 12px;
-  border-radius: 16px 0 16px 16px;
-  background-color: rgba(48, 78, 117, 1);
-  color: white;
-  max-width: 80%;
+  font-size: 16px;
+  /* border-radius: 4px; */
+  /* border-radius: 16px 0 16px 16px; */
+  background-color: #DFCBA4;
+  color: #000;
+  /* max-width: 80%; */
   word-break: break-word;
-  margin-right: 8px;
+  margin-right: 20px !important;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 58px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent transparent transparent #DFCBA4;
+  }
 }
 
 .sent-time {

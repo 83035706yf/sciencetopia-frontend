@@ -9,7 +9,7 @@
                     <v-spacer style="width: 10px;"></v-spacer>
                     {{ $t("footer.about") }}
                 </v-btn>
-            </v-col>
+            </v-col> 
             <v-col cols="3">
                 <v-btn class="Chinese-text-btn" variant="plain" href="/contact" style="padding: 0; height: 100%;">
                     <img width="36" height="36" src="https://img.icons8.com/pulsar-line/48/email.png" alt="email" />

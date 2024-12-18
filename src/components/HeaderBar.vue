@@ -5,7 +5,7 @@
             <v-row align="center">
                 <v-col cols="auto" class="logo-container">
                     <v-btn variant="plain" class="btn" @click="backToHomePage" style="padding: 0; height: 100%;">
-                        <img src="../assets/images/logo_banner.png" alt="Logo" class="responsive-logo" />
+                        <img :src="isSmallScreen ? smallLogo : largeLogo" alt="Logo" class="responsive-logo" />
                     </v-btn>
                 </v-col>
 
@@ -114,6 +114,9 @@ export default {
             themePath: '',
             searchQuery: '',
             searchResults: [],
+            largeLogo: require('@/assets/images/logo_banner.png'),
+            smallLogo: require('@/assets/images/logo.png'), // 小Logo路径
+            isSmallScreen: window.innerWidth <= 1200, // 初始化判断屏幕大小
         };
     },
     components: { LogInPartial, MessageAlert },
@@ -123,6 +126,9 @@ export default {
         },
     },
     methods: {
+        handleResize() {
+            this.isSmallScreen = window.innerWidth <= 1200; // 更新屏幕状态
+        },
         login() {
             this.$router.push({ name: 'login' });  // 跳转到LogIn组件
         },
@@ -179,6 +185,14 @@ export default {
             console.log('Show study plan dialog');
         },
     },
+    mounted() {
+        // 监听窗口大小变化
+        window.addEventListener('resize', this.handleResize);
+    },
+    beforeUnmount() {
+        // 清理监听器
+        window.removeEventListener('resize', this.handleResize);
+    },
 };
 </script>
 
@@ -186,7 +200,10 @@ export default {
 .large-header {
     height: 18vh;
     transition: height 0.3s ease;
-    /* background-color: red; */
+    z-index: 1000;
+    background-color: rgba(232, 218, 189, 0.6);
+    backdrop-filter: blur(10px); /* 磨砂效果 */
+    -webkit-backdrop-filter: blur(10px); /* 兼容 Safari */
 }
 
 .responsive-logo {

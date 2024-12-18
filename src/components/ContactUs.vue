@@ -16,7 +16,10 @@ export default {
 </script>
 
 <style scoped>
-/* Add your custom styles here */
+.contact-page{
+    padding: 0 10%;
+}
+
 .bilibili-url {
     color: #3f51b5;
 }

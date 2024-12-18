@@ -43,7 +43,7 @@
       <!-- Active Study Plans -->
       <v-tab-item v-if="activeTab === 0">
         <v-col v-for="item in activeStudyPlans" :key="item.studyPlan.id" cols="12">
-          <v-card class="mb-3">
+          <v-card class="mb-3 study-plan-container">
             <v-card-item>
               <v-row>
                 <v-col cols="11">
@@ -75,7 +75,7 @@
       <!-- Completed Study Plans -->
       <v-tab-item v-if="activeTab === 1">
         <v-col v-for="item in completedStudyPlans" :key="item.studyPlan.id" cols="12">
-          <v-card class="mb-3">
+          <v-card class="mb-3" >
             <v-card-item>
               <v-row>
                 <v-col cols="11">
@@ -250,3 +250,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.study-plan-container {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+</style>

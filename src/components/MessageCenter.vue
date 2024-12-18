@@ -1,88 +1,111 @@
 <template>
-    <div class="image-background" style="position: absolute;">
-    </div>
-    <v-container class="message-center">
-        <v-row>
-            <v-col cols="auto" class="sidebar">
-                <v-card outlined style="height: 100%;">
-                    <v-list variant="plain">
-                        <v-list-item :to="{ name: 'directMessages', params: { userId: userId } }" exact
+    <div style="position: relative; width: 100%; height: 100%; overflow: hidden;">
+        <!-- <div class="image-background" style="position: fixed; top: 0;">
+        </div> -->
+        <!-- <div class="blur-connector"></div> -->
+        <!-- <div
+            style="position: absolute; width: 100vw; height: 100vh; position: absolute; top:6vh; background-color: rgba(232, 218, 189, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+        </div> -->
+        <v-container class="message-center">
+            <v-row>
+                <v-col cols="auto" class="sidebar">
+                    <div style="height: 100%;">
+                        <!-- <v-list variant="plain"> -->
+                        <v-list-item variant="plain" class="sidebar-item"
+                            :to="{ name: 'directMessages', params: { userId: userId } }" exact
                             :class="{ 'active': activeTab === 'directMessages' }">
-                            <v-list-item-title>{{ $t('message.privatemessage') }}</v-list-item-title>
+                            <v-list-item-title class="sidebar-title">{{ $t('message.privatemessage')
+                                }}</v-list-item-title>
                             <div v-if="messageCount > 0" class="alert-badge">
                                 {{ messageCount > 99 ? '99+' : messageCount }}
                             </div>
                         </v-list-item>
-                        <v-list-item :to="{ name: 'notifications', params: { userId: userId } }" exact
+                        <div style="height: 1vh"></div>
+                        <v-list-item variant="plain" class="sidebar-item"
+                            :to="{ name: 'notifications', params: { userId: userId } }" exact
                             :class="{ 'active': activeTab === 'notifications' }">
-                            <v-list-item-title>{{ $t('message.notification') }}</v-list-item-title>
+                            <v-list-item-title class="sidebar-title">{{ $t('message.notification')
+                                }}</v-list-item-title>
                             <div v-if="notificationCount > 0" class="alert-badge">
                                 {{ notificationCount > 99 ? '99+' : notificationCount }}
                             </div>
                         </v-list-item>
-                    </v-list>
-                </v-card>
-            </v-col>
-            <v-col cols="auto" style="width: 85%;">
-                <v-card v-if="activeTab === 'directMessages'" class="message-card" style="height: 100%;">
-                    <v-card-text>
-                        <v-row>
-                            <v-col cols="auto" style="width: 30%;">
-                                <v-list dense>
-                                    <v-list-item v-for="conversation in conversations"
-                                        :key="conversation.conversationId" @click="selectConversation(conversation)"
-                                        :class="{ 'grey-background': isSelectedConversation(conversation) }">
-                                        <div>
-                                            <v-avatar>
-                                                <img :src="conversation.partnerAvatarUrl" alt="Avatar" />
-                                            </v-avatar>
-                                            <v-list-item-title>{{ conversation.partnerName }}</v-list-item-title>
-                                            <v-list-item-subtitle>{{ getLastMessage(conversation)
-                                                }}</v-list-item-subtitle>
-                                            <div v-if="conversationMessageCount[conversation.conversationId] > 0"
-                                                class="alert-badge">
-                                                {{ conversationMessageCount[conversation.conversationId] }}
+                        <!-- </v-list> -->
+                    </div>
+                </v-col>
+                <v-col cols="auto" style="width: 94%;">
+                    <v-card v-if="activeTab === 'directMessages'" class="message-card">
+                        <v-card-text>
+                            <v-row>
+                                <v-col cols="auto" style="width: 20%;">
+                                    <v-list class="direct-message-list" dense>
+                                        <v-list-item class="message-item" v-for="conversation in conversations"
+                                            :key="conversation.conversationId" @click="selectConversation(conversation)"
+                                            :class="{ 'grey-background': isSelectedConversation(conversation) }">
+                                            <v-row>
+                                                <v-col cols="auto">
+                                                    <v-avatar size="62" style="border: 2px solid #000;">
+                                                        <img :src="conversation.partnerAvatarUrl" alt="Avatar" />
+                                                    </v-avatar>
+                                                </v-col>
+                                                <v-col cols="auto">
+                                                    <v-list-item-title>{{ conversation.partnerName
+                                                        }}</v-list-item-title>
+                                                    <v-list-item-subtitle>{{ getLastMessage(conversation)
+                                                        }}</v-list-item-subtitle>
+                                                    <div v-if="conversationMessageCount[conversation.conversationId] > 0"
+                                                        class="alert-badge">
+                                                        {{ conversationMessageCount[conversation.conversationId] }}
+                                                    </div>
+                                                </v-col>
+                                            </v-row>
+                                            <!-- Triangle added dynamically when selected -->
+                                            <div v-if="isSelectedConversation(conversation)" class="triangle-dog-ear">
                                             </div>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-col>
+                                <!-- <v-divider vertical color="text" opacity="0.6"></v-divider> -->
+                                <v-col cols="auto" style="width: 74%; height: 86vh;" v-if="selectedConversation">
+                                    <v-card class="d-flex align-center justify-center partner-card">
+                                        <v-card-title>{{ selectedConversation.partnerName }}</v-card-title>
+                                    </v-card>
+                                    <MessageList ref="messageList" :messages="selectedConversation.messages"
+                                        :userId="userId" :userAvatarUrl="userAvatarUrl" />
+
+
+                                    <v-textarea class="textarea" variant="solo-filled"
+                                        v-model="selectedConversation.newMessage" :label="$t('message.editing')"
+                                        outlined dense></v-textarea>
+                                    <v-card-actions class="justify-end">
+                                        <button class="send" @click="sendMessage(selectedConversation)">
+                                            <div class="send-text"> {{ $t('message.send') }} </div>
+                                        </button>
+                                    </v-card-actions>
+                                </v-col>
+                                <v-col cols="auto" style="width: 6%;">
+                                    <div class="picker-container">
+                                        <button class="image-picker-btn">
+                                            <img width="36" height="36" src="https://img.icons8.com/glyph-neue/64/FFFFFF/image.png" alt="image"/>
+                                        </button>
+                                        <button class="emoji-picker-btn" @click="toggleEmojiPicker">
+                                            😊
+                                        </button>
+
+                                        <div v-if="showEmojiPicker">
+                                            <emoji-picker class="light emoji-picker"
+                                                @emoji-click="onEmojiClick"></emoji-picker>
                                         </div>
-                                    </v-list-item>
-                                </v-list>
-                            </v-col>
-                            <v-divider vertical color="text" opacity="0.2"></v-divider>
-                            <v-col cols="auto" style="width: 70%; height: 86vh;" v-if="selectedConversation">
-                                <v-card class="d-flex align-center justify-center"
-                                    style=" max-height: 36px; border-bottom: 2px solid rgba(48, 78, 117, 0.1); border-radius: 5px 5px 0 0 !important;">
-                                    <v-card-title>{{ selectedConversation.partnerName }}</v-card-title>
-                                </v-card>
-                                <MessageList ref="messageList" :messages="selectedConversation.messages"
-                                    :userId="userId" :userAvatarUrl="userAvatarUrl" />
-                                <v-divider color="text" opacity="0.2"></v-divider>
-                                <button class="image-picker-btn">
-                                    <img width="24" height="24" src="https://img.icons8.com/fluency/48/full-image.png"
-                                        alt="full-image" />
-                                </button>
-                                <button class="emoji-picker-btn" @click="toggleEmojiPicker">
-                                    😊
-                                </button>
-
-                                <div v-if="showEmojiPicker">
-                                    <emoji-picker class="light emoji-picker" @emoji-click="onEmojiClick"></emoji-picker>
-                                </div>
-
-                                <v-textarea style="height: 25vh" variant="solo-filled"
-                                    v-model="selectedConversation.newMessage" :label="$t('message.editing')" outlined
-                                    dense></v-textarea>
-                                <v-card-actions class="justify-end">
-                                    <v-btn variant="plain" style="position: absolute; top: 83vh"
-                                        @click="sendMessage(selectedConversation)">{{ $t('message.send') }}</v-btn>
-                                </v-card-actions>
-                            </v-col>
-                        </v-row>
-                    </v-card-text>
-                </v-card>
-                <SystemNotifications v-else />
-            </v-col>
-        </v-row>
-    </v-container>
+                                    </div>
+                                </v-col>
+                            </v-row>
+                        </v-card-text>
+                    </v-card>
+                    <SystemNotifications v-else />
+                </v-col>
+            </v-row>
+        </v-container>
+    </div>
 </template>
 
 <script>
@@ -303,46 +326,100 @@ export default {
 
 .message-center {
     display: flex;
-    width: 61.8vw;
+    width: 80vw;
     height: 87vh;
     padding: 0;
-    backdrop-filter: blur(10px); /* 磨砂效果 */
-    -webkit-backdrop-filter: blur(10px); /* 兼容 Safari */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     /* background-image: url('../assets/images/design.png');
     background-size: cover; */
 }
 
 .sidebar {
-    height: 100%;
-    width: 15%;
+    height: 87vh;
+    width: 6%;
     overflow-y: auto;
     padding-right: 0;
+    margin-top: 10px;
+    /* background-color: #C59F59; */
+    padding: 0;
+    border-radius: 8vw 0 0 8vw;
 }
 
-.sidebar .v-card {
-    background-color: rgba(48, 78, 117, 0.1);
+.sidebar-item {
+    height: 43vh !important;
+    background-color: #C59F59 !important;
+    opacity: 1;
+    color: white !important;
+    display: flex;
+    flex-direction: column;
+    /* 子元素垂直排列 */
+    justify-content: space-between;
+    /* 顶部、底部空间分布 */
+    align-items: center;
+    /* 水平居中 */
+    transition: 0.3s ease;
 }
 
-.sidebar .v-list {
-    background-color: unset;
-    /* background-color: rgba(48, 78, 117, 0.1); */
+.sidebar-title {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 2.2rem;
+    padding-top: 50px;
 }
 
 .message-card {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: unset;
+    height: 100%;
+}
+
+.direct-message-list {
+    height: 84vh;
+    /* border-left: 10px solid #EC0017; */
+    /* border-top: 5px solid #EC0017; */
+    background-color: #DFCBA4;
+    padding: 0;
+
+    /* &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        height: 100%;
+        background-color: #EC0017;
+        transform: translateX(0px);
+    } */
+}
+
+.message-item {
+    background-color: unset;
+    /* border-left: 2px solid #000;
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000; */
+    /* color: white; */
+    box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
+    margin-bottom: 10px;
+    height: 100px;
+    transition: 0.3s ease;
 }
 
 .grey-background {
-    background: radial-gradient(circle, #00FFF7 40%, transparent 40%) !important;
-    /* Button background */
-    background-size: 5px 5px !important;
-    /* color: white; */
+    position: relative;
+    background: radial-gradient(circle, rgb(0, 255, 247, 0.8) 30%, #E8DABD 30%) !important;
+    border-right: none !important;
+    background-size: 16vw 20vw !important;
+    background-position: 10vw center !important;
+    color: #000;
 }
 
 .active {
-    background: rgba(0, 255, 247, 0.7);
-    background-size: 5px 5px !important;
-    color: #000 !important;
+    background: radial-gradient(circle, rgb(0, 255, 247, 0.8) 30%, #DFCBA4 30%) !important;
+    /* Button background */
+    background-size: 25vw 25vw !important;
+    background-position: center -12vh !important;
+    /* Adjust the position of the circle */
+    color: #03381C !important;
     opacity: 1 !important;
 }
 
@@ -357,28 +434,103 @@ export default {
     font-size: 0.7em;
 }
 
+.partner-card {
+    height: 6%;
+    background-color: #DFCBA4;
+    color: #03381C;
+    border-bottom: 3px solid #666;
+    border-top-right-radius: 8vw !important;
+}
+
+.picker-container {
+    position: relative;
+    top: 61vh;
+    left: -25px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10px 20px 10px;
+    background-color: #C59F59;
+    height: 23vh;
+    min-width: 100px;
+    margin: 0;
+    border-bottom-right-radius: 8vw;
+}
+
 .emoji-picker {
-    position: absolute;
-    bottom: 300px;
+    position: relative;
+    bottom: 360px;
+    right: 200px;
     z-index: 10;
     max-height: 300px;
 }
 
 .emoji-picker-btn {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     /* Adjust size as needed */
+    line-height: 1;
+    /* Ensure proper alignment */
+    padding-left: 5px;
+}
+
+.image-picker-btn {
     line-height: 1;
     /* Ensure proper alignment */
     padding-bottom: 10px;
     padding-left: 5px;
 }
 
-.image-picker-btn {
+.textarea {
+    height: 18%;
+    /* border-radius: 0 0 16px 0; */
+    border-top: 3px solid #666;
+    border-right: 3px solid #666;
+    border-bottom: 3px solid #666;
+    background-color: #DFCBA4;
+}
+
+.send {
+    position: absolute;
+    top: 84vh;
+    right: 5vw;
+    z-index: 10;
+
+    &::after {
+        content: '';
+        position: absolute;
+        right: -30px;
+        top: -70px;
+        transform: translateY(-50%);
+        height: 80px;
+        width: 138.4px;
+        background-color: rgba(236, 0, 23, 0.8);
+        clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+        transform: rotate(-28deg);
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        right: -80px;
+        top: -56px;
+        transform: translateY(-50%);
+        height: 120px;
+        width: 120px;
+        border-radius: 100%;
+        background-color: #fff;
+        pointer-events: none; /* Disable click events */
+    }
+}
+
+.send-text {
+    position: relative;
+    right: 50px;
+    top: -20px;
     font-size: 1.2rem;
-    /* Adjust size as needed */
+    color: #fff;
     line-height: 1;
-    /* Ensure proper alignment */
     padding-bottom: 10px;
     padding-left: 5px;
+    transform: rotate(-28deg);
+    z-index: 10;
 }
 </style>

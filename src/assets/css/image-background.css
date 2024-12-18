@@ -3,6 +3,7 @@
     width: 100vw;
     height: 87vh;
     padding: 0;
-    background-image: url('../../assets/images/design.png');
+    background-image: url('../../assets/images/design.png'), url("https://www.transparenttextures.com/patterns/cream-dust.png");
+    /* background-blend-mode: overlay; */
     background-size: cover;
 }

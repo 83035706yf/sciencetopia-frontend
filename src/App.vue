@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app" class="global-background">
+  <v-app id="app">
     <component :is="layout">
       <!-- <GlobalLoader /> -->
       <!-- <div class="custom-width"> -->
@@ -39,7 +39,9 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  background-color: #E9DBBE;
+  background-color: #E8DABD;
+  background-image: url("https://www.transparenttextures.com/patterns/cream-dust.png");
+  /* background-blend-mode: overlay; */
   overflow: visible;
   /* Ensure footer can move freely */
 }

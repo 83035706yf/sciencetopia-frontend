@@ -4,8 +4,8 @@
 
   <!-- Thin App Bar -->
   <transition name="header-transition">
-    <v-app-bar app fixed dense elevated v-if="scrolledPastHeader"
-      style="height: 60px; background-color: #E8DABD; box-shadow: none; opacity: 90%;">
+    <v-app-bar app fixed dense elevated v-if="scrolledPastHeader" style="height: 60px; background-color: rgba(232, 218, 189, 0.6);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: none;">
       <ThinHeaderBar @showStudyPlanDialog="handleDialogClick" />
     </v-app-bar>
   </transition>
@@ -32,7 +32,7 @@
 
   <!-- Footer -->
   <transition style="height: 6vh;" name="footer-transition">
-    <v-footer app v-if="!showFinalFooter" style="background-color: #E8DABD;">
+    <v-footer app v-if="!showFinalFooter" class="dynamic-footer">
       <FooterBar />
     </v-footer>
   </transition>
@@ -182,6 +182,14 @@ body.modal-open .main-content {
 .footer-transition-leave-active {
   animation: footer-bounce-out 0.4s ease-out;
   /* Animate position and fade */
+}
+
+.dynamic-footer {
+  background-color: rgba(232, 218, 189, 0.6);
+  backdrop-filter: blur(10px);
+  /* 磨砂效果 */
+  -webkit-backdrop-filter: blur(10px);
+  /* 兼容 Safari */
 }
 
 @media (max-width: 1600px) {

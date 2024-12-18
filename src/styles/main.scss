@@ -173,30 +173,29 @@
   // }
 }
 
-.v-list-item--variant-plain {
-  font-family: 'Chinese-font', sans-serif !important; // Set font family for menu items
-  color: black !important; // Set color for menu items
+// .v-list-item--variant-plain {
+//   font-family: 'Chinese-font', sans-serif !important; // Set font family for menu items
+//   color: black !important; // Set color for menu items
 
-  &:hover {
-    // color: #C8001D !important; // Set text color on hover
-    background: radial-gradient(circle, #00FFF7 30%, transparent 30%) !important;
-    /* Button background */
-    background-size: 5px 5px !important;
-    /* Button background size */
-  }
-  .v-list-item__title {
-    font-weight: 500 !important; // Set font weight for menu item titles
-  }
+//   &:hover {
+//     // color: #C8001D !important; // Set text color on hover
+//     background: radial-gradient(circle, #00FFF7 40%, transparent 40%) !important;
+//     background-size: 15px 15px !important;
+//     color: black !important;
+//   }
+//   .v-list-item__title {
+//     font-weight: 500 !important; // Set font weight for menu item titles
+//   }
 
-  .v-list-item__icon {
-    color: #666 !important; // Set color for menu item icons
-    margin-right: 8px !important; // Add margin to the right of icons
-  }
+//   .v-list-item__icon {
+//     color: #666 !important; // Set color for menu item icons
+//     margin-right: 8px !important; // Add margin to the right of icons
+//   }
 
-  .v-list-item--active {
-    box-sizing: none !important; // Remove box sizing
-  }
-}
+//   .v-list-item--active {
+//     box-sizing: none !important; // Remove box sizing
+//   }
+// }
 
 .v-field--variant-solo-filled  {
   border-radius: 5px !important; // Remove border radius
@@ -259,4 +258,8 @@
   background-color: none !important;
   border: 2px solid #C59F59 !important;
   border-radius: 0 !important;
+}
+
+.v-ripple__container {
+  display:none !important;
 }

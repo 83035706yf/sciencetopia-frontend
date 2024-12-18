@@ -3,104 +3,98 @@
     <div ref="svgRef" id="cy" :class="{ 'fullscreen-mode': isFullScreen }"
         :style="{ width: width + 'px', height: height + 'px' }">
         <!-- Actions for selected nodes -->
-        <div class="node-actions">
-            <v-tooltip v-if="selectedNodes.length > 0" :text="$t('knowledgeGraph.adjacentnodes')" location="top">
-                <template v-slot:activator="{ props }">
-                    <button class="action-button" v-bind="props" @click="showAdjacentNodes">
-                        <i class="fas fa-circle-nodes action-icon"></i>
-                    </button>
-                </template>
-            </v-tooltip>
+        <div class="actions" :style="{ transform: `translateX(${offset}px)` }">
+            <div class="node-actions">
+                <v-tooltip v-if="selectedNodes.length > 0" :text="$t('knowledgeGraph.adjacentnodes')" location="top">
+                    <template v-slot:activator="{ props }">
+                        <button class="action-button" v-bind="props" @click="showAdjacentNodes">
+                            <i class="fas fa-circle-nodes action-icon"></i>
+                        </button>
+                    </template>
+                </v-tooltip>
 
-            <v-tooltip v-if="selectedNodes.length > 0" :text="$t('knowledgeGraph.frontnodes')" location="top">
-                <template v-slot:activator="{ props }">
-                    <button class="action-button" v-bind="props" @click="showPrerequisiteNodes">
-                        <i class="fas fa-share-nodes action-icon"></i>
-                    </button>
-                </template>
-            </v-tooltip>
+                <v-tooltip v-if="selectedNodes.length > 0" :text="$t('knowledgeGraph.frontnodes')" location="top">
+                    <template v-slot:activator="{ props }">
+                        <button class="action-button" v-bind="props" @click="showPrerequisiteNodes">
+                            <i class="fas fa-share-nodes action-icon"></i>
+                        </button>
+                    </template>
+                </v-tooltip>
 
-            <v-tooltip v-if="selectedNodes.length > 0" :text="$t('knowledgeGraph.backnodes')" location="top">
-                <template v-slot:activator="{ props }">
-                    <button class="action-button" v-bind="props" v-on="on" @click="showSubsequentNodes">
-                        <i class="fas fa-share-nodes action-icon"></i>
-                    </button>
-                </template>
-            </v-tooltip>
+                <v-tooltip v-if="selectedNodes.length > 0" :text="$t('knowledgeGraph.backnodes')" location="top">
+                    <template v-slot:activator="{ props }">
+                        <button class="action-button" v-bind="props" v-on="on" @click="showSubsequentNodes">
+                            <i class="fas fa-share-nodes action-icon"></i>
+                        </button>
+                    </template>
+                </v-tooltip>
 
-            <v-tooltip
-                v-if="selectedNodes.length > 0 && !isEditing"
-                :text="isFavorited ? $t('knowledgeGraph.removenode') : $t('knowledgeGraph.savenode')"
-                location="top"
-            >
-                <template v-slot:activator="{ props }">
-                    <button class="action-button" v-bind="props" @click="toggleFavorites">
-                        <i :class="isFavorited ? 'fas fa-heart-circle-minus' : 'fas fa-heart-circle-plus'"></i>
-                    </button>
-                </template>
-            </v-tooltip>
+                <v-tooltip v-if="selectedNodes.length > 0 && !isEditing"
+                    :text="isFavorited ? $t('knowledgeGraph.removenode') : $t('knowledgeGraph.savenode')"
+                    location="top">
+                    <template v-slot:activator="{ props }">
+                        <button class="action-button" v-bind="props" @click="toggleFavorites">
+                            <i :class="isFavorited ? 'fas fa-heart-circle-minus' : 'fas fa-heart-circle-plus'"></i>
+                        </button>
+                    </template>
+                </v-tooltip>
 
-            <v-tooltip :text="$t('knowledgeGraph.saved')" location="top">
-                <template v-slot:activator="{ props }">
-                    <button class="action-button" v-bind="props" v-on="on" @click="showFavoritedNodes">
-                        <i class="fas fa-star action-icon"></i>
-                    </button>
-                </template>
-            </v-tooltip>
+                <v-tooltip :text="$t('knowledgeGraph.saved')" location="top">
+                    <template v-slot:activator="{ props }">
+                        <button class="action-button" v-bind="props" v-on="on" @click="showFavoritedNodes">
+                            <i class="fas fa-star action-icon"></i>
+                        </button>
+                    </template>
+                </v-tooltip>
 
-            <v-tooltip :text="$t('knowledgeGraph.reset')" location="top">
-                <template v-slot:activator="{ props }">
-                    <button class="action-button" v-bind="props" v-on="on" @click="resetView">
-                        <i class="fas fa-arrows-rotate action-icon"></i>
-                    </button>
-                </template>
-            </v-tooltip>
-        </div>
-
-        <!-- Edit action buttons -->
-        <div class="edit-action">
-            <v-tooltip :text="$t('edit')" location="top">
-                <template v-slot:activator="{ props }">
-                    <button class="action-button" v-bind="props" v-on="on" @click="startEditing" v-if="!isEditing">
-                        <i class="fas fa-pen action-icon"></i>
-                    </button>
-                </template>
-            </v-tooltip>
-            <v-tooltip :text="$t('canceledit')" location="top" v-if="isEditing">
-                <template v-slot:activator="{ props }">
-                    <button class="action-button" v-bind="props" v-on="on" @click="submitEditing">
-                        <i class="fa-solid fa-right-from-bracket highlight-icon"></i>
-                    </button>
-                </template>
-            </v-tooltip>
-        </div>
-
-        <div class="bottom-right-actions">
-            <div class="map-actions">
-                <div @mouseover="showInput(), overContainer = true" @mouseleave="overContainer = false; hideInput()"
-                    class="action-container">
-                    <button @click="handleSearch" class="locator-btn">
-                        <svg-icon type="mdi" :path="path"></svg-icon>
-                    </button>
-                    <input
-                        v-if="inputVisible"
-                        v-model="searchQuery"
-                        type="text"
-                        :placeholder="$t('knowledgeGraph.locateto')"
-                        @input="handleInput"
-                        ref="searchInput"
-                        class="search-input"
-                    />
-                </div>
+                <v-tooltip :text="$t('knowledgeGraph.reset')" location="top">
+                    <template v-slot:activator="{ props }">
+                        <button class="action-button" v-bind="props" v-on="on" @click="resetView">
+                            <i class="fas fa-arrows-rotate action-icon"></i>
+                        </button>
+                    </template>
+                </v-tooltip>
             </div>
 
-            <v-tooltip :text="isFullScreen ? $t('exitfullscreen') : $t('knowledgeGraph.fullscreen')" location="top">
-                <template v-slot:activator="{ props }">
-                    <button class="fullscreen-button" v-bind="props" @click="toggleFullScreen">
-                        <i :class="isFullScreen ? 'fas fa-compress' : 'fas fa-expand'"></i>
-                    </button>
-                </template>
-            </v-tooltip>
+            <!-- Edit action buttons -->
+            <div class="edit-action">
+                <v-tooltip :text="$t('edit')" location="top">
+                    <template v-slot:activator="{ props }">
+                        <button class="action-button" v-bind="props" v-on="on" @click="startEditing" v-if="!isEditing">
+                            <i class="fas fa-pen action-icon"></i>
+                        </button>
+                    </template>
+                </v-tooltip>
+                <v-tooltip :text="$t('canceledit')" location="top" v-if="isEditing">
+                    <template v-slot:activator="{ props }">
+                        <button class="action-button" v-bind="props" v-on="on" @click="submitEditing">
+                            <i class="fa-solid fa-right-from-bracket highlight-icon"></i>
+                        </button>
+                    </template>
+                </v-tooltip>
+            </div>
+
+            <div class="bottom-right-actions">
+                <div class="map-actions">
+                    <div @mouseover="showInput(), overContainer = true" @mouseleave="overContainer = false; hideInput()"
+                        class="action-container">
+                        <button @click="handleSearch" class="locator-btn">
+                            <svg-icon type="mdi" :path="path"></svg-icon>
+                        </button>
+                        <input v-if="inputVisible" v-model="searchQuery" type="text"
+                            :placeholder="$t('knowledgeGraph.locateto')" @input="handleInput" ref="searchInput"
+                            class="search-input" />
+                    </div>
+                </div>
+
+                <v-tooltip :text="isFullScreen ? $t('exitfullscreen') : $t('knowledgeGraph.fullscreen')" location="top">
+                    <template v-slot:activator="{ props }">
+                        <button class="fullscreen-button" v-bind="props" @click="toggleFullScreen">
+                            <i :class="isFullScreen ? 'fas fa-compress' : 'fas fa-expand'"></i>
+                        </button>
+                    </template>
+                </v-tooltip>
+            </div>
         </div>
 
         <slot v-if="isFullScreen"></slot>
@@ -114,7 +108,7 @@
 import useKnowledgeGraph from './useKnowledgeGraph';
 import EditGuideDialog from './EditGuideDialog.vue'
 import ContextMenu from './ContextMenu.vue';
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { apiClient } from '@/api';
 import { useStore } from 'vuex';
 import SvgIcon from '@jamescoyle/vue-icon';
@@ -138,6 +132,24 @@ export default {
         const path = ref(mdiMapSearch);
 
         const dialogVisible = ref(false);
+
+        // Scroll-related data
+        const offset = ref(0); // Tracks the movement of the actions container
+
+        // Update offset based on scroll
+        const handleScroll = () => {
+            offset.value = window.scrollY * 0.5; // Adjust the multiplier for speed
+        };
+
+        // Add scroll event listener
+        onMounted(() => {
+            window.addEventListener('scroll', handleScroll);
+        });
+
+        // Remove scroll event listener
+        onBeforeUnmount(() => {
+            window.removeEventListener('scroll', handleScroll);
+        });
 
         const { svgRef,
             selectedNodes,
@@ -261,6 +273,7 @@ export default {
             isFavorited,
             toggleFullScreen,
             isFullScreen,
+            offset,
         };
     },
 
@@ -285,6 +298,11 @@ export default {
 </script>
 
 <style scoped>
+.actions {
+    transition: transform 0.1s linear;
+    /* Smooth movement */
+}
+
 #cy canvas {
     position: relative !important;
     margin: 0px;
@@ -298,7 +316,7 @@ export default {
 .node-actions {
     z-index: 1000;
     position: absolute;
-    top: 20px;
+    top: 20vh;
     right: 80px;
     display: flex;
     gap: 10px;
@@ -323,7 +341,7 @@ export default {
 .edit-action {
     z-index: 1000;
     position: absolute;
-    top: 20px;
+    top: 20vh;
     right: 40px;
     display: flex;
     gap: 10px;
@@ -349,8 +367,8 @@ export default {
 /* Modular bottom-right corner styling */
 .bottom-right-actions {
     position: absolute;
-    bottom: 20px;
-    right: 20px;
+    top: 89vh;
+    right: 40px;
     display: flex;
     align-items: center;
     gap: 10px;

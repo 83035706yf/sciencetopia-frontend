@@ -27,7 +27,7 @@
     /* Prevent fixed height */
     border-radius: 0 !important;
     /* Prevent border radius */
-    z-index: 1000000 !important;
+    z-index: 10 !important;
   }
   
   .split-color-text {
@@ -39,7 +39,7 @@
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    z-index: 1000000 !important;
+    z-index: 10 !important;
   }
   
   .feed-text {

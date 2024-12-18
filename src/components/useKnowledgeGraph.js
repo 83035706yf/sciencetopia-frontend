@@ -23,11 +23,9 @@ export default function useKnowledgeGraph(endpoint) {
     const selectedNodes = computed(() => store.state.selectedNodes);
     let currentZoomLevel = 1;
 
-    const strokeColor = '#000';  // Default stroke color for nodes
-    const strokeWidth = 0.6;  // Default stroke width for nodes
+    const strokeWidth = 1;  // Default stroke width for nodes
     const linkColor = '#000';  // Default link color
-    const linkWidth = 1;  // Default link width
-    const linkOpacity = 0.4;  // Default link opacity
+    const linkOpacity = 0.5;  // Default link opacity
     const labelFillColor = '#000';  // Default label fill color
     const labelStrokeColor = '#fff';  // Default label stroke color
     const highlightColor = '#00ffff';  // Highlight color for selected nodes
@@ -112,17 +110,17 @@ export default function useKnowledgeGraph(endpoint) {
         // .on('click', handleNodeClick);
 
         simulation = d3.forceSimulation()
-        .force('link', d3.forceLink().id(d => d.id).strength(1)) // Default link strength
-        .force('charge', d3.forceManyBody()
-            .strength(d => -50 - (d.degree || 0) * 10) // Increase repulsion for low-degree nodes
-        )
-        .force('center', d3.forceCenter(width.value / 2, height.value / 2)) // Centering force
-        // .force('collision', d3.forceCollide().radius(30)) // Prevent overlapping
-        .force("x", d3.forceX())
-        .force("y", d3.forceY());
+            .force('link', d3.forceLink().id(d => d.id).strength(1)) // Default link strength
+            .force('charge', d3.forceManyBody()
+                .strength(d => -50 - (d.degree || 0) * 10) // Increase repulsion for low-degree nodes
+            )
+            .force('center', d3.forceCenter(width.value / 2, height.value / 2)) // Centering force
+            // .force('collision', d3.forceCollide().radius(30)) // Prevent overlapping
+            .force("x", d3.forceX())
+            .force("y", d3.forceY());
 
         link = svg.append('g')
-            .attr('stroke', linkColor)
+            // .attr('stroke', linkColor)
             // .attr('stroke-opacity', 0.6)
             .selectAll('line');
 
@@ -158,37 +156,74 @@ export default function useKnowledgeGraph(endpoint) {
                 }
                 return acc;
             }, 0);
+
+            // Assign color dynamically using assignNodeColor
+            node.color = assignNodeColor(node);
+
+            // Compute a darker stroke color based on the fill color
+            const baseColor = d3.color(node.color);
+            if (baseColor) {
+                node.strokeColor = baseColor.darker(0.8).toString(); // Darken the color by a factor (adjust as needed)
+                console.log('nodeColor:', node.color, 'baseColor:', baseColor.toString(), 'strokeColor:', node.strokeColor);
+            } else {
+                node.strokeColor = "#000"; // Fallback to black if color is undefined
+            }
         });
 
         // Update links
+        // 更新曲线边
         link = link.data(links, d => d.id)
-            .join('line')
+            .join('path') // 改为使用 path 元素
             .attr('stroke-width', d => {
                 const sourceNode = nodes.find(n => n.id === d.source.id);
                 const targetNode = nodes.find(n => n.id === d.target.id);
 
-                // Check if both connected nodes are topics
+                // 根据节点关系设置边宽度
                 if (sourceNode && targetNode && targetNode.labels.includes('Field')) {
-                    return 1.5; // Thicker line for links between a Subject and a field
+                    return 2.5 / currentZoomLevel ** 0.5; // Thicker line for links between a Subject and a field
                 } else if (sourceNode && targetNode && targetNode.labels.includes('Topic')) {
-                    return 1.2; // Thicker line for links between a field and a topic or two topics
+                    return 2.3 / currentZoomLevel ** 0.5; // Thicker line for links between a field and a topic or two topics
                 } else {
-                    return Math.sqrt(d.value || 1); // Normal width for other links
+                    return 2 / currentZoomLevel ** 0.5; // Normal width for other links
                 }
             })
-            .attr('stroke', 'linkColor')  // Default link color
-            .attr('stroke-opacity', linkOpacity)  // Adjust opacity as needed;
+            .attr('stroke', d => {
+                // 计算边颜色为相邻节点颜色的中间值
+                const sourceNode = nodes.find(n => n.id === d.source.id);
+                const targetNode = nodes.find(n => n.id === d.target.id);
+
+                if (!sourceNode || !targetNode) return linkColor;
+
+                // // 如果目标节点被标记为 "Field"，使用目标节点的颜色
+                // if (targetNode.labels.includes('Field')) {
+                //     return '#AA1B1D' // 使用目标节点的颜色，默认颜色为灰色
+                // }
+
+                const sourceColor = d3.rgb(sourceNode.color || linkColor); // 默认颜色为灰色
+                const targetColor = d3.rgb(targetNode.color || linkColor);
+
+                // 计算 RGB 平均值
+                const midColor = d3.rgb(
+                    (sourceColor.r + targetColor.r) / 2,
+                    (sourceColor.g + targetColor.g) / 2,
+                    (sourceColor.b + targetColor.b) / 2
+                );
+
+                return midColor.toString(); // 返回中间颜色
+            })
+            .attr('fill', 'none') // 确保路径没有填充色
+            .attr('stroke-opacity', linkOpacity);  // Adjust opacity as needed;
 
         // Update nodes
         node = node.data(nodes, d => d.id)
             .join('circle')
-            .attr('stroke', strokeColor)  // Add white stroke to nodes
+            .attr('stroke', d => d.strokeColor) // Use the dynamically assigned darker color
             .attr('stroke-width', strokeWidth)  // Adjust stroke width as needed
             .attr('r', d => {
                 const degree = isNaN(d.degree) ? 0 : d.degree;
-            
+
                 if (d.labels.includes('Subject')) {
-                    return 10 + degree * 0.5; // Base size with minimal scaling
+                    return 12 + degree * 0.5; // Base size with minimal scaling
                 } else if (d.labels.includes('Field')) {
                     return 8 + degree * 0.4;
                 } else if (d.labels.includes('Topic')) {
@@ -196,29 +231,18 @@ export default function useKnowledgeGraph(endpoint) {
                 } else {
                     return 4 + degree * 0.2; // Small scaling for other nodes
                 }
-            })                                   
-            .attr('fill', d => {
-                if (d.labels.includes('pending_approval')) return '#848482';
-                else {
-                    if (d.labels.includes('Subject')) return 'black';
-                    if (d.labels.includes('Field')) return '#D5282A';
-                    if (d.labels.includes('Topic')) return '#DFCBA4';
-                    if (d.labels.includes('TheoriesAndConcept')) return '#4DB9E6';
-                    if (d.labels.includes('ModelsAndSystems')) return '#597E52';
-                    if (d.labels.includes('MethodsAndProcesses')) return '#F06292';
-                    if (d.labels.includes('PhenomenaAndEvents')) return '#5C469C';
-                    if (d.labels.includes('ArtefactsAndTechnologies')) return '#8C564B';
-                    if (d.labels.includes('FiguresAndInstitutions')) return '#C6A969';
-                    if (d.labels.includes('PublicationsAndStandards')) return '#BCBD22';
-                    if (d.labels.includes('LawsEthicsAndPrinciples')) return '#AEC6CF';
-                    if (d.labels.includes('DataMetricsAndAlgorithms')) return '#E377C2';
-                    if (d.labels.includes('PracticesFrameworkAndParadigms')) return '#FFDD44';
-                    if (d.labels.includes('QuestionsAndProblems')) return '#FFB347';
-                    if (d.labels.includes('LanguagesAndCultures')) return '#FF33CC';
-                    else if (d.labels.includes('Keyword')) return '#ccc';
-                    return '#ccc'; // Default color
-                }
             })
+            .attr('fill', d => d.color)
+            // .attr('fill-opacity', d => {
+            //     // Example logic: reduce opacity for less important nodes
+            //     if (d.labels.includes('Keyword')) {
+            //         return 0.8; // Set opacity to 50% for Keyword nodes
+            //     } else if (d.labels.includes('Field')) {
+            //         return 1; // Full opacity for Field nodes
+            //     } else {
+            //         return 0.9; // Default opacity for other nodes
+            //     }
+            // })
             .call(drag(simulation))
             .on('click', (event, d) => {
                 if (store.state.isEditing) {
@@ -261,16 +285,11 @@ export default function useKnowledgeGraph(endpoint) {
             .attr("text-anchor", "middle")
             .attr("alignment-baseline", "central")
             .style('font-weight', 'bold')
-            // .style("fill", '#fff')
             .style("pointer-events", "none") // To prevent interference with node interactivity
 
         node.on('mouseover', function (event, d) {
             labels.filter(l => l === d).text(l => l.name); // Show name on hover
         });
-
-        // node.on('mouseout', function (event, d) {
-        //     labels.filter(l => l === d && !l.labels.includes('Topic')).text(''); // Hide name on mouseout, except for 'Topic' nodes
-        // });
 
         // Restart the simulation with new data
         simulation.nodes(nodes).on('tick', ticked);
@@ -308,44 +327,25 @@ export default function useKnowledgeGraph(endpoint) {
             });
 
         labels
-            // .style('visibility', d => {
-            //     if (d.labels.includes('Subject')) return 'visible';
-            //     if (currentZoomLevel > topicLabelThreshold && d.labels.includes('Topic')) return 'visible';
-            //     return currentZoomLevel > keywordLabelThreshold ? 'visible' : 'hidden';
-            // })
             .style("font-size", 16 / currentZoomLevel)
             .style('font-family', 'Arial')
             .style("fill", labelFillColor)
             .style("font-weight", 'bold')
             .style("stroke", labelStrokeColor)
             .style("stroke-width", 0.5 / currentZoomLevel)
-            // .style("stroke", d => {
-            //     if (d.labels.includes('pending_approval')) return '#848482';
-            //     else {
-            //         if (d.labels.includes('Subject')) return "#d5282a"
-            //         else if (currentZoomLevel > topicThreshold && d.labels.includes('Field')) return "#d5282a"
-            //         else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return "#d5282a"
-            //         else return 'black'
-            //     }
-            // })
-            // .style("stroke-width", d => {
-            //     if (d.labels.includes('Subject')) return 1 / currentZoomLevel
-            //     else if (currentZoomLevel > topicThreshold && d.labels.includes('Field')) return 1 / currentZoomLevel
-            //     else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return 1 / currentZoomLevel
-            //     else return 0.5 / currentZoomLevel
-            // })// Adjust stroke width as needed
             .text(d => {
                 if (d.labels.includes('Subject')) return d.name;
                 else if (currentZoomLevel > fieldLabelThreshold && d.labels.includes('Field')) return d.name;
                 else if (currentZoomLevel > topicLabelThreshold && d.labels.includes('Topic')) return d.name;
                 return currentZoomLevel > keywordLabelThreshold ? d.name : '';
             })
-            .attr("alignment-baseline", d => {
-                if (d.labels.includes('Subject')) return "middle"
-                else if (currentZoomLevel > fieldThreshold && d.labels.includes('Field')) return "middle"
-                else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return "middle"
-                else return "hanging"
-            })
+            .attr("alignment-baseline", "ideographic")
+            // .attr("alignment-baseline", d => {
+            //     if (d.labels.includes('Subject')) return "middle"
+            //     else if (currentZoomLevel > fieldThreshold && d.labels.includes('Field')) return "middle"
+            //     else if (currentZoomLevel > keywordThreshold && d.labels.includes('Topic')) return "middle"
+            //     else return "hanging"
+            // })
             .attr("dy", d => {
                 if (d.labels.includes('Subject')) return 0
                 else if (currentZoomLevel > fieldThreshold && d.labels.includes('Field')) return 0
@@ -355,19 +355,19 @@ export default function useKnowledgeGraph(endpoint) {
 
 
         link
-            .attr('stroke-width', d => {
-                const sourceNode = nodes.value.find(n => n.id === d.source.id);
-                const targetNode = nodes.value.find(n => n.id === d.target.id);
+            // .attr('stroke-width', d => {
+            //     const sourceNode = nodes.value.find(n => n.id === d.source.id);
+            //     const targetNode = nodes.value.find(n => n.id === d.target.id);
 
-                // Check if both connected nodes are topics
-                if (sourceNode && targetNode && targetNode.labels.includes('Field')) {
-                    return 1.5 / currentZoomLevel ** 0.5; // Thicker line for links between a Subject and a field
-                } else if (sourceNode && targetNode && targetNode.labels.includes('Topic')) {
-                    return 1.2 / currentZoomLevel ** 0.5; // Thicker line for links between a field and a topic or two topics
-                } else {
-                    return Math.sqrt(d.value || 1) / currentZoomLevel ** 0.5; // Normal width for other links
-                }
-            })
+            //     // Check if both connected nodes are topics
+            //     if (sourceNode && targetNode && targetNode.labels.includes('Field')) {
+            //         return 2.5 / currentZoomLevel ** 0.5; // Thicker line for links between a Subject and a field
+            //     } else if (sourceNode && targetNode && targetNode.labels.includes('Topic')) {
+            //         return 2.3 / currentZoomLevel ** 0.5; // Thicker line for links between a field and a topic or two topics
+            //     } else {
+            //         return 2 / currentZoomLevel ** 0.5; // Normal width for other links
+            //     }
+            // })
             .style('visibility', d => {
                 const sourceNode = nodes.value.find(n => n.id === d.source.id);
                 const targetNode = nodes.value.find(n => n.id === d.target.id);
@@ -378,29 +378,62 @@ export default function useKnowledgeGraph(endpoint) {
                 } else if (currentZoomLevel <= topicThreshold) {
                     return (targetNode.labels.includes('Field')) || (targetNode.labels.includes('Subject')) ? 'visible' : 'hidden';
                 } else if (currentZoomLevel <= keywordThreshold) {
-                    return targetNode.labels.includes('Topic') || (targetNode.labels.includes('Field')) || (targetNode.labels.includes('Subject'))? 'visible' : 'hidden';
+                    return targetNode.labels.includes('Topic') || (targetNode.labels.includes('Field')) || (targetNode.labels.includes('Subject')) ? 'visible' : 'hidden';
                 } else {
                     return 'visible';
                 }
             });
     };
 
-    // Ticked function for updating node and link positions
+    const assignNodeColor = (d) => {
+        if (d.labels.includes('Subject')) return '#AA1B1D';
+        if (d.labels.includes('Field')) return '#E75A2A';
+        if (d.labels.includes('Topic')) return '#DFCBA4';
+        if (d.labels.includes('TheoriesAndConcept')) return '#4DB9E6';
+        if (d.labels.includes('ModelsAndSystems')) return '#597E52';
+        if (d.labels.includes('MethodsAndProcesses')) return '#F06292';
+        if (d.labels.includes('PhenomenaAndEvents')) return '#5C469C';
+        if (d.labels.includes('ArtefactsAndTechnologies')) return '#8C564B';
+        if (d.labels.includes('FiguresAndInstitutions')) return '#C6A969';
+        if (d.labels.includes('PublicationsAndStandards')) return '#BCBD22';
+        if (d.labels.includes('LawsEthicsAndPrinciples')) return '#AEC6CF';
+        if (d.labels.includes('DataMetricsAndAlgorithms')) return '#E377C2';
+        if (d.labels.includes('PracticesFrameworkAndParadigms')) return '#FFDD44';
+        if (d.labels.includes('QuestionsAndProblems')) return '#FFB347';
+        if (d.labels.includes('LanguagesAndCultures')) return '#FF33CC';
+        else if (d.labels.includes('Keyword')) return '#ccc';
+        return '#ccc'; // Default color
+    };
+
     const ticked = () => {
-        link
-            .attr('x1', d => d.source.x)
-            .attr('y1', d => d.source.y)
-            .attr('x2', d => d.target.x)
-            .attr('y2', d => d.target.y);
+        link.attr('d', d => {
+            const dx = d.target.x - d.source.x;
+            const dy = d.target.y - d.source.y;
+            const dr = Math.sqrt(dx * dx + dy * dy); // Distance between source and target
 
-        node
-            .attr('cx', d => d.x)
-            .attr('cy', d => d.y);
+            // Calculate x and y midpoints
+            const xMidpoint = (d.source.x + d.target.x) / 2;
+            const yMidpoint = (d.source.y + d.target.y) / 2;
 
-        // Update label positions
-        labels.attr('x', d => d.x)
-            .attr('y', d => d.y); // Adjust label position above the node
+            // Smooth transition for the offset
+            const xCenter = width.value / 2; // Horizontal center of the graph
+            const blendFactor = (xMidpoint - xCenter) / (width.value / 2); // Normalize (-1 for left, 1 for right)
+            const smoothFactor = Math.tanh(blendFactor); // Use tanh for smooth transitions (-1 to 1)
 
+            // Adjust the curvature offset
+            const curvatureIntensity = dr * 0.25; // Curvature strength (adjust as needed)
+            const yOffset = smoothFactor * curvatureIntensity;
+
+            // Calculate the control point
+            const cx = xMidpoint;
+            const cy = yMidpoint + yOffset;
+
+            return `M ${d.source.x},${d.source.y} Q ${cx},${cy} ${d.target.x},${d.target.y}`;
+        });
+
+        node.attr('cx', d => d.x).attr('cy', d => d.y);
+
+        labels.attr('x', d => d.x).attr('y', d => d.y);
     };
 
     // Fetch data from the backend
@@ -487,7 +520,7 @@ export default function useKnowledgeGraph(endpoint) {
         if (node && node.style) {
             // Reset styles for all nodes to remove any previous highlights
             node
-                .style('stroke', strokeColor)  // Reset stroke color for all nodes
+                .style('stroke', d => d.strokeColor)  // Reset stroke color for all nodes
                 .style('stroke-width', strokeWidth)  // Reset stroke width to none for all nodes
 
             // Highlight all selected nodes with a white stroke
@@ -581,9 +614,8 @@ export default function useKnowledgeGraph(endpoint) {
         // Reset opacity of nodes and links
         node.style('opacity', 1);
         labels.style('opacity', 1);
-        link.style('opacity', 1)
-            .attr('stroke', linkColor)  // Reset link color
-            .attr('stroke-width', linkWidth);  // Reset link width
+        link.style('opacity', 1);
+        //     .attr('stroke-width', linkWidth);  // Reset link width
         // Apply changes from the external state manager to D3
         // Define the reset transformation
         const resetTransform = d3.zoomIdentity;

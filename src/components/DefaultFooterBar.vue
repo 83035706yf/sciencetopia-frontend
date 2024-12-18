@@ -1,5 +1,5 @@
 <template>
-    <footer>
+    <footer style="background-color: unset;">
         <p class="bottom-footer-btn">&copy; {{ $t('footer.copy') }}</p>
         <nav>
             <ul>

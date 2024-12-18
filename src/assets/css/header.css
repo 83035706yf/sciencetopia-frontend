@@ -1,6 +1,6 @@
 /* Header */
 /* .site-header {
-  background-color: #E9DBBE;
+  background-color: #E8DABD;
   padding: 0px 20px 0px 0px;
 } */
 
@@ -57,6 +57,14 @@
   border-bottom-right-radius: 20px;
   background-color: white;
   /* border: 1px solid black; */
+}
+
+.search-container-thin {
+  width: 100%;
+  height: 40px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-color: #F4EEE1;
 }
 
 .search-form {

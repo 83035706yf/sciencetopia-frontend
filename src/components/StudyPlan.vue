@@ -258,7 +258,7 @@ export default {
 
         getConfettiColor(index) {
             // Return a random color for the confetti
-            const colors = ['#D5282A', '#01FFF7', '#E9DBBE', '#000000'];
+            const colors = ['#D5282A', '#01FFF7', '#E8DABD', '#000000'];
             return colors[index % colors.length];
         }
     },

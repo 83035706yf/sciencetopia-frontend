@@ -13,12 +13,11 @@
                 </button> -->
             </v-col>
 
-            <!-- Center Section: User Actions -->
+            <!-- Center Section: Search Bar -->
             <v-col cols="auto" style="width: 23.6vw;" class="text-end">
                 <v-row align="center" justify="center">
-                    <!-- Search Bar -->
-                    <div class="search-container">
-                        <v-text-field v-model="searchQuery" :placeholder="$t('searchbar.iwanttolearn')"
+                    <div class="search-container-thin">
+                        <v-text-field sty v-model="searchQuery" :placeholder="$t('searchbar.iwanttolearn')"
                             variant="plainfield" dense hide-details clearable @keyup.enter="globalSearch"
                             append-inner-icon="mdi-magnify" @click:append-inner="globalSearch" />
                     </div>

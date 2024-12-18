@@ -97,9 +97,11 @@ export default {
     font-weight: bold;
     cursor: pointer;
 }
+
 .team-button:hover {
     text-decoration: underline;
 }
+
 .join-us-botton {
     /* background-color: #D5282A; */
     color: #D5282A;
@@ -109,9 +111,14 @@ export default {
     border: 2px solid #D5282A;
     border-radius: 5px;
 }
+
 .join-us-botton:hover {
     background-color: #ff0000;
     color: white;
     border: 2px solid #ff0000;
+}
+
+.about-page {
+    padding: 0 10%;
 }
 </style>

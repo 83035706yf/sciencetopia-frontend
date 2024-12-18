@@ -1,9 +1,9 @@
 <template>
-    <div style="background-image: url('../assets/images/design.png'); background-size: cover;">
+    <!-- <div style="background-image: url('../assets/images/design.png'); background-size: cover;"> -->
         <header class="site-header">
             <!-- Thin App Bar -->
             <transition name="header-transition">
-                <v-app-bar app fixed dense elevated style="height: 6vh; background-color: #E8DABD; box-shadow: none;">
+                <v-app-bar app fixed dense elevated style="height: 6vh;background-color: rgba(232, 218, 189, 0); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: none;">
                     <ThinHeaderBar @showStudyPlanDialog="handleDialogClick" />
                 </v-app-bar>
             </transition>
@@ -33,21 +33,21 @@
 
         <!-- Footer -->
         <transition style="height: 6vh;" name="footer-transition">
-            <v-footer app v-if="!showFinalFooter" style="background-color: #E8DABD; height: 60px;">
+            <v-footer app v-if="!showFinalFooter" style="background-color: unset; height: 60px;">
                 <FooterBar />
             </v-footer>
         </transition>
 
         <!-- Final Footer -->
         <DefaultFooterBar />
-    </div>
+    <!-- </div> -->
 </template>
 
 <script>
 import LearningPlanner from './LearningPlanner.vue';
 import ThinHeaderBar from './ThinHeaderBar.vue';
 import FooterBar from './FooterBar.vue';
-import DefaultFooterBar from './DefaultFooterBar.vue';
+// import DefaultFooterBar from './DefaultFooterBar.vue';
 // import debounce from 'lodash/debounce';
 // import { apiClient } from '@/api';
 // import { useStore } from 'vuex';
@@ -64,7 +64,7 @@ export default {
         };
     },
 
-    components: { LearningPlanner, ThinHeaderBar, FooterBar, DefaultFooterBar },
+    components: { LearningPlanner, ThinHeaderBar, FooterBar },
 
     mounted() {
         window.addEventListener('scroll', this.handleScroll);

@@ -1,8 +1,8 @@
 <template>
+  <v-container class="notification-title-container d-flex align-center justify-center">
+    <v-card-title>{{ $t('message.notification') }}</v-card-title>
+  </v-container>
   <v-card class="system-notifications">
-    <v-container class="d-flex align-center justify-center" style=" padding: 0; background-color: rgba(48, 78, 117, 0.1);">
-      <v-card-title>{{ $t('message.notification') }}</v-card-title>
-    </v-container>
     <v-card-text>
       <v-accordion>
         <v-accordion-item v-for="(groupedNotifications, type) in groupedNotificationsByType" :key="type">
@@ -15,7 +15,7 @@
                 <v-list-item-title class="notification-bubble">{{ notification.content }}</v-list-item-title>
                 <v-list-item-subtitle>{{ formatDate(notification.createdAt) }}</v-list-item-subtitle>
                 <v-btn v-if="notification.data" @click="viewDetails(notification.data)" text small>{{
-                  $t('showdetail')}}</v-btn>
+                  $t('showdetail') }}</v-btn>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -92,13 +92,28 @@ export default {
 
 <style scoped>
 .system-notifications {
-  margin: auto;
-  height: 87vh;
-  background-color: rgba(255, 255, 255, 0.8);
+  margin-left: 0.6vw;
+  margin-top: 0.6vh;
+  height: 81vh;
+  width: 100%;
+  background-color: #F4EEE1;
+  border-bottom-right-radius: 4vw !important;
+}
+
+.notification-title-container {
+  height: 5vh;
+  padding: 0;
+  margin-top: 0vh;
+  background-color: #DFCBA4;
+  color: #03381C;
+  border-bottom: 3px solid #666666;
+  border-top-right-radius: 8vw !important;
+  margin-left: 0.6vw;
 }
 
 .v-list-item-title {
   font-weight: bold;
+  font-size: 18px;
 }
 
 .v-list-item-subtitle {
@@ -111,15 +126,17 @@ export default {
 }
 
 .notification-list {
-  height: 1000px;
+  height: 100%;
   overflow-y: auto;
+  background-color: unset;
 }
 
 .notification-bubble {
   padding: 8px 12px;
-  border-radius: 16px;
-  background-color: #D3D3D3;
-  max-width: 80%;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  background-color: #DFCBA4;
+  width: 100%;
   word-break: break-word;
 }
 </style>
