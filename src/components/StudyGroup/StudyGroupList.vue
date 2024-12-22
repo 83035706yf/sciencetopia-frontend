@@ -158,7 +158,8 @@ export default {
 
 /* Individual masonry items */
 .masonry-item {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  margin-left: 8px;
   /* Space between items vertically */
   width: 320px;
   /* Adjust dynamically */

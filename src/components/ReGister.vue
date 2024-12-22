@@ -1,59 +1,71 @@
 <template>
-  <v-container class="d-flex align-center justify-center"
-    style="min-height: 60vh; max-height: 100vh; position: relative;">
-    <!-- Decorative Parabolic Curve -->
-    <svg class="thin-curve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 800">
-      <path fill="none" stroke="#AA1B1D" stroke-width="1" d="M 50 400 Q 650 1000 1450 0"></path>
-    </svg>
-
-    <!-- Filled Circle Decoration -->
-    <div
-      style="position: fixed; top: 0px; left: 10px; width: 120px; height: 120px; background-color: #E8DABD; border-radius: 50%; z-index: 100;">
-    </div>
-
-    <!-- Outer Box -->
-    <v-card class="outer-box" elevation="2">
-      <v-container style="position: absolute; transform: rotate(-90deg); text-align: center;">
-        <v-card-text>
-          <h2 class="text-center text-white">{{ $t('register.title') }}</h2>
-        </v-card-text>
-        <v-card-text>
-          <h2 class="text-center text-white">{{ $t('register.alreadyHaveAccount') }}<a @click="navigateToLogin"
-              style="text-decoration: underline; cursor: pointer;">
-              {{ $t('register.clickHere') }}
-            </a></h2>
-        </v-card-text>
-      </v-container>
-    </v-card>
-
-    <!-- Inner Box -->
-    <v-card class="inner-box" elevation="3">
-      <v-card-text>
-        <v-alert v-if="validationSummary" type="error" dismissible class="mb-4">
-          {{ validationSummary }}
-        </v-alert>
-        <v-form @submit.prevent="register" ref="form">
-          <v-text-field v-model="userName" :label="$t('register.username')" variant="filled" required
-            class="mb-4"></v-text-field>
-          <v-text-field v-model="email" :label="$t('register.email')" variant="filled" type="email" required
-            class="mb-4"></v-text-field>
-          <v-text-field v-model="password" :label="$t('register.password')" variant="filled" type="password" required
-            class="mb-4"></v-text-field>
-          <v-text-field v-model="confirmPassword" :label="$t('register.confirmPassword')" variant="filled"
-            type="password" required class="mb-4"></v-text-field>
-
-          <!-- Register button -->
-          <div class="register-circle" elevation="3">
-            <button class="register-button" type="submit" block>
-              {{ $t('register.register') }}
-            </button>
+  <div class="background-decor">
+    <div class="background-decor-line1"></div>
+    <div class="background-decor-line2"></div>
+    <div class="background-decor-line3"></div>
+    <div class="background-decor-line4"></div>
+    <div class="background-decor-line5"></div>
+    <div class="background-decor-circle"></div>
+    <div class="background-decor-box1"></div>
+    <div class="background-decor-box2"></div>
+    <div class="background-decor-box3"></div>
+    <div class="background-decor-box4"></div>
+  </div>
+  <v-container class="register-container d-flex align-center justify-center">
+    <v-row no-gutters="true">
+      <v-col cols="6" class="d-flex justify-center">
+        <!-- Left card -->
+        <v-card class="left-card">
+          <div class="logo-front">
+            <img src="../assets/images/logo.png" class="logo-bold" />
           </div>
-        </v-form>
-      </v-card-text>
-    </v-card>
+          <div class="welcome-text-container welcome-container-position">
+            <h2 class="welcome-text text-white text-center">{{ $t('login.welcome') }}</h2>
+          </div>
+          <div class="welcome-text-container-nonmask welcome-container-position">
+            <h2 class="welcome-text text-center">{{ $t('login.welcome') }}</h2>
+          </div>
+        </v-card>
+      </v-col>
+      <v-col cols="6" class="d-flex justify-center">
+        <!-- Right card -->
+        <v-card class="right-card">
+          <v-card-title>
+            <h2 class="text-center">{{ $t('register.title') }}</h2>
+          </v-card-title>
+          <v-card-text>
+            <v-alert v-if="validationSummary" type="error" dismissible class="mb-4">
+              {{ validationSummary }}
+            </v-alert>
+            <v-form @submit.prevent="handleSubmit" ref="form">
+              <v-text-field v-model="userName" :label="$t('register.username')" variant="filled" required
+                class="mb-4"></v-text-field>
+              <v-text-field v-model="email" :label="$t('register.email')" variant="filled" type="email" required
+                class="mb-4"></v-text-field>
+              <v-text-field v-model="password" :label="$t('register.password')" variant="filled" type="password"
+                required class="mb-4"></v-text-field>
+              <v-text-field v-model="confirmPassword" :label="$t('register.confirmPassword')" variant="filled"
+                type="password" required class="mb-4"></v-text-field>
 
-    <!-- Decorations -->
-    <div class="dec-trapezoid"></div>
+              <!-- Register button -->
+              <button class="register-button" type="submit" block>
+                <div class="register-arrow"></div>
+                <div class="register-whitebox"></div>
+                <span class="register-text">{{ $t('register.register') }}</span>
+              </button>
+            </v-form>
+          </v-card-text>
+          <v-card-text class="to-login-text">
+            <p class="text-center">{{ $t('register.alreadyHaveAccount') }}
+              <span @click="navigateToLogin" class="interactive-text">
+                {{ $t('register.clickHere') }}
+              </span>
+            </p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <div class="horizontal-line"></div>
+    </v-row>
   </v-container>
 </template>
 
@@ -72,13 +84,13 @@ export default {
     };
   },
   methods: {
-    async register() {
-      try {
-        if (this.password !== this.confirmPassword) {
-          alert(this.$t("register.passwordMismatch"));
-          return;
-        }
+    async handleSubmit() {
+      if (this.password !== this.confirmPassword) {
+        this.validationSummary = this.$t("register.passwordMismatch");
+        return;
+      }
 
+      try {
         const response = await apiClient.post("/users/Account/Register", {
           userName: this.userName,
           email: this.email,
@@ -86,20 +98,14 @@ export default {
         });
 
         if (response.data.success) {
-          console.log(this.$t("register.success"), response.data);
+          this.$router.push({ name: "login" });
         } else {
-          console.error(this.$t("register.failed"), response.data.error);
+          this.validationSummary = response.data.error || this.$t("register.failed");
         }
       } catch (error) {
-        console.error(this.$t("register.failed"), error);
-        if (error.response && error.response.data) {
-          this.validationSummary = error.response.data.error || this.$t("register.failed");
-        } else {
-          this.validationSummary = this.$t("register.failed");
-        }
+        this.validationSummary = error.response?.data?.error || this.$t("register.failed");
       }
     },
-
     navigateToLogin() {
       this.$router.push({ name: "login" });
     },
@@ -108,85 +114,151 @@ export default {
 </script>
 
 <style scoped>
-.outer-box {
-  background-color: #1C2B42;
-  color: white;
-  width: 1600px;
-  height: 1600px;
-  position: absolute;
-  top: -180px;
-  left: -360px;
+@import '../assets/css/login-background.css';
+.logo {
+  height: 62vh;
+  width: auto;
+  opacity: 0.1;
+}
+
+.logo-front {
+  position: fixed;
+  top: 19vh;
+  left: 19vw;
   z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  clip-path: path("M 0 1600 Q 800 -1600 1600 1600 L 1600 1600 L 0 1600 Z");
+}
+
+.logo-bold {
+  height: 62vh;
+  width: auto;
+  clip-path: inset(7vh 0 7vh 9vw);
+  z-index: 1;
+}
+
+.register-container {
+  position: absolute;
+  top: 26vh;
+  left: 28vw;
+  height: 48vh;
+  width: 42vw;
+  background-color: #ccc;
+  margin: 0 !important;
+  box-shadow: 0px 10px 50px 30px rgba(0, 0, 0, 0.1);
+}
+
+.left-card {
+  position: fixed;
+  height: 48vh;
+  width: 42vw;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #DFCBA4;
+}
+
+.right-card {
+  position: fixed;
+  height: 48vh;
+  width: 42vw;
+  background-color: #F4EEE1;
+  padding: 10px !important;
+}
+
+.welcome-container-position {
+  position: fixed;
+  top: 19vh;
+  left: 19vw;
+  height: 62vh;
+  width: 21vw;
+  margin: 0 !important;
+  padding: 20px !important;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.welcome-text-container {
+  z-index: 100;
+  /* background-color: red; */
+  mask-image: url('../assets/images/logo.png');
+  mask-size: cover;
+  mask-repeat: no-repeat;
+  mask-position: 0%;
+  -webkit-mask-image: url('../assets/images/logo.png');
+  -webkit-mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: 0% 0%;
+}
+
+.welcome-text {
+  position: absolute;
+  top: 12vh;
+  left: 10vw;
+  font-size: 36px;
+}
+
+.welcome-text-container-nonmask {
+  z-index: 0;
+}
+
+/* Register-specific styles */
+.register-button {
+  position: relative;
+  left: 17vw;
+  top: -10vh;
+  color: white;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: unset;
+  }
+}
+
+.register-arrow {
+  width: 80px;
+  height: 240px;
+  background: linear-gradient(to left, #AA1B1D 50%, #EC0017 50%);
+  clip-path: polygon(0% 100%, 50% 30%, 100% 100%, 50% 90%, 50% 80%, 50% 90%);
   transform: rotate(90deg);
 }
 
-.inner-box {
-  background-color: #E2B43C;
-  width: 600px;
-  height: 500px;
-  padding: 20px;
-  z-index: 1000 !important;
+.register-whitebox {
   position: relative;
-  left: -600px;
-  top: -40px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  top: -15vh;
+  right: 120px;
+  width: 80px;
+  height: 80px;
+  background-color: white;
+  clip-path: polygon(50% 0%, 80% 50%, 50% 100%, 20% 50%);
 }
 
-.v-alert {
-  border-radius: 8px;
+.register-text {
+  position: relative;
+  top: -21vh;
+  right: 60px;
+  font-size: 20px;
+  font-weight: normal;
+  transform: perspective(500px) rotateX(20deg) rotateY(8deg) skewX(15deg) scaleX(1.5);
+  transform-origin: center;
+  display: inline-block; /* Ensures the transform applies correctly */
 }
 
-.register-circle {
-  width: 120px;
-  height: 120px;
-  border-radius: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.to-login-text {
   position: absolute;
-  top: 100px;
-  right: -280px;
+  bottom: 0;
+  right: 0;
+  padding: 10px !important;
+  color: #666;
 }
 
-.register-button {
-  background-color: #D5282A;
-  color: white;
-  border: none;
-  border-radius: 100%;
-  width: 100%;
-  height: 100%;
-  font-size: 1.5rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
 
-.register-button:hover {
-  transform: translateY(-20px);
-  background-color: #AA1B1D;
-}
-
-.dec-trapezoid {
-  position: absolute;
-  top: 200px;
-  left: 1150px;
-  width: 200px;
-  height: 800px;
-  background-color: #AA1B1D;
-  transform: rotate(-15deg);
-  z-index: 1 !important;
-}
-
-.thin-curve {
-  position: absolute;
-  width: 100%;
-  height: auto;
-  top: 0;
-  z-index: 3;
+.horizontal-line {
+  position: relative;
+  bottom: 7.8vh;
+  left: 15vw;
+  width: calc(23.3vw - 50px);
+  height: 4px;
+  background-color: #EC0017;
+  z-index: 1;
+  /* box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1); */
 }
 </style>

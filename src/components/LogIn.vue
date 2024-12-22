@@ -1,59 +1,72 @@
 <template>
-    <v-container class="d-flex align-center justify-center"
-        style="min-height: 60vh; max-height: 100vh; position: relative;">
-        <svg class="thin-curve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 700">
-            <path fill="none" stroke="#D5282A" stroke-width="1" d="M 50 400 Q 650 1000 1450 0"></path>
-        </svg>
-        <!-- Filled Circle Decoration -->
-        <div
-            style="position: fixed; top: 0px; left: 10px; width: 120px; height: 120px; background-color: #E8DABD; border-radius: 50%; z-index: 100;">
-        </div>
-        <!-- Outer Box -->
-        <v-card class="outer-box" elevation="2">
-            <v-container style="position: absolute; transform: rotate(-90deg); text-align: center;">
-                <v-card-text>
-                    <h2 class="text-center text-white">{{ $t('login.title') }}</h2>
-                </v-card-text>
-                <v-card-text>
-                    <h2 class="text-center text-white">{{ $t('login.dontHaveAccount') }}<p
-                            @click="navigateToRegister" class="interactive-text">
-                            {{ $t('login.clickHere') }}
-                    </p></h2>
-                </v-card-text>
-            </v-container>
-        </v-card>
-
-        <!-- Inner Box -->
-        <v-card class="inner-box" elevation="3">
-            <v-card-text>
-                <v-alert v-if="validationSummary" type="error" dismissible class="mb-4">
-                    {{ validationSummary }}
-                </v-alert>
-                <v-form @submit.prevent="handleSubmit" ref="form">
-                    <v-text-field v-model="userName" :label="$t('login.userNameLabel')" :error-messages="userNameError"
-                        variant="filled" required class="mb-4"></v-text-field>
-                    <v-text-field v-model="password" :label="$t('login.passwordLabel')" :error-messages="passwordError"
-                        type="password" variant="filled" shaped required class="mb-4"></v-text-field>
-                    <v-checkbox v-model="rememberMe" :label="$t('login.rememberMeLabel')" dense></v-checkbox>
-                    <!-- <v-btn type="submit" variant="outlined" class="mt-4" block>
-                        {{ $t('header.login') }}
-                    </v-btn> -->
-
-                    <!-- Login button -->
-                    <div class="login-circle" elevation="3">
-                        <button class="login-button" type="submit" block>
-                            {{ $t('header.login') }}
-                        </button>
+    <div class="background-decor">
+        <div class="background-decor-line1"></div>
+        <div class="background-decor-line2"></div>
+        <div class="background-decor-line3"></div>
+        <div class="background-decor-line4"></div>
+        <div class="background-decor-line5"></div>
+        <div class="background-decor-circle"></div>
+        <div class="background-decor-box1"></div>
+        <div class="background-decor-box2"></div>
+        <div class="background-decor-box3"></div>
+        <div class="background-decor-box4"></div>
+    </div>
+    <!-- <div class="logo-background">
+        <img src="../assets/images/logo.png" class="logo" />
+    </div> -->
+    <v-container class="login-container d-flex align-center justify-center">
+        <v-row no-gutters="true">
+            <v-col cols="6" class="d-flex justify-center">
+                <!-- left card -->
+                <v-card class="left-card">
+                    <div class="logo-front">
+                        <img src="../assets/images/logo.png" class="logo-bold" />
                     </div>
-                </v-form>
-            </v-card-text>
-        </v-card>
+                    <div class="welcome-text-container welcome-container-position">
+                        <h2 class="welcome-text text-white text-center">{{ $t('login.welcome') }}</h2>
+                    </div>
+                    <div class="welcome-text-container-nonmask welcome-container-position">
+                        <h2 class="welcome-text text-center">{{ $t('login.welcome') }}</h2>
+                    </div>
+                </v-card>
+            </v-col>
+            <v-col cols="6" class="d-flex justify-center">
+                <!-- Right card -->
+                <v-card class="right-card">
+                    <v-card-title>
+                        <h2 class="text-center">{{ $t('login.title') }}</h2>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-alert v-if="validationSummary" type="error" dismissible class="mb-4">
+                            {{ validationSummary }}
+                        </v-alert>
+                        <v-form @submit.prevent="handleSubmit" ref="form">
+                            <v-text-field v-model="userName" :label="$t('login.userNameLabel')"
+                                :error-messages="userNameError" variant="filled" required class="mb-4"></v-text-field>
+                            <v-text-field v-model="password" :label="$t('login.passwordLabel')"
+                                :error-messages="passwordError" type="password" variant="filled" shaped required
+                                class="mb-4"></v-text-field>
+                            <v-checkbox v-model="rememberMe" :label="$t('login.rememberMeLabel')" dense></v-checkbox>
 
-        <!-- Decorations -->
-        <!-- Inclined Trapezoid Decoration -->
-        <div class="dec-trapezoid">
-        </div>
-
+                            <!-- Login button -->
+                            <button class="login-button" type="submit" block>
+                                <div class="login-arrow"></div>
+                                <div class="login-whitebox"></div>
+                                <span class="login-text">{{ $t('header.login') }}</span>
+                            </button>
+                        </v-form>
+                    </v-card-text>
+                    <v-card-text class="to-register-text">
+                        <p class="text-center">{{ $t('login.dontHaveAccount') }}
+                            <span @click="navigateToRegister" class="interactive-text">
+                                {{ $t('login.clickHere') }}
+                            </span>
+                        </p>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+            <div class="horizontal-line"></div>
+        </v-row>
     </v-container>
 </template>
 
@@ -104,138 +117,166 @@ export default {
 </script>
 
 <style scoped>
-.outer-box {
-    background-color: #1C2B42;
-    /* Blue color */
-    color: white;
-    width: 1600px;
-    height: 1600px;
-    position: absolute;
-    top: -180px;
-    left: -360px;
-    z-index: 1 !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    clip-path: path("M 0 1600 Q 800 -1600 1600 1600 L 1600 1600 L 0 1600 Z"
-        );
-    transform: rotate(90deg);
-    /* Rotate the entire box */
-    transform-origin: center;
-    /* Center rotation */
-    /* opacity: 0.9; */
+@import '../assets/css/login-background.css';
+
+.logo-background {
+    position: fixed;
+    top: 19vh;
+    left: 19vw;
+    z-index: 0;
 }
 
-.inner-box {
-    background-color: #E2B43C;
-    /* White background for input fields */
-    width: 600px;
-    height: 400px;
-    padding: 20px;
-    z-index: 1000 !important;
-    position: relative;
-    left: -600px;
-    top: -40px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    /* opacity: 0.9; */
+.logo {
+    height: 62vh;
+    width: auto;
+    opacity: 0.1;
 }
 
-.dec-trapezoid {
+.logo-front {
+    position: fixed;
+    top: 19vh;
+    left: 19vw;
+    z-index: 1;
+}
+
+.logo-bold {
+    height: 62vh;
+    width: auto;
+    clip-path: inset(10vh 0 10vh 9vw);
+    z-index: 1;
+}
+
+.login-container {
     position: absolute;
-    top: 200px;
-    left: 1150px;
-    width: 200px;
-    height: 800px;
-    background-color: #AA1B1D;
-    /* clip-path: polygon(0 100%, 100% 100%, 80% 0, 20% 0); */
+    top: 29vh;
+    left: 28vw;
+    height: 42vh;
+    width: 42vw;
+    background-color: #ccc;
+    margin: 0 !important;
+    box-shadow: 0px 10px 50px 30px rgba(0, 0, 0, 0.1);
+}
+
+.left-card {
+    height: 42vh;
+    width: 42vw;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #DFCBA4;
+}
+
+.welcome-container-position {
+    position: fixed;
+    top: 19vh;
+    left: 19vw;
+    height: 62vh;
+    width: 21vw;
+    margin: 0 !important;
+    padding: 20px !important;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.welcome-text-container {
+    z-index: 100;
+    /* background-color: red; */
+    mask-image: url('../assets/images/logo.png');
+    mask-size: cover;
+    mask-repeat: no-repeat;
+    mask-position: 0%;
+    -webkit-mask-image: url('../assets/images/logo.png');
+    -webkit-mask-size: cover;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: 0% 0%;
+}
+
+.welcome-text {
+    position: absolute;
+    top: 12vh;
+    left: 10vw;
+    font-size: 36px;
+}
+
+.welcome-text-container-nonmask {
+    z-index: 0;
+}
+
+.to-register-text {
     position: absolute;
     bottom: 0;
     right: 0;
-    transform: rotate(-15deg);
-    z-index: 0 !important;
-    /* opacity: 0.9; */
+    padding: 10px !important;
+    color: #666;
 }
 
-.v-btn {
-    font-weight: bold;
+.right-card {
+    height: 42vh;
+    width: 42vw;
+    background-color: #F4EEE1;
+    padding: 10px !important;
+}
+
+.login-button {
+    position: relative;
+    left: 17vw;
+    top: -10vh;
+    color: white;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+        background-color: unset;
+    }
+}
+
+.login-arrow {
+    width: 80px;
+    height: 240px;
+    background: linear-gradient(to left, #AA1B1D 50%, #EC0017 50%);
+    clip-path: polygon(0% 100%,
+            50% 30%,
+            100% 100%,
+            50% 90%,
+            50% 80%,
+            50% 90%);
+    transform: rotate(90deg);
+}
+
+.login-whitebox {
+    position: relative;
+    top: -15vh;
+    right: 120px;
+    width: 80px;
+    height: 80px;
+    background-color: white;
+    clip-path: polygon(50% 0%, 80% 50%, 50% 100%, 20% 50%);
+}
+
+.login-text {
+    position: relative;
+    top: -21vh;
+    right: 60px;
+    font-size: 20px;
+    font-weight: normal;
+
+    /* Add 3D distortion */
+    transform: perspective(500px) rotateX(20deg) rotateY(8deg) skewX(15deg) scaleX(1.5);
+    transform-origin: center; /* Rotate around the center */
+    display: inline-block; /* Ensures the transform applies correctly */
+}
+
+.horizontal-line {
+    position: relative;
+    bottom: 9.3vh;
+    left: 15.6vw;
+    width: calc(22vw - 40px);
+    height: 4px;
+    background-color: #EC0017;
+    z-index: 1;
+    /* box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1); */
 }
 
 .v-alert {
     border-radius: 8px;
-}
-
-.login-btn {
-    font-weight: bold;
-    font-size: 1.5rem;
-    padding: 30px;
-    position: relative;
-    top: 600px;
-}
-
-.login-circle {
-    width: 120px;
-    height: 120px;
-    border-radius: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    position: absolute;
-    top: 100px;
-    right: -280px;
-    /* top: 600px; */
-}
-
-.login-button {
-    background-color: #D5282A;
-    color: white;
-    border: none;
-    border-radius: 100%;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-    top: -20px;
-    font-size: 2rem;
-    transition: transform 0.3s ease;
-
-    &:hover {
-        transform: translateY(-20px);
-        background-color: #AA1B1D;
-        border: 2px solid #1C2B42;
-    }
-}
-
-.curve-decoration {
-    position: absolute;
-    width: 100%;
-    height: auto;
-    top: 0;
-    z-index: 1000000;
-}
-
-.thin-curve {
-    position: absolute;
-    width: 100%;
-    height: auto;
-    top: 0;
-    z-index: 3;
-}
-
-.interactive-text {
-    cursor: pointer;
-    text-decoration: underline;
-    z-index: 1000 !important;
-    position: relative;
-}
-
-/* Remove any unintentional spacing around the text */
-.interactive-text::before,
-.interactive-text::after {
-  content: "";
-  display: none;
 }
 </style>

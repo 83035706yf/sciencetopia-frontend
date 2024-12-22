@@ -438,7 +438,7 @@ export default {
     height: 6%;
     background-color: #DFCBA4;
     color: #03381C;
-    border-bottom: 3px solid #666;
+    border-bottom: 2px solid #977535;
     border-top-right-radius: 8vw !important;
 }
 
@@ -482,10 +482,10 @@ export default {
 .textarea {
     height: 18%;
     /* border-radius: 0 0 16px 0; */
-    border-top: 3px solid #666;
-    border-right: 3px solid #666;
-    border-bottom: 3px solid #666;
-    background-color: #DFCBA4;
+    border-top: 2px solid #977535;
+    border-right: 2px solid #977535;
+    border-bottom: 2px solid #977535;
+    background-color: white;
 }
 
 .send {

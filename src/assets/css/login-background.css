@@ -1,0 +1,107 @@
+.background-decor-line1 {
+    position: fixed;
+    top: 12vh;
+    left: 2.5vw;
+    height: 100vh;
+    width: 1.5px;
+    background-color: #304E75;
+    z-index: 1;
+}
+
+.background-decor-line2 {
+    position: fixed;
+    top: 10vh;
+    left: 6vw;
+    height: 1.5px;
+    width: 100vw;
+    background-color: #EC0017;
+    z-index: 1;
+}
+
+.background-decor-line3 {
+    position: fixed;
+    top: 0vh;
+    right: 2vw;
+    height: 100vh;
+    width: 1.5px;
+    background-color: #304E75;
+    z-index: 100000 !important;
+}
+
+.background-decor-line4 {
+    position: fixed;
+    bottom: 12vh;
+    right: 12vw;
+    height: 1px;
+    width: 100vw;
+    background-color: #EC0017;
+    z-index: 1;
+}
+
+.background-decor-line5 {
+    position: fixed;
+    top: 16vh;
+    right: 0;
+    height: 1.5px;
+    width: 20vw;
+    background-color: #EC0017;
+    z-index: 1;
+}
+
+.background-decor-circle {
+    position: fixed;
+    top: 20vh;
+    right: -8vw;
+    height: 16vw;
+    width: 16vw;
+    background-color: #E2B43C;
+    border-radius: 100%;
+    z-index: 1;
+}
+
+.background-decor-box1 {
+    position: fixed;
+    bottom: 12.3vh;
+    left: 0.5vw;
+    height: 10vh;
+    width: 2vw;
+    background-color: #E2B43C;
+    z-index: 0;
+}
+
+.background-decor-box2 {
+    position: fixed;
+    bottom: 26vh;
+    left: 2vw;
+    height: 8vh;
+    width: 2vh;
+    background-color: #EC0017;
+    transform: rotate(60deg);
+    z-index: 0;
+}
+
+.background-decor-box3 {
+    position: fixed;
+    top: 11.5vh;
+    right: 4vw;
+    height: 3vh;
+    width: 8vh;
+    background-color: rgba(236, 0, 23, 0.6);
+    z-index: 0;
+}
+
+.background-decor-box4 {
+    position: fixed;
+    top: 18vh;
+    right: 8vw;
+    height: 3vh;
+    width: 8vh;
+    background-color: rgba(236, 0, 23, 0.6);
+    z-index: 0;
+}
+
+.interactive-text {
+    color: #666;
+    cursor: pointer;
+    text-decoration: underline;
+}

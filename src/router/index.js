@@ -39,13 +39,13 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LogIn,
-    meta: { layout: "thin"},
+    meta: { layout: "simplest"},
   },
   {
     path: '/register',
     name: 'register',
     component: ReGister,
-    meta: { layout: "thin"},
+    meta: { layout: "simplest"},
   },
   {
     path: '/:userId',

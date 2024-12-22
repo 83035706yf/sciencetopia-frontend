@@ -12,6 +12,7 @@
 <script>
 import LayOut from './components/LayOut.vue';
 import ThinLayOut from './components/ThinLayOut.vue';
+import SimplestLayOut from './components/SimplestLayOut.vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'quill/dist/quill.snow.css'; // for snow theme
 
@@ -20,13 +21,14 @@ export default {
   components: {
     LayOut,
     ThinLayOut,
+    SimplestLayOut,
   },
   computed: {
     layout() {
       // Determine the layout based on the route meta
       const layout = this.$route.meta.layout;
       if (layout === "thin") return "ThinLayOut"; // Thin layout
-      if (layout === "none") return "router-view"; // Render directly without layout
+      else if (layout === "simplest") return "SimplestLayOut"; // Render directly without layout
       return "LayOut"; // Default layout
     },
   },

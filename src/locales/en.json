@@ -85,7 +85,7 @@
         "studygroup": "Study Group"
     },
     "register": {
-        "title": "Register Sciencetopia Account",
+        "title": "Sign Up",
         "alreadyHaveAccount": "Already have an account?",
         "clickHere": "Click here to log in",
         "username": "Username",
@@ -98,7 +98,8 @@
         "failed": "Registration failed"
     },
     "login": {
-        "title": "Log In to Sciencetopia",
+        "title": "Log In",
+        "welcome": "Welcome to",
         "userNameLabel": "Username",
         "passwordLabel": "Password",
         "rememberMeLabel": "Remember Me",

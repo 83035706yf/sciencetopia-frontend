@@ -26,8 +26,8 @@
             </v-dialog>
         </header>
 
-        <v-spacer style="height: 6vh"></v-spacer>
-        <v-divider color="text" opacity="0.2" :thickness="2" style="margin-left: 100px; margin-top: 0;"></v-divider>
+        <v-spacer style="height: 7vh"></v-spacer>
+        <!-- <v-divider color="text" opacity="0.2" :thickness="2" style="margin-left: 100px; margin-top: 0;"></v-divider> -->
         <!-- Main Content -->
         <slot></slot>
 

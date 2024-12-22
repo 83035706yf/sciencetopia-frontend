@@ -85,7 +85,7 @@
         "studygroup": "学习小组"
     },
     "register": {
-        "title": "注册Sciencetopia",
+        "title": "注册",
         "alreadyHaveAccount": "已有账号？",
         "clickHere": "点击这里登录",
         "username": "用户名",
@@ -98,7 +98,8 @@
         "failed": "注册失败"
     },
     "login": {
-        "title": "登录Sciencetopia",
+        "title": "登录",
+        "welcome": "欢迎来到",
         "userNameLabel": "用户名",
         "passwordLabel": "密码",
         "rememberMeLabel": "记住我",
