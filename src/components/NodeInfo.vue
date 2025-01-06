@@ -2,6 +2,7 @@
   <div>
     <v-card v-for="(node, index) in selectedNodes" :key="index">
       <v-card-title>{{ node.name }}</v-card-title>
+      <!-- eslint-disable-next-line vue/no-v-text-v-html-on-component -->
       <v-card-text v-html="node.description.replace(/\n/g, '<br>')"></v-card-text>
       <v-card-item v-for="resource in node.resources" :key="resource" class="link-preview-container">
         <LinkPreview :url="resource.link" />

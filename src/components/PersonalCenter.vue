@@ -43,6 +43,7 @@
                 <v-card-title>
                   {{ group.name }}
                 </v-card-title>
+                <!-- eslint-disable-next-line vue/no-v-text-v-html-on-component -->
                 <v-card-subtitle v-html="group.description"></v-card-subtitle>
                 <v-card-text>
                   <v-chip class="group-chip ml-auto" color="text" variant="outlined" label>{{ group.role }}</v-chip>

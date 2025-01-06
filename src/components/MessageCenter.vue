@@ -205,7 +205,7 @@ export default {
                     partnerName: partnerName    // Use the partnerName passed in
                 };
             } catch (error) {
-                console.error("Unable to retrieve conversation data. Initializing new conversation.");
+                console.error("Unable to retrieve conversation data. Initializing new conversation:", error);
 
                 // Initialize an empty conversation structure as a fallback
                 this.selectedConversation = {

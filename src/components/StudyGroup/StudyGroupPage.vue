@@ -9,11 +9,11 @@
                 :src="group.imageurl ? group.imageurl : require('@/assets/images/default_study_group.png')"></v-img>
             </div>
             <v-card-title>{{ group.name }}</v-card-title>
+            <!-- eslint-disable-next-line vue/no-v-text-v-html-on-component -->
             <v-card-subtitle v-html="group.bio"></v-card-subtitle>
             <v-card-text>
               <span v-html="group.description"></span>
             </v-card-text>
-            <!-- <v-divider color="text" opacity="1"></v-divider> -->
             <v-card-title class="group-member-title">
               {{ $t('studygroup.groupmember') }}:
               <v-row>
