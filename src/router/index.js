@@ -10,13 +10,14 @@ import MessageCenter from '@/components/MessageCenter.vue'
 import AccountCenter from '@/components/AccountCenter.vue'
 import StudyGroupList from '@/components/StudyGroup/StudyGroupList.vue'
 import StudyGroupPage from '@/components/StudyGroup/StudyGroupPage.vue'
-import StudyGroupSpace from '@/components/StudyGroup/StudyGroupSpace.vue'
+// import StudyGroupSpace from '@/components/StudyGroup/StudyGroupSpace.vue'
 import CreateStudyGroup from '@/components/StudyGroup/CreateStudyGroup.vue'
-import ManagePanel from '@/components/StudyGroup/ManagePanel.vue'; // Update with the correct path
+// import ManagePanel from '@/components/StudyGroup/ManagePanel.vue'; // Update with the correct path
 import SponsorShip from '@/components/SponsorShip.vue'
 import AboutUs from '@/components/AboutUs.vue'
 import ContactUs from '@/components/ContactUs.vue'
 import TestHeight from '@/components/TestHeight.vue'
+import StudyPlanDetail from '@/components/StudyPlanDetail.vue'
 
 const routes = [
   {
@@ -39,13 +40,13 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LogIn,
-    meta: { layout: "simplest"},
+    meta: { layout: "simplest" },
   },
   {
     path: '/register',
     name: 'register',
     component: ReGister,
-    meta: { layout: "simplest"},
+    meta: { layout: "simplest" },
   },
   {
     path: '/:userId',
@@ -54,10 +55,17 @@ const routes = [
     props: true,
   },
   {
+    path: '/:userId/:studyPlanId',
+    name: 'StudyPlanDetail',
+    component: StudyPlanDetail,
+    props: true,
+    meta: { layout: "thin" },
+  },
+  {
     path: '/:userId/message',
     name: 'messagecenter',
     component: MessageCenter,
-    meta: { layout: "thin"},
+    meta: { layout: "thin" },
     props: true,
     children: [
       {
@@ -73,7 +81,7 @@ const routes = [
         props: route => ({ userId: route.params.userId })  // Pass userId explicitly
       }
     ]
-  },  
+  },
   {
     path: '/:catchAll(.*)',
     redirect: '/messages/directMessages'
@@ -99,19 +107,34 @@ const routes = [
     name: 'studyGroupPage',
     component: StudyGroupPage,
     props: true, // Enables the route parameter to be passed as a prop to the component
+    meta: { layout: "thin" },
+    children: [
+      {
+        path: 'studyGroupSpace',
+        name: 'studyGroupSpace',
+        component: StudyGroupPage,
+        props: route => ({ groupId: route.params.groupId })  // Pass userId explicitly
+      },
+      {
+        path: 'managePanel',
+        name: 'managePanel',
+        component: StudyGroupPage,
+        props: route => ({ groupId: route.params.groupId })  // Pass userId explicitly
+      }
+    ]
   },
-  {
-    path: '/group/:groupId/manage',
-    name: 'managePanel',
-    component: ManagePanel,
-    props: true
-  },
-  {
-    path: '/studygroup/:groupId/space',
-    name: 'studyGroupSpace',
-    component: StudyGroupSpace,
-    props: true, // Enables the route parameter to be passed as a prop to the component
-  },
+  // {
+  //   path: '/group/:groupId/manage',
+  //   name: 'managePanel',
+  //   component: ManagePanel,
+  //   props: true
+  // },
+  // {
+  //   path: '/studygroup/:groupId/space',
+  //   name: 'studyGroupSpace',
+  //   component: StudyGroupSpace,
+  //   props: true, // Enables the route parameter to be passed as a prop to the component
+  // },
   {
     path: '/support',
     name: 'support',

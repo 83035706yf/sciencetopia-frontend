@@ -1,6 +1,6 @@
 <template>
-  <div class="create-studygroup">
-    <v-container>
+  <v-container>
+    <div class="create-studygroup">
       <v-card-title class="headline">创建学习小组</v-card-title>
       <v-card-text>
         <v-form @submit.prevent="createGroup">
@@ -13,8 +13,8 @@
           </v-card-actions>
         </v-form>
       </v-card-text>
-    </v-container>
-  </div>
+    </div>
+  </v-container>
 </template>
 
 <script>
@@ -97,6 +97,15 @@ export default {
 </script>
 
 <style>
+.create-studygroup {
+  background-color: #F4EEE1;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  box-shadow: -8px 4px 8px 0px rgba(0, 0, 0, 0.05) !important;
+}
+
 /* Custom styles for the standard HTML input */
 .custom-input {
   width: 100%;
@@ -108,7 +117,7 @@ export default {
 }
 
 .quill-editor {
-  height: 300px;
+  height: 400px;
   /* Adjust based on your needs */
 }
 </style>

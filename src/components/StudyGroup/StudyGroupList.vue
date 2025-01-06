@@ -8,6 +8,12 @@
         第一个吧！
       </p>
     </div>
+    <button class="create-group-btn" @click="toCreateGroupPage"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+        width="32" height="32" viewBox="0 0 32 32">
+        <path
+          d="M 12 2 C 6.4889971 2 2 6.4889971 2 12 C 2 17.511003 6.4889971 22 12 22 C 17.511003 22 22 17.511003 22 12 C 22 6.4889971 17.511003 2 12 2 z M 12 4 C 16.430123 4 20 7.5698774 20 12 C 20 16.430123 16.430123 20 12 20 C 7.5698774 20 4 16.430123 4 12 C 4 7.5698774 7.5698774 4 12 4 z M 11 7 L 11 11 L 7 11 L 7 13 L 11 13 L 11 17 L 13 17 L 13 13 L 17 13 L 17 11 L 13 11 L 13 7 L 11 7 z">
+        </path>
+      </svg>创建学习小组</button>
     <div ref="masonryContainer" class="masonry-container">
       <div v-for="group in groups" :key="group.id" class="masonry-item">
         <v-card class="st-card">
@@ -211,7 +217,22 @@ export default {
 /* Create group button */
 .create-group-btn {
   position: fixed;
-  top: 18vh;
-  right: 20px;
+  top: 20vh;
+  right: 4vw;
+  background-color: #DFCBA4;
+  border: 1px solid #FAF6F0;
+  box-shadow: 0 4px 10px 0px #FAF6F0;
+  padding: 20px 10px 20px 10px;
+  border-radius: 16px;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-size: 18px;
+
+  &:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease-in-out;
+    border: 2px solid #FAF6F0;
+    box-shadow: 0 4px 10px 1px #FAF6F0;
+  }
 }
 </style>

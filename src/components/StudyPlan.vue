@@ -1,8 +1,4 @@
 <template>
-    <div v-if="isCelebrating" class="celebration">
-        <div class="confetti" v-for="n in 200" :key="n"
-            :style="{ animationDelay: `${n * 10}ms`, backgroundColor: getConfettiColor(n) }"></div>
-    </div>
     <div class="study-plan">
         <div class="edit-button-container">
             <!-- Edit Button -->
@@ -17,8 +13,8 @@
         <div v-else>
             <v-tooltip :text="`学习进度：${studyPlan.progressPercentage} %`" location="up">
                 <template v-slot:activator="{ props }">
-                    <v-progress-linear v-bind="props" :model-value="studyPlan.progressPercentage"
-                        color="text" height="15" striped></v-progress-linear>
+                    <v-progress-linear v-bind="props" :model-value="studyPlan.progressPercentage" color="text"
+                        height="15" striped></v-progress-linear>
                 </template>
             </v-tooltip>
             <!-- <v-spacer style="height: 5px;"></v-spacer> -->
@@ -42,7 +38,8 @@
                         {{ lesson.description }}
                         <!-- Resource Link Previews for Prerequisite Lessons -->
                         <div v-if="lesson.resources[0] != null" class="link-previews-container">
-                            <v-card max-width="300px" v-for="resource in lesson.resources" :key="resource" class="link-preview-container">
+                            <v-card max-width="300px" v-for="resource in lesson.resources" :key="resource"
+                                class="link-preview-container">
                                 <v-card-item>
                                     <LinkPreview :url="resource.link" />
                                     <!-- Checkbox to mark the resource as learned -->
@@ -93,7 +90,8 @@
                 </div>
             </div>
             <div class="py-3"></div>
-            <h2 v-if="studyPlan.advancedTopics && studyPlan.advancedTopics.length > 0">{{ $t('studyplan.advancedtopics') }}</h2>
+            <h2 v-if="studyPlan.advancedTopics && studyPlan.advancedTopics.length > 0">{{ $t('studyplan.advancedtopics')
+                }}</h2>
             <div class="advanced-topics">
                 <div v-for="(lesson, key) in studyPlan.advancedTopics" :key="key" class="item-box"
                     @click="toggleDetails(key, 'advancedTopics')">
@@ -128,6 +126,7 @@
 </template>
 
 <script>
+import confetti from "canvas-confetti";
 import rightArrow from '@/assets/images/right-arrow-next.svg';
 import { apiClient } from '@/api';
 import LinkPreview from '@/components/LinkPreview.vue'; // Assuming you have a LinkPreview component
@@ -214,7 +213,7 @@ export default {
             } else {
                 // If learning for the first time, no confirmation needed
                 // Show celebration if marking as learned for the first time
-                this.showCelebration();
+                this.launchConfetti(); // Show confetti when marking as learned
             }
 
             // Update the learned status based on the action
@@ -239,27 +238,30 @@ export default {
             }
         },
 
-        showCelebration() {
-            this.isCelebrating = true;
+        launchConfetti() {
+            const end = Date.now() + 10 * 1000; // 15 seconds duration
+            const colors = ['#EC0017', '#E2B43C', '00FFF7']; // Custom colors
 
-            // Automatically hide the celebration effect after a short duration
-            setTimeout(() => {
-                this.isCelebrating = false;
-            }, 4000); // Duration of the celebration animation
-        },
+            (function frame() {
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }, // Left side
+                    colors: colors,
+                });
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }, // Right side
+                    colors: colors,
+                });
 
-        getBackgroundStyle(progressPercentage) {
-            // Create a linear gradient from green to the original background color at the progress point
-            const backgroundStyle = {
-                backgroundImage: `linear-gradient(to right, green ${progressPercentage}%, #ffffff ${progressPercentage}%)`
-            };
-            return backgroundStyle;
-        },
-
-        getConfettiColor(index) {
-            // Return a random color for the confetti
-            const colors = ['#D5282A', '#01FFF7', '#E8DABD', '#000000'];
-            return colors[index % colors.length];
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame); // Continue animation
+                }
+            })();
         }
     },
 };
@@ -346,50 +348,5 @@ export default {
     margin-right: 20px;
     /* Space between arrow and box */
     margin-top: 10px;
-}
-
-@keyframes celebration-animation {
-    0% {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-    }
-
-    80% {
-        opacity: 1;
-    }
-
-    100% {
-        transform: translateY(30vh) scale(0);
-        opacity: 0;
-    }
-}
-
-.celebration {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    pointer-events: none;
-    display: flex;
-    flex-wrap: wrap;
-    width: 100vw;
-    height: 100vh;
-    justify-content: center;
-    align-items: start;
-    overflow: hidden;
-    z-index: 9999;
-}
-
-.confetti {
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    animation: celebration-animation 1.5s linear forwards;
-}
-
-.edit-button-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 5px;
 }
 </style>

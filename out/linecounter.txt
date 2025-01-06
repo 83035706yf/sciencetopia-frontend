@@ -1,0 +1,182 @@
+===============================================================================
+EXTENSION NAME : linecounter
+EXTENSION VERSION : 0.2.7
+-------------------------------------------------------------------------------
+count time : 2024-12-30 18:01:35
+count workspace : c:\Users\83035\OneDrive - Washington University in St. Louis\Documents\Sciencetopia\SciencetopiaWebApp\sciencetopia-frontend
+total files : 157
+total code lines : 24701
+total comment lines : 1130
+total blank lines : 1230
+
+    statistics
+   |      extension|     total code|  total comment|    total blank|percent|
+   -------------------------------------------------------------------------
+   |               |             19|              0|              4|  0.077|
+   |            .js|           1209|            273|            162|    4.9|
+   |            .md|             30|              1|              5|   0.12|
+   |          .scss|            125|            141|             36|   0.51|
+   |          .json|          13701|              0|             32|     55|
+   |           .vue|           7226|            629|            704|     29|
+   |          .html|             81|              1|              8|   0.33|
+   |           .css|            732|             77|            124|    3.0|
+   |           .svg|           1578|              8|            155|    6.4|
+   -------------------------------------------------------------------------
+.gitignore, code is 19, comment is 0, blank is 4.
+babel.config.js, code is 4, comment is 0, blank is 1.
+jsconfig.json, code is 17, comment is 0, blank is 2.
+package-lock.json, code is 12621, comment is 0, blank is 28.
+package.json, code is 73, comment is 0, blank is 2.
+public\assets\css\dark-theme.css, code is 10, comment is 1, blank is 3.
+public\assets\images\banner.png, it is a binary file.
+public\ChatHubTest.html, code is 64, comment is 0, blank is 8.
+public\favicon.ico, it is a binary file.
+public\index.html, code is 17, comment is 1, blank is 0.
+README.md, code is 30, comment is 1, blank is 5.
+src\api.js, code is 21, comment is 2, blank is 3.
+src\App.vue, code is 48, comment is 12, blank is 5.
+src\assets\css\avatar.css, code is 13, comment is 0, blank is 3.
+src\assets\css\footer.css, code is 19, comment is 2, blank is 4.
+src\assets\css\form.css, code is 44, comment is 3, blank is 6.
+src\assets\css\header.css, code is 155, comment is 39, blank is 35.
+src\assets\css\home.css, code is 31, comment is 0, blank is 6.
+src\assets\css\image-background.css, code is 8, comment is 1, blank is 0.
+src\assets\css\knowledge-graph.css, code is 9, comment is 0, blank is 0.
+src\assets\css\knowledge-network.css, code is 21, comment is 2, blank is 2.
+src\assets\css\layout.css, code is 72, comment is 1, blank is 13.
+src\assets\css\link-preview.css, code is 36, comment is 0, blank is 6.
+src\assets\css\login-background.css, code is 97, comment is 0, blank is 10.
+src\assets\css\news-recommendation.css, code is 38, comment is 2, blank is 5.
+src\assets\css\search-tools.css, code is 15, comment is 1, blank is 2.
+src\assets\css\site.css, code is 63, comment is 11, blank is 13.
+src\assets\css\special-text.css, code is 39, comment is 12, blank is 4.
+src\assets\css\switches.css, code is 51, comment is 2, blank is 10.
+src\assets\css\table.css, code is 11, comment is 0, blank is 2.
+src\assets\data\countryCodes.json, code is 180, comment is 0, blank is 0.
+src\assets\data\mockStudyGroup.json, code is 210, comment is 0, blank is 0.
+src\assets\data\mockStudyPlan.json, code is 85, comment is 0, blank is 0.
+src\assets\fonts\ChillRoundGothic_Medium.otf, it is a binary file.
+src\assets\fonts\ChillRoundGothic_Regular.otf, it is a binary file.
+src\assets\fonts\ChillYunmoGothicMedium.otf, it is a binary file.
+src\assets\fonts\ChillYunmoGothicRegular.otf, it is a binary file.
+src\assets\fonts\NotoSansSC-Medium.ttf, it is a binary file.
+src\assets\fonts\NotoSansSC-Regular.ttf, it is a binary file.
+src\assets\fonts\SiYuanHeiTiGoogleBan\NotoSansCJK-Black-7.otf, it is a binary file.
+src\assets\fonts\SiYuanHeiTiGoogleBan\NotoSansCJK-Bold-6.otf, it is a binary file.
+src\assets\fonts\SiYuanHeiTiGoogleBan\NotoSansCJK-DemiLight-4.otf, it is a binary file.
+src\assets\fonts\SiYuanHeiTiGoogleBan\NotoSansCJK-Light-3.otf, it is a binary file.
+src\assets\fonts\SiYuanHeiTiGoogleBan\NotoSansCJK-Medium-5.otf, it is a binary file.
+src\assets\fonts\SiYuanHeiTiGoogleBan\NotoSansCJK-Regular-1.otf, it is a binary file.
+src\assets\fonts\SiYuanHeiTiGoogleBan\NotoSansCJK-Thin-2.otf, it is a binary file.
+src\assets\images\._recommendation_main.svg, it is a binary file.
+src\assets\images\avatar.svg, code is 112, comment is 1, blank is 1.
+src\assets\images\banner.png, it is a binary file.
+src\assets\images\black_line.svg, code is 54, comment is 1, blank is 1.
+src\assets\images\ciencetopia.png, it is a binary file.
+src\assets\images\ciencetopia.svg, code is 93, comment is 1, blank is 1.
+src\assets\images\dec_curve.svg, code is 8, comment is 0, blank is 1.
+src\assets\images\default_avatar.png, it is a binary file.
+src\assets\images\default_study_group.png, it is a binary file.
+src\assets\images\design.png, it is a binary file.
+src\assets\images\design_lightbg.png, it is a binary file.
+src\assets\images\design_whitebg.png, it is a binary file.
+src\assets\images\EditGuide\doubleselect.svg, code is 52, comment is 0, blank is 0.
+src\assets\images\EditGuide\links.svg, code is 41, comment is 0, blank is 0.
+src\assets\images\EditGuide\resource10.svg, code is 95, comment is 0, blank is 17.
+src\assets\images\EditGuide\resource11.svg, code is 95, comment is 0, blank is 17.
+src\assets\images\EditGuide\resource14.svg, code is 64, comment is 0, blank is 9.
+src\assets\images\EditGuide\resource16.svg, code is 77, comment is 0, blank is 14.
+src\assets\images\EditGuide\resource17.svg, code is 75, comment is 0, blank is 11.
+src\assets\images\EditGuide\resource19.svg, code is 95, comment is 0, blank is 16.
+src\assets\images\EditGuide\resource3.svg, code is 58, comment is 0, blank is 11.
+src\assets\images\EditGuide\resource5.svg, code is 58, comment is 0, blank is 11.
+src\assets\images\EditGuide\resource6.svg, code is 60, comment is 0, blank is 8.
+src\assets\images\EditGuide\resource7.svg, code is 51, comment is 0, blank is 8.
+src\assets\images\EditGuide\resource8.svg, code is 75, comment is 0, blank is 14.
+src\assets\images\EditGuide\resource9.svg, code is 73, comment is 0, blank is 11.
+src\assets\images\image_resources\image1.jpg, it is a binary file.
+src\assets\images\image_resources\image10.jpg, it is a binary file.
+src\assets\images\image_resources\image11.jpg, it is a binary file.
+src\assets\images\image_resources\image2.png, it is a binary file.
+src\assets\images\image_resources\image3.png, it is a binary file.
+src\assets\images\image_resources\image4.jpg, it is a binary file.
+src\assets\images\image_resources\image5.jpg, it is a binary file.
+src\assets\images\image_resources\image6.jpg, it is a binary file.
+src\assets\images\image_resources\image7.jpg, it is a binary file.
+src\assets\images\image_resources\image9.jpg, it is a binary file.
+src\assets\images\image_resources\redtriangle.webp, it is a binary file.
+src\assets\images\logo.png, it is a binary file.
+src\assets\images\LOGO6.jpg, it is a binary file.
+src\assets\images\logo_banner.png, it is a binary file.
+src\assets\images\recommendation_main.svg, code is 1, comment is 1, blank is 0.
+src\assets\images\red_arrow.svg, code is 85, comment is 1, blank is 1.
+src\assets\images\red_black_bar.svg, code is 87, comment is 1, blank is 1.
+src\assets\images\right-arrow-next.svg, code is 10, comment is 0, blank is 0.
+src\assets\images\subject_content_frame.svg, code is 77, comment is 1, blank is 1.
+src\assets\images\subject_shape.svg, code is 82, comment is 1, blank is 1.
+src\components\AboutUs.vue, code is 116, comment is 2, blank is 6.
+src\components\AccountCenter.vue, code is 359, comment is 32, blank is 14.
+src\components\ContactUs.vue, code is 26, comment is 0, blank is 3.
+src\components\ContextMenu.vue, code is 70, comment is 5, blank is 5.
+src\components\DarkModeSwitch.vue, code is 96, comment is 4, blank is 20.
+src\components\DefaultFooterBar.vue, code is 25, comment is 0, blank is 2.
+src\components\EditGuideDialog.vue, code is 159, comment is 5, blank is 10.
+src\components\EditStudyPlanForm.vue, code is 213, comment is 5, blank is 19.
+src\components\FavoriteKnowledgeGraph.vue, code is 85, comment is 11, blank is 9.
+src\components\FooterBar.vue, code is 38, comment is 0, blank is 1.
+src\components\GlobalLoader.vue, code is 37, comment is 3, blank is 5.
+src\components\HeaderBar.vue, code is 196, comment is 35, blank is 19.
+src\components\JoinStudyGroup.vue, code is 22, comment is 1, blank is 1.
+src\components\KnowledgeNetwork.vue, code is 343, comment is 39, blank is 51.
+src\components\LayOut.vue, code is 196, comment is 30, blank is 40.
+src\components\LearningPlanner.vue, code is 91, comment is 21, blank is 11.
+src\components\LinkCreationForm.vue, code is 77, comment is 6, blank is 10.
+src\components\LinkPreview.vue, code is 44, comment is 4, blank is 2.
+src\components\LoadingSpinner.vue, code is 71, comment is 0, blank is 7.
+src\components\LogIn.vue, code is 251, comment is 5, blank is 27.
+src\components\LogInPartial.vue, code is 218, comment is 30, blank is 25.
+src\components\MediaFeed.vue, code is 49, comment is 0, blank is 7.
+src\components\MessageAlert.vue, code is 121, comment is 15, blank is 11.
+src\components\MessageCenter.vue, code is 470, comment is 44, blank is 30.
+src\components\MessageList.vue, code is 192, comment is 14, blank is 20.
+src\components\NodeCreationForm.vue, code is 129, comment is 8, blank is 14.
+src\components\NodeInfo.vue, code is 37, comment is 1, blank is 4.
+src\components\NotificationService.js, code is 16, comment is 4, blank is 5.
+src\components\PersonalCenter.vue, code is 183, comment is 3, blank is 13.
+src\components\PersonalInformation.vue, code is 232, comment is 14, blank is 14.
+src\components\ReGister.vue, code is 238, comment is 3, blank is 23.
+src\components\ScrollToTopButton.vue, code is 129, comment is 25, blank is 14.
+src\components\SimplestLayOut.vue, code is 35, comment is 1, blank is 5.
+src\components\SponsorShip.vue, code is 105, comment is 0, blank is 15.
+src\components\StudyGroup\ActivityLogs.vue, code is 39, comment is 0, blank is 3.
+src\components\StudyGroup\CreateStudyGroup.vue, code is 94, comment is 23, blank is 10.
+src\components\StudyGroup\GroupOverview.vue, code is 84, comment is 3, blank is 5.
+src\components\StudyGroup\JoinRequests.vue, code is 79, comment is 2, blank is 5.
+src\components\StudyGroup\ManagePanel.vue, code is 122, comment is 14, blank is 12.
+src\components\StudyGroup\MemberManagement.vue, code is 95, comment is 2, blank is 7.
+src\components\StudyGroup\StudyGroupList.vue, code is 160, comment is 42, blank is 19.
+src\components\StudyGroup\StudyGroupPage.vue, code is 405, comment is 39, blank is 45.
+src\components\StudyGroup\StudyGroupSpace.vue, code is 27, comment is 3, blank is 1.
+src\components\StudyPlan.vue, code is 292, comment is 44, blank is 27.
+src\components\StudyPlanDetail.vue, code is 235, comment is 11, blank is 16.
+src\components\StudyPlanList.vue, code is 161, comment is 1, blank is 8.
+src\components\SystemNotifications.vue, code is 130, comment is 4, blank is 9.
+src\components\TestHeight.vue, code is 16, comment is 0, blank is 2.
+src\components\ThinHeaderBar.vue, code is 145, comment is 7, blank is 15.
+src\components\ThinLayOut.vue, code is 184, comment is 28, blank is 36.
+src\components\useGraphEditMode.js, code is 10, comment is 3, blank is 4.
+src\components\useKnowledgeGraph.js, code is 562, comment is 184, blank is 105.
+src\eventBus.js, code is 26, comment is 1, blank is 3.
+src\i18n.js, code is 24, comment is 6, blank is 4.
+src\locales\en.json, code is 257, comment is 0, blank is 0.
+src\locales\zh.json, code is 258, comment is 0, blank is 0.
+src\main.js, code is 63, comment is 28, blank is 14.
+src\router\index.js, code is 146, comment is 22, blank is 4.
+src\services\linkPreviewService.js, code is 20, comment is 2, blank is 1.
+src\services\signalr-service.js, code is 65, comment is 5, blank is 11.
+src\store.js, code is 245, comment is 15, blank is 7.
+src\styles\main.scss, code is 125, comment is 141, blank is 36.
+src\views\HomePage.vue, code is 182, comment is 26, blank is 19.
+src\views\SearchListPage.vue, code is 75, comment is 2, blank is 3.
+vue.config.js, code is 7, comment is 1, blank is 0.
+===============================================================================

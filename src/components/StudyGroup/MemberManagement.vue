@@ -99,5 +99,6 @@ export default {
   /* Ensure the card takes the full width of its container */
   max-width: 1200px;
   margin: auto;
+  background-color: unset !important;
 }
 </style>

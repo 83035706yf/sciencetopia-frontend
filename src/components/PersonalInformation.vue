@@ -1,33 +1,35 @@
 <template>
-    <v-container class="d-flex align-center justify-center">
+    <v-container class="d-flex align-center justify-center personal-information-container">
         <!-- Display Mode -->
         <div v-if="!isEditMode">
-            <v-card class="st-card" >
             <v-container>
-                <v-row no-gutters style="align-items: center;">
-                    <v-col cols="auto" style="width: 200px;">
-                        <v-avatar size="120">
+                <div align="center">
+                    <v-btn :disabled="true" icon="dots-vertical" class="default-avatar profile-avatar" size="200">
+                        <v-avatar size="196">
                             <img :src="avatarUrl" alt="Avatar">
                         </v-avatar>
-                        <div style="height: 20px;"></div>
-                        <v-card-title style="padding: 0px 10px">{{ userInfo.userName }}</v-card-title>
-                    </v-col>
-                    <v-col cols="auto" style="width: 460px;">
-                        <p>{{ $t('userprofile.gender') }}{{ $t(':') }}{{ userInfo.gender }}</p>
-                        <p>{{ $t('userprofile.dateofbirth') }}{{ $t(':') }}{{ userInfo.formattedBirthDate }}</p>
-                        <p>{{ $t('userprofile.aboutme') }}{{ $t(':') }}{{ userInfo.selfIntroduction }}</p>
-                        <v-divider class="border-opacity-0"></v-divider>
-                        <p>{{ $t('userprofile.completedStudyPlanCountmsg', { completedStudyPlanCount }) }}</p>
-                        <p>{{ $t('userprofile.contributeNodemsg', { contributedNodeCount, contributedLinkCount }) }}</p>
-                    </v-col>
-                    <v-col cols="auto" style="align-self:baseline">
-                        <!-- Show edit button only if it's the current user's profile -->
-                        <v-btn v-if="isCurrentUser" icon variant="text" @click="enterEditMode">✏️</v-btn>
-                        <slot v-if="!isCurrentUser"></slot>
-                    </v-col>
-                </v-row>
+                    </v-btn>
+                </div>
+                <v-card class="st-card profile-card">
+                    <div>
+                        <div class="profile-title">
+                            <v-card-title class="username">{{ userInfo.userName }}</v-card-title>
+                            <!-- Show edit button only if it's the current user's profile -->
+                            <v-btn v-if="isCurrentUser" icon variant="text" @click="enterEditMode">✏️</v-btn>
+                            <slot v-if="!isCurrentUser"></slot>
+                        </div>
+                        <div class="profile-text">
+                            <p>{{ $t('userprofile.gender') }}{{ $t(':') }}{{ userInfo.gender }}</p>
+                            <p>{{ $t('userprofile.dateofbirth') }}{{ $t(':') }}{{ userInfo.formattedBirthDate }}</p>
+                            <p>{{ $t('userprofile.aboutme') }}{{ $t(':') }}{{ userInfo.selfIntroduction }}</p>
+                            <v-divider class="border-opacity-0"></v-divider>
+                            <p>{{ $t('userprofile.completedStudyPlanCountmsg', { completedStudyPlanCount }) }}</p>
+                            <p>{{ $t('userprofile.contributeNodemsg', { contributedNodeCount, contributedLinkCount }) }}
+                            </p>
+                        </div>
+                    </div>
+                </v-card>
             </v-container>
-            </v-card>
         </div>
 
         <!-- Edit Mode -->
@@ -200,11 +202,47 @@ export default {
 </script>
 
 <style scoped>
+.profile-card {
+    /* width: 12vw; */
+    padding: 20px;
+    padding-top: 100px;
+    margin-top: -90px;
+    padding-bottom: 40px;
+}
+
+.profile-title {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .edit-avatar-icon {
     position: relative;
     right: 0;
     bottom: 0;
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 50%;
+}
+
+.profile-avatar {
+    position: relative;
+    z-index: 100;
+}
+
+.username {
+    font-size: 32px;
+    color: #1C2B42;
+    font-weight: bold;
+}
+
+.personal-information-container {
+    padding: 0;
+    margin: 0;
+}
+
+.profile-text {
+    font-size: 18px;
+    padding: 20px;
 }
 </style>

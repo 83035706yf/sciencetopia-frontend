@@ -1,44 +1,38 @@
 <template>
-  <div class="manage-panel">
-    <v-container class="framed-container">
-      <v-row>
-        <v-col cols="3">
-          <!-- Side Navigation List -->
-          <v-list variant="plain" class="list-on-framed-container">
-            <v-list-item color="secondary" v-for="(item, index) in tabs" :key="index" :active="activeTab === index"
-              @click="activeTab = index" class="list-item">
-              <div style="display: flex; align-items: center; margin-left: 6vw;">
-                <v-list-item-title style="font-size: 1.2rem;">{{ item.title }}</v-list-item-title>
-                <v-badge style="margin-left: 20px; margin-bottom: 5px;"
-                  v-if="item.title === '加入请求' && pendingJoinRequests > 0" color="red" :content="pendingJoinRequests"
-                  overlap></v-badge>
-              </div>
-            </v-list-item>
-          </v-list>
-        </v-col>
+  <v-container class="manage-panel">
+    <v-row>
+      <v-col cols="2">
+        <!-- Side Navigation List -->
+        <v-list variant="plain" class="tab-list">
+          <v-list-item color="secondary" v-for="(item, index) in tabs" :key="index" :active="activeTab === index"
+            @click="activeTab = index" class="list-item">
+            <div style="display: flex; align-items: center; margin-left: 6vw;">
+              <v-list-item-title style="font-size: 1.2rem;">{{ item.title }}</v-list-item-title>
+              <v-badge style="margin-left: 20px; margin-bottom: 5px;"
+                v-if="item.title === '加入请求' && pendingJoinRequests > 0" color="red" :content="pendingJoinRequests"
+                overlap></v-badge>
+            </div>
+          </v-list-item>
+        </v-list>
+      </v-col>
 
-        <!-- <v-divider vertical :thickness="3" color="secondary" opacity="1"></v-divider>
-        <v-divider vertical :thickness="2" color="yellow" opacity="1" style="margin-left: 5px;"></v-divider> -->
-        <v-col cols="8">
-          <v-card>
-            <!-- Tab Content -->
-            <v-tab-item v-if="activeTab === 0">
-              <GroupOverview :groupId="groupId" />
-            </v-tab-item>
-            <v-tab-item v-if="isManager && activeTab === 1">
-              <MemberManagement :groupId="groupId" />
-            </v-tab-item>
-            <v-tab-item v-if="isManager && activeTab === 2">
-              <JoinRequests :groupId="groupId" />
-            </v-tab-item>
-            <v-tab-item v-if="isManager && activeTab === 3">
-              <ActivityLogs :groupId="groupId" />
-            </v-tab-item>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+      <v-col cols="10">
+        <!-- Tab Content -->
+        <div v-if="activeTab === 0" class="tab-content">
+          <GroupOverview :groupId="groupId" />
+        </div>
+        <div v-if="isManager && activeTab === 1" class="tab-content">
+          <MemberManagement :groupId="groupId" />
+        </div>
+        <div v-if="isManager && activeTab === 2" class="tab-content">
+          <JoinRequests :groupId="groupId" />
+        </div>
+        <div v-if="isManager && activeTab === 3" class="tab-content">
+          <ActivityLogs :groupId="groupId" />
+        </div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -93,7 +87,27 @@ export default {
 .manage-panel {
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  /* background-color: #F4EEE1; */
+  height: 84vh;
+  position: relative;
+  top: -3vh;
+  /* box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.05) !important; */
+}
+
+.tab-list {
+  background-color: #F4EEE1;
+  padding: 0;
+  box-shadow: -8px 4px 8px 0px rgba(0, 0, 0, 0.05) !important;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.tab-content {
+  background-color: #F4EEE1;
+  padding: 0;
+  box-shadow: 8px 4px 8px 0px rgba(0, 0, 0, 0.05) !important;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .list-item {

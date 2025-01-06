@@ -1,0 +1,1043 @@
+{
+    "extension": "linecounter",
+    "version": "0.2.7",
+    "workspace": "c:\\Users\\83035\\OneDrive - Washington University in St. Louis\\Documents\\Sciencetopia\\SciencetopiaWebApp\\sciencetopia-frontend",
+    "linecount": [
+        {
+            "version": "0.2.7",
+            "counttime": "2024-12-30 18:01:35",
+            "filesum": 157,
+            "codesum": 24701,
+            "commentsum": 1130,
+            "blanksum": 1230,
+            "statistics": {
+                "": {
+                    "code": 19,
+                    "comment": 0,
+                    "blank": 4
+                },
+                ".js": {
+                    "code": 1209,
+                    "comment": 273,
+                    "blank": 162
+                },
+                ".md": {
+                    "code": 30,
+                    "comment": 1,
+                    "blank": 5
+                },
+                ".scss": {
+                    "code": 125,
+                    "comment": 141,
+                    "blank": 36
+                },
+                ".json": {
+                    "code": 13701,
+                    "comment": 0,
+                    "blank": 32
+                },
+                ".vue": {
+                    "code": 7226,
+                    "comment": 629,
+                    "blank": 704
+                },
+                ".html": {
+                    "code": 81,
+                    "comment": 1,
+                    "blank": 8
+                },
+                ".css": {
+                    "code": 732,
+                    "comment": 77,
+                    "blank": 124
+                },
+                ".svg": {
+                    "code": 1578,
+                    "comment": 8,
+                    "blank": 155
+                }
+            },
+            "filelist": [
+                {
+                    "blank": 4,
+                    "code": 19,
+                    "comment": 0,
+                    "filename": ".gitignore"
+                },
+                {
+                    "blank": 1,
+                    "code": 4,
+                    "comment": 0,
+                    "filename": "babel.config.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 17,
+                    "comment": 0,
+                    "filename": "jsconfig.json"
+                },
+                {
+                    "blank": 28,
+                    "code": 12621,
+                    "comment": 0,
+                    "filename": "package-lock.json"
+                },
+                {
+                    "blank": 2,
+                    "code": 73,
+                    "comment": 0,
+                    "filename": "package.json"
+                },
+                {
+                    "blank": 3,
+                    "code": 10,
+                    "comment": 1,
+                    "filename": "public\\assets\\css\\dark-theme.css"
+                },
+                {
+                    "filename": "public\\assets\\images\\banner.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 8,
+                    "code": 64,
+                    "comment": 0,
+                    "filename": "public\\ChatHubTest.html"
+                },
+                {
+                    "filename": "public\\favicon.ico",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 17,
+                    "comment": 1,
+                    "filename": "public\\index.html"
+                },
+                {
+                    "blank": 5,
+                    "code": 30,
+                    "comment": 1,
+                    "filename": "README.md"
+                },
+                {
+                    "blank": 3,
+                    "code": 21,
+                    "comment": 2,
+                    "filename": "src\\api.js"
+                },
+                {
+                    "blank": 5,
+                    "code": 48,
+                    "comment": 12,
+                    "filename": "src\\App.vue"
+                },
+                {
+                    "blank": 3,
+                    "code": 13,
+                    "comment": 0,
+                    "filename": "src\\assets\\css\\avatar.css"
+                },
+                {
+                    "blank": 4,
+                    "code": 19,
+                    "comment": 2,
+                    "filename": "src\\assets\\css\\footer.css"
+                },
+                {
+                    "blank": 6,
+                    "code": 44,
+                    "comment": 3,
+                    "filename": "src\\assets\\css\\form.css"
+                },
+                {
+                    "blank": 35,
+                    "code": 155,
+                    "comment": 39,
+                    "filename": "src\\assets\\css\\header.css"
+                },
+                {
+                    "blank": 6,
+                    "code": 31,
+                    "comment": 0,
+                    "filename": "src\\assets\\css\\home.css"
+                },
+                {
+                    "blank": 0,
+                    "code": 8,
+                    "comment": 1,
+                    "filename": "src\\assets\\css\\image-background.css"
+                },
+                {
+                    "blank": 0,
+                    "code": 9,
+                    "comment": 0,
+                    "filename": "src\\assets\\css\\knowledge-graph.css"
+                },
+                {
+                    "blank": 2,
+                    "code": 21,
+                    "comment": 2,
+                    "filename": "src\\assets\\css\\knowledge-network.css"
+                },
+                {
+                    "blank": 13,
+                    "code": 72,
+                    "comment": 1,
+                    "filename": "src\\assets\\css\\layout.css"
+                },
+                {
+                    "blank": 6,
+                    "code": 36,
+                    "comment": 0,
+                    "filename": "src\\assets\\css\\link-preview.css"
+                },
+                {
+                    "blank": 10,
+                    "code": 97,
+                    "comment": 0,
+                    "filename": "src\\assets\\css\\login-background.css"
+                },
+                {
+                    "blank": 5,
+                    "code": 38,
+                    "comment": 2,
+                    "filename": "src\\assets\\css\\news-recommendation.css"
+                },
+                {
+                    "blank": 2,
+                    "code": 15,
+                    "comment": 1,
+                    "filename": "src\\assets\\css\\search-tools.css"
+                },
+                {
+                    "blank": 13,
+                    "code": 63,
+                    "comment": 11,
+                    "filename": "src\\assets\\css\\site.css"
+                },
+                {
+                    "blank": 4,
+                    "code": 39,
+                    "comment": 12,
+                    "filename": "src\\assets\\css\\special-text.css"
+                },
+                {
+                    "blank": 10,
+                    "code": 51,
+                    "comment": 2,
+                    "filename": "src\\assets\\css\\switches.css"
+                },
+                {
+                    "blank": 2,
+                    "code": 11,
+                    "comment": 0,
+                    "filename": "src\\assets\\css\\table.css"
+                },
+                {
+                    "blank": 0,
+                    "code": 180,
+                    "comment": 0,
+                    "filename": "src\\assets\\data\\countryCodes.json"
+                },
+                {
+                    "blank": 0,
+                    "code": 210,
+                    "comment": 0,
+                    "filename": "src\\assets\\data\\mockStudyGroup.json"
+                },
+                {
+                    "blank": 0,
+                    "code": 85,
+                    "comment": 0,
+                    "filename": "src\\assets\\data\\mockStudyPlan.json"
+                },
+                {
+                    "filename": "src\\assets\\fonts\\ChillRoundGothic_Medium.otf",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\fonts\\ChillRoundGothic_Regular.otf",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\fonts\\ChillYunmoGothicMedium.otf",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\fonts\\ChillYunmoGothicRegular.otf",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\fonts\\NotoSansSC-Medium.ttf",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\fonts\\NotoSansSC-Regular.ttf",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\fonts\\SiYuanHeiTiGoogleBan\\NotoSansCJK-Black-7.otf",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\fonts\\SiYuanHeiTiGoogleBan\\NotoSansCJK-Bold-6.otf",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\fonts\\SiYuanHeiTiGoogleBan\\NotoSansCJK-DemiLight-4.otf",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\fonts\\SiYuanHeiTiGoogleBan\\NotoSansCJK-Light-3.otf",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\fonts\\SiYuanHeiTiGoogleBan\\NotoSansCJK-Medium-5.otf",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\fonts\\SiYuanHeiTiGoogleBan\\NotoSansCJK-Regular-1.otf",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\fonts\\SiYuanHeiTiGoogleBan\\NotoSansCJK-Thin-2.otf",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\._recommendation_main.svg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 1,
+                    "code": 112,
+                    "comment": 1,
+                    "filename": "src\\assets\\images\\avatar.svg"
+                },
+                {
+                    "filename": "src\\assets\\images\\banner.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 1,
+                    "code": 54,
+                    "comment": 1,
+                    "filename": "src\\assets\\images\\black_line.svg"
+                },
+                {
+                    "filename": "src\\assets\\images\\ciencetopia.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 1,
+                    "code": 93,
+                    "comment": 1,
+                    "filename": "src\\assets\\images\\ciencetopia.svg"
+                },
+                {
+                    "blank": 1,
+                    "code": 8,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\dec_curve.svg"
+                },
+                {
+                    "filename": "src\\assets\\images\\default_avatar.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\default_study_group.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\design.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\design_lightbg.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\design_whitebg.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 52,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\EditGuide\\doubleselect.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 41,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\EditGuide\\links.svg"
+                },
+                {
+                    "blank": 17,
+                    "code": 95,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\EditGuide\\resource10.svg"
+                },
+                {
+                    "blank": 17,
+                    "code": 95,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\EditGuide\\resource11.svg"
+                },
+                {
+                    "blank": 9,
+                    "code": 64,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\EditGuide\\resource14.svg"
+                },
+                {
+                    "blank": 14,
+                    "code": 77,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\EditGuide\\resource16.svg"
+                },
+                {
+                    "blank": 11,
+                    "code": 75,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\EditGuide\\resource17.svg"
+                },
+                {
+                    "blank": 16,
+                    "code": 95,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\EditGuide\\resource19.svg"
+                },
+                {
+                    "blank": 11,
+                    "code": 58,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\EditGuide\\resource3.svg"
+                },
+                {
+                    "blank": 11,
+                    "code": 58,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\EditGuide\\resource5.svg"
+                },
+                {
+                    "blank": 8,
+                    "code": 60,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\EditGuide\\resource6.svg"
+                },
+                {
+                    "blank": 8,
+                    "code": 51,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\EditGuide\\resource7.svg"
+                },
+                {
+                    "blank": 14,
+                    "code": 75,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\EditGuide\\resource8.svg"
+                },
+                {
+                    "blank": 11,
+                    "code": 73,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\EditGuide\\resource9.svg"
+                },
+                {
+                    "filename": "src\\assets\\images\\image_resources\\image1.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\image_resources\\image10.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\image_resources\\image11.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\image_resources\\image2.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\image_resources\\image3.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\image_resources\\image4.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\image_resources\\image5.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\image_resources\\image6.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\image_resources\\image7.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\image_resources\\image9.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\image_resources\\redtriangle.webp",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\logo.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\LOGO6.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "src\\assets\\images\\logo_banner.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 1,
+                    "filename": "src\\assets\\images\\recommendation_main.svg"
+                },
+                {
+                    "blank": 1,
+                    "code": 85,
+                    "comment": 1,
+                    "filename": "src\\assets\\images\\red_arrow.svg"
+                },
+                {
+                    "blank": 1,
+                    "code": 87,
+                    "comment": 1,
+                    "filename": "src\\assets\\images\\red_black_bar.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "src\\assets\\images\\right-arrow-next.svg"
+                },
+                {
+                    "blank": 1,
+                    "code": 77,
+                    "comment": 1,
+                    "filename": "src\\assets\\images\\subject_content_frame.svg"
+                },
+                {
+                    "blank": 1,
+                    "code": 82,
+                    "comment": 1,
+                    "filename": "src\\assets\\images\\subject_shape.svg"
+                },
+                {
+                    "blank": 6,
+                    "code": 116,
+                    "comment": 2,
+                    "filename": "src\\components\\AboutUs.vue"
+                },
+                {
+                    "blank": 14,
+                    "code": 359,
+                    "comment": 32,
+                    "filename": "src\\components\\AccountCenter.vue"
+                },
+                {
+                    "blank": 3,
+                    "code": 26,
+                    "comment": 0,
+                    "filename": "src\\components\\ContactUs.vue"
+                },
+                {
+                    "blank": 5,
+                    "code": 70,
+                    "comment": 5,
+                    "filename": "src\\components\\ContextMenu.vue"
+                },
+                {
+                    "blank": 20,
+                    "code": 96,
+                    "comment": 4,
+                    "filename": "src\\components\\DarkModeSwitch.vue"
+                },
+                {
+                    "blank": 2,
+                    "code": 25,
+                    "comment": 0,
+                    "filename": "src\\components\\DefaultFooterBar.vue"
+                },
+                {
+                    "blank": 10,
+                    "code": 159,
+                    "comment": 5,
+                    "filename": "src\\components\\EditGuideDialog.vue"
+                },
+                {
+                    "blank": 19,
+                    "code": 213,
+                    "comment": 5,
+                    "filename": "src\\components\\EditStudyPlanForm.vue"
+                },
+                {
+                    "blank": 9,
+                    "code": 85,
+                    "comment": 11,
+                    "filename": "src\\components\\FavoriteKnowledgeGraph.vue"
+                },
+                {
+                    "blank": 1,
+                    "code": 38,
+                    "comment": 0,
+                    "filename": "src\\components\\FooterBar.vue"
+                },
+                {
+                    "blank": 5,
+                    "code": 37,
+                    "comment": 3,
+                    "filename": "src\\components\\GlobalLoader.vue"
+                },
+                {
+                    "blank": 19,
+                    "code": 196,
+                    "comment": 35,
+                    "filename": "src\\components\\HeaderBar.vue"
+                },
+                {
+                    "blank": 1,
+                    "code": 22,
+                    "comment": 1,
+                    "filename": "src\\components\\JoinStudyGroup.vue"
+                },
+                {
+                    "blank": 51,
+                    "code": 343,
+                    "comment": 39,
+                    "filename": "src\\components\\KnowledgeNetwork.vue"
+                },
+                {
+                    "blank": 40,
+                    "code": 196,
+                    "comment": 30,
+                    "filename": "src\\components\\LayOut.vue"
+                },
+                {
+                    "blank": 11,
+                    "code": 91,
+                    "comment": 21,
+                    "filename": "src\\components\\LearningPlanner.vue"
+                },
+                {
+                    "blank": 10,
+                    "code": 77,
+                    "comment": 6,
+                    "filename": "src\\components\\LinkCreationForm.vue"
+                },
+                {
+                    "blank": 2,
+                    "code": 44,
+                    "comment": 4,
+                    "filename": "src\\components\\LinkPreview.vue"
+                },
+                {
+                    "blank": 7,
+                    "code": 71,
+                    "comment": 0,
+                    "filename": "src\\components\\LoadingSpinner.vue"
+                },
+                {
+                    "blank": 27,
+                    "code": 251,
+                    "comment": 5,
+                    "filename": "src\\components\\LogIn.vue"
+                },
+                {
+                    "blank": 25,
+                    "code": 218,
+                    "comment": 30,
+                    "filename": "src\\components\\LogInPartial.vue"
+                },
+                {
+                    "blank": 7,
+                    "code": 49,
+                    "comment": 0,
+                    "filename": "src\\components\\MediaFeed.vue"
+                },
+                {
+                    "blank": 11,
+                    "code": 121,
+                    "comment": 15,
+                    "filename": "src\\components\\MessageAlert.vue"
+                },
+                {
+                    "blank": 30,
+                    "code": 470,
+                    "comment": 44,
+                    "filename": "src\\components\\MessageCenter.vue"
+                },
+                {
+                    "blank": 20,
+                    "code": 192,
+                    "comment": 14,
+                    "filename": "src\\components\\MessageList.vue"
+                },
+                {
+                    "blank": 14,
+                    "code": 129,
+                    "comment": 8,
+                    "filename": "src\\components\\NodeCreationForm.vue"
+                },
+                {
+                    "blank": 4,
+                    "code": 37,
+                    "comment": 1,
+                    "filename": "src\\components\\NodeInfo.vue"
+                },
+                {
+                    "blank": 5,
+                    "code": 16,
+                    "comment": 4,
+                    "filename": "src\\components\\NotificationService.js"
+                },
+                {
+                    "blank": 13,
+                    "code": 183,
+                    "comment": 3,
+                    "filename": "src\\components\\PersonalCenter.vue"
+                },
+                {
+                    "blank": 14,
+                    "code": 232,
+                    "comment": 14,
+                    "filename": "src\\components\\PersonalInformation.vue"
+                },
+                {
+                    "blank": 23,
+                    "code": 238,
+                    "comment": 3,
+                    "filename": "src\\components\\ReGister.vue"
+                },
+                {
+                    "blank": 14,
+                    "code": 129,
+                    "comment": 25,
+                    "filename": "src\\components\\ScrollToTopButton.vue"
+                },
+                {
+                    "blank": 5,
+                    "code": 35,
+                    "comment": 1,
+                    "filename": "src\\components\\SimplestLayOut.vue"
+                },
+                {
+                    "blank": 15,
+                    "code": 105,
+                    "comment": 0,
+                    "filename": "src\\components\\SponsorShip.vue"
+                },
+                {
+                    "blank": 3,
+                    "code": 39,
+                    "comment": 0,
+                    "filename": "src\\components\\StudyGroup\\ActivityLogs.vue"
+                },
+                {
+                    "blank": 10,
+                    "code": 94,
+                    "comment": 23,
+                    "filename": "src\\components\\StudyGroup\\CreateStudyGroup.vue"
+                },
+                {
+                    "blank": 5,
+                    "code": 84,
+                    "comment": 3,
+                    "filename": "src\\components\\StudyGroup\\GroupOverview.vue"
+                },
+                {
+                    "blank": 5,
+                    "code": 79,
+                    "comment": 2,
+                    "filename": "src\\components\\StudyGroup\\JoinRequests.vue"
+                },
+                {
+                    "blank": 12,
+                    "code": 122,
+                    "comment": 14,
+                    "filename": "src\\components\\StudyGroup\\ManagePanel.vue"
+                },
+                {
+                    "blank": 7,
+                    "code": 95,
+                    "comment": 2,
+                    "filename": "src\\components\\StudyGroup\\MemberManagement.vue"
+                },
+                {
+                    "blank": 19,
+                    "code": 160,
+                    "comment": 42,
+                    "filename": "src\\components\\StudyGroup\\StudyGroupList.vue"
+                },
+                {
+                    "blank": 45,
+                    "code": 405,
+                    "comment": 39,
+                    "filename": "src\\components\\StudyGroup\\StudyGroupPage.vue"
+                },
+                {
+                    "blank": 1,
+                    "code": 27,
+                    "comment": 3,
+                    "filename": "src\\components\\StudyGroup\\StudyGroupSpace.vue"
+                },
+                {
+                    "blank": 27,
+                    "code": 292,
+                    "comment": 44,
+                    "filename": "src\\components\\StudyPlan.vue"
+                },
+                {
+                    "blank": 16,
+                    "code": 235,
+                    "comment": 11,
+                    "filename": "src\\components\\StudyPlanDetail.vue"
+                },
+                {
+                    "blank": 8,
+                    "code": 161,
+                    "comment": 1,
+                    "filename": "src\\components\\StudyPlanList.vue"
+                },
+                {
+                    "blank": 9,
+                    "code": 130,
+                    "comment": 4,
+                    "filename": "src\\components\\SystemNotifications.vue"
+                },
+                {
+                    "blank": 2,
+                    "code": 16,
+                    "comment": 0,
+                    "filename": "src\\components\\TestHeight.vue"
+                },
+                {
+                    "blank": 15,
+                    "code": 145,
+                    "comment": 7,
+                    "filename": "src\\components\\ThinHeaderBar.vue"
+                },
+                {
+                    "blank": 36,
+                    "code": 184,
+                    "comment": 28,
+                    "filename": "src\\components\\ThinLayOut.vue"
+                },
+                {
+                    "blank": 4,
+                    "code": 10,
+                    "comment": 3,
+                    "filename": "src\\components\\useGraphEditMode.js"
+                },
+                {
+                    "blank": 105,
+                    "code": 562,
+                    "comment": 184,
+                    "filename": "src\\components\\useKnowledgeGraph.js"
+                },
+                {
+                    "blank": 3,
+                    "code": 26,
+                    "comment": 1,
+                    "filename": "src\\eventBus.js"
+                },
+                {
+                    "blank": 4,
+                    "code": 24,
+                    "comment": 6,
+                    "filename": "src\\i18n.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 257,
+                    "comment": 0,
+                    "filename": "src\\locales\\en.json"
+                },
+                {
+                    "blank": 0,
+                    "code": 258,
+                    "comment": 0,
+                    "filename": "src\\locales\\zh.json"
+                },
+                {
+                    "blank": 14,
+                    "code": 63,
+                    "comment": 28,
+                    "filename": "src\\main.js"
+                },
+                {
+                    "blank": 4,
+                    "code": 146,
+                    "comment": 22,
+                    "filename": "src\\router\\index.js"
+                },
+                {
+                    "blank": 1,
+                    "code": 20,
+                    "comment": 2,
+                    "filename": "src\\services\\linkPreviewService.js"
+                },
+                {
+                    "blank": 11,
+                    "code": 65,
+                    "comment": 5,
+                    "filename": "src\\services\\signalr-service.js"
+                },
+                {
+                    "blank": 7,
+                    "code": 245,
+                    "comment": 15,
+                    "filename": "src\\store.js"
+                },
+                {
+                    "blank": 36,
+                    "code": 125,
+                    "comment": 141,
+                    "filename": "src\\styles\\main.scss"
+                },
+                {
+                    "blank": 19,
+                    "code": 182,
+                    "comment": 26,
+                    "filename": "src\\views\\HomePage.vue"
+                },
+                {
+                    "blank": 3,
+                    "code": 75,
+                    "comment": 2,
+                    "filename": "src\\views\\SearchListPage.vue"
+                },
+                {
+                    "blank": 0,
+                    "code": 7,
+                    "comment": 1,
+                    "filename": "vue.config.js"
+                }
+            ]
+        }
+    ]
+}

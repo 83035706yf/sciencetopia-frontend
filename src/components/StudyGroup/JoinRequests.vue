@@ -79,5 +79,6 @@ export default {
   width: 100%;
   max-width: 1200px;
   margin: auto;
+  background-color: unset !important;
 }
 </style>
