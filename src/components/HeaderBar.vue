@@ -68,7 +68,7 @@
           <span v-if="!isSmallScreen" class="icon-label">{{ $t('header.studygroup') }}</span>
         </div>
 
-        <!-- 学习计划 / StudyPlan (示例：不使用 v-menu，直接显示) -->
+        <!-- 学习计划 / StudyPlan -->
         <div class="icon-item">
           <v-tooltip :text="$t('header.studyplan')" location="bottom" open-delay="300" :disabled="!isSmallScreen">
             <template v-slot:activator="slotProps">
@@ -143,25 +143,24 @@
             {{ isDarkThemeEnabled ? $t('header.darkmode') : $t('header.lightmode') }}
           </span>
         </div>
+      </div>
 
-        <!-- 语言切换 -->
-        <div class="icon-item lang-item">
-          <v-select
-            v-model="$i18n.locale"
-            :items="languageOptions"
-            density="comfortable"
-            hide-details
-            variant="plain"
-            class="language-select"
-            @update:model-value="handleLanguageChange"
-            :style="computeLangWidthStyle"
-          />
-        </div>
+      <!-- 语言切换栏 -->
+      <div class="language-section">
+        <v-select
+          v-model="$i18n.locale"
+          :items="languageOptions"
+          density="comfortable"
+          hide-details
+          variant="plain"
+          class="language-select"
+          @update:model-value="handleLanguageChange"
+          :style="computeLangWidthStyle"
+        />
       </div>
     </v-container>
   </div>
 </template>
-
 <script>
 import { debounce } from 'lodash-es';
 
@@ -175,7 +174,7 @@ export default {
       smallLogo: require('@/assets/images/logo.png'),
       isSmallScreen: window.innerWidth <= 1200,
       languageOptions: [
-        { title: '英文', value: 'en' },
+        { title: 'English', value: 'en' },
         { title: 'Chinese', value: 'zh' }
       ],
       langTextWidth: 0 // 用来存储当前选项文本的实际宽度
@@ -192,13 +191,13 @@ export default {
     computeLangWidthStyle() {
       // 若测量结果为 0 或为空，给个默认值
       const baseWidth = this.langTextWidth || 30;
-      // 需求: 最小值 = 1.1 * 文本宽度, 最大值 = 2 * 文本宽度
+      // 需求: 最小值 = 2 * 文本宽度, 最大值 = 2.5 * 文本宽度
       const minW = 2 * baseWidth;
       const maxW = 2.5 * baseWidth;
-      return `
-        min-width: ${minW}px;
-        max-width: ${maxW}px;
-      `;
+      return {
+        minWidth: `${minW}px`,
+        maxWidth: `${maxW}px`,
+      };
     }
   },
   methods: {
@@ -286,7 +285,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .large-header {
   background-color: rgba(232, 218, 189, 0.6);
@@ -302,29 +300,21 @@ export default {
 
 .header-grid {
   display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-areas: "logo search icons";
+  grid-template-columns: auto 1fr auto auto; /* logo, search, icons, language */
+  grid-template-areas: "logo search icons language";
   align-items: center;
   column-gap: 24px;
   padding: 0 24px;
+  position: relative;
 }
 
-/* 让Logo区域(大屏)上下居中 */
+/* Logo区域 */
 .logo-section {
   grid-area: logo;
-
   display: flex;
-  align-items: center;      /* 垂直居中 */
-  justify-content: center;  /* 水平居中 */
-}
-
-/* 小屏时，Logo贴近左上角，减少 padding，使它更贴边 */
-@media (max-width: 1200px) {
-  .logo-section {
-    justify-content: flex-start;
-    align-items: flex-start;
-    padding: 8px; /* 你可以适当减少或增大 */
-  }
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+  overflow: visible; /* 允许 Logo 溢出 */
 }
 
 /* Logo按钮 */
@@ -349,12 +339,14 @@ export default {
   }
 }
 
+/* 搜索区域 */
 .search-section {
   grid-area: search;
-  max-width: 600px; /* 视需求可改 */
+  max-width: 600px; /* 根据需求调整 */
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: center; /* 垂直居中 */
+  position: relative; /* 为了绝对定位搜索按钮 */
 }
 
 /* 修改搜索输入 */
@@ -363,50 +355,90 @@ export default {
   border: none; /* 移除边框线 */
   border-radius: 999px; /* 两侧完全圆形 */
   padding-left: 16px;
-  padding-right: 16px;
+  padding-right: 48px; /* 为搜索按钮留出空间 */
   box-shadow: 0 0 0 0 transparent; /* 移除默认的v-text-field阴影 */
+  position: relative; /* 相对定位，为内部的绝对定位做参照 */
+  height: 48px; /* 固定高度，确保垂直居中 */
 }
 
+/* 确保 v-input__slot 占满高度并移除边框 */
 .search-input .v-input__slot {
   border: none !important; /* 确保没有边框 */
   box-shadow: none !important;
+  height: 100%; /* 占满父容器的高度 */
+  display: flex;
+  align-items: center; /* 垂直居中内容 */
 }
 
+/* 绝对定位的 append-inner 图标，使其水平和垂直居中 */
+.search-input .v-field__append-inner {
+  position: absolute;
+  top: 50%;
+  right: 16px; /* 根据需要调整与右侧的距离 */
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer; /* 显示为可点击 */
+}
+
+/* 调整 append-inner 中图标的大小（可选） */
+.search-input .v-field__append-inner i.v-icon {
+  font-size: 1.25rem; /* 根据需要调整图标大小 */
+}
+
+/* 图标区域 */
 .icons-section {
   grid-area: icons;
-  display: grid; /* 从 flex 改为 grid */
-  grid-template-columns: repeat(auto-fit, minmax(48px, 1fr)); /* 每行最多显示3个 */
-  grid-gap: 16px; /* 默认间距 */
-  justify-items: end; /* 右对齐 */
+  display: flex;
+  flex-wrap: nowrap; /* 确保单行 */
   align-items: center;
-  width: 100%;
+  gap: 16px; /* 图标间距 */
+  overflow-x: auto; /* 如果图标过多，可以滚动 */
 }
 
-@media (min-width: 1600px) {
-  .icons-section {
-    grid-template-columns: repeat(3, 1fr); /* 每行固定3个 */
-    grid-gap: 24px;
+/* 隐藏滚动条但允许滚动 */
+.icons-section::-webkit-scrollbar {
+  display: none;
+}
+.icons-section {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* 语言切换栏 */
+.language-section {
+  grid-area: language;
+  display: flex;
+  align-items: center;
+  margin-left: 16px; /* 根据需要调整 */
+}
+
+/* 响应式调整 */
+@media (max-width: 1600px) {
+  .header-grid {
+    grid-template-columns: auto 1fr auto auto;
   }
 }
 
 @media (max-width: 1200px) {
   .header-grid {
-    grid-template-columns: auto auto;
+    grid-template-columns: auto 1fr auto;
     grid-template-areas:
-      "logo icons"
-      "search search";
+      "logo icons language"
+      "search search search";
+    row-gap: 12px; /* 行间距 */
   }
+
   .search-section {
-    margin-top: 8px;
-    margin-bottom: 8px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
+    width: 100%;
   }
 
   .icons-section {
-    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
-    grid-gap: 12px; /* 压缩间距 */
-    justify-items: center;
+    flex-wrap: nowrap; /* 保持单行 */
+    gap: 12px; /* 压缩间距 */
+    justify-content: flex-start;
   }
 
   .icon-btn {
@@ -421,9 +453,8 @@ export default {
     white-space: nowrap;
   }
 
-  .language-selector {
-    top: 10px;
-    right: 24px;
+  .language-section {
+    margin-left: 24px;
   }
 }
 
@@ -433,7 +464,9 @@ export default {
     grid-template-areas:
       "logo"
       "search"
-      "icons";
+      "icons"
+      "language";
+    row-gap: 8px;
   }
 
   .large-header {
@@ -450,9 +483,9 @@ export default {
   }
 
   .icons-section {
-    grid-template-columns: repeat(auto-fit, minmax(32px, 1fr));
-    grid-gap: 8px; /* 进一步压缩间距 */
-    justify-items: center;
+    flex-wrap: wrap; /* 在极窄屏幕下换行 */
+    gap: 8px; /* 进一步压缩间距 */
+    justify-content: center;
   }
 
   .icon-btn {
@@ -464,9 +497,9 @@ export default {
     display: none;
   }
 
-  .language-selector {
-    top: 5px;
-    right: 16px;
+  .language-section {
+    justify-content: center; /* 居中对齐 */
+    margin-left: 0; /* 移除左边距 */
   }
 }
 
@@ -475,11 +508,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-/* 语言切换也归为icon-item */
-.lang-item {
-  align-items: stretch;
 }
 
 /* 按钮样式 */
