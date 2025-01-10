@@ -191,9 +191,9 @@ export default {
     computeLangWidthStyle() {
       // 若测量结果为 0 或为空，给个默认值
       const baseWidth = this.langTextWidth || 30;
-      // 需求: 最小值 = 2 * 文本宽度, 最大值 = 2.5 * 文本宽度
-      const minW = 2 * baseWidth;
-      const maxW = 2.5 * baseWidth;
+      // 需求: 最小值 = 1.1 * 文本宽度, 最大值 = 2 * 文本宽度
+      const minW = 1.1 * baseWidth;
+      const maxW = 2 * baseWidth;
       return {
         minWidth: `${minW}px`,
         maxWidth: `${maxW}px`,
@@ -293,7 +293,7 @@ export default {
   transition: all 0.3s ease;
   z-index: 1000;
 
-  /* 大屏时，更大一些的上下内边距，让Logo居中 */
+  /* 增大上下边距 */
   padding-top: 20px;
   padding-bottom: 20px;
 }
@@ -321,6 +321,9 @@ export default {
 .logo-btn {
   height: 100%;
   padding: 0; /* 让图片本身来控制大小 */
+  display: flex;
+  align-items: center; /* 垂直居中图标 */
+  justify-content: center; /* 水平居中图标 */
 }
 
 /* 大屏下Logo更大，小屏Logo更小且贴边 */
@@ -330,13 +333,8 @@ export default {
   /* 大屏: 比原先更大一些 */
   height: 64px;
   width: auto;
-}
-
-@media (max-width: 1200px) {
-  .responsive-logo {
-    /* 小屏: 再缩小一点 */
-    height: 48px;
-  }
+  object-fit: contain; /* 保持比例 */
+  max-height: 100%; /* 防止超出容器 */
 }
 
 /* 搜索区域 */
@@ -456,6 +454,9 @@ export default {
   .language-section {
     margin-left: 24px;
   }
+  .logo-section {
+    margin-top: 14px; /* 根据需要调整距离 */
+  }
 }
 
 @media (max-width: 800px) {
@@ -535,5 +536,42 @@ export default {
 .language-select {
   text-align: center;
   /* 其他基础样式保持 */
+}
+
+/* 确保所有图标在一条直线上 */
+.nav-section,
+.actions-section {
+  display: flex;
+  align-items: center;
+}
+
+/* 增大上下边距 */
+.actions-section,
+.nav-section {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* 纵向居中大Logo，即使图片超出 */
+.logo-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.logo-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.responsive-logo {
+  display: block;
+  transition: all 0.3s ease;
+  height: 64px;
+  width: auto;
+  object-fit: contain;
+  max-height: 100%;
 }
 </style>
