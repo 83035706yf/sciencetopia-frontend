@@ -209,7 +209,7 @@ export default {
     },
     toggleTheme() {
       this.isDarkThemeEnabled = !this.isDarkThemeEnabled;
-      // 你项目中的实际主题切换逻辑...
+      // TODO你项目中的实际主题切换逻辑...
     },
     backToHomePage() {
       this.$router.push({ name: 'HomePage' });
@@ -228,7 +228,7 @@ export default {
         console.log('Search query is empty!');
         return;
       }
-      // 省略了搜索逻辑 ...
+      // TODO省略了搜索逻辑 ...
       const path = this.$router.resolve({
         name: 'searchList',
         query: { q: query }
