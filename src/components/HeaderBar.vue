@@ -21,7 +21,7 @@
         <v-text-field
           v-model="searchQuery"
           :placeholder="$t('searchbar.iwanttolearn')"
-          variant="plainfield"
+          variant="plain"
           density="comfortable"
           hide-details
           clearable
@@ -357,13 +357,117 @@ export default {
   align-items: center;
 }
 
-/* 合并后的图标区 */
+/* 修改搜索输入 */
+.search-input {
+  background-color: rgba(255, 255, 255, 1);
+  border: none; /* 移除边框线 */
+  border-radius: 999px; /* 两侧完全圆形 */
+  padding-left: 16px;
+  padding-right: 16px;
+  box-shadow: 0 0 0 0 transparent; /* 移除默认的v-text-field阴影 */
+}
+
+.search-input .v-input__slot {
+  border: none !important; /* 确保没有边框 */
+  box-shadow: none !important;
+}
+
 .icons-section {
   grid-area: icons;
-  display: flex;
+  display: grid; /* 从 flex 改为 grid */
+  grid-template-columns: repeat(auto-fit, minmax(48px, 1fr)); /* 每行最多显示3个 */
+  grid-gap: 16px; /* 默认间距 */
+  justify-items: end; /* 右对齐 */
   align-items: center;
-  gap: 24px;
-  justify-content: flex-end;
+  width: 100%;
+}
+
+@media (min-width: 1600px) {
+  .icons-section {
+    grid-template-columns: repeat(3, 1fr); /* 每行固定3个 */
+    grid-gap: 24px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .header-grid {
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      "logo icons"
+      "search search";
+  }
+  .search-section {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .icons-section {
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+    grid-gap: 12px; /* 压缩间距 */
+    justify-items: center;
+  }
+
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .icon-label {
+    font-size: 14px;
+    margin-top: 6px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .language-selector {
+    top: 10px;
+    right: 24px;
+  }
+}
+
+@media (max-width: 800px) {
+  .header-grid {
+    grid-template-columns: auto;
+    grid-template-areas:
+      "logo"
+      "search"
+      "icons";
+  }
+
+  .large-header {
+    padding: 10px 16px; /* 调整内边距 */
+  }
+
+  .responsive-logo {
+    height: 40px;
+  }
+
+  .search-section {
+    margin: 10px 5px 20px 5px;
+    min-width: 100%;
+  }
+
+  .icons-section {
+    grid-template-columns: repeat(auto-fit, minmax(32px, 1fr));
+    grid-gap: 8px; /* 进一步压缩间距 */
+    justify-items: center;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .icon-label {
+    display: none;
+  }
+
+  .language-selector {
+    top: 5px;
+    right: 16px;
+  }
 }
 
 /* 每个图标+文本组合 */
@@ -399,31 +503,9 @@ export default {
   white-space: nowrap;
 }
 
-/* 搜索输入 */
-.search-input {
-  background-color: rgba(255, 255, 255, 1);
-  border-radius: 8px;
-}
-
 /* 语言选择器 - 宽度由JS动态控制 */
 .language-select {
   text-align: center;
   /* 其他基础样式保持 */
-}
-
-/* 小屏时栅格变动：Logo + Icons在同一行，搜索栏下移 */
-@media (max-width: 1000px) {
-  .header-grid {
-    grid-template-columns: auto auto;
-    grid-template-areas:
-      "logo icons"
-      "search search";
-  }
-  .search-section {
-    margin-top: 8px;
-    margin-bottom: 8px;
-    margin-left: auto;
-    margin-right: auto;
-  }
 }
 </style>
