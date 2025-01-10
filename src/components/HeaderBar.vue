@@ -1,242 +1,429 @@
 <template>
-    <div class="large-header">
-        <!-- Left Section: Logo -->
-        <v-container class="header-container" style="padding: 0; margin: 0;" fluid>
-            <v-row align="center">
-                <v-col cols="auto" class="logo-container">
-                    <v-btn variant="plain" class="btn" @click="backToHomePage" style="padding: 0; height: 100%;">
-                        <img :src="isSmallScreen ? smallLogo : largeLogo" alt="Logo" class="responsive-logo" />
-                    </v-btn>
-                </v-col>
+  <div class="large-header">
+    <v-container class="header-grid" fluid>
+      <!-- Logo -->
+      <div class="logo-section">
+        <v-btn
+          variant="plain"
+          class="logo-btn"
+          @click.prevent="backToHomePage"
+        >
+          <img
+            :src="isSmallScreen ? smallLogo : largeLogo"
+            alt="Logo"
+            class="responsive-logo"
+          />
+        </v-btn>
+      </div>
 
-                <!-- Center Section: Search -->
-                <v-col cols="auto" class="text-end"
-                    style="position: absolute; padding-top: 5vh; left: 37.5vw; width: 25vw; z-index: 10;">
-                    <v-row align="center" justify="center">
-                        <!-- Search Bar -->
-                        <div class="search-container">
-                            <v-text-field v-model="searchQuery" :placeholder="$t('searchbar.iwanttolearn')"
-                                variant="plainfield" dense hide-details clearable @keyup.enter="globalSearch"
-                                append-inner-icon="mdi-magnify" @click:append-inner="globalSearch" />
-                        </div>
-                    </v-row>
-                </v-col>
+      <!-- Search -->
+      <div class="search-section">
+        <v-text-field
+          v-model="searchQuery"
+          :placeholder="$t('searchbar.iwanttolearn')"
+          variant="plainfield"
+          density="comfortable"
+          hide-details
+          clearable
+          @keydown.enter.prevent="globalSearch"
+          append-inner-icon="mdi-magnify"
+          @click:append-inner="globalSearch"
+          class="search-input"
+        />
+      </div>
 
-                <!-- <div style="background-color: #DFCBA4; position: absolute; top: 1vh; left: 34vw; width: 66vw; height: 12vh;"></div> -->
+      <!-- Icons (nav + actions) -->
+      <div class="icons-section">
+        <!-- 趋势 / Trend -->
+        <div class="icon-item">
+          <v-tooltip :text="$t('header.trend')" location="bottom" open-delay="300" :disabled="!isSmallScreen">
+            <template v-slot:activator="slotProps">
+              <v-btn
+                v-bind="slotProps.props"
+                class="icon-btn"
+                variant="plain"
+                @click.prevent="scrollToSection"
+              >
+                <v-icon :size="iconSize">mdi-rss</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
+          <span v-if="!isSmallScreen" class="icon-label">{{ $t('header.trend') }}</span>
+        </div>
 
-                <!-- Right Section: Navigation Links -->
-                <v-col cols="auto" style="position: absolute; padding-top: 2vh; left: 65vw;">
-                    <v-row align="center" justify="center">
-                        <v-btn class="header-btn two-rows-btn" variant="plain" @click="scrollToSection">
-                            <div class="btn-content">
-                                <img width="40" height="40" src="https://img.icons8.com/hatch/64/rss.png" alt="rss" />
-                                <span class="btn-title">{{ $t('header.trend') }}</span>
-                            </div>
-                        </v-btn>
-                        <v-btn class="header-btn two-rows-btn" variant="plain" @click="RouteToStudyGroup">
-                            <div class="btn-content">
-                                <img width="40" height="40"
-                                    src="https://img.icons8.com/ios-filled/50/online-group-studying.png"
-                                    alt="online-group-studying" />
-                                <span class="btn-title">{{ $t('header.studygroup') }}</span>
-                            </div>
-                        </v-btn>
-                        <v-menu open-on-hover offset-y>
-                            <template v-slot:activator="{ props }">
-                                <v-btn v-bind="props" class="header-btn two-rows-btn" variant="plain"
-                                    @click="isAuthenticated ? showDialog() : null">
-                                    <div class="btn-content">
-                                        <img width="40" height="40"
-                                            src="https://img.icons8.com/hatch/64/blueprint--v1.png"
-                                            alt="blueprint--v1" />
-                                        <span class="btn-title">{{ $t('header.studyplan') }}</span>
-                                    </div>
-                                </v-btn>
-                            </template>
-                            <v-card v-if="!isAuthenticated" class="header-list">
-                                <v-card-title>
-                                    <v-list>
-                                        <v-list-item-title>{{ $t('please') }} <v-btn @click="login"
-                                                variant="outlined">{{
-                                                    $t('header.login') }}</v-btn> {{
-                                                    $t('header.tocreateplan') }}</v-list-item-title>
-                                    </v-list>
-                                </v-card-title>
-                            </v-card>
-                        </v-menu>
-                    </v-row>
-                </v-col>
+        <!-- 学习小组 / StudyGroup -->
+        <div class="icon-item">
+          <v-tooltip :text="$t('header.studygroup')" location="bottom" open-delay="300" :disabled="!isSmallScreen">
+            <template v-slot:activator="slotProps">
+              <v-btn
+                v-bind="slotProps.props"
+                class="icon-btn"
+                variant="plain"
+                @click.prevent="RouteToStudyGroup"
+              >
+                <v-icon :size="iconSize">mdi-account-group</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
+          <span v-if="!isSmallScreen" class="icon-label">{{ $t('header.studygroup') }}</span>
+        </div>
 
-                <!-- Right Section: User Actions -->
-                <v-col cols="auto" style="padding-top: 4vh; position: absolute; left: 83vw;">
-                    <v-row align="center" justify="end">
-                        <!-- User Options -->
-                        <LogInPartial />
-                        <MessageAlert />
+        <!-- 学习计划 / StudyPlan (示例：不使用 v-menu，直接显示) -->
+        <div class="icon-item">
+          <v-tooltip :text="$t('header.studyplan')" location="bottom" open-delay="300" :disabled="!isSmallScreen">
+            <template v-slot:activator="slotProps">
+              <v-btn
+                v-bind="slotProps.props"
+                class="icon-btn"
+                variant="plain"
+                @click.prevent="handleStudyPlan"
+              >
+                <v-icon :size="iconSize">mdi-book-open-variant</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
+          <span v-if="!isSmallScreen" class="icon-label">{{ $t('header.studyplan') }}</span>
+        </div>
 
-                        <!-- Dark Mode Toggle -->
-                        <v-btn class="header-btn two-rows-btn" variant="plain" @click="toggleTheme">
-                            <div class="btn-content">
-                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="40"
-                                    viewBox="0 0 50 50">
-                                    <path
-                                        d="M 24.90625 3.96875 C 24.863281 3.976563 24.820313 3.988281 24.78125 4 C 24.316406 4.105469 23.988281 4.523438 24 5 L 24 11 C 23.996094 11.359375 24.183594 11.695313 24.496094 11.878906 C 24.808594 12.058594 25.191406 12.058594 25.503906 11.878906 C 25.816406 11.695313 26.003906 11.359375 26 11 L 26 5 C 26.011719 4.710938 25.894531 4.433594 25.6875 4.238281 C 25.476563 4.039063 25.191406 3.941406 24.90625 3.96875 Z M 10.65625 9.84375 C 10.28125 9.910156 9.980469 10.183594 9.875 10.546875 C 9.769531 10.914063 9.878906 11.304688 10.15625 11.5625 L 14.40625 15.8125 C 14.648438 16.109375 15.035156 16.246094 15.410156 16.160156 C 15.78125 16.074219 16.074219 15.78125 16.160156 15.410156 C 16.246094 15.035156 16.109375 14.648438 15.8125 14.40625 L 11.5625 10.15625 C 11.355469 9.933594 11.054688 9.820313 10.75 9.84375 C 10.71875 9.84375 10.6875 9.84375 10.65625 9.84375 Z M 39.03125 9.84375 C 38.804688 9.875 38.59375 9.988281 38.4375 10.15625 L 34.1875 14.40625 C 33.890625 14.648438 33.753906 15.035156 33.839844 15.410156 C 33.925781 15.78125 34.21875 16.074219 34.589844 16.160156 C 34.964844 16.246094 35.351563 16.109375 35.59375 15.8125 L 39.84375 11.5625 C 40.15625 11.265625 40.246094 10.800781 40.0625 10.410156 C 39.875 10.015625 39.460938 9.789063 39.03125 9.84375 Z M 24.90625 15 C 24.875 15.007813 24.84375 15.019531 24.8125 15.03125 C 24.75 15.035156 24.6875 15.046875 24.625 15.0625 C 24.613281 15.074219 24.605469 15.082031 24.59375 15.09375 C 19.289063 15.320313 15 19.640625 15 25 C 15 30.503906 19.496094 35 25 35 C 30.503906 35 35 30.503906 35 25 C 35 19.660156 30.746094 15.355469 25.46875 15.09375 C 25.433594 15.09375 25.410156 15.0625 25.375 15.0625 C 25.273438 15.023438 25.167969 15.003906 25.0625 15 C 25.042969 15 25.019531 15 25 15 C 24.96875 15 24.9375 15 24.90625 15 Z M 24.9375 17 C 24.957031 17 24.980469 17 25 17 C 25.03125 17 25.0625 17 25.09375 17 C 29.46875 17.050781 33 20.613281 33 25 C 33 29.421875 29.421875 33 25 33 C 20.582031 33 17 29.421875 17 25 C 17 20.601563 20.546875 17.035156 24.9375 17 Z M 4.71875 24 C 4.167969 24.078125 3.78125 24.589844 3.859375 25.140625 C 3.9375 25.691406 4.449219 26.078125 5 26 L 11 26 C 11.359375 26.003906 11.695313 25.816406 11.878906 25.503906 C 12.058594 25.191406 12.058594 24.808594 11.878906 24.496094 C 11.695313 24.183594 11.359375 23.996094 11 24 L 5 24 C 4.96875 24 4.9375 24 4.90625 24 C 4.875 24 4.84375 24 4.8125 24 C 4.78125 24 4.75 24 4.71875 24 Z M 38.71875 24 C 38.167969 24.078125 37.78125 24.589844 37.859375 25.140625 C 37.9375 25.691406 38.449219 26.078125 39 26 L 45 26 C 45.359375 26.003906 45.695313 25.816406 45.878906 25.503906 C 46.058594 25.191406 46.058594 24.808594 45.878906 24.496094 C 45.695313 24.183594 45.359375 23.996094 45 24 L 39 24 C 38.96875 24 38.9375 24 38.90625 24 C 38.875 24 38.84375 24 38.8125 24 C 38.78125 24 38.75 24 38.71875 24 Z M 15 33.875 C 14.773438 33.90625 14.5625 34.019531 14.40625 34.1875 L 10.15625 38.4375 C 9.859375 38.679688 9.722656 39.066406 9.808594 39.441406 C 9.894531 39.8125 10.1875 40.105469 10.558594 40.191406 C 10.933594 40.277344 11.320313 40.140625 11.5625 39.84375 L 15.8125 35.59375 C 16.109375 35.308594 16.199219 34.867188 16.039063 34.488281 C 15.882813 34.109375 15.503906 33.867188 15.09375 33.875 C 15.0625 33.875 15.03125 33.875 15 33.875 Z M 34.6875 33.875 C 34.3125 33.941406 34.011719 34.214844 33.90625 34.578125 C 33.800781 34.945313 33.910156 35.335938 34.1875 35.59375 L 38.4375 39.84375 C 38.679688 40.140625 39.066406 40.277344 39.441406 40.191406 C 39.8125 40.105469 40.105469 39.8125 40.191406 39.441406 C 40.277344 39.066406 40.140625 38.679688 39.84375 38.4375 L 35.59375 34.1875 C 35.40625 33.988281 35.148438 33.878906 34.875 33.875 C 34.84375 33.875 34.8125 33.875 34.78125 33.875 C 34.75 33.875 34.71875 33.875 34.6875 33.875 Z M 24.90625 37.96875 C 24.863281 37.976563 24.820313 37.988281 24.78125 38 C 24.316406 38.105469 23.988281 38.523438 24 39 L 24 45 C 23.996094 45.359375 24.183594 45.695313 24.496094 45.878906 C 24.808594 46.058594 25.191406 46.058594 25.503906 45.878906 C 25.816406 45.695313 26.003906 45.359375 26 45 L 26 39 C 26.011719 38.710938 25.894531 38.433594 25.6875 38.238281 C 25.476563 38.039063 25.191406 37.941406 24.90625 37.96875 Z">
-                                    </path>
-                                </svg>
-                            </div>
-                        </v-btn>
+        <!-- 登录 / Login -->
+        <div class="icon-item">
+          <v-tooltip :text="$t('header.login')" location="bottom" open-delay="300" :disabled="!isSmallScreen">
+            <template v-slot:activator="slotProps">
+              <v-btn
+                v-bind="slotProps.props"
+                class="icon-btn"
+                variant="plain"
+                @click.prevent="login"
+              >
+                <v-icon :size="iconSize">mdi-account</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
+          <span v-if="!isSmallScreen" class="icon-label">{{ $t('header.login') }}</span>
+        </div>
 
-                        <!-- Language Switcher -->
-                        <v-select v-model="$i18n.locale"
-                            :items="[{ title: 'English', value: 'en' }, { title: '中文', value: 'zh' }]" dense
-                            hide-details solo-inverted variant="plainfield"
-                            :menu-props="{ contentClass: 'custom-language-menu' }" style="max-width: 100px;">
-                            <template v-slot:item="{ props }">
-                                <v-list-item variant="plain" class="language-list-item" v-bind="props"></v-list-item>
-                            </template>
-                        </v-select>
-                    </v-row>
-                </v-col>
-            </v-row>
-        </v-container>
-    </div>
+        <!-- 消息 / Messages -->
+        <div class="icon-item">
+          <v-tooltip :text="$t('header.messages')" location="bottom" open-delay="300" :disabled="!isSmallScreen">
+            <template v-slot:activator="slotProps">
+              <v-btn
+                v-bind="slotProps.props"
+                class="icon-btn"
+                variant="plain"
+              >
+                <v-icon :size="iconSize">mdi-bell</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
+          <span v-if="!isSmallScreen" class="icon-label">{{ $t('header.messages') }}</span>
+        </div>
+
+        <!-- 明/暗模式切换 -->
+        <div class="icon-item">
+          <v-tooltip
+            :text="isDarkThemeEnabled ? $t('header.darkmode') : $t('header.lightmode')"
+            location="bottom"
+            open-delay="300"
+            :disabled="!isSmallScreen"
+          >
+            <template v-slot:activator="slotProps">
+              <v-btn
+                v-bind="slotProps.props"
+                class="icon-btn"
+                variant="plain"
+                @click.prevent="toggleTheme"
+              >
+                <v-icon :size="iconSize">
+                  {{ isDarkThemeEnabled ? 'mdi-weather-night' : 'mdi-weather-sunny' }}
+                </v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
+          <span v-if="!isSmallScreen" class="icon-label">
+            {{ isDarkThemeEnabled ? $t('header.darkmode') : $t('header.lightmode') }}
+          </span>
+        </div>
+
+        <!-- 语言切换 -->
+        <div class="icon-item lang-item">
+          <v-select
+            v-model="$i18n.locale"
+            :items="languageOptions"
+            density="comfortable"
+            hide-details
+            variant="plain"
+            class="language-select"
+            @update:model-value="handleLanguageChange"
+            :style="computeLangWidthStyle"
+          />
+        </div>
+      </div>
+    </v-container>
+  </div>
 </template>
 
 <script>
-import LogInPartial from './LogInPartial.vue';
-import MessageAlert from './MessageAlert.vue';
+import { debounce } from 'lodash-es';
 
 export default {
-    name: "HeaderBar",
-    data() {
-        return {
-            isDarkThemeEnabled: false,
-            themePath: '',
-            searchQuery: '',
-            searchResults: [],
-            largeLogo: require('@/assets/images/logo_banner.png'),
-            smallLogo: require('@/assets/images/logo.png'), // 小Logo路径
-            isSmallScreen: window.innerWidth <= 1200, // 初始化判断屏幕大小
-        };
+  name: "HeaderBar",
+  data() {
+    return {
+      isDarkThemeEnabled: false,
+      searchQuery: '',
+      largeLogo: require('@/assets/images/logo_banner.png'),
+      smallLogo: require('@/assets/images/logo.png'),
+      isSmallScreen: window.innerWidth <= 1200,
+      languageOptions: [
+        { title: '英文', value: 'en' },
+        { title: 'Chinese', value: 'zh' }
+      ],
+      langTextWidth: 0 // 用来存储当前选项文本的实际宽度
+    };
+  },
+  computed: {
+    isAuthenticated() {
+      return this.$store.state.isAuthenticated;
     },
-    components: { LogInPartial, MessageAlert },
-    computed: {
-        isAuthenticated() {
-            return this.$store.state.isAuthenticated;
-        },
+    iconSize() {
+      return this.isSmallScreen ? 24 : 32;
     },
-    methods: {
-        handleResize() {
-            this.isSmallScreen = window.innerWidth <= 1200; // 更新屏幕状态
-        },
-        login() {
-            this.$router.push({ name: 'login' });  // 跳转到LogIn组件
-        },
-        toggleTheme() {
-            this.isDarkThemeEnabled = !this.isDarkThemeEnabled;
-            if (this.isDarkThemeEnabled) {
-                this.themePath = '/assets/css/dark-theme.css';  // 使用深色模式
-            } else {
-                this.themePath = '';  // 使用浅色模式
-            }
-        },
-
-        backToHomePage() {
-            this.$router.push({ name: 'HomePage' });  // 跳转到LogIn组件
-        },
-
-        scrollToSection() {
-            // 获取目标元素的位置
-            const section = document.getElementById('feed-section');
-            console.log("section:", section);
-            if (section) {
-                const yOffset = -60; // 调整偏移量，根据需要修改
-                const y = section.getBoundingClientRect().top + window.scrollY + yOffset;
-
-                // 滚动到指定位置
-                window.scrollTo({ top: y, behavior: 'smooth' });
-            }
-        },
-
-        async globalSearch() {
-            const query = this.searchQuery ? this.searchQuery.trim() : '';
-            if (!query) {
-                console.log('Search query is empty!');
-                return;
-            }
-
-            this.isLoading = true;
-            try {
-                const path = this.$router.resolve({ name: 'searchList', query: { q: this.searchQuery } }).href;
-                window.open(path, '_blank');
-            } catch (error) {
-                console.error('Error searching:', error);
-            } finally {
-                this.isLoading = false;
-            }
-        },
-
-        RouteToStudyGroup() {
-            this.$router.push({ name: 'studyGroupList' });
-        },
-
-        showDialog() {
-            this.$emit('showStudyPlanDialog', true);
-            console.log('Show study plan dialog');
-        },
+    // 根据测量到的文字宽度，动态计算 V-Select 的 min-width / max-width
+    computeLangWidthStyle() {
+      // 若测量结果为 0 或为空，给个默认值
+      const baseWidth = this.langTextWidth || 30;
+      // 需求: 最小值 = 1.1 * 文本宽度, 最大值 = 2 * 文本宽度
+      const minW = 2 * baseWidth;
+      const maxW = 2.5 * baseWidth;
+      return `
+        min-width: ${minW}px;
+        max-width: ${maxW}px;
+      `;
+    }
+  },
+  methods: {
+    handleResize() {
+      this.isSmallScreen = window.innerWidth <= 1200;
     },
-    mounted() {
-        // 监听窗口大小变化
-        window.addEventListener('resize', this.handleResize);
+    login() {
+      this.$router.push({ name: 'login' });
     },
-    beforeUnmount() {
-        // 清理监听器
-        window.removeEventListener('resize', this.handleResize);
+    toggleTheme() {
+      this.isDarkThemeEnabled = !this.isDarkThemeEnabled;
+      // 你项目中的实际主题切换逻辑...
     },
+    backToHomePage() {
+      this.$router.push({ name: 'HomePage' });
+    },
+    scrollToSection() {
+      const section = document.getElementById('feed-section');
+      if (section) {
+        const yOffset = -60;
+        const y = section.getBoundingClientRect().top + window.scrollY + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    },
+    async globalSearch() {
+      const query = this.searchQuery ? this.searchQuery.trim() : '';
+      if (!query) {
+        console.log('Search query is empty!');
+        return;
+      }
+      // 省略了搜索逻辑 ...
+      const path = this.$router.resolve({
+        name: 'searchList',
+        query: { q: query }
+      }).href;
+      window.open(path, '_blank');
+    },
+    RouteToStudyGroup() {
+      this.$router.push({ name: 'studyGroupList' });
+    },
+    handleStudyPlan() {
+      if (!this.isAuthenticated) {
+        // 未登录 -> 提示或跳转登录
+        alert("请先登录再查看学习计划");
+      } else {
+        // 已登录 -> 打开学习计划对话框
+        this.$emit('showStudyPlanDialog', true);
+      }
+    },
+    handleLanguageChange(val) {
+      this.$i18n.locale = val;
+      this.$vuetify.locale.current = val;
+      this.$nextTick(() => {
+        this.measureLangTextWidth();
+      });
+    },
+    // 用一个隐藏 span 测量选项文字的宽度
+    measureLangTextWidth() {
+      const tempSpan = document.createElement('span');
+      const selectedItem = this.languageOptions.find(
+        (item) => item.value === this.$i18n.locale
+      );
+      const text = selectedItem ? selectedItem.title : '';
+      tempSpan.innerText = text;
+      // 让它不换行、不可见，但以正常的字体渲染
+      tempSpan.style.position = 'absolute';
+      tempSpan.style.visibility = 'hidden';
+      tempSpan.style.whiteSpace = 'nowrap';
+      tempSpan.style.fontSize = '14px'; // 跟 v-select 同样的字体设定
+      document.body.appendChild(tempSpan);
+      this.langTextWidth = tempSpan.offsetWidth;
+      document.body.removeChild(tempSpan);
+    }
+  },
+  created() {
+    this.debouncedResize = debounce(this.handleResize, 100);
+    this.handleResize();
+  },
+  mounted() {
+    window.addEventListener('resize', this.debouncedResize);
+    this.measureLangTextWidth();
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.debouncedResize);
+  }
 };
 </script>
 
 <style scoped>
 .large-header {
-    height: 18vh;
-    transition: height 0.3s ease;
-    z-index: 1000;
-    background-color: rgba(232, 218, 189, 0.6);
-    backdrop-filter: blur(10px); /* 磨砂效果 */
-    -webkit-backdrop-filter: blur(10px); /* 兼容 Safari */
+  background-color: rgba(232, 218, 189, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+
+  /* 大屏时，更大一些的上下内边距，让Logo居中 */
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
+.header-grid {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: "logo search icons";
+  align-items: center;
+  column-gap: 24px;
+  padding: 0 24px;
+}
+
+/* 让Logo区域(大屏)上下居中 */
+.logo-section {
+  grid-area: logo;
+
+  display: flex;
+  align-items: center;      /* 垂直居中 */
+  justify-content: center;  /* 水平居中 */
+}
+
+/* 小屏时，Logo贴近左上角，减少 padding，使它更贴边 */
+@media (max-width: 1200px) {
+  .logo-section {
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 8px; /* 你可以适当减少或增大 */
+  }
+}
+
+/* Logo按钮 */
+.logo-btn {
+  height: 100%;
+  padding: 0; /* 让图片本身来控制大小 */
+}
+
+/* 大屏下Logo更大，小屏Logo更小且贴边 */
 .responsive-logo {
-    height: 18vh;
-    margin-top: 0%;
-    width: auto;
+  display: block;
+  transition: all 0.3s ease;
+  /* 大屏: 比原先更大一些 */
+  height: 64px;
+  width: auto;
 }
 
-/* @media (max-width: 1200px) {
-    .large-header {
-        height: 15vh;
-    }
+@media (max-width: 1200px) {
+  .responsive-logo {
+    /* 小屏: 再缩小一点 */
+    height: 48px;
+  }
 }
 
-@media (max-width: 992px) {
-    .large-header {
-        height: 12vh;
-    }
+.search-section {
+  grid-area: search;
+  max-width: 600px; /* 视需求可改 */
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
-@media (max-width: 768px) {
-    .large-header {
-        height: 10vh;
-    }
+/* 合并后的图标区 */
+.icons-section {
+  grid-area: icons;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  justify-content: flex-end;
 }
 
-@media (max-width: 576px) {
-    .large-header {
-        height: 8vh;
-    }
-} */
+/* 每个图标+文本组合 */
+.icon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-.language-list-item {
-    background-color: none !important;
+/* 语言切换也归为icon-item */
+.lang-item {
+  align-items: stretch;
+}
+
+/* 按钮样式 */
+.icon-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  transform: scale(1.05);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 图标下方的文字 */
+.icon-label {
+  font-size: 14px;
+  margin-top: 6px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* 搜索输入 */
+.search-input {
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 8px;
+}
+
+/* 语言选择器 - 宽度由JS动态控制 */
+.language-select {
+  text-align: center;
+  /* 其他基础样式保持 */
+}
+
+/* 小屏时栅格变动：Logo + Icons在同一行，搜索栏下移 */
+@media (max-width: 1000px) {
+  .header-grid {
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      "logo icons"
+      "search search";
+  }
+  .search-section {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 </style>

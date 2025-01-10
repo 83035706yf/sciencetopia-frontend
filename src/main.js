@@ -1,55 +1,47 @@
 /* Set up using Vue 3 */
 import { createApp } from 'vue'
-import store from './store';  // Import the store
+import store from './store';
 import App from './App.vue'
-import i18n from './i18n'; // Import the i18n plugin
+import i18n from './i18n';
 import GlobalLoader from './components/GlobalLoader.vue';
 import { initializeSignalRConnection, connection } from './services/signalr-service';
-
-/* import router */
 import router from './router'
-
-/* import custom css */ 
 import './assets/css/site.css'
-
-// /* import the fontawesome core */
-// import { library } from '@fortawesome/fontawesome-svg-core'
-
-// /* import font awesome icon component */
-// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-// /* import specific icons */
-// import { faSearch } from '@fortawesome/free-solid-svg-icons'
-// import { faSun } from '@fortawesome/free-solid-svg-icons'
-// import {faTrashCan} from '@fortawesome/free-solid-svg-icons';
-// import {faHeartCirclePlus} from '@fortawesome/free-solid-svg-icons';
-// import {faCircleNodes} from '@fortawesome/free-solid-svg-icons';
-// import {faShareNodes} from '@fortawesome/free-solid-svg-icons';
-// import {faArrowsRotate} from '@fortawesome/free-solid-svg-icons';
-
-// /* add icons to the library */
-// library.add(faSearch, faSun, faTrashCan, faHeartCirclePlus, faCircleNodes, faShareNodes, faArrowsRotate)
+import './styles/main.scss';
 
 // Vuetify
 import 'vuetify/styles'
-import './styles/main.scss';
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
-import '@mdi/font/css/materialdesignicons.css';
+import '@mdi/font/css/materialdesignicons.css'
 
 const vuetify = createVuetify({
   icons: {
-    iconfont: 'mdi', // 默认值 - 只有在使用其他图标集时才需要更改
+    iconfont: 'mdi',
   },
   components,
   directives,
+  display: {
+    // 添加响应式断点
+    thresholds: {
+      xs: 0,
+      sm: 600,
+      md: 960,
+      lg: 1264,
+      xl: 1904,
+    },
+    // 添加响应式布局
+    breakpoint: {
+      mobileBreakpoint: 'sm'
+    }
+  },
   theme: {
-    defaultTheme: 'light', // Set the default theme to light
+    defaultTheme: 'light',
     themes: {
       light: {
         colors: {
-          primary: '#000', // Ensure valid color values
+          primary: '#000',
           text: '#304E75',
           background: '#E8DABD',
           secondary: '#EC0017',
@@ -62,7 +54,7 @@ const vuetify = createVuetify({
       },
       dark: {
         colors: {
-          primary: '#ffffff', // Ensure valid color values
+          primary: '#ffffff',
           secondary: '#b0bec5',
           accent: '#8c9eff',
           error: '#f44336',
@@ -73,7 +65,6 @@ const vuetify = createVuetify({
 })
 
 router.beforeEach((to, from, next) => {
-  // Check if the URL has changed
   if (to.path !== from.path) {
     store.commit('resetSelectedNodes');
     store.commit('RESET_EDIT_MODE');
@@ -81,16 +72,12 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
-/* Create Vue app */
 const app = createApp(App)
 app.component('GlobalLoader', GlobalLoader);
 
-// Initialize SignalR connection
 initializeSignalRConnection();
-
 app.config.globalProperties.$signalRConnection = connection;
 
-// app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)
 app.use(store)
 app.use(vuetify)
