@@ -3,33 +3,16 @@
     <v-container class="header-grid" fluid>
       <!-- Logo -->
       <div class="logo-section">
-        <v-btn
-          variant="plain"
-          class="logo-btn"
-          @click.prevent="backToHomePage"
-        >
-          <img
-            :src="isSmallScreen ? smallLogo : largeLogo"
-            alt="Logo"
-            class="responsive-logo"
-          />
+        <v-btn variant="plain" class="logo-btn" @click.prevent="backToHomePage">
+          <img :src="isSmallScreen ? smallLogo : largeLogo" alt="Logo" class="responsive-logo" />
         </v-btn>
       </div>
 
       <!-- Search -->
       <div class="search-section">
-        <v-text-field
-          v-model="searchQuery"
-          :placeholder="$t('searchbar.iwanttolearn')"
-          variant="plain"
-          density="comfortable"
-          hide-details
-          clearable
-          @keydown.enter.prevent="globalSearch"
-          append-inner-icon="mdi-magnify"
-          @click:append-inner="globalSearch"
-          class="search-input"
-        />
+        <v-text-field v-model="searchQuery" :placeholder="$t('searchbar.iwanttolearn')" variant="plain"
+          density="comfortable" hide-details clearable @keydown.enter.prevent="globalSearch"
+          append-inner-icon="mdi-magnify" @click:append-inner="globalSearch" class="search-input" />
       </div>
 
       <!-- Icons (nav + actions) -->
@@ -38,12 +21,7 @@
         <div class="icon-item">
           <v-tooltip :text="$t('header.trend')" location="bottom" open-delay="300" :disabled="!isSmallScreen">
             <template v-slot:activator="slotProps">
-              <v-btn
-                v-bind="slotProps.props"
-                class="icon-btn"
-                variant="plain"
-                @click.prevent="scrollToSection"
-              >
+              <v-btn v-bind="slotProps.props" class="icon-btn" variant="plain" @click.prevent="scrollToSection">
                 <v-icon :size="iconSize">mdi-rss</v-icon>
               </v-btn>
             </template>
@@ -55,12 +33,7 @@
         <div class="icon-item">
           <v-tooltip :text="$t('header.studygroup')" location="bottom" open-delay="300" :disabled="!isSmallScreen">
             <template v-slot:activator="slotProps">
-              <v-btn
-                v-bind="slotProps.props"
-                class="icon-btn"
-                variant="plain"
-                @click.prevent="RouteToStudyGroup"
-              >
+              <v-btn v-bind="slotProps.props" class="icon-btn" variant="plain" @click.prevent="RouteToStudyGroup">
                 <v-icon :size="iconSize">mdi-account-group</v-icon>
               </v-btn>
             </template>
@@ -72,12 +45,7 @@
         <div class="icon-item">
           <v-tooltip :text="$t('header.studyplan')" location="bottom" open-delay="300" :disabled="!isSmallScreen">
             <template v-slot:activator="slotProps">
-              <v-btn
-                v-bind="slotProps.props"
-                class="icon-btn"
-                variant="plain"
-                @click.prevent="handleStudyPlan"
-              >
+              <v-btn v-bind="slotProps.props" class="icon-btn" variant="plain" @click.prevent="handleStudyPlan">
                 <v-icon :size="iconSize">mdi-book-open-variant</v-icon>
               </v-btn>
             </template>
@@ -86,53 +54,27 @@
         </div>
 
         <!-- 登录 / Login -->
-        <div class="icon-item">
+        <LogInPartial :is-small-screen="isSmallScreen" :icon-size="iconSize" />
+        <!-- <div class="icon-item">
           <v-tooltip :text="$t('header.login')" location="bottom" open-delay="300" :disabled="!isSmallScreen">
             <template v-slot:activator="slotProps">
-              <v-btn
-                v-bind="slotProps.props"
-                class="icon-btn"
-                variant="plain"
-                @click.prevent="login"
-              >
+              <v-btn v-bind="slotProps.props" class="icon-btn" variant="plain" @click.prevent="login">
                 <v-icon :size="iconSize">mdi-account</v-icon>
               </v-btn>
             </template>
           </v-tooltip>
           <span v-if="!isSmallScreen" class="icon-label">{{ $t('header.login') }}</span>
-        </div>
+        </div> -->
 
         <!-- 消息 / Messages -->
-        <div class="icon-item">
-          <v-tooltip :text="$t('header.messages')" location="bottom" open-delay="300" :disabled="!isSmallScreen">
-            <template v-slot:activator="slotProps">
-              <v-btn
-                v-bind="slotProps.props"
-                class="icon-btn"
-                variant="plain"
-              >
-                <v-icon :size="iconSize">mdi-bell</v-icon>
-              </v-btn>
-            </template>
-          </v-tooltip>
-          <span v-if="!isSmallScreen" class="icon-label">{{ $t('header.messages') }}</span>
-        </div>
+        <MessageAlert :is-small-screen="isSmallScreen" :icon-size="iconSize" />
 
         <!-- 明/暗模式切换 -->
         <div class="icon-item">
-          <v-tooltip
-            :text="isDarkThemeEnabled ? $t('header.darkmode') : $t('header.lightmode')"
-            location="bottom"
-            open-delay="300"
-            :disabled="!isSmallScreen"
-          >
+          <v-tooltip :text="isDarkThemeEnabled ? $t('header.darkmode') : $t('header.lightmode')" location="bottom"
+            open-delay="300" :disabled="!isSmallScreen">
             <template v-slot:activator="slotProps">
-              <v-btn
-                v-bind="slotProps.props"
-                class="icon-btn"
-                variant="plain"
-                @click.prevent="toggleTheme"
-              >
+              <v-btn v-bind="slotProps.props" class="icon-btn" variant="plain" @click.prevent="toggleTheme">
                 <v-icon :size="iconSize">
                   {{ isDarkThemeEnabled ? 'mdi-weather-night' : 'mdi-weather-sunny' }}
                 </v-icon>
@@ -147,25 +89,20 @@
 
       <!-- 语言切换栏 -->
       <div class="language-section">
-        <v-select
-          v-model="$i18n.locale"
-          :items="languageOptions"
-          density="comfortable"
-          hide-details
-          variant="plain"
-          class="language-select"
-          @update:model-value="handleLanguageChange"
-          :style="computeLangWidthStyle"
-        />
+        <v-select v-model="$i18n.locale" :items="languageOptions" density="comfortable" hide-details variant="plain"
+          class="language-select" @update:model-value="handleLanguageChange" :style="computeLangWidthStyle" />
       </div>
     </v-container>
   </div>
 </template>
 <script>
 import { debounce } from 'lodash-es';
+import MessageAlert from './MessageAlert.vue';
+import LogInPartial from './LogInPartial.vue';
 
 export default {
   name: "HeaderBar",
+  components: { MessageAlert, LogInPartial },
   data() {
     return {
       isDarkThemeEnabled: false,
@@ -228,7 +165,6 @@ export default {
         console.log('Search query is empty!');
         return;
       }
-      // TODO省略了搜索逻辑 ...
       const path = this.$router.resolve({
         name: 'searchList',
         query: { q: query }
@@ -292,7 +228,6 @@ export default {
   -webkit-backdrop-filter: blur(10px);
   transition: all 0.3s ease;
   z-index: 1000;
-
   /* 增大上下边距 */
   padding-top: 20px;
   padding-bottom: 20px;
@@ -300,7 +235,8 @@ export default {
 
 .header-grid {
   display: grid;
-  grid-template-columns: auto 1fr auto auto; /* logo, search, icons, language */
+  grid-template-columns: auto 1fr auto auto;
+  /* logo, search, icons, language */
   grid-template-areas: "logo search icons language";
   align-items: center;
   column-gap: 24px;
@@ -312,18 +248,24 @@ export default {
 .logo-section {
   grid-area: logo;
   display: flex;
-  align-items: center; /* 垂直居中 */
-  justify-content: center; /* 水平居中 */
-  overflow: visible; /* 允许 Logo 溢出 */
+  align-items: center;
+  /* 垂直居中 */
+  justify-content: center;
+  /* 水平居中 */
+  overflow: visible;
+  /* 允许 Logo 溢出 */
 }
 
 /* Logo按钮 */
 .logo-btn {
   height: 100%;
-  padding: 0; /* 让图片本身来控制大小 */
+  padding: 0;
+  /* 让图片本身来控制大小 */
   display: flex;
-  align-items: center; /* 垂直居中图标 */
-  justify-content: center; /* 水平居中图标 */
+  align-items: center;
+  /* 垂直居中图标 */
+  justify-content: center;
+  /* 水平居中图标 */
 }
 
 /* 大屏下Logo更大，小屏Logo更小且贴边 */
@@ -333,75 +275,98 @@ export default {
   /* 大屏: 比原先更大一些 */
   height: 64px;
   width: auto;
-  object-fit: contain; /* 保持比例 */
-  max-height: 100%; /* 防止超出容器 */
+  object-fit: contain;
+  /* 保持比例 */
+  max-height: 100%;
+  /* 防止超出容器 */
 }
 
 /* 搜索区域 */
 .search-section {
   grid-area: search;
-  max-width: 600px; /* 根据需求调整 */
+  max-width: 600px;
+  /* 根据需求调整 */
   width: 100%;
   display: flex;
-  align-items: center; /* 垂直居中 */
-  position: relative; /* 为了绝对定位搜索按钮 */
+  align-items: center;
+  /* 垂直居中 */
+  position: relative;
+  /* 为了绝对定位搜索按钮 */
 }
 
 /* 修改搜索输入 */
 .search-input {
   background-color: rgba(255, 255, 255, 1);
-  border: none; /* 移除边框线 */
-  border-radius: 999px; /* 两侧完全圆形 */
+  border: none;
+  /* 移除边框线 */
+  border-radius: 999px;
+  /* 两侧完全圆形 */
   padding-left: 16px;
-  padding-right: 48px; /* 为搜索按钮留出空间 */
-  box-shadow: 0 0 0 0 transparent; /* 移除默认的v-text-field阴影 */
-  position: relative; /* 相对定位，为内部的绝对定位做参照 */
-  height: 48px; /* 固定高度，确保垂直居中 */
+  padding-right: 48px;
+  /* 为搜索按钮留出空间 */
+  box-shadow: 0 0 0 0 transparent;
+  /* 移除默认的v-text-field阴影 */
+  position: relative;
+  /* 相对定位，为内部的绝对定位做参照 */
+  height: 48px;
+  /* 固定高度，确保垂直居中 */
 }
 
 /* 确保 v-input__slot 占满高度并移除边框 */
 .search-input .v-input__slot {
-  border: none !important; /* 确保没有边框 */
+  border: none !important;
+  /* 确保没有边框 */
   box-shadow: none !important;
-  height: 100%; /* 占满父容器的高度 */
+  height: 100%;
+  /* 占满父容器的高度 */
   display: flex;
-  align-items: center; /* 垂直居中内容 */
+  align-items: center;
+  /* 垂直居中内容 */
 }
 
 /* 绝对定位的 append-inner 图标，使其水平和垂直居中 */
 .search-input .v-field__append-inner {
   position: absolute;
   top: 50%;
-  right: 16px; /* 根据需要调整与右侧的距离 */
+  right: 16px;
+  /* 根据需要调整与右侧的距离 */
   transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer; /* 显示为可点击 */
+  cursor: pointer;
+  /* 显示为可点击 */
 }
 
 /* 调整 append-inner 中图标的大小（可选） */
 .search-input .v-field__append-inner i.v-icon {
-  font-size: 1.25rem; /* 根据需要调整图标大小 */
+  font-size: 1.25rem;
+  /* 根据需要调整图标大小 */
 }
 
 /* 图标区域 */
 .icons-section {
   grid-area: icons;
   display: flex;
-  flex-wrap: nowrap; /* 确保单行 */
+  flex-wrap: nowrap;
+  /* 确保单行 */
   align-items: center;
-  gap: 16px; /* 图标间距 */
-  overflow-x: auto; /* 如果图标过多，可以滚动 */
+  gap: 16px;
+  /* 图标间距 */
+  overflow-x: auto;
+  /* 如果图标过多，可以滚动 */
 }
 
 /* 隐藏滚动条但允许滚动 */
 .icons-section::-webkit-scrollbar {
   display: none;
 }
+
 .icons-section {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 /* 语言切换栏 */
@@ -409,7 +374,8 @@ export default {
   grid-area: language;
   display: flex;
   align-items: center;
-  margin-left: 16px; /* 根据需要调整 */
+  margin-left: 16px;
+  /* 根据需要调整 */
 }
 
 /* 响应式调整 */
@@ -425,7 +391,8 @@ export default {
     grid-template-areas:
       "logo icons language"
       "search search search";
-    row-gap: 12px; /* 行间距 */
+    row-gap: 12px;
+    /* 行间距 */
   }
 
   .search-section {
@@ -434,8 +401,10 @@ export default {
   }
 
   .icons-section {
-    flex-wrap: nowrap; /* 保持单行 */
-    gap: 12px; /* 压缩间距 */
+    flex-wrap: nowrap;
+    /* 保持单行 */
+    gap: 12px;
+    /* 压缩间距 */
     justify-content: flex-start;
   }
 
@@ -454,8 +423,10 @@ export default {
   .language-section {
     margin-left: 24px;
   }
+
   .logo-section {
-    margin-top: 14px; /* 根据需要调整距离 */
+    margin-top: 14px;
+    /* 根据需要调整距离 */
   }
 }
 
@@ -471,7 +442,8 @@ export default {
   }
 
   .large-header {
-    padding: 10px 16px; /* 调整内边距 */
+    padding: 10px 16px;
+    /* 调整内边距 */
   }
 
   .responsive-logo {
@@ -484,8 +456,10 @@ export default {
   }
 
   .icons-section {
-    flex-wrap: wrap; /* 在极窄屏幕下换行 */
-    gap: 8px; /* 进一步压缩间距 */
+    flex-wrap: wrap;
+    /* 在极窄屏幕下换行 */
+    gap: 8px;
+    /* 进一步压缩间距 */
     justify-content: center;
   }
 
@@ -499,8 +473,10 @@ export default {
   }
 
   .language-section {
-    justify-content: center; /* 居中对齐 */
-    margin-left: 0; /* 移除左边距 */
+    justify-content: center;
+    /* 居中对齐 */
+    margin-left: 0;
+    /* 移除左边距 */
   }
 }
 
@@ -576,4 +552,4 @@ export default {
 }
 </style>
 
-<!-- TODO:主题颜色切换  搜索功能实现  输入框对齐居中  -->
+<!-- TODO:主题颜色切换  输入框对齐居中  -->

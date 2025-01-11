@@ -144,7 +144,9 @@ export default {
 @import "../assets/css/header.css";
 
 .avatar-container {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* Avatar hover and transition */
@@ -202,22 +204,6 @@ export default {
     /* Vertically align buttons and divider */
 }
 
-.btn-row {
-    display: flex;
-    /* Ensure v-row remains in one row */
-    gap: 5px;
-    /* Add space between buttons and the divider */
-}
-
-.divider {
-    font-size: 16px;
-    /* Adjust divider font size */
-    margin-left: 20px;
-    /* Add spacing around the "/" */
-    font-weight: bold;
-    /* Make divider bold */
-}
-
 .no-padding {
     padding: 0;
     min-width: none;
@@ -225,41 +211,43 @@ export default {
 
 /* Keyframes for entrance animation */
 @keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /* Keyframes for exit animation */
 @keyframes fadeOutScale {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.9);
-  }
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
 }
 
 /* Apply animation to the card */
 .animated-card {
-  animation-duration: 0.3s;
-  animation-fill-mode: forwards;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
 }
 
 /* Trigger entrance animation */
 .avatar-hover-container:hover .animated-card {
-  animation-name: fadeInScale;
+    animation-name: fadeInScale;
 }
 
 /* Trigger exit animation */
 .avatar-hover-container:not(:hover) .animated-card {
-  animation-name: fadeOutScale;
+    animation-name: fadeOutScale;
 }
 </style>
