@@ -16,7 +16,7 @@
         </v-btn>
       </template>
 
-      <!-- 下拉菜单 -->
+      <!-- 下拉菜单: 仅当已登录(isAuthenticated)时才显示 -->
       <v-list class="header-list st-card" v-if="isAuthenticated">
         <v-list-item variant="plain" @click="directMessages">
           <v-list-item-title>{{ $t('message.privatemessage') }}</v-list-item-title>
@@ -26,19 +26,9 @@
           <v-list-item-title>{{ $t('message.notification') }}</v-list-item-title>
         </v-list-item>
       </v-list>
-
-      <v-card class="header-list" v-else>
-        <v-card-title>
-          <v-list>
-            <v-list-item-title>
-              {{ $t('please') }}
-              <v-btn @click="login" variant="outlined">{{ $t('header.login') }}</v-btn>
-              {{ $t('header.toseemessage') }}
-            </v-list-item-title>
-          </v-list>
-        </v-card-title>
-      </v-card>
+      <!-- 未登录时，不再显示任何提示卡片，以免悬停出现"请登录以查看信息" -->
     </v-menu>
+
     <span v-if="!isSmallScreen" class="icon-label">{{ $t('header.messages') }}</span>
   </div>
 </template>
