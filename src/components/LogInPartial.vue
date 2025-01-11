@@ -1,5 +1,4 @@
 <template>
-  <!-- 用 icon-item 类统一外层容器，与其他图标保持一致 -->
   <div class="avatar-container icon-item">
     <!-- 已登录状态 -->
     <div v-if="isAuthenticated" @mouseleave="hovering = false" class="icon-item">

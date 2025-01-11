@@ -27,70 +27,28 @@
       <!-- Icons (nav + actions) -->
       <div class="icons-section">
         <!-- 趋势 / Trend -->
-        <div class="icon-item" @click.prevent="scrollToSection">
-          <v-tooltip
-            :text="$t('header.trend')"
-            location="bottom"
-            open-delay="300"
-            :disabled="!isSmallScreen"
-          >
-            <template v-slot:activator="slotProps">
-              <v-btn
-                v-bind="slotProps.props"
-                class="icon-btn"
-                variant="plain"
-                disabled
-              >
-                <v-icon :size="iconSize">mdi-rss</v-icon>
-              </v-btn>
-            </template>
-          </v-tooltip>
-          <span v-if="!isSmallScreen" class="icon-label">{{ $t('header.trend') }}</span>
-        </div>
+        <ReusableIconButton
+          icon="mdi-rss"
+          :label="$t('header.trend')"
+          :iconSize="iconSize"
+          @click="scrollToSection"
+        />
 
         <!-- 学习小组 / StudyGroup -->
-        <div class="icon-item" @click.prevent="RouteToStudyGroup">
-          <v-tooltip
-            :text="$t('header.studygroup')"
-            location="bottom"
-            open-delay="300"
-            :disabled="!isSmallScreen"
-          >
-            <template v-slot:activator="slotProps">
-              <v-btn
-                v-bind="slotProps.props"
-                class="icon-btn"
-                variant="plain"
-                disabled
-              >
-                <v-icon :size="iconSize">mdi-account-group</v-icon>
-              </v-btn>
-            </template>
-          </v-tooltip>
-          <span v-if="!isSmallScreen" class="icon-label">{{ $t('header.studygroup') }}</span>
-        </div>
+        <ReusableIconButton
+          icon="mdi-account-group"
+          :label="$t('header.studygroup')"
+          :iconSize="iconSize"
+          @click="RouteToStudyGroup"
+        />
 
         <!-- 学习计划 / StudyPlan -->
-        <div class="icon-item" @click.prevent="handleStudyPlan">
-          <v-tooltip
-            :text="$t('header.studyplan')"
-            location="bottom"
-            open-delay="300"
-            :disabled="!isSmallScreen"
-          >
-            <template v-slot:activator="slotProps">
-              <v-btn
-                v-bind="slotProps.props"
-                class="icon-btn"
-                variant="plain"
-                disabled
-              >
-                <v-icon :size="iconSize">mdi-book-open-variant</v-icon>
-              </v-btn>
-            </template>
-          </v-tooltip>
-          <span v-if="!isSmallScreen" class="icon-label">{{ $t('header.studyplan') }}</span>
-        </div>
+        <ReusableIconButton
+          icon="mdi-book-open-variant"
+          :label="$t('header.studyplan')"
+          :iconSize="iconSize"
+          @click="handleStudyPlan"
+        />
 
         <!-- 登录 / Login (handled by LogInPartial) -->
         <LogInPartial :is-small-screen="isSmallScreen" :icon-size="iconSize" />
@@ -99,30 +57,12 @@
         <MessageAlert :is-small-screen="isSmallScreen" :icon-size="iconSize" />
 
         <!-- 明/暗模式切换 -->
-        <div class="icon-item" @click.prevent="toggleTheme">
-          <v-tooltip
-            :text="isDarkThemeEnabled ? $t('header.darkmode') : $t('header.lightmode')"
-            location="bottom"
-            open-delay="300"
-            :disabled="!isSmallScreen"
-          >
-            <template v-slot:activator="slotProps">
-              <v-btn
-                v-bind="slotProps.props"
-                class="icon-btn"
-                variant="plain"
-                disabled
-              >
-                <v-icon :size="iconSize">
-                  {{ isDarkThemeEnabled ? 'mdi-weather-night' : 'mdi-weather-sunny' }}
-                </v-icon>
-              </v-btn>
-            </template>
-          </v-tooltip>
-          <span v-if="!isSmallScreen" class="icon-label">
-            {{ isDarkThemeEnabled ? $t('header.darkmode') : $t('header.lightmode') }}
-          </span>
-        </div>
+        <ReusableIconButton
+          :icon="themeIcon"
+          :label="themeLabel"
+          :iconSize="iconSize"
+          @click="toggleTheme"
+        />
       </div>
 
       <!-- 语言切换栏 -->
@@ -146,10 +86,15 @@
 import { debounce } from 'lodash-es';
 import MessageAlert from './MessageAlert.vue';
 import LogInPartial from './LogInPartial.vue';
+import ReusableIconButton from './ReusableIconButton.vue';
 
 export default {
   name: "HeaderBar",
-  components: { MessageAlert, LogInPartial },
+  components: {
+    MessageAlert,
+    LogInPartial,
+    ReusableIconButton,
+  },
   data() {
     return {
       isDarkThemeEnabled: false,
@@ -159,9 +104,9 @@ export default {
       isSmallScreen: window.innerWidth <= 1200,
       languageOptions: [
         { title: 'English', value: 'en' },
-        { title: 'Chinese', value: 'zh' }
+        { title: 'Chinese', value: 'zh' },
       ],
-      langTextWidth: 0
+      langTextWidth: 0,
     };
   },
   computed: {
@@ -169,7 +114,16 @@ export default {
       return this.$store.state.isAuthenticated;
     },
     iconSize() {
+      // 大屏用 32，小屏用 24
       return this.isSmallScreen ? 24 : 32;
+    },
+    themeIcon() {
+      return this.isDarkThemeEnabled ? 'mdi-weather-night' : 'mdi-weather-sunny';
+    },
+    themeLabel() {
+      return this.isDarkThemeEnabled
+        ? this.$t('header.darkmode')
+        : this.$t('header.lightmode');
     },
     computeLangWidthStyle() {
       const baseWidth = this.langTextWidth || 30;
@@ -179,7 +133,7 @@ export default {
         minWidth: `${minW}px`,
         maxWidth: `${maxW}px`,
       };
-    }
+    },
   },
   methods: {
     handleResize() {
@@ -187,7 +141,10 @@ export default {
     },
     toggleTheme() {
       this.isDarkThemeEnabled = !this.isDarkThemeEnabled;
-      // 你项目中的主题切换逻辑...
+      // Vuetify 主题切换
+      this.$vuetify.theme.dark = this.isDarkThemeEnabled;
+      // 可选：持久化
+      localStorage.setItem('isDarkThemeEnabled', this.isDarkThemeEnabled);
     },
     backToHomePage() {
       this.$router.push({ name: 'HomePage' });
@@ -201,14 +158,14 @@ export default {
       }
     },
     async globalSearch() {
-      const query = this.searchQuery ? this.searchQuery.trim() : '';
+      const query = this.searchQuery.trim();
       if (!query) {
         console.log('Search query is empty!');
         return;
       }
       const path = this.$router.resolve({
         name: 'searchList',
-        query: { q: query }
+        query: { q: query },
       }).href;
       window.open(path, '_blank');
     },
@@ -243,19 +200,25 @@ export default {
       document.body.appendChild(tempSpan);
       this.langTextWidth = tempSpan.offsetWidth;
       document.body.removeChild(tempSpan);
-    }
+    },
   },
   created() {
     this.debouncedResize = debounce(this.handleResize, 100);
+    this.$root.isSmallScreen = this.isSmallScreen;
     this.handleResize();
   },
   mounted() {
     window.addEventListener('resize', this.debouncedResize);
     this.measureLangTextWidth();
+    const storedTheme = localStorage.getItem('isDarkThemeEnabled');
+    if (storedTheme !== null) {
+      this.isDarkThemeEnabled = storedTheme === 'true';
+      this.$vuetify.theme.dark = this.isDarkThemeEnabled;
+    }
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.debouncedResize);
-  }
+  },
 };
 </script>
 
@@ -363,6 +326,7 @@ export default {
 .icons-section::-webkit-scrollbar {
   display: none;
 }
+
 .icons-section {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -382,6 +346,7 @@ export default {
     grid-template-columns: auto 1fr auto auto;
   }
 }
+
 @media (max-width: 1200px) {
   .header-grid {
     grid-template-columns: auto 1fr auto;
@@ -399,16 +364,6 @@ export default {
     gap: 12px;
     justify-content: flex-start;
   }
-  .icon-btn {
-    width: 36px;
-    height: 36px;
-  }
-  .icon-label {
-    font-size: 14px;
-    margin-top: 6px;
-    text-align: center;
-    white-space: nowrap;
-  }
   .language-section {
     margin-left: 24px;
   }
@@ -416,6 +371,7 @@ export default {
     margin-top: 14px;
   }
 }
+
 @media (max-width: 800px) {
   .header-grid {
     grid-template-columns: auto;
@@ -441,53 +397,12 @@ export default {
     gap: 8px;
     justify-content: center;
   }
-  .icon-btn {
-    width: 32px;
-    height: 32px;
-  }
-  .icon-label {
-    display: none;
-  }
   .language-section {
     justify-content: center;
     margin-left: 0;
   }
 }
 
-/* 每个图标+文本组合 */
-.icon-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer; /* 让整个区域有点击手型 */
-  position: relative;
-}
-
-.icon-item:hover .icon-btn {
-  transform: scale(1.05);
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* 按钮样式 */
-.icon-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* 图标下方的文字 */
-.icon-label {
-  font-size: 14px;
-  margin-top: 6px;
-  text-align: center;
-  white-space: nowrap;
-}
-
-/* 语言选择器 - 宽度由JS动态控制 */
 .language-select {
   text-align: center;
 }
@@ -506,11 +421,13 @@ export default {
   justify-content: center;
   overflow: visible;
 }
+
 .logo-btn {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .responsive-logo {
   display: block;
   transition: all 0.3s ease;
@@ -520,5 +437,3 @@ export default {
   max-height: 100%;
 }
 </style>
-
-<!-- TODO:主题颜色切换  输入框对齐居中 -->

@@ -1,12 +1,16 @@
 <template>
   <v-container fluid class="header-container">
     <v-row align="center" justify="space-between" class="header-row">
-
       <!-- 左侧部分：Logo 和 搜索框 -->
       <v-col cols="auto" class="left-section">
         <!-- Logo -->
-        <v-btn variant="plain" class="logo-btn" @click="backToHomePage" aria-label="返回主页">
-          <img src="../assets/images/logo.png" alt="Logo" class="logo-image" />
+        <v-btn
+          variant="plain"
+          class="logo-btn"
+          @click="backToHomePage"
+          aria-label="返回主页"
+        >
+          <img :src="logoSrc" alt="Logo" class="logo-image" />
         </v-btn>
 
         <!-- 搜索框 -->
@@ -22,6 +26,8 @@
             clearable
             hide-details
             flat
+            aria-label="搜索"
+            ref="searchInput"
           ></v-text-field>
         </div>
       </v-col>
@@ -29,46 +35,21 @@
       <!-- 右侧部分：导航链接 和 用户操作 -->
       <v-col cols="auto" class="right-section">
         <v-row align="center" justify="end" class="right-row">
-
           <!-- 导航链接 -->
-          <v-btn class="header-btn" variant="plain" @click="scrollToSection">
-            {{ $t('header.trend') }}
-          </v-btn>
-          <v-btn class="header-btn" variant="plain" @click="RouteToStudyGroup">
-            {{ $t('header.studygroup') }}
-          </v-btn>
-
-          <v-menu open-on-hover offset-y>
-            <template v-slot:activator="{ props }">
-              <v-btn v-bind="props" class="header-btn" variant="plain"
-                @click="isAuthenticated ? showDialog() : null">
-                {{ $t('header.studyplan') }}
-              </v-btn>
-            </template>
-            <v-card v-if="!isAuthenticated">
-              <v-card-title>
-                <v-list>
-                  <v-list-item-title>
-                    {{ $t('please') }}
-                    <v-btn @click="login" variant="outlined">
-                      {{ $t('header.login') }}
-                    </v-btn>
-                    {{ $t('header.tocreateplan') }}
-                  </v-list-item-title>
-                </v-list>
-              </v-card-title>
-            </v-card>
-          </v-menu>
+          <ReusableIconButton
+            v-for="(item, index) in navItems"
+            :key="index"
+            :icon="item.icon"
+            :label="item.label"
+            @click="item.action"
+          />
 
           <!-- 深色模式切换 -->
-          <v-btn class="header-btn dark-mode-btn" variant="plain" @click="toggleTheme" aria-label="切换主题">
-            <div class="btn-content">
-              <!-- 深色模式 SVG 图标 -->
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path d="..."></path>
-              </svg>
-            </div>
-          </v-btn>
+          <ReusableIconButton
+            :icon="themeIcon"
+            :label="themeLabel"
+            @click="toggleTheme"
+          />
 
           <!-- 语言切换器 -->
           <v-select
@@ -76,7 +57,7 @@
             :items="languageOptions"
             dense
             hide-details
-            solo-inverted
+            solo
             variant="plainfield"
             class="language-select"
             aria-label="语言切换"
@@ -88,159 +69,196 @@
           <MessageAlert :scrolledPastHeader="true" />
         </v-row>
       </v-col>
-
     </v-row>
 
-    <!-- 登录注册对话框（如有需要） -->
-    <v-dialog v-model="loginRegisterDialog" max-width="400px">
+    <!-- 登录注册对话框 -->
+    <v-dialog v-model="loginRegisterDialog" max-width="400px" persistent>
       <v-card>
         <v-card-title>
-          <span class="headline">{{ isLogin ? $t('login.title') : $t('register.title') }}</span>
+          <span class="headline">
+            {{ isLogin ? $t('login.title') : $t('register.title') }}
+          </span>
         </v-card-title>
         <v-card-text>
-          <LogInPartial v-if="isLogin" @login-success="handleLoginSuccess" />
-          <MessageAlert v-if="alertMessage" :message="alertMessage" @close="alertMessage = ''" />
-          <v-form v-else @submit.prevent="registerUser">
-            <!-- 注册表单内容 -->
-            <v-text-field
-              v-model="registerUsername"
-              :label="$t('register.username')"
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="registerEmail"
-              :label="$t('register.email')"
-              type="email"
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="registerPassword"
-              :label="$t('register.password')"
-              type="password"
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="registerConfirmPassword"
-              :label="$t('register.confirmPassword')"
-              type="password"
-              required
-            ></v-text-field>
-            <v-btn type="submit" color="primary">{{ $t('register.register') }}</v-btn>
-            <v-btn text @click="switchToLogin">{{ $t('register.alreadyHaveAccount') }}</v-btn>
-          </v-form>
+          <div v-if="isLogin">
+            <LogInPartial @login-success="handleLoginSuccess" />
+            <v-divider class="my-4"></v-divider>
+            <div class="text-center">
+              {{ $t('login.noAccount') }}
+              <v-btn text @click="switchToRegister">
+                {{ $t('register.register') }}
+              </v-btn>
+            </div>
+          </div>
+          <div v-else>
+            <v-form @submit.prevent="registerUser">
+              <v-text-field
+                v-model="registerUsername"
+                :label="$t('register.username')"
+                required
+              ></v-text-field>
+              <v-text-field
+                v-model="registerEmail"
+                :label="$t('register.email')"
+                type="email"
+                required
+              ></v-text-field>
+              <v-text-field
+                v-model="registerPassword"
+                :label="$t('register.password')"
+                type="password"
+                required
+              ></v-text-field>
+              <v-text-field
+                v-model="registerConfirmPassword"
+                :label="$t('register.confirmPassword')"
+                type="password"
+                required
+              ></v-text-field>
+              <v-btn type="submit" color="primary">
+                {{ $t('register.register') }}
+              </v-btn>
+              <v-btn text @click="switchToLogin">
+                {{ $t('register.alreadyHaveAccount') }}
+              </v-btn>
+            </v-form>
+            <MessageAlert v-if="alertMessage" :message="alertMessage" @close="alertMessage = ''" />
+          </div>
         </v-card-text>
       </v-card>
     </v-dialog>
-
   </v-container>
 </template>
 
 <script>
+import { debounce } from 'lodash-es';
 import LogInPartial from './LogInPartial.vue';
 import MessageAlert from './MessageAlert.vue';
+import ReusableIconButton from './ReusableIconButton.vue'; // 新增的可复用按钮组件
 
 export default {
   name: "ThinHeaderBar",
-  components: { LogInPartial, MessageAlert },
+  components: { LogInPartial, MessageAlert, ReusableIconButton },
   data() {
     return {
       isDarkThemeEnabled: false,
-      themePath: '',
       searchQuery: '',
-      searchResults: [],
-      isLoading: false,
-      currentLocale: this.$i18n.locale,
+      isSmallScreen: window.innerWidth <= 1200,
       languageOptions: [
         { title: 'English', value: 'en' },
         { title: '中文', value: 'zh' },
         // 可根据需要添加更多语言选项
       ],
+      currentLocale: this.$i18n.locale,
       isLogin: true, // 控制显示登录或注册表单
       loginRegisterDialog: false, // 控制对话框显示
-      loginUsername: '',
-      loginPassword: '',
       registerUsername: '',
       registerEmail: '',
       registerPassword: '',
       registerConfirmPassword: '',
       alertMessage: '', // 用于显示警告信息
+      largeLogo: require('@/assets/images/logo_banner.png'),
+      smallLogo: require('@/assets/images/logo.png'),
     };
   },
   computed: {
     isAuthenticated() {
       return this.$store.state.isAuthenticated;
     },
+    logoSrc() {
+      return this.isSmallScreen ? this.smallLogo : this.largeLogo;
+    },
+    iconSize() {
+      return this.isSmallScreen ? 24 : 32;
+    },
+    themeIcon() {
+      return this.isDarkThemeEnabled ? 'mdi-weather-night' : 'mdi-weather-sunny';
+    },
+    themeLabel() {
+      return this.isDarkThemeEnabled ? this.$t('header.darkmode') : this.$t('header.lightmode');
+    },
+    themeTooltip() {
+      return this.isDarkThemeEnabled
+        ? this.$t('header.darkmode')
+        : this.$t('header.lightmode');
+    },
+    navItems() {
+      return [
+        {
+          icon: 'mdi-rss',
+          label: this.$t('header.trend'),
+          action: this.scrollToSection,
+        },
+        {
+          icon: 'mdi-account-group',
+          label: this.$t('header.studygroup'),
+          action: this.RouteToStudyGroup,
+        },
+        {
+          icon: 'mdi-book-open-variant',
+          label: this.$t('header.studyplan'),
+          action: this.showStudyPlanDialog,
+        },
+      ];
+    },
   },
   methods: {
-    login() {
-      this.$router.push({ name: 'login' });  // 跳转到LogIn组件
+    handleResize() {
+      this.isSmallScreen = window.innerWidth <= 1200;
     },
     toggleTheme() {
       this.isDarkThemeEnabled = !this.isDarkThemeEnabled;
-      if (this.isDarkThemeEnabled) {
-        this.themePath = '/assets/css/dark-theme.css';  // 使用深色模式
-      } else {
-        this.themePath = '';  // 使用浅色模式
-      }
-      // 此处假设已有主题切换逻辑，不做更改
+      // 主题切换逻辑...
+      this.$vuetify.theme.dark = this.isDarkThemeEnabled;
     },
-
     backToHomePage() {
-      this.$router.push({ name: 'HomePage' });  // 返回主页
+      this.$router.push({ name: 'HomePage' }); // 返回主页
     },
-
     scrollToSection() {
-      // 获取目标元素的位置
       const section = document.getElementById('feed-section');
-      console.log("section:", section);
       if (section) {
         const yOffset = -60; // 调整偏移量，根据需要修改
         const y = section.getBoundingClientRect().top + window.scrollY + yOffset;
-
-        // 滚动到指定位置
         window.scrollTo({ top: y, behavior: 'smooth' });
       }
     },
-
     async globalSearch() {
-      const query = this.searchQuery ? this.searchQuery.trim() : '';
+      const query = this.searchQuery.trim();
       if (!query) {
-        console.log('Search query is empty!');
+        this.$refs.searchInput.focus();
         return;
       }
-
-      this.isLoading = true;
       try {
-        const path = this.$router.resolve({ name: 'searchList', query: { q: this.searchQuery } }).href;
+        const path = this.$router.resolve({
+          name: 'searchList',
+          query: { q: query }
+        }).href;
         window.open(path, '_blank');
       } catch (error) {
         console.error('Error searching:', error);
-      } finally {
-        this.isLoading = false;
       }
     },
-
     RouteToStudyGroup() {
       this.$router.push({ name: 'studyGroupList' });
     },
-
-    showDialog() {
-      this.loginRegisterDialog = true;
-      console.log('Show study plan dialog');
+    showStudyPlanDialog() {
+      if (!this.isAuthenticated) {
+        this.alertMessage = this.$t('pleaseLoginToViewStudyPlan');
+      } else {
+        this.loginRegisterDialog = true;
+        this.isLogin = true;
+      }
     },
-
     switchToRegister() {
       this.isLogin = false;
+      this.alertMessage = '';
     },
-
     switchToLogin() {
       this.isLogin = true;
+      this.alertMessage = '';
     },
-
     async loginUser() {
-      // 实现登录逻辑
       try {
-        // 假设有一个登录方法
         await this.$store.dispatch('login', {
           username: this.loginUsername,
           password: this.loginPassword,
@@ -251,15 +269,12 @@ export default {
         this.alertMessage = this.$t('login.failed');
       }
     },
-
     async registerUser() {
-      // 实现注册逻辑
       if (this.registerPassword !== this.registerConfirmPassword) {
         this.alertMessage = this.$t('register.passwordMismatch');
         return;
       }
       try {
-        // 假设有一个注册方法
         await this.$store.dispatch('register', {
           username: this.registerUsername,
           email: this.registerEmail,
@@ -271,16 +286,23 @@ export default {
         this.alertMessage = this.$t('register.failed');
       }
     },
-
-    handleLoginSuccess() {  // 已移除 userData 参数
-      // 处理登录成功逻辑
+    handleLoginSuccess() {
       this.loginRegisterDialog = false;
-      // 其他逻辑...
+      // 其他登录成功后的逻辑...
     },
-
-    changeLanguage() {
-      this.$i18n.locale = this.currentLocale;
+    changeLanguage(val) {
+      this.$i18n.locale = val;
+      this.$vuetify.locale = val;
     },
+  },
+  created() {
+    this.debouncedResize = debounce(this.handleResize, 100);
+  },
+  mounted() {
+    window.addEventListener('resize', this.debouncedResize);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.debouncedResize);
   },
 };
 </script>
@@ -355,27 +377,11 @@ export default {
   gap: 24px; /* 导航项之间的间距 */
 }
 
-.header-btn {
-  font-size: 16px;
-  font-weight: 500;
-  color: #333333;
-  margin: 0 8px;
-}
-
-.header-btn:hover {
-  color: #1976D2; /* Vuetify 默认主色 */
-}
-
-.dark-mode-btn .btn-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .language-select {
   max-width: 100px;
 }
 
+/* 响应式调整 */
 @media (max-width: 1200px) {
   .search-input {
     width: 250px;
@@ -406,5 +412,3 @@ export default {
   }
 }
 </style>
-
-<!-- TODO:响应式设计 搜索栏外观 统一图标 检查导航栏各项功能 -->
