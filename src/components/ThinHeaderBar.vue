@@ -1,84 +1,138 @@
 <template>
-    <!-- Content remains the same -->
-    <v-container fluid>
-        <v-row align="center">
-            <v-col cols="auto" style="width: 38.2vw;">
-                <v-btn variant="plain" class="btn" @click="backToHomePage" style="padding: 0;">
-                    <img src="../assets/images/logo.png" alt="Logo"
-                        style="max-height: 120px; margin-top: -12px; width: auto;" />
-                </v-btn>
-                <!-- <button @click="backToHomePage">
-                    <img src="../assets/images/ciencetopia.png" alt="ciencetopia"
-                        style="position: absolute; top: 0.5vh; left: 120px; height: 80%; width: auto; opacity: 0.1;" />
-                </button> -->
-            </v-col>
+  <v-container fluid class="header-container">
+    <v-row align="center" justify="space-between" class="header-row">
 
-            <!-- Center Section: Search Bar -->
-            <v-col cols="auto" style="width: 23.6vw;" class="text-end">
-                <v-row align="center" justify="center">
-                    <div class="search-container-thin">
-                        <v-text-field sty v-model="searchQuery" :placeholder="$t('searchbar.iwanttolearn')"
-                            variant="plainfield" dense hide-details clearable @keyup.enter="globalSearch"
-                            append-inner-icon="mdi-magnify" @click:append-inner="globalSearch" />
-                    </div>
-                </v-row>
-            </v-col>
+      <!-- 左侧部分：Logo 和 搜索框 -->
+      <v-col cols="auto" class="left-section">
+        <!-- Logo -->
+        <v-btn variant="plain" class="logo-btn" @click="backToHomePage" aria-label="返回主页">
+          <img src="../assets/images/logo.png" alt="Logo" class="logo-image" />
+        </v-btn>
 
-            <!-- Right Section: Navigation Links -->
-            <v-col cols="auto" style="position: absolute; left: 66vw;">
-                <v-row align="center" justify="center">
-                    <v-btn class="header-btn" variant="plain" @click="scrollToSection">{{ $t('header.trend')
-                        }}</v-btn>
-                    <v-btn class="header-btn" variant="plain" @click="RouteToStudyGroup">{{
-                        $t('header.studygroup')
-                    }}</v-btn>
+        <!-- 搜索框 -->
+        <div class="search-wrapper">
+          <v-text-field
+            v-model="searchQuery"
+            :placeholder="$t('searchbar.iwanttolearn')"
+            append-inner-icon="mdi-magnify"
+            @click:append-inner="globalSearch"
+            @keyup.enter="globalSearch"
+            class="search-input no-border"
+            dense
+            clearable
+            hide-details
+            flat
+          ></v-text-field>
+        </div>
+      </v-col>
 
-                    <v-menu open-on-hover offset-y>
-                        <template v-slot:activator="{ props }">
-                            <v-btn v-bind="props" class="header-btn" variant="plain"
-                                @click="isAuthenticated ? showDialog() : null">{{ $t('header.studyplan')
-                                }}</v-btn>
-                        </template>
-                        <v-card v-if="!isAuthenticated">
-                            <v-card-title>
-                                <v-list>
-                                    <v-list-item-title>{{ $t('please') }} <v-btn @click="login" variant="outlined">{{
-                                        $t('header.login') }}</v-btn> {{
-                                                $t('header.tocreateplan') }}</v-list-item-title>
-                                </v-list>
-                            </v-card-title>
-                        </v-card>
-                    </v-menu>
-                </v-row>
-            </v-col>
+      <!-- 右侧部分：导航链接 和 用户操作 -->
+      <v-col cols="auto" class="right-section">
+        <v-row align="center" justify="end" class="right-row">
 
-            <!-- Right Section: User Actions -->
-            <v-col cols="auto" class="header-bottom" style="position: absolute; left: 83.8vw;">
-                <v-row align="center" justify="end">
-                    <!-- User Options -->
-                    <LogInPartial :scrolledPastHeader="true" />
-                    <MessageAlert :scrolledPastHeader="true" />
+          <!-- 导航链接 -->
+          <v-btn class="header-btn" variant="plain" @click="scrollToSection">
+            {{ $t('header.trend') }}
+          </v-btn>
+          <v-btn class="header-btn" variant="plain" @click="RouteToStudyGroup">
+            {{ $t('header.studygroup') }}
+          </v-btn>
 
-                    <!-- Dark Mode Toggle -->
-                    <v-btn class="header-btn two-rows-btn" variant="plain" @click="toggleTheme">
-                        <div class="btn-content">
-                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="32" height="32"
-                                viewBox="0 0 50 50">
-                                <path
-                                    d="M 24.90625 3.96875 C 24.863281 3.976563 24.820313 3.988281 24.78125 4 C 24.316406 4.105469 23.988281 4.523438 24 5 L 24 11 C 23.996094 11.359375 24.183594 11.695313 24.496094 11.878906 C 24.808594 12.058594 25.191406 12.058594 25.503906 11.878906 C 25.816406 11.695313 26.003906 11.359375 26 11 L 26 5 C 26.011719 4.710938 25.894531 4.433594 25.6875 4.238281 C 25.476563 4.039063 25.191406 3.941406 24.90625 3.96875 Z M 10.65625 9.84375 C 10.28125 9.910156 9.980469 10.183594 9.875 10.546875 C 9.769531 10.914063 9.878906 11.304688 10.15625 11.5625 L 14.40625 15.8125 C 14.648438 16.109375 15.035156 16.246094 15.410156 16.160156 C 15.78125 16.074219 16.074219 15.78125 16.160156 15.410156 C 16.246094 15.035156 16.109375 14.648438 15.8125 14.40625 L 11.5625 10.15625 C 11.355469 9.933594 11.054688 9.820313 10.75 9.84375 C 10.71875 9.84375 10.6875 9.84375 10.65625 9.84375 Z M 39.03125 9.84375 C 38.804688 9.875 38.59375 9.988281 38.4375 10.15625 L 34.1875 14.40625 C 33.890625 14.648438 33.753906 15.035156 33.839844 15.410156 C 33.925781 15.78125 34.21875 16.074219 34.589844 16.160156 C 34.964844 16.246094 35.351563 16.109375 35.59375 15.8125 L 39.84375 11.5625 C 40.15625 11.265625 40.246094 10.800781 40.0625 10.410156 C 39.875 10.015625 39.460938 9.789063 39.03125 9.84375 Z M 24.90625 15 C 24.875 15.007813 24.84375 15.019531 24.8125 15.03125 C 24.75 15.035156 24.6875 15.046875 24.625 15.0625 C 24.613281 15.074219 24.605469 15.082031 24.59375 15.09375 C 19.289063 15.320313 15 19.640625 15 25 C 15 30.503906 19.496094 35 25 35 C 30.503906 35 35 30.503906 35 25 C 35 19.660156 30.746094 15.355469 25.46875 15.09375 C 25.433594 15.09375 25.410156 15.0625 25.375 15.0625 C 25.273438 15.023438 25.167969 15.003906 25.0625 15 C 25.042969 15 25.019531 15 25 15 C 24.96875 15 24.9375 15 24.90625 15 Z M 24.9375 17 C 24.957031 17 24.980469 17 25 17 C 25.03125 17 25.0625 17 25.09375 17 C 29.46875 17.050781 33 20.613281 33 25 C 33 29.421875 29.421875 33 25 33 C 20.582031 33 17 29.421875 17 25 C 17 20.601563 20.546875 17.035156 24.9375 17 Z M 4.71875 24 C 4.167969 24.078125 3.78125 24.589844 3.859375 25.140625 C 3.9375 25.691406 4.449219 26.078125 5 26 L 11 26 C 11.359375 26.003906 11.695313 25.816406 11.878906 25.503906 C 12.058594 25.191406 12.058594 24.808594 11.878906 24.496094 C 11.695313 24.183594 11.359375 23.996094 11 24 L 5 24 C 4.96875 24 4.9375 24 4.90625 24 C 4.875 24 4.84375 24 4.8125 24 C 4.78125 24 4.75 24 4.71875 24 Z M 38.71875 24 C 38.167969 24.078125 37.78125 24.589844 37.859375 25.140625 C 37.9375 25.691406 38.449219 26.078125 39 26 L 45 26 C 45.359375 26.003906 45.695313 25.816406 45.878906 25.503906 C 46.058594 25.191406 46.058594 24.808594 45.878906 24.496094 C 45.695313 24.183594 45.359375 23.996094 45 24 L 39 24 C 38.96875 24 38.9375 24 38.90625 24 C 38.875 24 38.84375 24 38.8125 24 C 38.78125 24 38.75 24 38.71875 24 Z M 15 33.875 C 14.773438 33.90625 14.5625 34.019531 14.40625 34.1875 L 10.15625 38.4375 C 9.859375 38.679688 9.722656 39.066406 9.808594 39.441406 C 9.894531 39.8125 10.1875 40.105469 10.558594 40.191406 C 10.933594 40.277344 11.320313 40.140625 11.5625 39.84375 L 15.8125 35.59375 C 16.109375 35.308594 16.199219 34.867188 16.039063 34.488281 C 15.882813 34.109375 15.503906 33.867188 15.09375 33.875 C 15.0625 33.875 15.03125 33.875 15 33.875 Z M 34.6875 33.875 C 34.3125 33.941406 34.011719 34.214844 33.90625 34.578125 C 33.800781 34.945313 33.910156 35.335938 34.1875 35.59375 L 38.4375 39.84375 C 38.679688 40.140625 39.066406 40.277344 39.441406 40.191406 C 39.8125 40.105469 40.105469 39.8125 40.191406 39.441406 C 40.277344 39.066406 40.140625 38.679688 39.84375 38.4375 L 35.59375 34.1875 C 35.40625 33.988281 35.148438 33.878906 34.875 33.875 C 34.84375 33.875 34.8125 33.875 34.78125 33.875 C 34.75 33.875 34.71875 33.875 34.6875 33.875 Z M 24.90625 37.96875 C 24.863281 37.976563 24.820313 37.988281 24.78125 38 C 24.316406 38.105469 23.988281 38.523438 24 39 L 24 45 C 23.996094 45.359375 24.183594 45.695313 24.496094 45.878906 C 24.808594 46.058594 25.191406 46.058594 25.503906 45.878906 C 25.816406 45.695313 26.003906 45.359375 26 45 L 26 39 C 26.011719 38.710938 25.894531 38.433594 25.6875 38.238281 C 25.476563 38.039063 25.191406 37.941406 24.90625 37.96875 Z">
-                                </path>
-                            </svg>
-                        </div>
+          <v-menu open-on-hover offset-y>
+            <template v-slot:activator="{ props }">
+              <v-btn v-bind="props" class="header-btn" variant="plain"
+                @click="isAuthenticated ? showDialog() : null">
+                {{ $t('header.studyplan') }}
+              </v-btn>
+            </template>
+            <v-card v-if="!isAuthenticated">
+              <v-card-title>
+                <v-list>
+                  <v-list-item-title>
+                    {{ $t('please') }}
+                    <v-btn @click="login" variant="outlined">
+                      {{ $t('header.login') }}
                     </v-btn>
+                    {{ $t('header.tocreateplan') }}
+                  </v-list-item-title>
+                </v-list>
+              </v-card-title>
+            </v-card>
+          </v-menu>
 
-                    <!-- Language Switcher -->
-                    <v-select v-model="$i18n.locale"
-                        :items="[{ title: 'English', value: 'en' }, { title: '中文', value: 'zh' }]" dense hide-details
-                        solo-inverted variant="plainfield" style="max-width: 100px;" />
-                </v-row>
-            </v-col>
+          <!-- 深色模式切换 -->
+          <v-btn class="header-btn dark-mode-btn" variant="plain" @click="toggleTheme" aria-label="切换主题">
+            <div class="btn-content">
+              <!-- 深色模式 SVG 图标 -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="..."></path>
+              </svg>
+            </div>
+          </v-btn>
+
+          <!-- 语言切换器 -->
+          <v-select
+            v-model="currentLocale"
+            :items="languageOptions"
+            dense
+            hide-details
+            solo-inverted
+            variant="plainfield"
+            class="language-select"
+            aria-label="语言切换"
+            @change="changeLanguage"
+          />
+
+          <!-- 用户操作组件 -->
+          <LogInPartial :scrolledPastHeader="true" />
+          <MessageAlert :scrolledPastHeader="true" />
         </v-row>
-    </v-container>
+      </v-col>
+
+    </v-row>
+
+    <!-- 登录注册对话框（如有需要） -->
+    <v-dialog v-model="loginRegisterDialog" max-width="400px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">{{ isLogin ? $t('login.title') : $t('register.title') }}</span>
+        </v-card-title>
+        <v-card-text>
+          <LogInPartial v-if="isLogin" @login-success="handleLoginSuccess" />
+          <MessageAlert v-if="alertMessage" :message="alertMessage" @close="alertMessage = ''" />
+          <v-form v-else @submit.prevent="registerUser">
+            <!-- 注册表单内容 -->
+            <v-text-field
+              v-model="registerUsername"
+              :label="$t('register.username')"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="registerEmail"
+              :label="$t('register.email')"
+              type="email"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="registerPassword"
+              :label="$t('register.password')"
+              type="password"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="registerConfirmPassword"
+              :label="$t('register.confirmPassword')"
+              type="password"
+              required
+            ></v-text-field>
+            <v-btn type="submit" color="primary">{{ $t('register.register') }}</v-btn>
+            <v-btn text @click="switchToLogin">{{ $t('register.alreadyHaveAccount') }}</v-btn>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+  </v-container>
 </template>
 
 <script>
@@ -86,77 +140,271 @@ import LogInPartial from './LogInPartial.vue';
 import MessageAlert from './MessageAlert.vue';
 
 export default {
-    name: "ThinHeaderBar",
-    data() {
-        return {
-            isDarkThemeEnabled: false,
-            themePath: '',
-            searchQuery: '',
-            searchResults: [],
-        };
+  name: "ThinHeaderBar",
+  components: { LogInPartial, MessageAlert },
+  data() {
+    return {
+      isDarkThemeEnabled: false,
+      themePath: '',
+      searchQuery: '',
+      searchResults: [],
+      isLoading: false,
+      currentLocale: this.$i18n.locale,
+      languageOptions: [
+        { title: 'English', value: 'en' },
+        { title: '中文', value: 'zh' },
+        // 可根据需要添加更多语言选项
+      ],
+      isLogin: true, // 控制显示登录或注册表单
+      loginRegisterDialog: false, // 控制对话框显示
+      loginUsername: '',
+      loginPassword: '',
+      registerUsername: '',
+      registerEmail: '',
+      registerPassword: '',
+      registerConfirmPassword: '',
+      alertMessage: '', // 用于显示警告信息
+    };
+  },
+  computed: {
+    isAuthenticated() {
+      return this.$store.state.isAuthenticated;
     },
-    components: { LogInPartial, MessageAlert },
-    computed: {
-        isAuthenticated() {
-            return this.$store.state.isAuthenticated;
-        },
+  },
+  methods: {
+    login() {
+      this.$router.push({ name: 'login' });  // 跳转到LogIn组件
     },
-    methods: {
-        login() {
-            this.$router.push({ name: 'login' });  // 跳转到LogIn组件
-        },
-        toggleTheme() {
-            this.isDarkThemeEnabled = !this.isDarkThemeEnabled;
-            if (this.isDarkThemeEnabled) {
-                this.themePath = '/assets/css/dark-theme.css';  // 使用深色模式
-            } else {
-                this.themePath = '';  // 使用浅色模式
-            }
-        },
-
-        backToHomePage() {
-            this.$router.push({ name: 'HomePage' });  // 跳转到LogIn组件
-        },
-
-        scrollToSection() {
-            // 获取目标元素的位置
-            const section = document.getElementById('feed-section');
-            console.log("section:", section);
-            if (section) {
-                const yOffset = -60; // 调整偏移量，根据需要修改
-                const y = section.getBoundingClientRect().top + window.scrollY + yOffset;
-
-                // 滚动到指定位置
-                window.scrollTo({ top: y, behavior: 'smooth' });
-            }
-        },
-
-        async globalSearch() {
-            const query = this.searchQuery ? this.searchQuery.trim() : '';
-            if (!query) {
-                console.log('Search query is empty!');
-                return;
-            }
-
-            this.isLoading = true;
-            try {
-                const path = this.$router.resolve({ name: 'searchList', query: { q: this.searchQuery } }).href;
-                window.open(path, '_blank');
-            } catch (error) {
-                console.error('Error searching:', error);
-            } finally {
-                this.isLoading = false;
-            }
-        },
-
-        RouteToStudyGroup() {
-            this.$router.push({ name: 'studyGroupList' });
-        },
-
-        showDialog() {
-            this.$emit('showStudyPlanDialog', true);
-            console.log('Show study plan dialog');
-        },
+    toggleTheme() {
+      this.isDarkThemeEnabled = !this.isDarkThemeEnabled;
+      if (this.isDarkThemeEnabled) {
+        this.themePath = '/assets/css/dark-theme.css';  // 使用深色模式
+      } else {
+        this.themePath = '';  // 使用浅色模式
+      }
+      // 此处假设已有主题切换逻辑，不做更改
     },
+
+    backToHomePage() {
+      this.$router.push({ name: 'HomePage' });  // 返回主页
+    },
+
+    scrollToSection() {
+      // 获取目标元素的位置
+      const section = document.getElementById('feed-section');
+      console.log("section:", section);
+      if (section) {
+        const yOffset = -60; // 调整偏移量，根据需要修改
+        const y = section.getBoundingClientRect().top + window.scrollY + yOffset;
+
+        // 滚动到指定位置
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    },
+
+    async globalSearch() {
+      const query = this.searchQuery ? this.searchQuery.trim() : '';
+      if (!query) {
+        console.log('Search query is empty!');
+        return;
+      }
+
+      this.isLoading = true;
+      try {
+        const path = this.$router.resolve({ name: 'searchList', query: { q: this.searchQuery } }).href;
+        window.open(path, '_blank');
+      } catch (error) {
+        console.error('Error searching:', error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    RouteToStudyGroup() {
+      this.$router.push({ name: 'studyGroupList' });
+    },
+
+    showDialog() {
+      this.loginRegisterDialog = true;
+      console.log('Show study plan dialog');
+    },
+
+    switchToRegister() {
+      this.isLogin = false;
+    },
+
+    switchToLogin() {
+      this.isLogin = true;
+    },
+
+    async loginUser() {
+      // 实现登录逻辑
+      try {
+        // 假设有一个登录方法
+        await this.$store.dispatch('login', {
+          username: this.loginUsername,
+          password: this.loginPassword,
+        });
+        this.loginRegisterDialog = false;
+      } catch (error) {
+        console.error('登录失败:', error);
+        this.alertMessage = this.$t('login.failed');
+      }
+    },
+
+    async registerUser() {
+      // 实现注册逻辑
+      if (this.registerPassword !== this.registerConfirmPassword) {
+        this.alertMessage = this.$t('register.passwordMismatch');
+        return;
+      }
+      try {
+        // 假设有一个注册方法
+        await this.$store.dispatch('register', {
+          username: this.registerUsername,
+          email: this.registerEmail,
+          password: this.registerPassword,
+        });
+        this.loginRegisterDialog = false;
+      } catch (error) {
+        console.error('注册失败:', error);
+        this.alertMessage = this.$t('register.failed');
+      }
+    },
+
+    handleLoginSuccess() {  // 已移除 userData 参数
+      // 处理登录成功逻辑
+      this.loginRegisterDialog = false;
+      // 其他逻辑...
+    },
+
+    changeLanguage() {
+      this.$i18n.locale = this.currentLocale;
+    },
+  },
 };
 </script>
+
+<style scoped>
+.header-container {
+  background-color: #ffffff; /* 纯白背景 */
+  transition: all 0.3s ease;
+  z-index: 1000;
+  padding: 10px 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加轻微阴影以区分内容 */
+}
+
+.header-row {
+  width: 100%;
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Logo 和搜索框之间的间距 */
+}
+
+.logo-btn {
+  padding: 0;
+}
+
+.logo-image {
+  max-height: 120px; /* 调整 Logo 大小 */
+  width: auto;
+}
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 300px;
+  border-radius: 999px; /* 圆形边角，确保两侧完全圆形 */
+  background-color: #f5f5f5; /* 搜索框背景颜色 */
+  padding-left: 16px; /* 内边距，确保文本不靠边 */
+  padding-right: 16px; /* 内边距，确保图标不靠边 */
+}
+
+/* 移除搜索框的边框和下划线 */
+.no-border .v-input__control .v-input__slot {
+  border: none !important;
+  box-shadow: none !important;
+  background-color: #f5f5f5 !important; /* 保持背景颜色 */
+}
+
+/* 如果仍有下划线，可以进一步移除 */
+.no-border .v-input__slot::before,
+.no-border .v-input__slot::after {
+  display: none !important;
+}
+
+/* 调整搜索框内的图标位置 */
+.search-input .v-input__append-inner {
+  margin-right: 8px; /* 调整图标与边缘的间距 */
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+}
+
+.right-row {
+  display: flex;
+  align-items: center;
+  gap: 24px; /* 导航项之间的间距 */
+}
+
+.header-btn {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333333;
+  margin: 0 8px;
+}
+
+.header-btn:hover {
+  color: #1976D2; /* Vuetify 默认主色 */
+}
+
+.dark-mode-btn .btn-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.language-select {
+  max-width: 100px;
+}
+
+@media (max-width: 1200px) {
+  .search-input {
+    width: 250px;
+  }
+  .language-select {
+    max-width: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .left-section,
+  .right-section {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .search-input {
+    width: 100%;
+    margin-top: 8px;
+  }
+  .right-row {
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: flex-start;
+  }
+}
+</style>
+
+<!-- TODO:响应式设计 搜索栏外观 统一图标 检查导航栏各项功能 -->
