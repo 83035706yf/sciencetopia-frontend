@@ -71,7 +71,7 @@ export default {
     directMessages() {
       if (!this.isAuthenticated) {
         // 未登录 -> 提示或跳转登录
-        alert("请先登录再查看学习计划");
+        alert("请先登录再查看消息列表");
       } else {
         const userId = this.$store.state.currentUserID;
         this.$router.push({ name: 'directMessages', params: { userId } });
