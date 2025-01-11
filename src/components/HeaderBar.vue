@@ -10,45 +10,26 @@
 
       <!-- Search -->
       <div class="search-section">
-        <v-text-field
-          v-model="searchQuery"
-          :placeholder="$t('searchbar.iwanttolearn')"
-          variant="plain"
-          density="comfortable"
-          hide-details
-          clearable
-          @keydown.enter.prevent="globalSearch"
-          append-inner-icon="mdi-magnify"
-          @click:append-inner="globalSearch"
-          class="search-input"
-        />
+        <v-text-field v-model="searchQuery" :placeholder="$t('searchbar.iwanttolearn')" variant="plain"
+          density="comfortable" hide-details clearable @keydown.enter.prevent="globalSearch"
+          append-inner-icon="mdi-magnify" @click:append-inner="globalSearch" class="search-input" />
       </div>
 
       <!-- Icons (nav + actions) -->
       <div class="icons-section">
         <!-- 趋势 / Trend -->
-        <ReusableIconButton
-          icon="mdi-rss"
-          :label="$t('header.trend')"
-          :iconSize="iconSize"
-          @click="scrollToSection"
-        />
+        <ReusableIconButton icon="mdi-rss" :label="$t('header.trend')" :iconSize="iconSize" @click="scrollToSection" />
 
         <!-- 学习小组 / StudyGroup -->
-        <ReusableIconButton
-          icon="mdi-account-group"
-          :label="$t('header.studygroup')"
-          :iconSize="iconSize"
-          @click="RouteToStudyGroup"
-        />
+        <ReusableIconButton icon="mdi-account-group" :label="$t('header.studygroup')" :iconSize="iconSize"
+          @click="RouteToStudyGroup" />
 
         <!-- 学习计划 / StudyPlan -->
-        <ReusableIconButton
-          icon="mdi-book-open-variant"
-          :label="$t('header.studyplan')"
-          :iconSize="iconSize"
-          @click="handleStudyPlan"
-        />
+        <ReusableIconButton icon="mdi-book-open-variant" :label="$t('header.studyplan')" :iconSize="iconSize"
+          @click="handleStudyPlan" />
+
+        <!-- 明/暗模式切换 -->
+        <ReusableIconButton :icon="themeIcon" :label="themeLabel" :iconSize="iconSize" @click="toggleTheme" />
 
         <!-- 登录 / Login (handled by LogInPartial) -->
         <LogInPartial :is-small-screen="isSmallScreen" :icon-size="iconSize" />
@@ -56,27 +37,12 @@
         <!-- 消息 / Messages -->
         <MessageAlert :is-small-screen="isSmallScreen" :icon-size="iconSize" />
 
-        <!-- 明/暗模式切换 -->
-        <ReusableIconButton
-          :icon="themeIcon"
-          :label="themeLabel"
-          :iconSize="iconSize"
-          @click="toggleTheme"
-        />
       </div>
 
       <!-- 语言切换栏 -->
       <div class="language-section">
-        <v-select
-          v-model="$i18n.locale"
-          :items="languageOptions"
-          density="comfortable"
-          hide-details
-          variant="plain"
-          class="language-select"
-          @update:model-value="handleLanguageChange"
-          :style="computeLangWidthStyle"
-        />
+        <v-select v-model="$i18n.locale" :items="languageOptions" density="comfortable" hide-details variant="plain"
+          class="language-select" @update:model-value="handleLanguageChange" :style="computeLangWidthStyle" />
       </div>
     </v-container>
   </div>
@@ -229,9 +195,15 @@ export default {
   -webkit-backdrop-filter: blur(10px);
   transition: all 0.3s ease;
   z-index: 1000;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding: 16px 0; /* Ensure padding is visible */
+  width: 100%;
+  position: relative;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  overflow: hidden; /* Fix overflow issues */
 }
+
 
 .header-grid {
   display: grid;
@@ -355,18 +327,22 @@ export default {
       "search search search";
     row-gap: 12px;
   }
+
   .search-section {
     margin: 0 auto;
     width: 100%;
   }
+
   .icons-section {
     flex-wrap: nowrap;
     gap: 12px;
     justify-content: flex-start;
   }
+
   .language-section {
     margin-left: 24px;
   }
+
   .logo-section {
     margin-top: 14px;
   }
@@ -382,21 +358,26 @@ export default {
       "language";
     row-gap: 8px;
   }
+
   .large-header {
     padding: 10px 16px;
   }
+
   .responsive-logo {
     height: 40px;
   }
+
   .search-section {
     margin: 10px 5px 20px 5px;
     min-width: 100%;
   }
+
   .icons-section {
     flex-wrap: wrap;
     gap: 8px;
     justify-content: center;
   }
+
   .language-section {
     justify-content: center;
     margin-left: 0;
