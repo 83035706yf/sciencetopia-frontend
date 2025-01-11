@@ -1,47 +1,52 @@
 <template>
-  <!-- <header> -->
-  <HeaderBar @showStudyPlanDialog="handleDialogClick" />
+  <div class="layout-wrapper">
+    <HeaderBar @showStudyPlanDialog="handleDialogClick" />
 
-  <!-- Thin App Bar -->
-  <transition name="header-transition">
-    <v-app-bar app fixed dense elevated v-if="scrolledPastHeader" style="height: 60px; background-color: rgba(232, 218, 189, 0.6);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: none;">
-      <ThinHeaderBar @showStudyPlanDialog="handleDialogClick" />
-    </v-app-bar>
-  </transition>
+    <transition name="header-transition">
+      <v-app-bar
+        app
+        fixed
+        dense
+        elevated
+        v-if="scrolledPastHeader"
+        class="thin-app-bar">
+        <ThinHeaderBar @showStudyPlanDialog="handleDialogClick" />
+      </v-app-bar>
+    </transition>
 
-  <!-- Study Plan Dialog -->
-  <v-dialog v-model="dialog" persistent max-width="800px">
-    <v-card>
-      <v-card-title>{{ $t('header.studyplan') }}</v-card-title>
-      <v-card-text>
-        <LearningPlanner ref="learningPlanner" @update:showStudyPlan="handleShowStudyPlanUpdate" />
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="red darken-1" text v-if="showStudyPlan" @click="triggerSavePlan">
-          {{ $t('save') }}{{ $t('wordbreaker') }}{{ $t('header.studyplan') }}
-        </v-btn>
-        <v-btn color="blue darken-1" text @click="closeDialog">{{ $t('close') }}</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-  <!-- </header> -->
+    <v-dialog v-model="dialog" persistent :max-width="$vuetify.display.smAndDown ? '100%' : '800px'"
+      :fullscreen="$vuetify.display.smAndDown">
+      <v-card>
+        <v-card-title>{{ $t('header.studyplan') }}</v-card-title>
+        <v-card-text>
+          <LearningPlanner ref="learningPlanner" @update:showStudyPlan="handleShowStudyPlanUpdate" />
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red darken-1" text v-if="showStudyPlan" @click="triggerSavePlan">
+            {{ $t('save') }}{{ $t('wordbreaker') }}{{ $t('header.studyplan') }}
+          </v-btn>
+          <v-btn color="blue darken-1" text @click="closeDialog">{{ $t('close') }}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
-  <slot></slot>
+    <main class="main-content" :class="{'pt-16': $vuetify.display.smAndDown}">
+      <slot></slot>
+    </main>
 
-  <!-- Footer -->
-  <transition style="height: 6vh;" name="footer-transition">
-    <v-footer app v-if="!showFinalFooter" class="dynamic-footer">
-      <FooterBar />
-    </v-footer>
-  </transition>
+    <div class="footer-container">
+      <transition name="footer-transition" :style="{'height': $vuetify.display.smAndDown ? '8vh' : '6vh'}">
+        <v-footer app v-if="!showFinalFooter" class="dynamic-footer">
+          <FooterBar />
+        </v-footer>
+      </transition>
 
-  <!-- Final Footer -->
-  <DefaultFooterBar />
+      <DefaultFooterBar />
+    </div>
 
-  <!-- Scroll to Top Button -->
-  <ScrollToTopButton />
+    <ScrollToTopButton />
+  </div>
 </template>
 
 <script>
@@ -51,58 +56,49 @@ import ThinHeaderBar from './ThinHeaderBar.vue';
 import FooterBar from './FooterBar.vue';
 import DefaultFooterBar from './DefaultFooterBar.vue';
 import ScrollToTopButton from './ScrollToTopButton.vue';
-// import debounce from 'lodash/debounce';
-// import { apiClient } from '@/api';
-// import { useStore } from 'vuex';
 
 export default {
   name: 'LayOut',
+  components: {
+    LearningPlanner,
+    HeaderBar,
+    ThinHeaderBar,
+    FooterBar,
+    DefaultFooterBar,
+    ScrollToTopButton
+  },
   data() {
     return {
       isLoading: false,
       dialog: false,
       showStudyPlan: false,
-      scrolledPastHeader: false, // Tracks if the initial header is out of view
-      showFinalFooter: false, // Determines which footer to display
+      scrolledPastHeader: false,
+      showFinalFooter: false,
     };
   },
-
-  components: { LearningPlanner, HeaderBar, ThinHeaderBar, FooterBar, DefaultFooterBar, ScrollToTopButton },
-
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
   },
-
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
   },
-  // created() {
-  //   this.debouncedSearch = debounce(this.searchNode, 300);
-  // },
-
   methods: {
     handleScroll() {
       const headerHeight = document.querySelector('.large-header')?.offsetHeight || 0;
       this.scrolledPastHeader = window.scrollY > headerHeight;
-
       const bottomThreshold = window.scrollY >= 60;
       this.showFinalFooter = bottomThreshold;
     },
-
     triggerSavePlan() {
       this.$refs.learningPlanner.savePlan();
     },
-
     closeDialog() {
       this.showStudyPlan = false;
-      // Any other logic needed to handle the closing of the dialog
-      this.dialog = false; // Assuming 'dialog' is a local data property controlling the dialog visibility
+      this.dialog = false;
     },
-
     handleShowStudyPlanUpdate(value) {
       this.showStudyPlan = value;
     },
-
     handleDialogClick() {
       this.dialog = true;
       console.log('Dialog clicked');
@@ -111,13 +107,31 @@ export default {
 }
 </script>
 
-
 <style scoped>
 @import "../assets/css/layout.css";
 @import "../assets/css/header.css";
 @import "../assets/css/switches.css";
 @import "../assets/css/footer.css";
 @import "../assets/css/form.css";
+
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: var(--content-padding, 16px);
+}
+
+.thin-app-bar {
+  height: 60px;
+  background-color: rgba(232, 218, 189, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: none;
+}
 
 .header-container {
   background-color: #E8DABD;
@@ -141,7 +155,6 @@ export default {
 
 .planner-card {
   max-width: 1600px;
-  /* 或者其他合适的宽度 */
   padding: 20px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, .3);
 }
@@ -151,7 +164,6 @@ export default {
   font-weight: 500;
 }
 
-/* 模糊背景 */
 body.modal-open {
   overflow: hidden;
 }
@@ -166,7 +178,6 @@ body.modal-open .main-content {
   align-items: center;
   padding-left: 30px;
   padding-right: 0px;
-  /* Adjust padding as needed for spacing */
 }
 
 .dot {
@@ -176,20 +187,42 @@ body.modal-open .main-content {
 
 .footer-transition-enter-active {
   animation: footer-bounce-in 0.4s ease-out;
-  /* Animate position and fade */
 }
 
 .footer-transition-leave-active {
   animation: footer-bounce-out 0.4s ease-out;
-  /* Animate position and fade */
 }
 
 .dynamic-footer {
   background-color: rgba(232, 218, 189, 0.6);
   backdrop-filter: blur(10px);
-  /* 磨砂效果 */
   -webkit-backdrop-filter: blur(10px);
-  /* 兼容 Safari */
+}
+
+@media (max-width: 600px) {
+  .main-content {
+    --content-padding: 8px;
+  }
+
+  .thin-app-bar {
+    height: 56px;
+  }
+
+  .dynamic-footer {
+    padding: 8px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 960px) {
+  .main-content {
+    --content-padding: 16px;
+  }
+}
+
+@media (min-width: 961px) {
+  .main-content {
+    --content-padding: 24px;
+  }
 }
 
 @media (max-width: 1600px) {
@@ -199,18 +232,13 @@ body.modal-open .main-content {
 
   .dot-col .dot {
     font-size: 12px;
-    /* Adjust dot size for small screens */
   }
 
   .header-bottom {
-    /* width: 10%;
-    height: 10%; */
     padding-top: 30px;
   }
 
   .search-container {
-    /* width: 50%; */
-    /* height: 10%; */
     padding: 0px;
     align-items: center;
     justify-content: center;
@@ -226,7 +254,6 @@ body.modal-open .main-content {
     border: 0px;
     margin: 0px;
     padding-left: 0px;
-    border-radius: px;
   }
 }
 
@@ -235,11 +262,6 @@ body.modal-open .main-content {
     transform: translateY(120%);
     opacity: 0%;
   }
-
-  /* 60% {
-    transform: translateY(10px);
-    opacity: 1;
-  } */
   100% {
     transform: translateY(0);
     opacity: 100%;
@@ -251,11 +273,6 @@ body.modal-open .main-content {
     transform: translateY(0);
     opacity: 100%;
   }
-
-  /* 60% {
-    transform: translateY(10px);
-    opacity: 1;
-  } */
   100% {
     transform: translateY(120%);
     opacity: 0%;

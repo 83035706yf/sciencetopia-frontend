@@ -1,106 +1,103 @@
 <template>
-    <!-- <div style="background-image: url('../assets/images/design.png'); background-size: cover;"> -->
-        <header class="site-header">
-            <!-- Thin App Bar -->
-            <transition name="header-transition">
-                <v-app-bar app fixed dense elevated style="height: 6vh;background-color: rgba(232, 218, 189, 0); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: none;">
-                    <ThinHeaderBar @showStudyPlanDialog="handleDialogClick" />
-                </v-app-bar>
-            </transition>
+  <div class="layout-wrapper">
+    <header class="site-header">
+      <transition name="header-transition">
+        <v-app-bar app fixed dense elevated class="thin-app-bar">
+          <ThinHeaderBar @showStudyPlanDialog="handleDialogClick" />
+        </v-app-bar>
+      </transition>
 
-            <!-- Study Plan Dialog -->
-            <v-dialog v-model="dialog" persistent max-width="800px">
-                <v-card>
-                    <v-card-title>{{ $t('header.studyplan') }}</v-card-title>
-                    <v-card-text>
-                        <LearningPlanner ref="learningPlanner" @update:showStudyPlan="handleShowStudyPlanUpdate" />
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="red darken-1" text v-if="showStudyPlan" @click="triggerSavePlan">
-                            {{ $t('save') }}{{ $t('wordbreaker') }}{{ $t('header.studyplan') }}
-                        </v-btn>
-                        <v-btn color="blue darken-1" text @click="closeDialog">{{ $t('close') }}</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
-        </header>
+      <v-dialog
+        v-model="dialog"
+        persistent
+        :fullscreen="$vuetify.display.smAndDown"
+        :max-width="$vuetify.display.smAndDown ? '100%' : '800px'"
+      >
+        <v-card>
+          <v-card-title>{{ $t('header.studyplan') }}</v-card-title>
+          <v-card-text>
+            <LearningPlanner ref="learningPlanner" @update:showStudyPlan="handleShowStudyPlanUpdate" />
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red darken-1" text v-if="showStudyPlan" @click="triggerSavePlan">
+              {{ $t('save') }}{{ $t('wordbreaker') }}{{ $t('header.studyplan') }}
+            </v-btn>
+            <v-btn color="blue darken-1" text @click="closeDialog">{{ $t('close') }}</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </header>
 
-        <v-spacer style="height: 7vh"></v-spacer>
-        <!-- <v-divider color="text" opacity="0.2" :thickness="2" style="margin-left: 100px; margin-top: 0;"></v-divider> -->
-        <!-- Main Content -->
-        <slot></slot>
+    <v-spacer class="header-spacer"></v-spacer>
 
-        <!-- Footer -->
-        <transition style="height: 6vh;" name="footer-transition">
-            <v-footer app v-if="!showFinalFooter" style="background-color: unset; height: 60px;">
-                <FooterBar />
-            </v-footer>
-        </transition>
+    <main class="main-content">
+      <slot></slot>
+    </main>
 
-        <!-- Final Footer -->
-        <DefaultFooterBar />
-    <!-- </div> -->
+    <div class="footer-container">
+      <transition name="footer-transition">
+        <v-footer app v-if="!showFinalFooter" class="dynamic-footer">
+          <FooterBar />
+        </v-footer>
+      </transition>
+
+      <DefaultFooterBar />
+    </div>
+  </div>
 </template>
 
 <script>
 import LearningPlanner from './LearningPlanner.vue';
 import ThinHeaderBar from './ThinHeaderBar.vue';
 import FooterBar from './FooterBar.vue';
-// import DefaultFooterBar from './DefaultFooterBar.vue';
-// import debounce from 'lodash/debounce';
-// import { apiClient } from '@/api';
-// import { useStore } from 'vuex';
+import DefaultFooterBar from './DefaultFooterBar.vue';
 
 export default {
-    name: 'ThinLayOut',
-    data() {
-        return {
-
-            isLoading: false,
-            dialog: false,
-            showStudyPlan: false,
-            showFinalFooter: false, // Determines which footer to display
-        };
+  name: 'ThinLayOut',
+  components: {
+    LearningPlanner,
+    ThinHeaderBar,
+    FooterBar,
+    DefaultFooterBar
+  },
+  data() {
+    return {
+      isLoading: false,
+      dialog: false,
+      showStudyPlan: false,
+      showFinalFooter: false,
+    };
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+  methods: {
+    triggerSavePlan() {
+      this.$refs.learningPlanner.savePlan();
     },
-
-    components: { LearningPlanner, ThinHeaderBar, FooterBar },
-
-    mounted() {
-        window.addEventListener('scroll', this.handleScroll);
+    closeDialog() {
+      this.showStudyPlan = false;
+      this.dialog = false;
     },
-
-    beforeUnmount() {
-        window.removeEventListener('scroll', this.handleScroll);
+    handleShowStudyPlanUpdate(value) {
+      this.showStudyPlan = value;
+      console.log('showStudyPlan:', this.showStudyPlan);
     },
-    // created() {
-    //   this.debouncedSearch = debounce(this.searchNode, 300);
-    // },
-
-    methods: {
-        triggerSavePlan() {
-            this.$refs.learningPlanner.savePlan();
-        },
-
-        closeDialog() {
-            this.showStudyPlan = false;
-            // Any other logic needed to handle the closing of the dialog
-            this.dialog = false; // Assuming 'dialog' is a local data property controlling the dialog visibility
-        },
-
-        handleShowStudyPlanUpdate(value) {
-            this.showStudyPlan = value;
-            console.log('showStudyPlan:', this.showStudyPlan);
-        },
-
-        handleDialogClick() {
-            this.dialog = true;
-            console.log('Dialog clicked');
-        },
+    handleDialogClick() {
+      this.dialog = true;
+      console.log('Dialog clicked');
     },
+    handleScroll() {
+      const bottomThreshold = window.scrollY >= 60;
+      this.showFinalFooter = bottomThreshold;
+    },
+  },
 }
 </script>
-
 
 <style scoped>
 @import "../assets/css/layout.css";
@@ -109,138 +106,158 @@ export default {
 @import "../assets/css/footer.css";
 @import "../assets/css/form.css";
 
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: var(--content-padding, 16px);
+}
+
+.thin-app-bar {
+  height: 6vh;
+  background-color: rgba(232, 218, 189, 0);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: none;
+}
+
+.header-spacer {
+  height: 7vh;
+}
+
+.dynamic-footer {
+  background-color: unset;
+  height: 60px;
+}
+
 .header-container {
-    background-color: #E8DABD;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
+  background-color: #E8DABD;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
 .planner-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .planner-card {
-    max-width: 1600px;
-    /* 或者其他合适的宽度 */
-    padding: 20px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, .3);
+  max-width: 1600px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .3);
 }
 
 .header-button {
-    font-family: 'Noto Sans SC', sans-serif;
-    font-weight: 500;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 500;
 }
 
-/* 模糊背景 */
 body.modal-open {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 body.modal-open .main-content {
-    filter: blur(5px);
+  filter: blur(5px);
 }
 
 .dot-col {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-left: 30px;
-    padding-right: 0px;
-    /* Adjust padding as needed for spacing */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 30px;
+  padding-right: 0px;
 }
 
 .dot {
-    display: inline-block;
-    text-align: center;
+  display: inline-block;
+  text-align: center;
+}
+
+.footer-container {
+  position: relative;
 }
 
 .footer-transition-enter-active {
-    animation: footer-bounce-in 0.4s ease-out;
-    /* Animate position and fade */
+  animation: footer-bounce-in 0.4s ease-out;
 }
 
 .footer-transition-leave-active {
-    animation: footer-bounce-out 0.4s ease-out;
-    /* Animate position and fade */
+  animation: footer-bounce-out 0.4s ease-out;
 }
 
-@media (max-width: 1600px) {
-    .header-btn {
-        padding: 0px;
-    }
+@media (max-width: 600px) {
+  .main-content {
+    --content-padding: 8px;
+  }
 
-    .dot-col .dot {
-        font-size: 12px;
-        /* Adjust dot size for small screens */
-    }
+  .thin-app-bar {
+    height: 48px !important;
+  }
 
-    .header-bottom {
-        /* width: 10%;
-      height: 10%; */
-        padding-top: 30px;
-    }
+  .header-spacer {
+    height: 56px;
+  }
 
-    .search-container {
-        /* width: 50%; */
-        /* height: 10%; */
-        padding: 0px;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-    }
+  .dynamic-footer {
+    height: 56px;
+    padding: 8px;
+  }
 
-    .search-btn {
-        font-size: 12px;
-        padding: 0px;
-    }
+  .header-btn {
+    padding: 0;
+  }
 
-    .search-form input {
-        border: 0px;
-        margin: 0px;
-        padding-left: 0px;
-        border-radius: px;
-    }
+  .dot-col .dot {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 960px) {
+  .main-content {
+    --content-padding: 16px;
+  }
+}
+
+@media (min-width: 961px) {
+  .main-content {
+    --content-padding: 24px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
 }
 
 @keyframes footer-bounce-in {
-    0% {
-        transform: translateY(120%);
-        opacity: 0%;
-    }
-
-    /* 60% {
-      transform: translateY(10px);
-      opacity: 1;
-    } */
-    100% {
-        transform: translateY(0);
-        opacity: 100%;
-    }
+  0% {
+    transform: translateY(120%);
+    opacity: 0%;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 100%;
+  }
 }
 
 @keyframes footer-bounce-out {
-    0% {
-        transform: translateY(0);
-        opacity: 100%;
-    }
-
-    /* 60% {
-      transform: translateY(10px);
-      opacity: 1;
-    } */
-    100% {
-        transform: translateY(120%);
-        opacity: 0%;
-    }
+  0% {
+    transform: translateY(0);
+    opacity: 100%;
+  }
+  100% {
+    transform: translateY(120%);
+    opacity: 0%;
+  }
 }
 </style>

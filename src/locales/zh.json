@@ -44,6 +44,8 @@
         "studyplan": "学习计划",
         "messages": "消息",
         "toseemessage": "以查看消息",
+        "lightmode": "明模式",
+        "darkmode": "暗模式",
         "tocreateplan": "以创建学习计划"
     },
     "searchbar": {

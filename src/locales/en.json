@@ -44,6 +44,8 @@
         "studyplan": "Study Plan",
         "messages": "Messages",
         "toseemessage": "to see messages",
+        "lightmode": "Light Mode",
+        "darkmode": "Dark Mode",
         "tocreateplan": "to create study plans"
     },
     "searchbar": {
