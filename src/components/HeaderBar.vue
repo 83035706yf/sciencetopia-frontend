@@ -27,7 +27,7 @@
       <!-- Icons (nav + actions) -->
       <div class="icons-section">
         <!-- 趋势 / Trend -->
-        <div class="icon-item">
+        <div class="icon-item" @click.prevent="scrollToSection">
           <v-tooltip
             :text="$t('header.trend')"
             location="bottom"
@@ -39,7 +39,7 @@
                 v-bind="slotProps.props"
                 class="icon-btn"
                 variant="plain"
-                @click.prevent="scrollToSection"
+                disabled
               >
                 <v-icon :size="iconSize">mdi-rss</v-icon>
               </v-btn>
@@ -49,7 +49,7 @@
         </div>
 
         <!-- 学习小组 / StudyGroup -->
-        <div class="icon-item">
+        <div class="icon-item" @click.prevent="RouteToStudyGroup">
           <v-tooltip
             :text="$t('header.studygroup')"
             location="bottom"
@@ -61,7 +61,7 @@
                 v-bind="slotProps.props"
                 class="icon-btn"
                 variant="plain"
-                @click.prevent="RouteToStudyGroup"
+                disabled
               >
                 <v-icon :size="iconSize">mdi-account-group</v-icon>
               </v-btn>
@@ -71,7 +71,7 @@
         </div>
 
         <!-- 学习计划 / StudyPlan -->
-        <div class="icon-item">
+        <div class="icon-item" @click.prevent="handleStudyPlan">
           <v-tooltip
             :text="$t('header.studyplan')"
             location="bottom"
@@ -83,7 +83,7 @@
                 v-bind="slotProps.props"
                 class="icon-btn"
                 variant="plain"
-                @click.prevent="handleStudyPlan"
+                disabled
               >
                 <v-icon :size="iconSize">mdi-book-open-variant</v-icon>
               </v-btn>
@@ -99,7 +99,7 @@
         <MessageAlert :is-small-screen="isSmallScreen" :icon-size="iconSize" />
 
         <!-- 明/暗模式切换 -->
-        <div class="icon-item">
+        <div class="icon-item" @click.prevent="toggleTheme">
           <v-tooltip
             :text="isDarkThemeEnabled ? $t('header.darkmode') : $t('header.lightmode')"
             location="bottom"
@@ -111,7 +111,7 @@
                 v-bind="slotProps.props"
                 class="icon-btn"
                 variant="plain"
-                @click.prevent="toggleTheme"
+                disabled
               >
                 <v-icon :size="iconSize">
                   {{ isDarkThemeEnabled ? 'mdi-weather-night' : 'mdi-weather-sunny' }}
@@ -459,6 +459,13 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer; /* 让整个区域有点击手型 */
+  position: relative;
+}
+
+.icon-item:hover .icon-btn {
+  transform: scale(1.05);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* 按钮样式 */
@@ -467,10 +474,9 @@ export default {
   height: 48px;
   border-radius: 8px;
   transition: all 0.2s ease;
-}
-.icon-btn:hover {
-  transform: scale(1.05);
-  background-color: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 图标下方的文字 */
@@ -515,4 +521,4 @@ export default {
 }
 </style>
 
-<!-- TODO:主题颜色切换  输入框对齐居中  -->
+<!-- TODO:主题颜色切换  输入框对齐居中 -->

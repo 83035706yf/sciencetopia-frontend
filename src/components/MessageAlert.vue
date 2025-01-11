@@ -1,12 +1,18 @@
 <template>
-  <div class="icon-item">
+  <div
+    class="icon-item"
+    @click.prevent="directMessages"
+    role="button"
+    tabindex="0"
+    @keydown.enter.prevent="directMessages"
+  >
     <v-menu open-on-hover>
       <template v-slot:activator="{ props }">
         <v-btn
           v-bind="props"
           class="icon-btn"
           variant="plain"
-          @click="directMessages"
+          disabled
         >
           <v-icon :size="iconSize">mdi-bell</v-icon>
           <div v-if="messageCount > 0" class="alert-badge">
@@ -80,6 +86,13 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer; /* 显示手型指针 */
+  position: relative;
+}
+
+.icon-item:hover .icon-btn {
+  transform: scale(1.05);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .icon-btn {
@@ -87,11 +100,14 @@ export default {
   height: 48px;
   border-radius: 8px;
   position: relative;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.icon-btn:hover {
-  transform: scale(1.05);
-  background-color: rgba(255, 255, 255, 0.1);
+.icon-btn:disabled {
+  cursor: inherit; /* 禁用按钮的手型指针，避免冲突 */
 }
 
 .alert-badge {

@@ -233,7 +233,7 @@ export default {
 /* 图标旁边的文字，用于已登录时大屏显示用户名 */
 .icon-label {
   font-size: 14px;
-  margin-left: 8px; /* 改为左边距，以便与头像在同一行 */
+  margin-top: 6px;
   text-align: center;
   white-space: nowrap;
 }
@@ -264,8 +264,6 @@ export default {
   opacity: 1;
   transform: scale(1);
 }
-
-/* 用户名样式 */
 .user-name {
   font-weight: bold;
   font-size: 16px;
@@ -308,9 +306,10 @@ export default {
 /* 大屏下的“登录”和“注册”按钮容器 */
 .auth-buttons {
   display: flex;
+  justify-content: center; /* 居中对齐 */
   align-items: center;
-  gap: 8px; /* 按钮之间的间距 */
-  margin-left: 8px; /* 与头像之间的间距 */
+  gap: 16px; /* 调整按钮之间的间距 */
+  width: 100%; /* 使容器占满父容器的宽度 */
 }
 
 /* “登录”和“注册”按钮的统一样式 */
