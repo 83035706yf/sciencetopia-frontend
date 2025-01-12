@@ -10,37 +10,17 @@
 
       <!-- Search -->
       <div class="search-section">
-        <v-text-field
-          v-model.trim="searchQuery"
-          :placeholder="$t('searchbar.iwanttolearn')"
-          variant="plain"
-          density="comfortable"
-          hide-details
-          clearable
-          @keydown.enter.prevent="globalSearch"
-          append-inner-icon="mdi-magnify"
-          @click:append-inner="globalSearch"
-          class="search-input"
-        />
+        <v-text-field v-model.trim="searchQuery" :placeholder="$t('searchbar.iwanttolearn')" variant="plain"
+          density="comfortable" hide-details clearable @keydown.enter.prevent="globalSearch"
+          append-inner-icon="mdi-magnify" @click:append-inner="globalSearch" class="search-input" />
       </div>
 
       <!-- Icons (nav + actions) -->
       <div class="icons-section">
-        <ReusableIconButton
-          v-for="(item, index) in navItems"
-          :key="index"
-          :icon="item.icon"
-          :label="item.label"
-          :iconSize="iconSize"
-          @click="item.action"
-        />
+        <ReusableIconButton v-for="(item, index) in navItems" :key="index" :icon="item.icon" :label="item.label"
+          :iconSize="iconSize" @click="item.action" />
 
-        <ReusableIconButton
-          :icon="themeIcon"
-          :label="themeLabel"
-          :iconSize="iconSize"
-          @click="toggleTheme"
-        />
+        <ReusableIconButton :icon="themeIcon" :label="themeLabel" :iconSize="iconSize" @click="toggleTheme" />
 
         <LogInPartial :is-small-screen="isSmallScreen" :icon-size="iconSize" />
         <MessageAlert :is-small-screen="isSmallScreen" :icon-size="iconSize" />
@@ -48,16 +28,8 @@
 
       <!-- 语言切换栏 -->
       <div class="language-section">
-        <v-select
-          v-model="currentLocale"
-          :items="languageOptions"
-          density="comfortable"
-          hide-details
-          variant="plain"
-          class="language-select"
-          @update:model-value="handleLanguageChange"
-          :style="computeLangWidthStyle"
-        />
+        <v-select v-model="currentLocale" :items="languageOptions" density="comfortable" hide-details variant="plain"
+          class="language-select" @update:model-value="handleLanguageChange" :style="computeLangWidthStyle" />
       </div>
     </v-container>
   </div>
@@ -255,13 +227,15 @@ export default {
   -webkit-backdrop-filter: blur(10px);
   transition: all 0.3s ease;
   z-index: 1000;
-  padding: 16px 0; /* Ensure padding is visible */
+  padding: 16px 0;
+  /* Ensure padding is visible */
   width: 100%;
   position: relative;
   min-height: 80px;
   display: flex;
   align-items: center;
-  overflow: hidden; /* Fix overflow issues */
+  overflow: hidden;
+  /* Fix overflow issues */
 }
 
 .header-grid {
@@ -273,7 +247,8 @@ export default {
   padding: 0 24px;
   position: relative;
   width: 100%;
-  overflow: hidden; /* Fix overflow issues */
+  overflow: hidden;
+  /* Fix overflow issues */
 }
 
 /* Logo区域 */

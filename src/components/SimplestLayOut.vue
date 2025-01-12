@@ -1,11 +1,7 @@
 <template>
   <div class="simplest-layout">
     <v-btn variant="plain" class="btn back-to-home" @click="backToHomePage">
-      <img
-        src="../assets/images/logo.png"
-        alt="Logo"
-        class="logo-image"
-      />
+      <img src="../assets/images/logo.png" alt="Logo" class="logo-image" />
     </v-btn>
 
     <v-spacer class="header-spacer"></v-spacer>

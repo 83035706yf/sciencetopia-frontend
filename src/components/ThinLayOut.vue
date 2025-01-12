@@ -7,12 +7,8 @@
         </v-app-bar>
       </transition>
 
-      <v-dialog
-        v-model="dialog"
-        persistent
-        :fullscreen="$vuetify.display.smAndDown"
-        :max-width="$vuetify.display.smAndDown ? '100%' : '800px'"
-      >
+      <v-dialog v-model="dialog" persistent :fullscreen="$vuetify.display.smAndDown"
+        :max-width="$vuetify.display.smAndDown ? '100%' : '800px'">
         <v-card>
           <v-card-title>{{ $t('header.studyplan') }}</v-card-title>
           <v-card-text>
@@ -118,7 +114,8 @@ export default {
 }
 
 .thin-app-bar {
-  min-height: 80px; /* 确保有足够的高度显示 padding */
+  min-height: 80px;
+  /* 确保有足够的高度显示 padding */
   background-color: rgba(232, 218, 189, 0);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -204,7 +201,8 @@ body.modal-open .main-content {
   }
 
   .thin-app-bar {
-    min-height: 80px; /* 确保有足够的高度显示 padding */
+    min-height: 80px;
+    /* 确保有足够的高度显示 padding */
   }
 
   .header-spacer {
@@ -244,6 +242,7 @@ body.modal-open .main-content {
     transform: translateY(120%);
     opacity: 0%;
   }
+
   100% {
     transform: translateY(0);
     opacity: 100%;
@@ -255,6 +254,7 @@ body.modal-open .main-content {
     transform: translateY(0);
     opacity: 100%;
   }
+
   100% {
     transform: translateY(120%);
     opacity: 0%;

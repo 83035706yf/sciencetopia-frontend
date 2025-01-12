@@ -195,13 +195,15 @@ export default {
   -webkit-backdrop-filter: blur(10px);
   transition: all 0.3s ease;
   z-index: 1000;
-  padding: 16px 0; /* Ensure padding is visible */
+  padding: 16px 0;
+  /* Ensure padding is visible */
   width: 100%;
   position: relative;
   min-height: 80px;
   display: flex;
   align-items: center;
-  overflow: hidden; /* Fix overflow issues */
+  overflow: hidden;
+  /* Fix overflow issues */
 }
 
 

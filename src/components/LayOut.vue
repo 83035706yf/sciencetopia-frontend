@@ -3,13 +3,7 @@
     <HeaderBar @showStudyPlanDialog="handleDialogClick" />
 
     <transition name="header-transition">
-      <v-app-bar
-        app
-        fixed
-        dense
-        elevated
-        v-if="scrolledPastHeader"
-        class="thin-app-bar">
+      <v-app-bar app fixed dense elevated v-if="scrolledPastHeader" class="thin-app-bar">
         <ThinHeaderBar @showStudyPlanDialog="handleDialogClick" />
       </v-app-bar>
     </transition>
@@ -31,12 +25,12 @@
       </v-card>
     </v-dialog>
 
-    <main class="main-content" :class="{'pt-16': $vuetify.display.smAndDown}">
+    <main class="main-content" :class="{ 'pt-16': $vuetify.display.smAndDown }">
       <slot></slot>
     </main>
 
     <div class="footer-container">
-      <transition name="footer-transition" :style="{'height': $vuetify.display.smAndDown ? '8vh' : '6vh'}">
+      <transition name="footer-transition" :style="{ 'height': $vuetify.display.smAndDown ? '8vh' : '6vh' }">
         <v-footer app v-if="!showFinalFooter" class="dynamic-footer">
           <FooterBar />
         </v-footer>
@@ -126,7 +120,8 @@ export default {
 }
 
 .thin-app-bar {
-  min-height: 80px; /* 确保有足够的高度显示 padding */
+  min-height: 80px;
+  /* 确保有足够的高度显示 padding */
   background-color: rgba(232, 218, 189, 0.6);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -205,7 +200,8 @@ body.modal-open .main-content {
   }
 
   .thin-app-bar {
-    min-height: 80px; /* 确保有足够的高度显示 padding */
+    min-height: 80px;
+    /* 确保有足够的高度显示 padding */
   }
 
   .dynamic-footer {
@@ -262,6 +258,7 @@ body.modal-open .main-content {
     transform: translateY(120%);
     opacity: 0%;
   }
+
   100% {
     transform: translateY(0);
     opacity: 100%;
@@ -273,6 +270,7 @@ body.modal-open .main-content {
     transform: translateY(0);
     opacity: 100%;
   }
+
   100% {
     transform: translateY(120%);
     opacity: 0%;

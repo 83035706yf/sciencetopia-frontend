@@ -27,8 +27,8 @@
                   {{ message.content }}
                 </div>
                 <v-avatar v-if="shouldShowAvatar(group.messages, index)" size="36"
-                    @click="navigateToProfile(message.sender.id)">
-                      <img v-if="isMyMessage(message)" :src="message.sender.avatarUrl" alt="Avatar" />
+                  @click="navigateToProfile(message.sender.id)">
+                  <img v-if="isMyMessage(message)" :src="message.sender.avatarUrl" alt="Avatar" />
                 </v-avatar>
                 <div v-else style="width: 36px"></div>
               </div>

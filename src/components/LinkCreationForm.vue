@@ -1,21 +1,14 @@
 <template>
-    <v-card>
-        <v-card-title>
-            <v-select
-                :label="$t('knowledgeGraph.linktype')"
-                v-model="linkData.type"
-                :items="translatedRelationshipTypes"
-                item-title="text"
-                item-value="value"
-                outlined
-                dense
-            ></v-select>
-        </v-card-title>
-        <v-card-actions>
-            <v-btn color="primary" @click="submitLink">{{ $t('knowledgeGraph.submitlink') }}</v-btn>
-            <v-btn color="error" @click="cancelLinkCreation">{{ $t('cancel') }}</v-btn>
-        </v-card-actions>
-    </v-card>
+  <v-card>
+    <v-card-title>
+      <v-select :label="$t('knowledgeGraph.linktype')" v-model="linkData.type" :items="translatedRelationshipTypes"
+        item-title="text" item-value="value" outlined dense></v-select>
+    </v-card-title>
+    <v-card-actions>
+      <v-btn color="primary" @click="submitLink">{{ $t('knowledgeGraph.submitlink') }}</v-btn>
+      <v-btn color="error" @click="cancelLinkCreation">{{ $t('cancel') }}</v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>

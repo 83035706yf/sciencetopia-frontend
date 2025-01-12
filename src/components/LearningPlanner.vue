@@ -3,7 +3,7 @@
   <div>
     <input type="text" v-model="learningObjective" :placeholder="$t('studyplan.placeholder')" />
     <button :disabled="!learningObjective" @click="generateStudyPlan">{{ $t('studyplan.startcustomizing') }}</button>
-    
+
     <!-- Loader Spinner -->
     <div v-if="loading" class="loader">{{ $t('studyplan.AIplaceholder') }}</div>
 

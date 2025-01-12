@@ -115,6 +115,7 @@ export default {
 
 <style scoped>
 @import '../assets/css/login-background.css';
+
 .logo {
   height: 62vh;
   width: auto;
@@ -239,7 +240,8 @@ export default {
   font-weight: normal;
   transform: perspective(500px) rotateX(20deg) rotateY(8deg) skewX(15deg) scaleX(1.5);
   transform-origin: center;
-  display: inline-block; /* Ensures the transform applies correctly */
+  display: inline-block;
+  /* Ensures the transform applies correctly */
 }
 
 .to-login-text {

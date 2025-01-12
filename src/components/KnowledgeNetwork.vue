@@ -1,22 +1,14 @@
 <template>
   <GlobalLoader />
-  <div
-    ref="svgRef"
-    id="cy"
-    :class="{ 'fullscreen-mode': isFullScreen }"
-    :style="{ width: width + 'px', height: height + 'px' }"
-  >
+  <div ref="svgRef" id="cy" :class="{ 'fullscreen-mode': isFullScreen }"
+    :style="{ width: width + 'px', height: height + 'px' }">
     <!-- Actions Container -->
     <div class="actions" :style="{ transform: `translateX(${offset}px)` }">
       <!-- Node Actions Box -->
       <div class="node-actions-box" v-if="selectedNodes.length > 0">
         <v-tooltip :text="$t('knowledgeGraph.adjacentnodes')" location="top">
           <template v-slot:activator="{ props }">
-            <button
-              class="action-button"
-              v-bind="props"
-              @click="showAdjacentNodes"
-            >
+            <button class="action-button" v-bind="props" @click="showAdjacentNodes">
               <i class="fas fa-circle-nodes action-icon"></i>
             </button>
           </template>
@@ -24,11 +16,7 @@
 
         <v-tooltip :text="$t('knowledgeGraph.frontnodes')" location="top">
           <template v-slot:activator="{ props }">
-            <button
-              class="action-button"
-              v-bind="props"
-              @click="showPrerequisiteNodes"
-            >
+            <button class="action-button" v-bind="props" @click="showPrerequisiteNodes">
               <i class="fas fa-share-nodes action-icon"></i>
             </button>
           </template>
@@ -36,30 +24,17 @@
 
         <v-tooltip :text="$t('knowledgeGraph.backnodes')" location="top">
           <template v-slot:activator="{ props }">
-            <button
-              class="action-button"
-              v-bind="props"
-              @click="showSubsequentNodes"
-            >
+            <button class="action-button" v-bind="props" @click="showSubsequentNodes">
               <i class="fas fa-share-nodes action-icon"></i>
             </button>
           </template>
         </v-tooltip>
 
-        <v-tooltip
-          v-if="!isEditing"
-          :text="isFavorited ? $t('knowledgeGraph.removenode') : $t('knowledgeGraph.savenode')"
-          location="top"
-        >
+        <v-tooltip v-if="!isEditing"
+          :text="isFavorited ? $t('knowledgeGraph.removenode') : $t('knowledgeGraph.savenode')" location="top">
           <template v-slot:activator="{ props }">
-            <button
-              class="action-button"
-              v-bind="props"
-              @click="toggleFavorites"
-            >
-              <i
-                :class="isFavorited ? 'fas fa-heart-circle-minus' : 'fas fa-heart-circle-plus'"
-              ></i>
+            <button class="action-button" v-bind="props" @click="toggleFavorites">
+              <i :class="isFavorited ? 'fas fa-heart-circle-minus' : 'fas fa-heart-circle-plus'"></i>
             </button>
           </template>
         </v-tooltip>
@@ -69,11 +44,7 @@
       <div class="common-actions-box">
         <v-tooltip :text="$t('knowledgeGraph.saved')" location="top">
           <template v-slot:activator="{ props }">
-            <button
-              class="action-button"
-              v-bind="props"
-              @click="showFavoritedNodes"
-            >
+            <button class="action-button" v-bind="props" @click="showFavoritedNodes">
               <i class="fas fa-star action-icon"></i>
             </button>
           </template>
@@ -89,28 +60,15 @@
 
         <v-tooltip :text="$t('edit')" location="top">
           <template v-slot:activator="{ props }">
-            <button
-              class="action-button"
-              v-bind="props"
-              @click="startEditing"
-              v-if="!isEditing"
-            >
+            <button class="action-button" v-bind="props" @click="startEditing" v-if="!isEditing">
               <i class="fas fa-pen action-icon"></i>
             </button>
           </template>
         </v-tooltip>
 
-        <v-tooltip
-          :text="$t('canceledit')"
-          location="top"
-          v-if="isEditing"
-        >
+        <v-tooltip :text="$t('canceledit')" location="top" v-if="isEditing">
           <template v-slot:activator="{ props }">
-            <button
-              class="action-button"
-              v-bind="props"
-              @click="submitEditing"
-            >
+            <button class="action-button" v-bind="props" @click="submitEditing">
               <i class="fa-solid fa-right-from-bracket highlight-icon"></i>
             </button>
           </template>
@@ -125,39 +83,20 @@
       <!-- Bottom Right Actions -->
       <div class="bottom-right-actions">
         <div class="map-actions">
-          <div
-            @mouseover="showInput(), overContainer = true"
-            @mouseleave="overContainer = false; hideInput()"
-            class="action-container"
-          >
+          <div @mouseover="showInput(), overContainer = true" @mouseleave="overContainer = false; hideInput()"
+            class="action-container">
             <button @click="handleSearch" class="locator-btn">
               <svg-icon type="mdi" :path="path"></svg-icon>
             </button>
-            <input
-              v-if="inputVisible"
-              v-model="searchQuery"
-              type="text"
-              :placeholder="$t('knowledgeGraph.locateto')"
-              @input="handleInput"
-              ref="searchInput"
-              class="search-input"
-            />
+            <input v-if="inputVisible" v-model="searchQuery" type="text" :placeholder="$t('knowledgeGraph.locateto')"
+              @input="handleInput" ref="searchInput" class="search-input" />
           </div>
         </div>
 
-        <v-tooltip
-          :text="isFullScreen ? $t('exitfullscreen') : $t('knowledgeGraph.fullscreen')"
-          location="top"
-        >
+        <v-tooltip :text="isFullScreen ? $t('exitfullscreen') : $t('knowledgeGraph.fullscreen')" location="top">
           <template v-slot:activator="{ props }">
-            <button
-              class="fullscreen-button"
-              v-bind="props"
-              @click="toggleFullScreen"
-            >
-              <i
-                :class="isFullScreen ? 'fas fa-compress' : 'fas fa-expand'"
-              ></i>
+            <button class="fullscreen-button" v-bind="props" @click="toggleFullScreen">
+              <i :class="isFullScreen ? 'fas fa-compress' : 'fas fa-expand'"></i>
             </button>
           </template>
         </v-tooltip>
@@ -165,16 +104,9 @@
     </div>
 
     <slot v-if="isFullScreen"></slot>
-    <EditGuideDialog
-      v-model="dialogVisible"
-      @confirmed="confirmGuide"
-    ></EditGuideDialog>
-    <ContextMenu
-      :visible="contextMenuState.visible"
-      :position="contextMenuState.position"
-      @update:visible="contextMenuState.visible = $event"
-      @close="hideContextMenu"
-    />
+    <EditGuideDialog v-model="dialogVisible" @confirmed="confirmGuide"></EditGuideDialog>
+    <ContextMenu :visible="contextMenuState.visible" :position="contextMenuState.position"
+      @update:visible="contextMenuState.visible = $event" @close="hideContextMenu" />
   </div>
 </template>
 
@@ -406,7 +338,8 @@ export default {
 /* Common Actions Box (Saved, Reset, Edit) */
 .common-actions-box {
   position: absolute;
-  top: 40vh; /* Positioned below node-actions-box to avoid overlap */
+  top: 40vh;
+  /* Positioned below node-actions-box to avoid overlap */
   right: 40px;
   display: flex;
   gap: 20px;
@@ -419,13 +352,15 @@ export default {
   margin: 10px;
   justify-content: space-between;
   align-items: center;
-  width: 200px; /* Adjust width as needed */
+  width: 200px;
+  /* Adjust width as needed */
 }
 
 /* Default Message Box */
 .default-message-box {
   position: absolute;
-  top: 60vh; /* Positioned below common-actions-box */
+  top: 60vh;
+  /* Positioned below common-actions-box */
   right: 40px;
   padding: 16px;
   background-color: rgba(255, 255, 255, 0.4);
@@ -441,7 +376,8 @@ export default {
 /* Bottom Right Actions */
 .bottom-right-actions {
   position: absolute;
-  bottom: 5vh; /* Positioned near the bottom to avoid overlapping */
+  bottom: 5vh;
+  /* Positioned near the bottom to avoid overlapping */
   right: 40px;
   display: flex;
   align-items: center;

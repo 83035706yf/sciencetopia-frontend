@@ -75,10 +75,12 @@ export default {
 .scroll-to-top-enter-active {
   animation: rise-up 0.8s ease-out;
 }
+
 .scroll-to-top-enter-from {
   transform: translateY(50px);
   opacity: 0;
 }
+
 .scroll-to-top-enter-to {
   transform: translateY(0);
   opacity: 1;
@@ -88,10 +90,12 @@ export default {
 .scroll-to-top-leave-active {
   animation: descend 0.4s ease-in;
 }
+
 .scroll-to-top-leave-from {
   transform: translateY(0);
   opacity: 1;
 }
+
 .scroll-to-top-leave-to {
   transform: translateY(50px);
   opacity: 0;

@@ -2,46 +2,25 @@
   <div class="avatar-container icon-item">
     <!-- 已登录状态 -->
     <div v-if="isAuthenticated" @mouseleave="hovering = false" class="icon-item">
-      <v-tooltip
-        :text="$store.state.userInfo.userName"
-        location="bottom"
-        open-delay="300"
-        :disabled="!isSmallScreen"
-      >
+      <v-tooltip :text="$store.state.userInfo.userName" location="bottom" open-delay="300" :disabled="!isSmallScreen">
         <template v-slot:activator="slotProps">
-          <div
-            v-bind="slotProps.props"
-            @mouseenter="hovering = true"
-            @mouseleave="hovering = false"
-            class="avatar-hover-container"
-          >
+          <div v-bind="slotProps.props" @mouseenter="hovering = true" @mouseleave="hovering = false"
+            class="avatar-hover-container">
             <!-- 用户头像按钮 -->
-            <v-btn
-              variant="plain"
-              class="icon-btn default-avatar avatar-hover"
-              :style="{ width: iconSize + 'px', height: iconSize + 'px' }"
-              @click="personalcenter"
-            >
+            <v-btn variant="plain" class="icon-btn default-avatar avatar-hover"
+              :style="{ width: iconSize + 'px', height: iconSize + 'px' }" @click="personalcenter">
               <v-avatar :size="iconSize">
                 <img :src="avatarUrl" :alt="$t('user.useravatar')" />
               </v-avatar>
             </v-btn>
 
             <!-- 悬浮弹出卡片 -->
-            <v-card
-              v-if="hovering"
-              class="user-info-card animated-card st-card"
-              elevation="3"
-              width="250"
-            >
+            <v-card v-if="hovering" class="user-info-card animated-card st-card" elevation="3" width="250">
               <v-card-title @click="personalcenter">
                 <v-row>
                   <v-col cols="auto">
-                    <v-btn
-                      icon
-                      class="default-avatar"
-                      :style="{ width: (iconSize * 1.3) + 'px', height: (iconSize * 1.3) + 'px' }"
-                    >
+                    <v-btn icon class="default-avatar"
+                      :style="{ width: (iconSize * 1.3) + 'px', height: (iconSize * 1.3) + 'px' }">
                       <v-avatar :size="iconSize * 1.25">
                         <img :src="avatarUrl" :alt="$t('user.useravatar')" />
                       </v-avatar>
@@ -54,12 +33,7 @@
                   </v-col>
                 </v-row>
               </v-card-title>
-              <v-divider
-                color="text"
-                opacity="0.1"
-                :thickness="2"
-                style="margin: 5px 0;"
-              />
+              <v-divider color="text" opacity="0.1" :thickness="2" style="margin: 5px 0;" />
               <v-list class="list-on-card" dense>
                 <v-list-item @click="personalcenter">
                   <v-list-item-title>
@@ -94,27 +68,15 @@
 
     <!-- 未登录状态 -->
     <div v-else class="icon-item">
-      <v-tooltip
-        :text="$t('header.login') + ' / ' + $t('header.register')"
-        location="bottom"
-        open-delay="300"
-        :disabled="!isSmallScreen"
-      >
+      <v-tooltip :text="$t('header.login') + ' / ' + $t('header.register')" location="bottom" open-delay="300"
+        :disabled="!isSmallScreen">
         <template v-slot:activator="slotProps">
           <!-- 默认头像按钮，点击跳转到登录 -->
-          <v-btn
-            v-bind="slotProps.props"
-            variant="plain"
-            class="icon-btn default-avatar"
-            :style="{ width: iconSize + 'px', height: iconSize + 'px' }"
-            @click="login"
-          >
+          <v-btn v-bind="slotProps.props" variant="plain" class="icon-btn default-avatar"
+            :style="{ width: iconSize + 'px', height: iconSize + 'px' }" @click="login">
             <v-avatar :size="iconSize">
-              <img
-                src="../assets/images/avatar.svg"
-                alt="avatar"
-                style="width: 100%; height: 100%; border-radius: 50%;"
-              />
+              <img src="../assets/images/avatar.svg" alt="avatar"
+                style="width: 100%; height: 100%; border-radius: 50%;" />
             </v-avatar>
           </v-btn>
         </template>
@@ -122,20 +84,10 @@
 
       <!-- 大屏下显示“登录”和“注册”按钮 -->
       <div v-if="!isSmallScreen" class="auth-buttons">
-        <v-btn
-          variant="flat"
-          style="background-color: #DE2910; color: black;"
-          class="auth-btn"
-          @click="login"
-        >
+        <v-btn variant="flat" style="background-color: #DE2910; color: black;" class="auth-btn" @click="login">
           {{ $t('header.login') }}
         </v-btn>
-        <v-btn
-          variant="flat"
-          style="background-color: black; color: white;"
-          class="auth-btn"
-          @click="register"
-        >
+        <v-btn variant="flat" style="background-color: black; color: white;" class="auth-btn" @click="register">
           {{ $t('header.register') }}
         </v-btn>
       </div>
@@ -205,7 +157,8 @@ export default {
 .avatar-container {
   display: flex;
   align-items: center;
-  gap: 16px; /* 保持与其他图标相同的左右间距 */
+  gap: 16px;
+  /* 保持与其他图标相同的左右间距 */
 }
 
 /* 用于统一整体样式，跟 icons-section 内其他 icon-item 保持一致 */
@@ -242,27 +195,33 @@ export default {
   position: relative;
   display: inline-block;
 }
+
 .avatar-hover {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
 .user-info-card {
   position: absolute !important;
   top: -20px !important;
   left: -160px !important;
   z-index: 1000 !important;
 }
+
 .avatar-hover {
   opacity: 1;
   transform: scale(1);
 }
+
 .avatar-hover-container:hover .avatar-hover {
   opacity: 0;
   transform: scale(0.9);
 }
+
 .avatar-hover-container:hover .user-info-card {
   opacity: 1;
   transform: scale(1);
 }
+
 .user-name {
   font-weight: bold;
   font-size: 16px;
@@ -274,28 +233,34 @@ export default {
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
   }
 }
+
 @keyframes fadeOutScale {
   from {
     opacity: 1;
     transform: scale(1);
   }
+
   to {
     opacity: 0;
     transform: scale(0.9);
   }
 }
+
 .animated-card {
   animation-duration: 0.3s;
   animation-fill-mode: forwards;
 }
+
 .avatar-hover-container:hover .animated-card {
   animation-name: fadeInScale;
 }
+
 .avatar-hover-container:not(:hover) .animated-card {
   animation-name: fadeOutScale;
 }
@@ -305,11 +270,14 @@ export default {
 /* 大屏下的“登录”和“注册”按钮容器 */
 .auth-buttons {
   display: flex;
-  justify-content: center; /* 居中对齐 */
+  justify-content: center;
+  /* 居中对齐 */
   align-items: center;
   padding: auto;
-  gap: 10px; /* 调整按钮之间的间距 */
-  width: 100%; /* 使容器占满父容器的宽度 */
+  gap: 10px;
+  /* 调整按钮之间的间距 */
+  width: 100%;
+  /* 使容器占满父容器的宽度 */
 }
 
 /* “登录”和“注册”按钮的统一样式 */

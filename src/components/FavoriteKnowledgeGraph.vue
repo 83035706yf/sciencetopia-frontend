@@ -28,16 +28,16 @@ export default {
   name: 'FavoriteKnowledgeGraph',
   setup() {
     const { svgRef,
-            selectedNodes,
-            fetchData,
-            showAdjacentNodes,
-            showPrerequisiteNodes,
-            showSubsequentNodes,
-            resetView,
-            // highlightAndCenterNode,
-            // searchNode,
-            width,
-            height } = useKnowledgeGraph('/Favorites/MyFavorites');
+      selectedNodes,
+      fetchData,
+      showAdjacentNodes,
+      showPrerequisiteNodes,
+      showSubsequentNodes,
+      resetView,
+      // highlightAndCenterNode,
+      // searchNode,
+      width,
+      height } = useKnowledgeGraph('/Favorites/MyFavorites');
 
     // ... 你可以添加或覆盖一些逻辑 ...
     // 删除选中的节点
@@ -84,8 +84,8 @@ export default {
 } */
 
 #cy canvas {
-    position: relative !important;
-    margin: 0px;
+  position: relative !important;
+  margin: 0px;
 }
 
 .node-actions {

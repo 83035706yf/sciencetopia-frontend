@@ -47,7 +47,8 @@
                 <v-card-subtitle v-html="group.description"></v-card-subtitle>
                 <v-card-text>
                   <v-chip class="group-chip ml-auto" color="text" variant="outlined" label>{{ group.role }}</v-chip>
-                  <v-chip class="group-chip ml-auto" variant="outlined" v-if="group.status === 'pending_approval'" color="red" label>
+                  <v-chip class="group-chip ml-auto" variant="outlined" v-if="group.status === 'pending_approval'"
+                    color="red" label>
                     {{ group.status }}
                   </v-chip>
                 </v-card-text>
