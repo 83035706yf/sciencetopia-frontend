@@ -1,222 +1,173 @@
 <template>
-  <v-container fluid class="header-container">
-    <v-row align="center" justify="space-between" class="header-row">
-
-      <!-- 左侧部分：Logo 和 搜索框 -->
-      <v-col cols="auto" class="left-section">
-        <!-- Logo -->
-        <v-btn variant="plain" class="logo-btn" @click="backToHomePage" aria-label="返回主页">
-          <img src="../assets/images/logo.png" alt="Logo" class="logo-image" />
+  <div class="large-header">
+    <v-container class="header-grid" fluid>
+      <!-- Logo -->
+      <div class="logo-section">
+        <v-btn variant="plain" class="logo-btn" @click.prevent="backToHomePage">
+          <img :src="isSmallScreen ? smallLogo : largeLogo" alt="Logo" class="responsive-logo" />
         </v-btn>
+      </div>
 
-        <!-- 搜索框 -->
-        <div class="search-wrapper">
-          <v-text-field
-            v-model="searchQuery"
-            :placeholder="$t('searchbar.iwanttolearn')"
-            append-inner-icon="mdi-magnify"
-            @click:append-inner="globalSearch"
-            @keyup.enter="globalSearch"
-            class="search-input no-border"
-            dense
-            clearable
-            hide-details
-            flat
-          ></v-text-field>
-        </div>
-      </v-col>
+      <!-- Search -->
+      <div class="search-section">
+        <v-text-field
+          v-model.trim="searchQuery"
+          :placeholder="$t('searchbar.iwanttolearn')"
+          variant="plain"
+          density="comfortable"
+          hide-details
+          clearable
+          @keydown.enter.prevent="globalSearch"
+          append-inner-icon="mdi-magnify"
+          @click:append-inner="globalSearch"
+          class="search-input"
+        />
+      </div>
 
-      <!-- 右侧部分：导航链接 和 用户操作 -->
-      <v-col cols="auto" class="right-section">
-        <v-row align="center" justify="end" class="right-row">
+      <!-- Icons (nav + actions) -->
+      <div class="icons-section">
+        <ReusableIconButton
+          v-for="(item, index) in navItems"
+          :key="index"
+          :icon="item.icon"
+          :label="item.label"
+          :iconSize="iconSize"
+          @click="item.action"
+        />
 
-          <!-- 导航链接 -->
-          <v-btn class="header-btn" variant="plain" @click="scrollToSection">
-            {{ $t('header.trend') }}
-          </v-btn>
-          <v-btn class="header-btn" variant="plain" @click="RouteToStudyGroup">
-            {{ $t('header.studygroup') }}
-          </v-btn>
+        <ReusableIconButton
+          :icon="themeIcon"
+          :label="themeLabel"
+          :iconSize="iconSize"
+          @click="toggleTheme"
+        />
 
-          <v-menu open-on-hover offset-y>
-            <template v-slot:activator="{ props }">
-              <v-btn v-bind="props" class="header-btn" variant="plain"
-                @click="isAuthenticated ? showDialog() : null">
-                {{ $t('header.studyplan') }}
-              </v-btn>
-            </template>
-            <v-card v-if="!isAuthenticated">
-              <v-card-title>
-                <v-list>
-                  <v-list-item-title>
-                    {{ $t('please') }}
-                    <v-btn @click="login" variant="outlined">
-                      {{ $t('header.login') }}
-                    </v-btn>
-                    {{ $t('header.tocreateplan') }}
-                  </v-list-item-title>
-                </v-list>
-              </v-card-title>
-            </v-card>
-          </v-menu>
+        <LogInPartial :is-small-screen="isSmallScreen" :icon-size="iconSize" />
+        <MessageAlert :is-small-screen="isSmallScreen" :icon-size="iconSize" />
+      </div>
 
-          <!-- 深色模式切换 -->
-          <v-btn class="header-btn dark-mode-btn" variant="plain" @click="toggleTheme" aria-label="切换主题">
-            <div class="btn-content">
-              <!-- 深色模式 SVG 图标 -->
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path d="..."></path>
-              </svg>
-            </div>
-          </v-btn>
-
-          <!-- 语言切换器 -->
-          <v-select
-            v-model="currentLocale"
-            :items="languageOptions"
-            dense
-            hide-details
-            solo-inverted
-            variant="plainfield"
-            class="language-select"
-            aria-label="语言切换"
-            @change="changeLanguage"
-          />
-
-          <!-- 用户操作组件 -->
-          <LogInPartial :scrolledPastHeader="true" />
-          <MessageAlert :scrolledPastHeader="true" />
-        </v-row>
-      </v-col>
-
-    </v-row>
-
-    <!-- 登录注册对话框（如有需要） -->
-    <v-dialog v-model="loginRegisterDialog" max-width="400px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ isLogin ? $t('login.title') : $t('register.title') }}</span>
-        </v-card-title>
-        <v-card-text>
-          <LogInPartial v-if="isLogin" @login-success="handleLoginSuccess" />
-          <MessageAlert v-if="alertMessage" :message="alertMessage" @close="alertMessage = ''" />
-          <v-form v-else @submit.prevent="registerUser">
-            <!-- 注册表单内容 -->
-            <v-text-field
-              v-model="registerUsername"
-              :label="$t('register.username')"
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="registerEmail"
-              :label="$t('register.email')"
-              type="email"
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="registerPassword"
-              :label="$t('register.password')"
-              type="password"
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="registerConfirmPassword"
-              :label="$t('register.confirmPassword')"
-              type="password"
-              required
-            ></v-text-field>
-            <v-btn type="submit" color="primary">{{ $t('register.register') }}</v-btn>
-            <v-btn text @click="switchToLogin">{{ $t('register.alreadyHaveAccount') }}</v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
-  </v-container>
+      <!-- 语言切换栏 -->
+      <div class="language-section">
+        <v-select
+          v-model="currentLocale"
+          :items="languageOptions"
+          density="comfortable"
+          hide-details
+          variant="plain"
+          class="language-select"
+          @update:model-value="handleLanguageChange"
+          :style="computeLangWidthStyle"
+        />
+      </div>
+    </v-container>
+  </div>
 </template>
 
 <script>
-import LogInPartial from './LogInPartial.vue';
+import { debounce } from 'lodash-es';
 import MessageAlert from './MessageAlert.vue';
+import LogInPartial from './LogInPartial.vue';
+import ReusableIconButton from './ReusableIconButton.vue';
 
 export default {
   name: "ThinHeaderBar",
-  components: { LogInPartial, MessageAlert },
+
+  components: {
+    MessageAlert,
+    LogInPartial,
+    ReusableIconButton,
+  },
+
   data() {
     return {
       isDarkThemeEnabled: false,
-      themePath: '',
       searchQuery: '',
-      searchResults: [],
-      isLoading: false,
-      currentLocale: this.$i18n.locale,
+      largeLogo: require('@/assets/images/logo_banner.png'),
+      smallLogo: require('@/assets/images/logo.png'),
+      isSmallScreen: window.innerWidth <= 1200,
       languageOptions: [
         { title: 'English', value: 'en' },
-        { title: '中文', value: 'zh' },
-        // 可根据需要添加更多语言选项
+        { title: 'Chinese', value: 'zh' },
       ],
-      isLogin: true, // 控制显示登录或注册表单
-      loginRegisterDialog: false, // 控制对话框显示
-      loginUsername: '',
-      loginPassword: '',
-      registerUsername: '',
-      registerEmail: '',
-      registerPassword: '',
-      registerConfirmPassword: '',
-      alertMessage: '', // 用于显示警告信息
+      currentLocale: this.$i18n.locale,
+      langTextWidth: 0,
     };
   },
+
   computed: {
     isAuthenticated() {
       return this.$store.state.isAuthenticated;
     },
-  },
-  methods: {
-    login() {
-      this.$router.push({ name: 'login' });  // 跳转到LogIn组件
+
+    iconSize() {
+      // 大屏用 32，小屏用 24
+      return this.isSmallScreen ? 24 : 32;
     },
+
+    themeIcon() {
+      return this.isDarkThemeEnabled ? 'mdi-weather-night' : 'mdi-weather-sunny';
+    },
+
+    themeLabel() {
+      return this.isDarkThemeEnabled
+        ? this.$t('header.darkmode')
+        : this.$t('header.lightmode');
+    },
+
+    navItems() {
+      return [
+        {
+          icon: 'mdi-rss',
+          label: this.$t('header.trend'),
+          action: this.scrollToSection
+        },
+        {
+          icon: 'mdi-account-group',
+          label: this.$t('header.studygroup'),
+          action: this.RouteToStudyGroup
+        },
+        {
+          icon: 'mdi-book-open-variant',
+          label: this.$t('header.studyplan'),
+          action: this.handleStudyPlan
+        }
+      ];
+    },
+
+    computeLangWidthStyle() {
+      const baseWidth = this.langTextWidth || 30;
+      const minW = 1.1 * baseWidth;
+      const maxW = 2 * baseWidth;
+      return {
+        minWidth: `${minW}px`,
+        maxWidth: `${maxW}px`,
+      };
+    },
+  },
+
+  methods: {
+    handleResize() {
+      this.isSmallScreen = window.innerWidth <= 1200;
+    },
+
     toggleTheme() {
       this.isDarkThemeEnabled = !this.isDarkThemeEnabled;
-      if (this.isDarkThemeEnabled) {
-        this.themePath = '/assets/css/dark-theme.css';  // 使用深色模式
-      } else {
-        this.themePath = '';  // 使用浅色模式
-      }
-      // 此处假设已有主题切换逻辑，不做更改
+      // Vuetify 主题切换
+      this.$vuetify.theme.dark = this.isDarkThemeEnabled;
+      // 持久化主题选择
+      localStorage.setItem('isDarkThemeEnabled', this.isDarkThemeEnabled);
     },
 
     backToHomePage() {
-      this.$router.push({ name: 'HomePage' });  // 返回主页
+      this.$router.push({ name: 'HomePage' });
     },
 
     scrollToSection() {
-      // 获取目标元素的位置
       const section = document.getElementById('feed-section');
-      console.log("section:", section);
       if (section) {
-        const yOffset = -60; // 调整偏移量，根据需要修改
+        const yOffset = -60;
         const y = section.getBoundingClientRect().top + window.scrollY + yOffset;
-
-        // 滚动到指定位置
         window.scrollTo({ top: y, behavior: 'smooth' });
-      }
-    },
-
-    async globalSearch() {
-      const query = this.searchQuery ? this.searchQuery.trim() : '';
-      if (!query) {
-        console.log('Search query is empty!');
-        return;
-      }
-
-      this.isLoading = true;
-      try {
-        const path = this.$router.resolve({ name: 'searchList', query: { q: this.searchQuery } }).href;
-        window.open(path, '_blank');
-      } catch (error) {
-        console.error('Error searching:', error);
-      } finally {
-        this.isLoading = false;
       }
     },
 
@@ -224,187 +175,307 @@ export default {
       this.$router.push({ name: 'studyGroupList' });
     },
 
-    showDialog() {
-      this.loginRegisterDialog = true;
-      console.log('Show study plan dialog');
-    },
-
-    switchToRegister() {
-      this.isLogin = false;
-    },
-
-    switchToLogin() {
-      this.isLogin = true;
-    },
-
-    async loginUser() {
-      // 实现登录逻辑
-      try {
-        // 假设有一个登录方法
-        await this.$store.dispatch('login', {
-          username: this.loginUsername,
-          password: this.loginPassword,
-        });
-        this.loginRegisterDialog = false;
-      } catch (error) {
-        console.error('登录失败:', error);
-        this.alertMessage = this.$t('login.failed');
-      }
-    },
-
-    async registerUser() {
-      // 实现注册逻辑
-      if (this.registerPassword !== this.registerConfirmPassword) {
-        this.alertMessage = this.$t('register.passwordMismatch');
+    async globalSearch() {
+      const query = this.searchQuery.trim();
+      if (!query) {
+        this.$refs.searchInput?.focus();
         return;
       }
       try {
-        // 假设有一个注册方法
-        await this.$store.dispatch('register', {
-          username: this.registerUsername,
-          email: this.registerEmail,
-          password: this.registerPassword,
-        });
-        this.loginRegisterDialog = false;
+        const path = this.$router.resolve({
+          name: 'searchList',
+          query: { q: query },
+        }).href;
+        window.open(path, '_blank');
       } catch (error) {
-        console.error('注册失败:', error);
-        this.alertMessage = this.$t('register.failed');
+        console.error('Search error:', error);
       }
     },
 
-    handleLoginSuccess() {  // 已移除 userData 参数
-      // 处理登录成功逻辑
-      this.loginRegisterDialog = false;
-      // 其他逻辑...
+    handleStudyPlan() {
+      if (!this.isAuthenticated) {
+        this.alertMessage = this.$t('pleaseLoginToViewStudyPlan');
+        return;
+      }
+      this.$emit('showStudyPlanDialog', true);
     },
 
-    changeLanguage() {
-      this.$i18n.locale = this.currentLocale;
+    handleLanguageChange(val) {
+      this.currentLocale = val;
+      this.$i18n.locale = val;
+      this.$vuetify.locale = val;
+      this.$nextTick(() => {
+        this.measureLangTextWidth();
+      });
     },
+
+    measureLangTextWidth() {
+      const tempSpan = document.createElement('span');
+      const selectedItem = this.languageOptions.find(
+        (item) => item.value === this.currentLocale
+      );
+      const text = selectedItem ? selectedItem.title : '';
+      tempSpan.innerText = text;
+      tempSpan.style.position = 'absolute';
+      tempSpan.style.visibility = 'hidden';
+      tempSpan.style.whiteSpace = 'nowrap';
+      tempSpan.style.fontSize = '14px';
+      document.body.appendChild(tempSpan);
+      this.langTextWidth = tempSpan.offsetWidth;
+      document.body.removeChild(tempSpan);
+    },
+  },
+
+  created() {
+    this.debouncedResize = debounce(this.handleResize, 100);
+    this.$root.isSmallScreen = this.isSmallScreen;
+    this.handleResize();
+  },
+
+  mounted() {
+    window.addEventListener('resize', this.debouncedResize);
+    this.measureLangTextWidth();
+    const storedTheme = localStorage.getItem('isDarkThemeEnabled');
+    if (storedTheme !== null) {
+      this.isDarkThemeEnabled = storedTheme === 'true';
+      this.$vuetify.theme.dark = this.isDarkThemeEnabled;
+    }
+  },
+
+  beforeUnmount() {
+    window.removeEventListener('resize', this.debouncedResize);
   },
 };
 </script>
 
 <style scoped>
-.header-container {
-  background-color: #ffffff; /* 纯白背景 */
+.large-header {
+  background-color: rgba(232, 218, 189, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   transition: all 0.3s ease;
   z-index: 1000;
-  padding: 10px 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加轻微阴影以区分内容 */
-}
-
-.header-row {
+  padding: 16px 0; /* Ensure padding is visible */
   width: 100%;
-}
-
-.left-section {
+  position: relative;
+  min-height: 80px;
   display: flex;
   align-items: center;
-  gap: 16px; /* Logo 和搜索框之间的间距 */
+  overflow: hidden; /* Fix overflow issues */
+}
+
+.header-grid {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  grid-template-areas: "logo search icons language";
+  align-items: center;
+  column-gap: 24px;
+  padding: 0 24px;
+  position: relative;
+  width: 100%;
+  overflow: hidden; /* Fix overflow issues */
+}
+
+/* Logo区域 */
+.logo-section {
+  grid-area: logo;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
 }
 
 .logo-btn {
+  height: 100%;
   padding: 0;
-}
-
-.logo-image {
-  max-height: 120px; /* 调整 Logo 大小 */
-  width: auto;
-}
-
-.search-wrapper {
-  display: flex;
-  align-items: center;
-}
-
-.search-input {
-  width: 300px;
-  border-radius: 999px; /* 圆形边角，确保两侧完全圆形 */
-  background-color: #f5f5f5; /* 搜索框背景颜色 */
-  padding-left: 16px; /* 内边距，确保文本不靠边 */
-  padding-right: 16px; /* 内边距，确保图标不靠边 */
-}
-
-/* 移除搜索框的边框和下划线 */
-.no-border .v-input__control .v-input__slot {
-  border: none !important;
-  box-shadow: none !important;
-  background-color: #f5f5f5 !important; /* 保持背景颜色 */
-}
-
-/* 如果仍有下划线，可以进一步移除 */
-.no-border .v-input__slot::before,
-.no-border .v-input__slot::after {
-  display: none !important;
-}
-
-/* 调整搜索框内的图标位置 */
-.search-input .v-input__append-inner {
-  margin-right: 8px; /* 调整图标与边缘的间距 */
-}
-
-.right-section {
-  display: flex;
-  align-items: center;
-}
-
-.right-row {
-  display: flex;
-  align-items: center;
-  gap: 24px; /* 导航项之间的间距 */
-}
-
-.header-btn {
-  font-size: 16px;
-  font-weight: 500;
-  color: #333333;
-  margin: 0 8px;
-}
-
-.header-btn:hover {
-  color: #1976D2; /* Vuetify 默认主色 */
-}
-
-.dark-mode-btn .btn-content {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.language-select {
-  max-width: 100px;
+.responsive-logo {
+  display: block;
+  transition: all 0.3s ease;
+  height: 64px;
+  width: auto;
+  object-fit: contain;
+  max-height: 100%;
+}
+
+/* 搜索区域 */
+.search-section {
+  grid-area: search;
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.search-input {
+  background-color: rgba(255, 255, 255, 1);
+  border: none;
+  border-radius: 999px;
+  padding-left: 16px;
+  padding-right: 48px;
+  box-shadow: 0 0 0 0 transparent;
+  position: relative;
+  height: 48px;
+}
+
+.search-input .v-input__slot {
+  border: none !important;
+  box-shadow: none !important;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.search-input .v-field__append-inner {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.search-input .v-field__append-inner i.v-icon {
+  font-size: 1.25rem;
+}
+
+/* 图标区域 */
+.icons-section {
+  grid-area: icons;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 16px;
+  overflow-x: auto;
+}
+
+.icons-section::-webkit-scrollbar {
+  display: none;
+}
+
+.icons-section {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* 语言切换栏 */
+.language-section {
+  grid-area: language;
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+}
+
+/* 响应式调整 */
+@media (max-width: 1600px) {
+  .header-grid {
+    grid-template-columns: auto 1fr auto auto;
+  }
 }
 
 @media (max-width: 1200px) {
-  .search-input {
-    width: 250px;
+  .header-grid {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "logo icons language"
+      "search search search";
+    row-gap: 12px;
   }
-  .language-select {
-    max-width: 80px;
-  }
-}
 
-@media (max-width: 768px) {
-  .header-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .left-section,
-  .right-section {
+  .search-section {
+    margin: 0 auto;
     width: 100%;
-    justify-content: space-between;
   }
-  .search-input {
-    width: 100%;
-    margin-top: 8px;
-  }
-  .right-row {
-    flex-wrap: wrap;
+
+  .icons-section {
+    flex-wrap: nowrap;
     gap: 12px;
     justify-content: flex-start;
   }
+
+  .language-section {
+    margin-left: 24px;
+  }
+
+  .logo-section {
+    margin-top: 14px;
+  }
+}
+
+@media (max-width: 800px) {
+  .header-grid {
+    grid-template-columns: auto;
+    grid-template-areas:
+      "logo"
+      "search"
+      "icons"
+      "language";
+    row-gap: 8px;
+  }
+
+  .large-header {
+    padding: 10px 16px;
+  }
+
+  .responsive-logo {
+    height: 40px;
+  }
+
+  .search-section {
+    margin: 10px 5px 20px 5px;
+    min-width: 100%;
+  }
+
+  .icons-section {
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .language-section {
+    justify-content: center;
+    margin-left: 0;
+  }
+}
+
+.language-select {
+  text-align: center;
+}
+
+.nav-section,
+.actions-section {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.logo-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.responsive-logo {
+  display: block;
+  transition: all 0.3s ease;
+  height: 64px;
+  width: auto;
+  object-fit: contain;
+  max-height: 100%;
 }
 </style>
-
-<!-- TODO:响应式设计 搜索栏外观 统一图标 检查导航栏各项功能 -->

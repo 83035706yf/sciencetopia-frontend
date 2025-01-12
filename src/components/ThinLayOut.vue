@@ -118,7 +118,7 @@ export default {
 }
 
 .thin-app-bar {
-  height: 6vh;
+  min-height: 80px; /* 确保有足够的高度显示 padding */
   background-color: rgba(232, 218, 189, 0);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -204,7 +204,7 @@ body.modal-open .main-content {
   }
 
   .thin-app-bar {
-    height: 48px !important;
+    min-height: 80px; /* 确保有足够的高度显示 padding */
   }
 
   .header-spacer {
