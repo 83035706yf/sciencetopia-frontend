@@ -1,20 +1,38 @@
 <template>
   <div class="message-list">
     <v-list class="message-window" dense ref="messageList">
-      <template v-for="(group, groupIndex) in groupedMessages" :key="groupIndex">
+      <template
+        v-for="(group, groupIndex) in groupedMessages"
+        :key="groupIndex"
+      >
         <div class="grouped-message">
           <div v-if="group.firstMessageSentTime" class="sent-time">
             {{ formatSentTime(group.firstMessageSentTime) }}
           </div>
 
-          <template v-for="(message, index) in group.messages" :key="message.id">
+          <template
+            v-for="(message, index) in group.messages"
+            :key="message.id"
+          >
             <v-list-item
-              :class="{ 'my-message d-flex justify-end align-end': isMyMessage(message), 'their-message': !isMyMessage(message) }">
+              :class="{
+                'my-message d-flex justify-end align-end': isMyMessage(message),
+                'their-message': !isMyMessage(message),
+              }"
+            >
               <div class="d-flex align-start">
                 <!-- 判断当前消息和前一条消息的发送者是否相同 -->
-                <v-avatar v-if="shouldShowAvatar(group.messages, index)" size="36">
-                  <v-btn v-if="!isMyMessage(message)" icon="dots-vertical" variant="text" size="40"
-                    @click="navigateToProfile(message.sender.id)">
+                <v-avatar
+                  v-if="shouldShowAvatar(group.messages, index)"
+                  size="36"
+                >
+                  <v-btn
+                    v-if="!isMyMessage(message)"
+                    icon="dots-vertical"
+                    variant="text"
+                    size="40"
+                    @click="navigateToProfile(message.sender.id)"
+                  >
                     <v-avatar>
                       <img :src="message.sender.avatarUrl" alt="Avatar" />
                     </v-avatar>
@@ -23,12 +41,25 @@
                 <div v-else style="width: 36px"></div>
 
                 <!-- 消息内容 -->
-                <div class="message-bubble" :class="{ 'ml-2': !isMyMessage(message), 'mr-2': isMyMessage(message) }">
+                <div
+                  class="message-bubble"
+                  :class="{
+                    'ml-2': !isMyMessage(message),
+                    'mr-2': isMyMessage(message),
+                  }"
+                >
                   {{ message.content }}
                 </div>
-                <v-avatar v-if="shouldShowAvatar(group.messages, index)" size="36"
-                  @click="navigateToProfile(message.sender.id)">
-                  <img v-if="isMyMessage(message)" :src="message.sender.avatarUrl" alt="Avatar" />
+                <v-avatar
+                  v-if="shouldShowAvatar(group.messages, index)"
+                  size="36"
+                  @click="navigateToProfile(message.sender.id)"
+                >
+                  <img
+                    v-if="isMyMessage(message)"
+                    :src="message.sender.avatarUrl"
+                    alt="Avatar"
+                  />
                 </v-avatar>
                 <div v-else style="width: 36px"></div>
               </div>
@@ -41,7 +72,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from 'vuex'
 
 export default {
   props: {
@@ -51,94 +82,103 @@ export default {
   },
   computed: {
     groupedMessages() {
-      console.log(this.messages);
-      const groups = [];
-      let currentGroup = { messages: [], firstMessageSentTime: null };
+      console.log(this.messages)
+      const groups = []
+      let currentGroup = { messages: [], firstMessageSentTime: null }
 
       this.messages.forEach((message, index) => {
-        const messageTime = new Date(message.sentTime);
-        const previousMessageTime = index > 0 ? new Date(this.messages[index - 1].sentTime) : null;
+        const messageTime = new Date(message.sentTime)
+        const previousMessageTime =
+          index > 0 ? new Date(this.messages[index - 1].sentTime) : null
 
         if (
           previousMessageTime &&
           messageTime - previousMessageTime <= 5 * 60 * 1000
         ) {
-          currentGroup.messages.push(message);
+          currentGroup.messages.push(message)
         } else {
           if (currentGroup.messages.length) {
-            groups.push(currentGroup);
+            groups.push(currentGroup)
           }
-          currentGroup = { messages: [message], firstMessageSentTime: message.sentTime };
+          currentGroup = {
+            messages: [message],
+            firstMessageSentTime: message.sentTime,
+          }
         }
-      });
+      })
 
       if (currentGroup.messages.length) {
-        groups.push(currentGroup);
+        groups.push(currentGroup)
       }
 
-      return groups;
+      return groups
     },
   },
   methods: {
-    ...mapActions(['goToProfile']),  // Map the Vuex action
+    ...mapActions(['goToProfile']), // Map the Vuex action
 
     isMyMessage(message) {
-      return message.sender.id === this.userId;
+      return message.sender.id === this.userId
     },
     shouldShowAvatar(messages, index) {
       // 如果是第一条消息，始终显示头像
-      if (index === 0) return true;
+      if (index === 0) return true
 
       // 当前消息和上一条消息的发送者不同，则显示头像
-      return messages[index].sender.id !== messages[index - 1].sender.id;
+      return messages[index].sender.id !== messages[index - 1].sender.id
     },
     markMessagesAsRead() {
-      this.$emit('messages-read');
+      this.$emit('messages-read')
     },
     scrollToBottom() {
       this.$nextTick(() => {
-        const messageList = this.$refs.messageList.$el;
+        const messageList = this.$refs.messageList.$el
         if (messageList) {
-          messageList.scrollTop = messageList.scrollHeight;
-          console.log('scrolling to bottom');
-          console.log('messageList element:', this.$refs.messageList.$el);
-          console.log('scrollHeight:', messageList.scrollHeight, 'scrollTop:', messageList.scrollTop);
+          messageList.scrollTop = messageList.scrollHeight
+          console.log('scrolling to bottom')
+          console.log('messageList element:', this.$refs.messageList.$el)
+          console.log(
+            'scrollHeight:',
+            messageList.scrollHeight,
+            'scrollTop:',
+            messageList.scrollTop
+          )
         }
-      });
+      })
     },
     formatSentTime(sentTime) {
-      const time = new Date(sentTime);
-      const now = new Date();
-      const yesterday = new Date(now);
-      yesterday.setDate(yesterday.getDate() - 1);
+      const time = new Date(sentTime)
+      const now = new Date()
+      const yesterday = new Date(now)
+      yesterday.setDate(yesterday.getDate() - 1)
 
       if (time.toDateString() === now.toDateString()) {
-        return time.toLocaleTimeString();
+        return time.toLocaleTimeString()
       } else if (time.toDateString() === yesterday.toDateString()) {
-        return '昨天 ' + time.toLocaleTimeString();
+        return '昨天 ' + time.toLocaleTimeString()
       } else {
-        return time.toLocaleString();
+        return time.toLocaleString()
       }
     },
     async navigateToProfile(userId) {
-      this.goToProfile({ userId, router: this.$router });  // Dispatch the action
+      this.goToProfile({ userId, router: this.$router }) // Dispatch the action
     },
   },
   watch: {
     messages: {
       handler() {
-        this.scrollToBottom();
-        this.markMessagesAsRead();
+        this.scrollToBottom()
+        this.markMessagesAsRead()
       },
       immediate: true,
       deep: true,
-    }
+    },
   },
   mounted() {
-    this.scrollToBottom();
-    this.markMessagesAsRead();
+    this.scrollToBottom()
+    this.markMessagesAsRead()
   },
-};
+}
 </script>
 
 <style scoped>
@@ -156,7 +196,7 @@ export default {
 }
 
 .grouped-message {
-  background-color: #F4EEE1;
+  background-color: #f4eee1;
   /* border: 1px solid #C59F59; */
   margin: 5px;
 }
@@ -168,7 +208,7 @@ export default {
   /* border-radius: 4px; */
   /* border-radius: 0 16px 16px 16px; */
   background-color: #ffffff;
-  color: #1C2B42;
+  color: #1c2b42;
   /* max-width: 80%; */
   word-break: break-word;
 
@@ -195,7 +235,7 @@ export default {
   font-size: 16px;
   /* border-radius: 4px; */
   /* border-radius: 16px 0 16px 16px; */
-  background-color: #DFCBA4;
+  background-color: #dfcba4;
   color: #000;
   /* max-width: 80%; */
   word-break: break-word;
@@ -211,7 +251,7 @@ export default {
     height: 0;
     border-width: 8px;
     border-style: solid;
-    border-color: transparent transparent transparent #DFCBA4;
+    border-color: transparent transparent transparent #dfcba4;
   }
 }
 

@@ -3,8 +3,10 @@
     <v-row class="text-center">
       <v-col>
         <h1>赞助我们</h1>
-        <h1> ❤️</h1>
-        <p>Sciencetopia是一个对用户永久免费的自主学习平台。如果你从中受益，你可以为我们打赏赞助。你的支持会让Sciencetopia走得更远。</p>
+        <h1>❤️</h1>
+        <p>
+          Sciencetopia是一个对用户永久免费的自主学习平台。如果你从中受益，你可以为我们打赏赞助。你的支持会让Sciencetopia走得更远。
+        </p>
       </v-col>
     </v-row>
 
@@ -26,7 +28,11 @@
         <v-card class="sponsorship-card">
           <v-card-title>微信支付</v-card-title>
           <v-card-text>
-            <v-img src="../assets/images/wechat_qr.png" aspect-ratio="1" class="qr-code" />
+            <v-img
+              src="../assets/images/wechat_qr.png"
+              aspect-ratio="1"
+              class="qr-code"
+            />
             <p>打开微信扫一扫，支持我们。</p>
           </v-card-text>
         </v-card>
@@ -36,7 +42,11 @@
         <v-card class="sponsorship-card">
           <v-card-title>支付宝支付</v-card-title>
           <v-card-text>
-            <v-img src="../assets/images/alipay_qr.png" aspect-ratio="1" class="qr-code" />
+            <v-img
+              src="../assets/images/alipay_qr.png"
+              aspect-ratio="1"
+              class="qr-code"
+            />
             <p>打开支付宝扫一扫，支持我们。</p>
           </v-card-text>
         </v-card>
@@ -46,7 +56,11 @@
         <v-card class="sponsorship-card">
           <v-card-title>PayPal支付</v-card-title>
           <v-card-text>
-            <v-img src="../assets/images/paypal_qr.png" aspect-ratio="1" class="qr-code" />
+            <v-img
+              src="../assets/images/paypal_qr.png"
+              aspect-ratio="1"
+              class="qr-code"
+            />
             <p>打开PayPal扫一扫，支持我们。</p>
           </v-card-text>
         </v-card>
@@ -88,7 +102,7 @@
 <script>
 export default {
   name: 'SponsorShip',
-};
+}
 </script>
 
 <style scoped>

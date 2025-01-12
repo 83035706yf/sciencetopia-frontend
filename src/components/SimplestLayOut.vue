@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import DefaultFooterBar from './DefaultFooterBar.vue';
+import DefaultFooterBar from './DefaultFooterBar.vue'
 
 export default {
   name: 'SimplestLayOut',
@@ -23,11 +23,11 @@ export default {
     DefaultFooterBar,
   },
   data() {
-    return {};
+    return {}
   },
   methods: {
     backToHomePage() {
-      this.$router.push({ name: 'HomePage' });
+      this.$router.push({ name: 'HomePage' })
     },
   },
 }

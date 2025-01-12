@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import LayOut from './components/LayOut.vue';
-import ThinLayOut from './components/ThinLayOut.vue';
-import SimplestLayOut from './components/SimplestLayOut.vue';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'quill/dist/quill.snow.css'; // for snow theme
+import LayOut from './components/LayOut.vue'
+import ThinLayOut from './components/ThinLayOut.vue'
+import SimplestLayOut from './components/SimplestLayOut.vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'quill/dist/quill.snow.css' // for snow theme
 
 export default {
   name: 'App',
@@ -26,10 +26,11 @@ export default {
   computed: {
     layout() {
       // Determine the layout based on the route meta
-      const layout = this.$route.meta.layout;
-      if (layout === "thin") return "ThinLayOut"; // Thin layout
-      else if (layout === "simplest") return "SimplestLayOut"; // Render directly without layout
-      return "LayOut"; // Default layout
+      const layout = this.$route.meta.layout
+      if (layout === 'thin')
+        return 'ThinLayOut' // Thin layout
+      else if (layout === 'simplest') return 'SimplestLayOut' // Render directly without layout
+      return 'LayOut' // Default layout
     },
   },
 }
@@ -41,8 +42,8 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  background-color: #E8DABD;
-  background-image: url("https://www.transparenttextures.com/patterns/cream-dust.png");
+  background-color: #e8dabd;
+  background-image: url('https://www.transparenttextures.com/patterns/cream-dust.png');
   /* background-blend-mode: overlay; */
   overflow: visible;
   /* Ensure footer can move freely */
@@ -56,6 +57,7 @@ export default {
 
 @font-face {
   font-family: 'Chinese-font';
-  src: url('./assets/fonts/SiYuanHeiTiGoogleBan/NotoSansCJK-Regular-1.otf') format('opentype');
+  src: url('./assets/fonts/SiYuanHeiTiGoogleBan/NotoSansCJK-Regular-1.otf')
+    format('opentype');
 }
 </style>

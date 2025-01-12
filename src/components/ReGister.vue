@@ -20,9 +20,13 @@
             <img src="../assets/images/logo.png" class="logo-bold" />
           </div>
           <div class="welcome-text-container welcome-container-position">
-            <h2 class="welcome-text text-white text-center">{{ $t('login.welcome') }}</h2>
+            <h2 class="welcome-text text-white text-center">
+              {{ $t('login.welcome') }}
+            </h2>
           </div>
-          <div class="welcome-text-container-nonmask welcome-container-position">
+          <div
+            class="welcome-text-container-nonmask welcome-container-position"
+          >
             <h2 class="welcome-text text-center">{{ $t('login.welcome') }}</h2>
           </div>
         </v-card>
@@ -34,18 +38,46 @@
             <h2 class="text-center">{{ $t('register.title') }}</h2>
           </v-card-title>
           <v-card-text>
-            <v-alert v-if="validationSummary" type="error" dismissible class="mb-4">
+            <v-alert
+              v-if="validationSummary"
+              type="error"
+              dismissible
+              class="mb-4"
+            >
               {{ validationSummary }}
             </v-alert>
             <v-form @submit.prevent="handleSubmit" ref="form">
-              <v-text-field v-model="userName" :label="$t('register.username')" variant="filled" required
-                class="mb-4"></v-text-field>
-              <v-text-field v-model="email" :label="$t('register.email')" variant="filled" type="email" required
-                class="mb-4"></v-text-field>
-              <v-text-field v-model="password" :label="$t('register.password')" variant="filled" type="password"
-                required class="mb-4"></v-text-field>
-              <v-text-field v-model="confirmPassword" :label="$t('register.confirmPassword')" variant="filled"
-                type="password" required class="mb-4"></v-text-field>
+              <v-text-field
+                v-model="userName"
+                :label="$t('register.username')"
+                variant="filled"
+                required
+                class="mb-4"
+              ></v-text-field>
+              <v-text-field
+                v-model="email"
+                :label="$t('register.email')"
+                variant="filled"
+                type="email"
+                required
+                class="mb-4"
+              ></v-text-field>
+              <v-text-field
+                v-model="password"
+                :label="$t('register.password')"
+                variant="filled"
+                type="password"
+                required
+                class="mb-4"
+              ></v-text-field>
+              <v-text-field
+                v-model="confirmPassword"
+                :label="$t('register.confirmPassword')"
+                variant="filled"
+                type="password"
+                required
+                class="mb-4"
+              ></v-text-field>
 
               <!-- Register button -->
               <button class="register-button" type="submit" block>
@@ -56,7 +88,8 @@
             </v-form>
           </v-card-text>
           <v-card-text class="to-login-text">
-            <p class="text-center">{{ $t('register.alreadyHaveAccount') }}
+            <p class="text-center">
+              {{ $t('register.alreadyHaveAccount') }}
               <span @click="navigateToLogin" class="interactive-text">
                 {{ $t('register.clickHere') }}
               </span>
@@ -70,47 +103,49 @@
 </template>
 
 <script>
-import { apiClient } from "@/api";
+import { apiClient } from '@/api'
 
 export default {
-  name: "ReGister",
+  name: 'ReGister',
   data() {
     return {
-      userName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      validationSummary: "",
-    };
+      userName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      validationSummary: '',
+    }
   },
   methods: {
     async handleSubmit() {
       if (this.password !== this.confirmPassword) {
-        this.validationSummary = this.$t("register.passwordMismatch");
-        return;
+        this.validationSummary = this.$t('register.passwordMismatch')
+        return
       }
 
       try {
-        const response = await apiClient.post("/users/Account/Register", {
+        const response = await apiClient.post('/users/Account/Register', {
           userName: this.userName,
           email: this.email,
           password: this.password,
-        });
+        })
 
         if (response.data.success) {
-          this.$router.push({ name: "login" });
+          this.$router.push({ name: 'login' })
         } else {
-          this.validationSummary = response.data.error || this.$t("register.failed");
+          this.validationSummary =
+            response.data.error || this.$t('register.failed')
         }
       } catch (error) {
-        this.validationSummary = error.response?.data?.error || this.$t("register.failed");
+        this.validationSummary =
+          error.response?.data?.error || this.$t('register.failed')
       }
     },
     navigateToLogin() {
-      this.$router.push({ name: "login" });
+      this.$router.push({ name: 'login' })
     },
   },
-};
+}
 </script>
 
 <style scoped>
@@ -153,14 +188,14 @@ export default {
   width: 42vw;
   margin: 0 !important;
   padding: 0 !important;
-  background-color: #DFCBA4;
+  background-color: #dfcba4;
 }
 
 .right-card {
   position: fixed;
   height: 48vh;
   width: 42vw;
-  background-color: #F4EEE1;
+  background-color: #f4eee1;
   padding: 10px !important;
 }
 
@@ -217,7 +252,7 @@ export default {
 .register-arrow {
   width: 80px;
   height: 240px;
-  background: linear-gradient(to left, #AA1B1D 50%, #EC0017 50%);
+  background: linear-gradient(to left, #aa1b1d 50%, #ec0017 50%);
   clip-path: polygon(0% 100%, 50% 30%, 100% 100%, 50% 90%, 50% 80%, 50% 90%);
   transform: rotate(90deg);
 }
@@ -238,7 +273,8 @@ export default {
   right: 60px;
   font-size: 20px;
   font-weight: normal;
-  transform: perspective(500px) rotateX(20deg) rotateY(8deg) skewX(15deg) scaleX(1.5);
+  transform: perspective(500px) rotateX(20deg) rotateY(8deg) skewX(15deg)
+    scaleX(1.5);
   transform-origin: center;
   display: inline-block;
   /* Ensures the transform applies correctly */
@@ -252,14 +288,13 @@ export default {
   color: #666;
 }
 
-
 .horizontal-line {
   position: relative;
   bottom: 7.8vh;
   left: 15vw;
   width: calc(23.3vw - 50px);
   height: 4px;
-  background-color: #EC0017;
+  background-color: #ec0017;
   z-index: 1;
   /* box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1); */
 }

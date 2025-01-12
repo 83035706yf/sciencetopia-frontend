@@ -1,7 +1,12 @@
 <template>
   <div>
     <LoadingSpinner v-if="isLoading" />
-    <a v-else-if="preview" :href="preview.url" target="_blank" class="link-preview">
+    <a
+      v-else-if="preview"
+      :href="preview.url"
+      target="_blank"
+      class="link-preview"
+    >
       <h3 class="preview-title">{{ preview.title }}</h3>
       <img :src="preview.image" alt="缩略图" class="preview-image" />
       <p>{{ preview.description }}</p>
@@ -10,13 +15,13 @@
 </template>
 
 <script>
-import { fetchLinkPreview } from '@/services/linkPreviewService';
-import LoadingSpinner from './LoadingSpinner.vue'; // Import the Spinner component
+import { fetchLinkPreview } from '@/services/linkPreviewService'
+import LoadingSpinner from './LoadingSpinner.vue' // Import the Spinner component
 
 export default {
   name: 'LinkPreview',
   components: {
-    LoadingSpinner
+    LoadingSpinner,
   },
   props: {
     url: String,
@@ -24,23 +29,23 @@ export default {
   data() {
     return {
       preview: null,
-      isLoading: false,  // Add a loading state
-    };
+      isLoading: false, // Add a loading state
+    }
   },
   created() {
-    this.loadPreview();
+    this.loadPreview()
   },
   methods: {
     async loadPreview() {
-      this.isLoading = true;  // Set loading to true when fetching starts
+      this.isLoading = true // Set loading to true when fetching starts
       try {
-        this.preview = await fetchLinkPreview(this.url);
+        this.preview = await fetchLinkPreview(this.url)
       } catch (error) {
-        console.error('Error fetching link preview:', error);
+        console.error('Error fetching link preview:', error)
       } finally {
-        this.isLoading = false;  // Set loading to false when fetching ends
+        this.isLoading = false // Set loading to false when fetching ends
       }
-    }
-  }
+    },
+  },
 }
 </script>

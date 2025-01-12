@@ -14,9 +14,13 @@
         <tbody>
           <tr v-for="member in members" :key="member.id">
             <td>
-              <v-btn icon="dots-vertical" class="justify-center align-center default-avatar" size="40">
+              <v-btn
+                icon="dots-vertical"
+                class="justify-center align-center default-avatar"
+                size="40"
+              >
                 <v-avatar size="38">
-                  <img :src="member.avatarUrl" alt="用户头像">
+                  <img :src="member.avatarUrl" alt="用户头像" />
                 </v-avatar>
               </v-btn>
             </td>
@@ -25,19 +29,28 @@
             <td class="actions-column">
               <v-tooltip text="提升为管理员" location="bottom">
                 <template v-slot:activator="{ props }">
-                  <v-btn icon v-bind="props" @click="promoteToManager(member.id)">👨‍🎓</v-btn>
+                  <v-btn
+                    icon
+                    v-bind="props"
+                    @click="promoteToManager(member.id)"
+                    >👨‍🎓</v-btn
+                  >
                 </template>
               </v-tooltip>
 
               <v-tooltip text="设为普通成员" location="bottom">
                 <template v-slot:activator="{ props }">
-                  <v-btn icon v-bind="props" @click="demoteToMember(member.id)">🧑</v-btn>
+                  <v-btn icon v-bind="props" @click="demoteToMember(member.id)"
+                    >🧑</v-btn
+                  >
                 </template>
               </v-tooltip>
 
               <v-tooltip text="移除成员" location="bottom">
                 <template v-slot:activator="{ props }">
-                  <v-btn icon v-bind="props" @click="removeMember(member.id)">❎</v-btn>
+                  <v-btn icon v-bind="props" @click="removeMember(member.id)"
+                    >❎</v-btn
+                  >
                 </template>
               </v-tooltip>
             </td>
@@ -53,46 +66,55 @@
 </template>
 
 <script>
-import { apiClient } from '@/api';
+import { apiClient } from '@/api'
 
 export default {
   props: {
-    groupId: String
+    groupId: String,
   },
   data() {
     return {
-      members: []
-    };
+      members: [],
+    }
   },
   async mounted() {
-    await this.fetchMembers();
+    await this.fetchMembers()
   },
   methods: {
     async promoteToManager(memberId) {
-      await apiClient.post(`/StudyGroupManage/PromoteToManager/${this.groupId}`, { memberId });
-      this.fetchMembers();
+      await apiClient.post(
+        `/StudyGroupManage/PromoteToManager/${this.groupId}`,
+        { memberId }
+      )
+      this.fetchMembers()
     },
     async demoteToMember(memberId) {
-      await apiClient.post(`/StudyGroupManage/DemoteToMember/${this.groupId}`, { memberId });
-      this.fetchMembers();
+      await apiClient.post(`/StudyGroupManage/DemoteToMember/${this.groupId}`, {
+        memberId,
+      })
+      this.fetchMembers()
     },
     async removeMember(memberId) {
-      await apiClient.post(`/StudyGroupManage/RemoveMember/${this.groupId}`, { memberId });
-      this.fetchMembers();
+      await apiClient.post(`/StudyGroupManage/RemoveMember/${this.groupId}`, {
+        memberId,
+      })
+      this.fetchMembers()
     },
     async fetchMembers() {
-      const response = await apiClient.get(`/StudyGroup/GetStudyGroupMembers/${this.groupId}`);
-      this.members = response.data;
+      const response = await apiClient.get(
+        `/StudyGroup/GetStudyGroupMembers/${this.groupId}`
+      )
+      this.members = response.data
     },
     inviteMember() {
       // Logic to invite member
     },
-  }
-};
+  },
+}
 </script>
 
 <style scoped>
-@import "../../assets/css/table.css";
+@import '../../assets/css/table.css';
 
 .member-management {
   width: 100%;

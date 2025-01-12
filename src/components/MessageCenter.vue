@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative; width: 100%; height: 100%; overflow: hidden;">
+  <div style="position: relative; width: 100%; height: 100%; overflow: hidden">
     <!-- <div class="image-background" style="position: fixed; top: 0;">
         </div> -->
     <!-- <div class="blur-connector"></div> -->
@@ -9,23 +9,33 @@
     <v-container class="message-center">
       <v-row>
         <v-col cols="auto" class="sidebar">
-          <div style="height: 100%;">
+          <div style="height: 100%">
             <!-- <v-list variant="plain"> -->
-            <v-list-item variant="plain" class="sidebar-item"
-              :to="{ name: 'directMessages', params: { userId: userId } }" exact
-              :class="{ 'active': activeTab === 'directMessages' }">
-              <v-list-item-title class="sidebar-title">{{ $t('message.privatemessage')
-                }}</v-list-item-title>
+            <v-list-item
+              variant="plain"
+              class="sidebar-item"
+              :to="{ name: 'directMessages', params: { userId: userId } }"
+              exact
+              :class="{ active: activeTab === 'directMessages' }"
+            >
+              <v-list-item-title class="sidebar-title">{{
+                $t('message.privatemessage')
+              }}</v-list-item-title>
               <div v-if="messageCount > 0" class="alert-badge">
                 {{ messageCount > 99 ? '99+' : messageCount }}
               </div>
             </v-list-item>
             <div style="height: 1vh"></div>
-            <v-list-item variant="plain" class="sidebar-item"
-              :to="{ name: 'notifications', params: { userId: userId } }" exact
-              :class="{ 'active': activeTab === 'notifications' }">
-              <v-list-item-title class="sidebar-title">{{ $t('message.notification')
-                }}</v-list-item-title>
+            <v-list-item
+              variant="plain"
+              class="sidebar-item"
+              :to="{ name: 'notifications', params: { userId: userId } }"
+              exact
+              :class="{ active: activeTab === 'notifications' }"
+            >
+              <v-list-item-title class="sidebar-title">{{
+                $t('message.notification')
+              }}</v-list-item-title>
               <div v-if="notificationCount > 0" class="alert-badge">
                 {{ notificationCount > 99 ? '99+' : notificationCount }}
               </div>
@@ -33,66 +43,117 @@
             <!-- </v-list> -->
           </div>
         </v-col>
-        <v-col cols="auto" style="width: 94%;">
+        <v-col cols="auto" style="width: 94%">
           <v-card v-if="activeTab === 'directMessages'" class="message-card">
             <v-card-text>
               <v-row>
-                <v-col cols="auto" style="width: 20%;">
+                <v-col cols="auto" style="width: 20%">
                   <v-list class="direct-message-list" dense>
-                    <v-list-item class="message-item" v-for="conversation in conversations"
-                      :key="conversation.conversationId" @click="selectConversation(conversation)"
-                      :class="{ 'grey-background': isSelectedConversation(conversation) }">
+                    <v-list-item
+                      class="message-item"
+                      v-for="conversation in conversations"
+                      :key="conversation.conversationId"
+                      @click="selectConversation(conversation)"
+                      :class="{
+                        'grey-background': isSelectedConversation(conversation),
+                      }"
+                    >
                       <v-row>
                         <v-col cols="auto">
-                          <v-avatar size="62" style="border: 2px solid #000;">
-                            <img :src="conversation.partnerAvatarUrl" alt="Avatar" />
+                          <v-avatar size="62" style="border: 2px solid #000">
+                            <img
+                              :src="conversation.partnerAvatarUrl"
+                              alt="Avatar"
+                            />
                           </v-avatar>
                         </v-col>
                         <v-col cols="auto">
-                          <v-list-item-title>{{ conversation.partnerName
-                            }}</v-list-item-title>
-                          <v-list-item-subtitle>{{ getLastMessage(conversation)
-                            }}</v-list-item-subtitle>
-                          <div v-if="conversationMessageCount[conversation.conversationId] > 0" class="alert-badge">
-                            {{ conversationMessageCount[conversation.conversationId] }}
+                          <v-list-item-title>{{
+                            conversation.partnerName
+                          }}</v-list-item-title>
+                          <v-list-item-subtitle>{{
+                            getLastMessage(conversation)
+                          }}</v-list-item-subtitle>
+                          <div
+                            v-if="
+                              conversationMessageCount[
+                                conversation.conversationId
+                              ] > 0
+                            "
+                            class="alert-badge"
+                          >
+                            {{
+                              conversationMessageCount[
+                                conversation.conversationId
+                              ]
+                            }}
                           </div>
                         </v-col>
                       </v-row>
                       <!-- Triangle added dynamically when selected -->
-                      <div v-if="isSelectedConversation(conversation)" class="triangle-dog-ear">
-                      </div>
+                      <div
+                        v-if="isSelectedConversation(conversation)"
+                        class="triangle-dog-ear"
+                      ></div>
                     </v-list-item>
                   </v-list>
                 </v-col>
                 <!-- <v-divider vertical color="text" opacity="0.6"></v-divider> -->
-                <v-col cols="auto" style="width: 74%; height: 86vh;" v-if="selectedConversation">
-                  <v-card class="d-flex align-center justify-center partner-card">
-                    <v-card-title>{{ selectedConversation.partnerName }}</v-card-title>
+                <v-col
+                  cols="auto"
+                  style="width: 74%; height: 86vh"
+                  v-if="selectedConversation"
+                >
+                  <v-card
+                    class="d-flex align-center justify-center partner-card"
+                  >
+                    <v-card-title>{{
+                      selectedConversation.partnerName
+                    }}</v-card-title>
                   </v-card>
-                  <MessageList ref="messageList" :messages="selectedConversation.messages" :userId="userId"
-                    :userAvatarUrl="userAvatarUrl" />
+                  <MessageList
+                    ref="messageList"
+                    :messages="selectedConversation.messages"
+                    :userId="userId"
+                    :userAvatarUrl="userAvatarUrl"
+                  />
 
-
-                  <v-textarea class="textarea" variant="solo-filled" v-model="selectedConversation.newMessage"
-                    :label="$t('message.editing')" outlined dense></v-textarea>
+                  <v-textarea
+                    class="textarea"
+                    variant="solo-filled"
+                    v-model="selectedConversation.newMessage"
+                    :label="$t('message.editing')"
+                    outlined
+                    dense
+                  ></v-textarea>
                   <v-card-actions class="justify-end">
-                    <button class="send" @click="sendMessage(selectedConversation)">
-                      <div class="send-text"> {{ $t('message.send') }} </div>
+                    <button
+                      class="send"
+                      @click="sendMessage(selectedConversation)"
+                    >
+                      <div class="send-text">{{ $t('message.send') }}</div>
                     </button>
                   </v-card-actions>
                 </v-col>
-                <v-col cols="auto" style="width: 6%;">
+                <v-col cols="auto" style="width: 6%">
                   <div class="picker-container">
                     <button class="image-picker-btn">
-                      <img width="36" height="36" src="https://img.icons8.com/glyph-neue/64/FFFFFF/image.png"
-                        alt="image" />
+                      <img
+                        width="36"
+                        height="36"
+                        src="https://img.icons8.com/glyph-neue/64/FFFFFF/image.png"
+                        alt="image"
+                      />
                     </button>
                     <button class="emoji-picker-btn" @click="toggleEmojiPicker">
                       😊
                     </button>
 
                     <div v-if="showEmojiPicker">
-                      <emoji-picker class="light emoji-picker" @emoji-click="onEmojiClick"></emoji-picker>
+                      <emoji-picker
+                        class="light emoji-picker"
+                        @emoji-click="onEmojiClick"
+                      ></emoji-picker>
                     </div>
                   </div>
                 </v-col>
@@ -107,13 +168,13 @@
 </template>
 
 <script>
-import { apiClient } from '@/api';
-import { connection } from '@/services/signalr-service';
-import MessageList from '@/components/MessageList.vue';
-import SystemNotifications from '@/components/SystemNotifications.vue'; // Import the new component
-import { mapState } from 'vuex';
-import { DateTime } from 'luxon';
-import 'emoji-picker-element';
+import { apiClient } from '@/api'
+import { connection } from '@/services/signalr-service'
+import MessageList from '@/components/MessageList.vue'
+import SystemNotifications from '@/components/SystemNotifications.vue' // Import the new component
+import { mapState } from 'vuex'
+import { DateTime } from 'luxon'
+import 'emoji-picker-element'
 
 export default {
   components: { MessageList, SystemNotifications }, // Include the new component
@@ -125,22 +186,26 @@ export default {
       userId: null,
       userAvatarUrl: null,
       showEmojiPicker: false, // Controls the visibility of the emoji picker
-    };
+    }
   },
   computed: {
-    ...mapState(['messageCount', 'conversationMessageCount', 'notificationCount']),
+    ...mapState([
+      'messageCount',
+      'conversationMessageCount',
+      'notificationCount',
+    ]),
   },
   watch: {
     $route(to) {
       if (to.name === 'directMessages') {
-        this.activeTab = 'directMessages';
+        this.activeTab = 'directMessages'
         if (this.selectedConversation) {
-          this.markMessagesAsRead(this.selectedConversation.conversationId);
+          this.markMessagesAsRead(this.selectedConversation.conversationId)
         }
       } else if (to.name === 'notifications') {
-        this.activeTab = 'notifications';
+        this.activeTab = 'notifications'
         // if (this.notificationCount > 0) {
-        this.markNotificationsAsRead();
+        this.markNotificationsAsRead()
         // }
       }
     },
@@ -148,118 +213,139 @@ export default {
       immediate: true,
       handler(newConversationId) {
         if (newConversationId) {
-          this.loadConversation(newConversationId);
+          this.loadConversation(newConversationId)
         }
-      }
+      },
     },
     selectedConversation(conversation) {
       if (conversation) {
-        this.markMessagesAsRead(conversation.conversationId);
+        this.markMessagesAsRead(conversation.conversationId)
       }
     },
   },
   created() {
-    this.fetchConversations();
-    this.updateActiveTab();
-    this.setupSignalREvents();
+    this.fetchConversations()
+    this.updateActiveTab()
+    this.setupSignalREvents()
   },
   methods: {
     setupSignalREvents() {
-      const connection = this.$root.$signalRConnection;
+      const connection = this.$root.$signalRConnection
       if (connection) {
-        connection.on('ReceiveMessage', this.handleReceiveMessage);
+        connection.on('ReceiveMessage', this.handleReceiveMessage)
       } else {
-        console.error('SignalR connection is not defined');
+        console.error('SignalR connection is not defined')
       }
     },
     updateActiveTab() {
       if (this.$route.name === 'directMessages') {
-        this.activeTab = 'directMessages';
+        this.activeTab = 'directMessages'
         if (this.selectedConversation) {
-          this.markMessagesAsRead(this.selectedConversation.conversationId);
+          this.markMessagesAsRead(this.selectedConversation.conversationId)
         }
       } else if (this.$route.name === 'notifications') {
-        this.activeTab = 'notifications';
+        this.activeTab = 'notifications'
       }
     },
     async fetchConversations() {
-      const userId = this.$store.state.currentUserID;
-      const response = await apiClient.get(`Message/GetGroupedMessagesByUser/${userId}`);
-      this.conversations = response.data;
-      this.selectedConversation = this.conversations[0];
-      this.userId = userId;
-      this.userAvatarUrl = this.$store.state.avatarUrl;
+      const userId = this.$store.state.currentUserID
+      const response = await apiClient.get(
+        `Message/GetGroupedMessagesByUser/${userId}`
+      )
+      this.conversations = response.data
+      this.selectedConversation = this.conversations[0]
+      this.userId = userId
+      this.userAvatarUrl = this.$store.state.avatarUrl
     },
     async loadConversation(conversationId, partnerId = null, partnerName = '') {
       try {
         // Fetch the full conversation details from the backend
-        const response = await apiClient.get(`/Message/GetConversation/${conversationId}`);
+        const response = await apiClient.get(
+          `/Message/GetConversation/${conversationId}`
+        )
 
         // If the backend returns data, use it; otherwise, initialize a new conversation
         this.selectedConversation = response.data || {
           conversationId: conversationId,
           messages: [],
-          partnerId: partnerId,       // Use the partnerId passed in
-          partnerName: partnerName    // Use the partnerName passed in
-        };
+          partnerId: partnerId, // Use the partnerId passed in
+          partnerName: partnerName, // Use the partnerName passed in
+        }
       } catch (error) {
-        console.error("Unable to retrieve conversation data. Initializing new conversation:", error);
+        console.error(
+          'Unable to retrieve conversation data. Initializing new conversation:',
+          error
+        )
 
         // Initialize an empty conversation structure as a fallback
         this.selectedConversation = {
           conversationId: conversationId,
           messages: [],
           partnerId: partnerId,
-          partnerName: partnerName
-        };
+          partnerName: partnerName,
+        }
       }
     },
     selectConversation(conversation) {
-      this.selectedConversation = conversation;
+      this.selectedConversation = conversation
     },
     isSelectedConversation(conversation) {
-      return conversation.conversationId === this.selectedConversation.conversationId;
+      return (
+        conversation.conversationId === this.selectedConversation.conversationId
+      )
     },
     getLastMessage(conversation) {
-      return conversation.messages.length > 0 ? conversation.messages[conversation.messages.length - 1].content : null;
+      return conversation.messages.length > 0
+        ? conversation.messages[conversation.messages.length - 1].content
+        : null
     },
     async handleReceiveMessage(conversationId, message) {
       if (!conversationId) {
-        console.error('conversationId is undefined or null');
-        return;
+        console.error('conversationId is undefined or null')
+        return
       }
-      const conversation = this.conversations.find((c) => c.conversationId === conversationId);
+      const conversation = this.conversations.find(
+        (c) => c.conversationId === conversationId
+      )
       if (conversation) {
         if (message.sender.id !== this.userId) {
-          conversation.messages.push(message);
-          this.sortConversations(conversationId);
+          conversation.messages.push(message)
+          this.sortConversations(conversationId)
         }
         if (this.isSelectedConversation(conversation)) {
-          await this.markMessagesAsRead(conversationId);
+          await this.markMessagesAsRead(conversationId)
         }
       } else {
-        this.fetchConversations();
+        this.fetchConversations()
       }
     },
     async markMessagesAsRead(conversationId) {
       await apiClient.post('Message/MarkAsRead', {
         conversationId,
         userId: this.userId,
-      });
-      const conversation = this.conversations.find(c => c.conversationId === conversationId);
+      })
+      const conversation = this.conversations.find(
+        (c) => c.conversationId === conversationId
+      )
       if (conversation) {
-        conversation.messages.forEach(message => {
-          message.isRead = true;
-        });
+        conversation.messages.forEach((message) => {
+          message.isRead = true
+        })
       }
-      connection.invoke('MarkMessagesAsRead', conversationId, this.userId);
+      connection.invoke('MarkMessagesAsRead', conversationId, this.userId)
     },
     sendMessage(conversation) {
-      if (conversation.newMessage.trim() === '') return;
+      if (conversation.newMessage.trim() === '') return
 
-      const receiverId = conversation.partnerId;
+      const receiverId = conversation.partnerId
       connection
-        .invoke('SendMessage', conversation.conversationId, this.userId, receiverId, conversation.newMessage)
+        .invoke(
+          'SendMessage',
+          conversation.conversationId,
+          this.userId,
+          receiverId,
+          conversation.newMessage
+        )
         .then(() => {
           const newMessage = {
             id: Date.now().toString(),
@@ -269,54 +355,69 @@ export default {
             sender: {
               id: this.userId,
               avatarUrl: this.userAvatarUrl,
-            }
-          };
-          conversation.messages.push(newMessage);
-          conversation.newMessage = '';
-          this.$refs.messageList.scrollToBottom();
-          this.sortConversations(conversation.conversationId);
+            },
+          }
+          conversation.messages.push(newMessage)
+          conversation.newMessage = ''
+          this.$refs.messageList.scrollToBottom()
+          this.sortConversations(conversation.conversationId)
         })
-        .catch((err) => console.error('Error sending message:', err));
+        .catch((err) => console.error('Error sending message:', err))
     },
     sortConversations(conversationId) {
-      const conversationIndex = this.conversations.findIndex(c => c.conversationId === conversationId);
+      const conversationIndex = this.conversations.findIndex(
+        (c) => c.conversationId === conversationId
+      )
       if (conversationIndex !== -1) {
-        const conversation = this.conversations.splice(conversationIndex, 1)[0];
-        this.conversations.unshift(conversation);
+        const conversation = this.conversations.splice(conversationIndex, 1)[0]
+        this.conversations.unshift(conversation)
       }
     },
     async markNotificationsAsRead() {
-      await apiClient.post(`Notification/MarkAsReadByUser/${this.userId}`);
-      connection.invoke('MarkAllNotificationsAsRead', this.userId);
+      await apiClient.post(`Notification/MarkAsReadByUser/${this.userId}`)
+      connection.invoke('MarkAllNotificationsAsRead', this.userId)
       // console.log('Marked all notifications as read');
     },
     toggleEmojiPicker() {
-      this.showEmojiPicker = !this.showEmojiPicker; // Toggle emoji picker visibility
+      this.showEmojiPicker = !this.showEmojiPicker // Toggle emoji picker visibility
       if (this.showEmojiPicker) {
-        document.addEventListener('click', this.closeEmojiPickerOnOutsideClick);
+        document.addEventListener('click', this.closeEmojiPickerOnOutsideClick)
       } else {
-        document.removeEventListener('click', this.closeEmojiPickerOnOutsideClick);
+        document.removeEventListener(
+          'click',
+          this.closeEmojiPickerOnOutsideClick
+        )
       }
     },
     onEmojiClick(event) {
-      const emoji = event.detail.unicode; // Get the selected emoji
-      if (this.selectedConversation && typeof this.selectedConversation.newMessage === 'string') {
+      const emoji = event.detail.unicode // Get the selected emoji
+      if (
+        this.selectedConversation &&
+        typeof this.selectedConversation.newMessage === 'string'
+      ) {
         // 确保 newMessage 是一个字符串
-        this.selectedConversation.newMessage += emoji; // 拼接表情
+        this.selectedConversation.newMessage += emoji // 拼接表情
       } else if (this.selectedConversation) {
         // 如果 newMessage 未初始化，则赋值表情
-        this.selectedConversation.newMessage = emoji;
+        this.selectedConversation.newMessage = emoji
       }
     },
     closeEmojiPickerOnOutsideClick(event) {
-      const emojiPicker = document.querySelector('.emoji-picker');
-      if (emojiPicker && !emojiPicker.contains(event.target) && !event.target.closest('button')) {
-        this.showEmojiPicker = false;
-        document.removeEventListener('click', this.closeEmojiPickerOnOutsideClick);
+      const emojiPicker = document.querySelector('.emoji-picker')
+      if (
+        emojiPicker &&
+        !emojiPicker.contains(event.target) &&
+        !event.target.closest('button')
+      ) {
+        this.showEmojiPicker = false
+        document.removeEventListener(
+          'click',
+          this.closeEmojiPickerOnOutsideClick
+        )
       }
     },
   },
-};
+}
 </script>
 
 <style scoped>
@@ -346,7 +447,7 @@ export default {
 
 .sidebar-item {
   height: 43vh !important;
-  background-color: #C59F59 !important;
+  background-color: #c59f59 !important;
   opacity: 1;
   color: white !important;
   display: flex;
@@ -375,7 +476,7 @@ export default {
   height: 84vh;
   /* border-left: 10px solid #EC0017; */
   /* border-top: 5px solid #EC0017; */
-  background-color: #DFCBA4;
+  background-color: #dfcba4;
   padding: 0;
 
   /* &::before {
@@ -404,7 +505,11 @@ export default {
 
 .grey-background {
   position: relative;
-  background: radial-gradient(circle, rgb(0, 255, 247, 0.8) 30%, #E8DABD 30%) !important;
+  background: radial-gradient(
+    circle,
+    rgb(0, 255, 247, 0.8) 30%,
+    #e8dabd 30%
+  ) !important;
   border-right: none !important;
   background-size: 16vw 20vw !important;
   background-position: 10vw center !important;
@@ -412,12 +517,16 @@ export default {
 }
 
 .active {
-  background: radial-gradient(circle, rgb(0, 255, 247, 0.8) 30%, #DFCBA4 30%) !important;
+  background: radial-gradient(
+    circle,
+    rgb(0, 255, 247, 0.8) 30%,
+    #dfcba4 30%
+  ) !important;
   /* Button background */
   background-size: 25vw 25vw !important;
   background-position: center -12vh !important;
   /* Adjust the position of the circle */
-  color: #03381C !important;
+  color: #03381c !important;
   opacity: 1 !important;
 }
 
@@ -434,8 +543,8 @@ export default {
 
 .partner-card {
   height: 6%;
-  background-color: #DFCBA4;
-  color: #03381C;
+  background-color: #dfcba4;
+  color: #03381c;
   border-bottom: 2px solid #977535;
   border-top-right-radius: 8vw !important;
 }
@@ -447,7 +556,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 20px 10px 20px 10px;
-  background-color: #C59F59;
+  background-color: #c59f59;
   height: 23vh;
   min-width: 100px;
   margin: 0;

@@ -5,27 +5,31 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import LoadingSpinner from './LoadingSpinner.vue'; // Import the Spinner component
+import { ref } from 'vue'
+import LoadingSpinner from './LoadingSpinner.vue' // Import the Spinner component
 
-const isLoading = ref(false);
+const isLoading = ref(false)
 
 export function useGlobalLoading() {
   return {
     isLoading,
-    showLoading: () => { isLoading.value = true; },
-    hideLoading: () => { isLoading.value = false; }
-  };
+    showLoading: () => {
+      isLoading.value = true
+    },
+    hideLoading: () => {
+      isLoading.value = false
+    },
+  }
 }
 
 export default {
   components: {
-    LoadingSpinner
+    LoadingSpinner,
   },
   setup() {
-    return { isLoading };
-  }
-};
+    return { isLoading }
+  },
+}
 </script>
 
 <style scoped>

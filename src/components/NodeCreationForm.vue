@@ -1,24 +1,50 @@
 <template>
   <v-card>
     <v-card-title>
-      <v-select :label="$t('knowledgeGraph.node.type')" v-model="nodeData.label" :items="translatedNodeTypes"
-        item-title="text" item-value="value" outlined dense></v-select>
-      <v-text-field :label="$t('knowledgeGraph.node.name')" v-model="nodeData.name" outlined dense></v-text-field>
+      <v-select
+        :label="$t('knowledgeGraph.node.type')"
+        v-model="nodeData.label"
+        :items="translatedNodeTypes"
+        item-title="text"
+        item-value="value"
+        outlined
+        dense
+      ></v-select>
+      <v-text-field
+        :label="$t('knowledgeGraph.node.name')"
+        v-model="nodeData.name"
+        outlined
+        dense
+      ></v-text-field>
     </v-card-title>
     <v-card-text>
-      <v-textarea :label="$t('knowledgeGraph.node.description')" v-model="nodeData.description" outlined
-        dense></v-textarea>
+      <v-textarea
+        :label="$t('knowledgeGraph.node.description')"
+        v-model="nodeData.description"
+        outlined
+        dense
+      ></v-textarea>
     </v-card-text>
 
     <!-- Dynamic inputs for resources -->
     <v-card-text v-for="(url, index) in nodeData.urls" :key="index">
       <v-row align="center" no-gutters>
         <v-col cols="11">
-          <v-text-field class="flex-grow-1" :label="$t('knowledgeGraph.node.resource')" v-model="url.link" outlined
-            dense></v-text-field>
+          <v-text-field
+            class="flex-grow-1"
+            :label="$t('knowledgeGraph.node.resource')"
+            v-model="url.link"
+            outlined
+            dense
+          ></v-text-field>
         </v-col>
         <v-col cols="1">
-          <v-btn variant="text" icon @click.prevent="removeUrl(index)" v-if="nodeData.urls.length > 1">
+          <v-btn
+            variant="text"
+            icon
+            @click.prevent="removeUrl(index)"
+            v-if="nodeData.urls.length > 1"
+          >
             <v-icon>mdi-minus</v-icon>
           </v-btn>
         </v-col>
@@ -32,37 +58,41 @@
     </v-card-actions>
 
     <v-card-actions>
-      <v-btn color="primary" @click="submitNode">{{ $t('knowledgeGraph.submitnode') }}</v-btn>
-      <v-btn color="error" @click="cancelNodeCreation">{{ $t('cancel') }}</v-btn>
+      <v-btn color="primary" @click="submitNode">{{
+        $t('knowledgeGraph.submitnode')
+      }}</v-btn>
+      <v-btn color="error" @click="cancelNodeCreation">{{
+        $t('cancel')
+      }}</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import { ref, computed, getCurrentInstance } from "vue";
-import { useStore } from "vuex";
-import { apiClient } from "@/api";
+import { ref, computed, getCurrentInstance } from 'vue'
+import { useStore } from 'vuex'
+import { apiClient } from '@/api'
 
 export default {
-  name: "NodeCreationForm",
+  name: 'NodeCreationForm',
   setup() {
-    const store = useStore();
-    const { proxy } = getCurrentInstance(); // Access $t for translations
+    const store = useStore()
+    const { proxy } = getCurrentInstance() // Access $t for translations
 
     const nodeData = ref({
-      label: "",
-      name: "",
-      description: "",
-      urls: [{ link: "" }], // Initialize with an empty resource field
-    });
+      label: '',
+      name: '',
+      description: '',
+      urls: [{ link: '' }], // Initialize with an empty resource field
+    })
 
     // Define static node types
     const nodeTypes = [
-      { text: "Subject", value: "Subject" },
-      { text: "Field", value: "Field" },
-      { text: "Topic", value: "Topic" },
-      { text: "Keyword", value: "Keyword" },
-    ];
+      { text: 'Subject', value: 'Subject' },
+      { text: 'Field', value: 'Field' },
+      { text: 'Topic', value: 'Topic' },
+      { text: 'Keyword', value: 'Keyword' },
+    ]
 
     // Translate the node types
     const translatedNodeTypes = computed(() =>
@@ -70,37 +100,42 @@ export default {
         text: proxy.$t(`knowledgeGraph.nodetype_items.${type.text}`),
         value: type.value,
       }))
-    );
+    )
 
     const addUrl = () => {
-      nodeData.value.urls.push({ link: "" });
-    };
+      nodeData.value.urls.push({ link: '' })
+    }
 
     const removeUrl = (index) => {
-      nodeData.value.urls.splice(index, 1);
-    };
+      nodeData.value.urls.splice(index, 1)
+    }
 
     const submitNode = async () => {
-      console.log("Submitting Node:", nodeData.value);
+      console.log('Submitting Node:', nodeData.value)
       try {
-        await apiClient.post("/KnowledgeGraph/CreateNode", {
+        await apiClient.post('/KnowledgeGraph/CreateNode', {
           label: nodeData.value.label,
           name: nodeData.value.name,
           description: nodeData.value.description,
           link: nodeData.value.urls.map((u) => u.link),
-        });
-        alert(proxy.$t("knowledgeGraph.nodeSubmitted")); // Use translation
-        nodeData.value = { label: "", name: "", description: "", urls: [{ link: "" }] }; // Reset form
+        })
+        alert(proxy.$t('knowledgeGraph.nodeSubmitted')) // Use translation
+        nodeData.value = {
+          label: '',
+          name: '',
+          description: '',
+          urls: [{ link: '' }],
+        } // Reset form
       } catch (error) {
-        alert(proxy.$t("knowledgeGraph.submitFailed", { error: error.message })); // Use translation
+        alert(proxy.$t('knowledgeGraph.submitFailed', { error: error.message })) // Use translation
       }
-    };
+    }
 
     const cancelNodeCreation = () => {
-      if (confirm(proxy.$t("knowledgeGraph.confirmCancel"))) {
-        store.dispatch("toggleNodeCreationForm", false); // Assuming this toggles the form visibility
+      if (confirm(proxy.$t('knowledgeGraph.confirmCancel'))) {
+        store.dispatch('toggleNodeCreationForm', false) // Assuming this toggles the form visibility
       }
-    };
+    }
 
     return {
       nodeData,
@@ -109,9 +144,9 @@ export default {
       removeUrl,
       submitNode,
       cancelNodeCreation,
-    };
+    }
   },
-};
+}
 </script>
 
 <style scoped>

@@ -3,14 +3,19 @@
     <v-row>
       <v-col cols="auto">
         <div class="d-flex">
-          <v-btn :disabled="true" icon="dots-vertical" class="default-avatar profile-avatar" size="48">
+          <v-btn
+            :disabled="true"
+            icon="dots-vertical"
+            class="default-avatar profile-avatar"
+            size="48"
+          >
             <v-avatar size="46">
-              <img :src="avatarUrl" alt="Avatar">
+              <img :src="avatarUrl" alt="Avatar" />
             </v-avatar>
           </v-btn>
           <v-card-title class="study-plan-title">
-            {{ isCurrentUser ? $t('usercenter.my') : $t('usercenter.their') }}{{ $t('wordbreaker') }}{{
-              $t('usercenter.studyplan') }}
+            {{ isCurrentUser ? $t('usercenter.my') : $t('usercenter.their')
+            }}{{ $t('wordbreaker') }}{{ $t('usercenter.studyplan') }}
           </v-card-title>
         </div>
       </v-col>
@@ -34,44 +39,92 @@
           <v-card-item>
             <v-row>
               <v-col cols="11">
-                <StudyPlan :userId="userId" :studyPlan="studyPlan" @resourceUpdated="handleResourceUpdated" />
+                <StudyPlan
+                  :userId="userId"
+                  :studyPlan="studyPlan"
+                  @resourceUpdated="handleResourceUpdated"
+                />
               </v-col>
               <v-col cols="1" class="d-flex justify-end pt-4 pr-4">
-                <v-btn small variant="plain" icon color="primary"
-                  @click="$router.push({ name: 'personalcenter', params: { userId: userId } })">
+                <v-btn
+                  small
+                  variant="plain"
+                  icon
+                  color="primary"
+                  @click="
+                    $router.push({
+                      name: 'personalcenter',
+                      params: { userId: userId },
+                    })
+                  "
+                >
                   <div class="return-icon"></div>
                 </v-btn>
               </v-col>
             </v-row>
             <v-card-actions class="d-flex justify-end pr-4">
-              <v-btn small variant="text" color="red" @click="deleteStudyPlan(studyPlan?.title)">
-                {{ $t("delete") }}
+              <v-btn
+                small
+                variant="text"
+                color="red"
+                @click="deleteStudyPlan(studyPlan?.title)"
+              >
+                {{ $t('delete') }}
               </v-btn>
             </v-card-actions>
           </v-card-item>
         </v-card>
 
         <v-row>
-          <v-col v-for="studyPlan in activeStudyPlans" :key="studyPlan.studyPlan.id" cols="12">
-            <v-card v-if="studyPlan.studyPlan.id != studyPlanId" class="study-plan-summary">
-              <v-progress-linear v-bind="props" :model-value="studyPlan.studyPlan.progressPercentage" color="text"
-                height="15" striped></v-progress-linear>
+          <v-col
+            v-for="studyPlan in activeStudyPlans"
+            :key="studyPlan.studyPlan.id"
+            cols="12"
+          >
+            <v-card
+              v-if="studyPlan.studyPlan.id != studyPlanId"
+              class="study-plan-summary"
+            >
+              <v-progress-linear
+                v-bind="props"
+                :model-value="studyPlan.studyPlan.progressPercentage"
+                color="text"
+                height="15"
+                striped
+              ></v-progress-linear>
               <!-- <v-spacer style="height: 5px;"></v-spacer> -->
-              <v-progress-linear v-if="studyPlan.studyPlan.advancedTopicProgressPercentage > 0" v-bind="props"
-                :model-value="studyPlan.studyPlan.advancedTopicProgressPercentage" color="accent" height="15"
-                striped></v-progress-linear>
+              <v-progress-linear
+                v-if="studyPlan.studyPlan.advancedTopicProgressPercentage > 0"
+                v-bind="props"
+                :model-value="
+                  studyPlan.studyPlan.advancedTopicProgressPercentage
+                "
+                color="accent"
+                height="15"
+                striped
+              ></v-progress-linear>
               <v-row align="center">
                 <v-col cols="4">
                   <v-card-title>{{ studyPlan.studyPlan.title }}</v-card-title>
                 </v-col>
                 <v-col cols="7">
-                  <v-card-subtitle>已学习{{ studyPlan.studyPlan.progressPercentage }}
-                    %，额外学习了{{ studyPlan.studyPlan.advancedTopicProgressPercentage }}
-                    %的进阶内容</v-card-subtitle>
+                  <v-card-subtitle
+                    >已学习{{
+                      studyPlan.studyPlan.progressPercentage
+                    }}
+                    %，额外学习了{{
+                      studyPlan.studyPlan.advancedTopicProgressPercentage
+                    }}
+                    %的进阶内容</v-card-subtitle
+                  >
                 </v-col>
                 <v-col cols="1">
-                  <v-btn variant="plain" icon @click="goToPlanDetail(studyPlan.studyPlan.id)">
-                    <div class="go-to-icon "></div>
+                  <v-btn
+                    variant="plain"
+                    icon
+                    @click="goToPlanDetail(studyPlan.studyPlan.id)"
+                  >
+                    <div class="go-to-icon"></div>
                   </v-btn>
                 </v-col>
               </v-row>
@@ -84,12 +137,12 @@
 </template>
 
 <script>
-import StudyPlan from "./StudyPlan.vue";
-import { apiClient } from "@/api"; // Adjust the path as needed
-import { mapState } from "vuex";
+import StudyPlan from './StudyPlan.vue'
+import { apiClient } from '@/api' // Adjust the path as needed
+import { mapState } from 'vuex'
 
 export default {
-  name: "StudyPlanDetail",
+  name: 'StudyPlanDetail',
   components: {
     StudyPlan,
   },
@@ -100,9 +153,9 @@ export default {
       studyPlanId: this.$route.params.studyPlanId,
       userId: this.$route.params.userId,
       studyPlan: {
-        title: "",
+        title: '',
         introduction: {
-          description: "",
+          description: '',
         },
         progressPercentage: 0,
         advancedTopicProgressPercentage: 0,
@@ -110,40 +163,48 @@ export default {
         mainCurriculum: [],
         advancedTopics: [],
       },
-    };
+    }
   },
   computed: {
     ...mapState({
-      currentUserId: state => state.currentUserID  // Vuex store for current user's ID
+      currentUserId: (state) => state.currentUserID, // Vuex store for current user's ID
     }),
     avatarUrl() {
-      return this.isCurrentUser ? this.$store.state.avatarUrl : this.userInfo.avatarUrl;
+      return this.isCurrentUser
+        ? this.$store.state.avatarUrl
+        : this.userInfo.avatarUrl
     },
     isCurrentUser() {
       // Check if the userId passed as a prop matches the current authenticated user
-      return this.userId === this.currentUserId;
+      return this.userId === this.currentUserId
     },
     activeStudyPlans() {
-      return this.studyPlanDataList.filter((item) => !item.studyPlan.completed);
+      return this.studyPlanDataList.filter((item) => !item.studyPlan.completed)
     },
     completedStudyPlans() {
-      return this.studyPlanDataList.filter((item) => item.studyPlan.completed);
+      return this.studyPlanDataList.filter((item) => item.studyPlan.completed)
     },
   },
   methods: {
     async fetchDataForUser() {
       try {
-        const studyPlanResponse = await apiClient.get(`/StudyPlan/FetchStudyPlans`, {
-          params: { targetUserId: this.userId },
-        });
-        this.studyPlanDataList = studyPlanResponse.data;
+        const studyPlanResponse = await apiClient.get(
+          `/StudyPlan/FetchStudyPlans`,
+          {
+            params: { targetUserId: this.userId },
+          }
+        )
+        this.studyPlanDataList = studyPlanResponse.data
 
-        const studyGroupResponse = await apiClient.get(`/StudyGroup/GetStudyGroup`, {
-          params: { targetUserId: this.userId },
-        });
-        this.studyGroupList = studyGroupResponse.data;
+        const studyGroupResponse = await apiClient.get(
+          `/StudyGroup/GetStudyGroup`,
+          {
+            params: { targetUserId: this.userId },
+          }
+        )
+        this.studyGroupList = studyGroupResponse.data
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error)
       }
     },
     // Fetch study plan details
@@ -151,62 +212,65 @@ export default {
       try {
         const response = await apiClient.get(`/StudyPlan/GetStudyPlanById`, {
           params: { studyPlanId: this.studyPlanId, targetUserId: this.userId },
-        });
+        })
 
-        this.studyPlan = response.data.studyPlan;
+        this.studyPlan = response.data.studyPlan
 
         if (!this.studyPlan) {
-          console.error("Study plan not found. Redirecting...");
-          this.$router.replace({ name: "ErrorPage" });
+          console.error('Study plan not found. Redirecting...')
+          this.$router.replace({ name: 'ErrorPage' })
         }
       } catch (error) {
-        console.error("Error fetching study plan:", error);
-        this.$router.replace({ name: "ErrorPage" });
+        console.error('Error fetching study plan:', error)
+        this.$router.replace({ name: 'ErrorPage' })
       }
     },
 
     // Handle resource updates
     async handleResourceUpdated() {
-      await this.fetchStudyPlan();
+      await this.fetchStudyPlan()
     },
 
     // Delete the study plan
     async deleteStudyPlan(planTitle) {
-      if (confirm("Are you sure you want to delete this study plan?")) {
+      if (confirm('Are you sure you want to delete this study plan?')) {
         try {
-          const response = await apiClient.delete(`/StudyPlan/DeleteStudyPlan`, {
-            params: { studyPlanTitle: planTitle },
-          });
+          const response = await apiClient.delete(
+            `/StudyPlan/DeleteStudyPlan`,
+            {
+              params: { studyPlanTitle: planTitle },
+            }
+          )
 
           if (response.status === 200) {
-            alert("Study plan deleted successfully.");
-            this.$router.replace({ name: "UserDashboard" }); // Redirect after deletion
+            alert('Study plan deleted successfully.')
+            this.$router.replace({ name: 'UserDashboard' }) // Redirect after deletion
           } else {
-            throw new Error("Failed to delete the study plan.");
+            throw new Error('Failed to delete the study plan.')
           }
         } catch (error) {
-          console.error("Error deleting study plan:", error);
-          alert("Failed to delete the study plan.");
+          console.error('Error deleting study plan:', error)
+          alert('Failed to delete the study plan.')
         }
       }
     },
     goToPlanDetail(planId) {
       this.$router.push({
-        name: "StudyPlanDetail",
+        name: 'StudyPlanDetail',
         params: { studyPlanId: planId, userId: this.userId },
-      });
+      })
     },
   },
   mounted() {
-    this.fetchDataForUser();
-    this.fetchStudyPlan();
+    this.fetchDataForUser()
+    this.fetchStudyPlan()
   },
-};
+}
 </script>
 
 <style scoped>
 .study-plan-container {
-  background-color: #F4EEE1;
+  background-color: #f4eee1;
   box-shadow: 0px 2px 10px 3px rgba(0, 0, 0, 0.1) !important;
   /* position: absolute;
     top: 8vh;

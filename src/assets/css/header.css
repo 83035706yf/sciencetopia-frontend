@@ -64,7 +64,7 @@
   height: 40px;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-  background-color: #FAF6F0;
+  background-color: #faf6f0;
 }
 
 .search-form {
@@ -129,11 +129,11 @@
   opacity: 0;
 }
 
-input:checked+.slider .sun-icon {
+input:checked + .slider .sun-icon {
   opacity: 0;
 }
 
-input:checked+.slider .moon-icon {
+input:checked + .slider .moon-icon {
   opacity: 1;
 }
 

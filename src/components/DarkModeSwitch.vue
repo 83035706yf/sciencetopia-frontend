@@ -1,12 +1,28 @@
 <template>
-  <label for="themeToggle" class="themeToggle st-sunMoonThemeToggleBtn" type="checkbox">
+  <label
+    for="themeToggle"
+    class="themeToggle st-sunMoonThemeToggleBtn"
+    type="checkbox"
+  >
     <input type="checkbox" id="themeToggle" class="themeToggleInput" />
-    <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" stroke="none">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      stroke="none"
+    >
       <mask id="moon-mask">
         <rect x="0" y="0" width="20" height="20" fill="white"></rect>
         <circle cx="11" cy="3" r="8" fill="black"></circle>
       </mask>
-      <circle class="sunMoon" cx="10" cy="10" r="8" mask="url(#moon-mask)"></circle>
+      <circle
+        class="sunMoon"
+        cx="10"
+        cy="10"
+        r="8"
+        mask="url(#moon-mask)"
+      ></circle>
       <g>
         <circle class="sunRay sunRay1" cx="18" cy="10" r="1.5"></circle>
         <circle class="sunRay sunRay2" cx="14" cy="16.928" r="1.5"></circle>
@@ -21,8 +37,8 @@
 
 <script>
 export default {
-  name: "ThemeToggle",
-};
+  name: 'ThemeToggle',
+}
 </script>
 
 <style scoped>
@@ -67,7 +83,7 @@ export default {
   transform: scale(0);
 }
 
-.st-sunMoonThemeToggleBtn svg mask>circle {
+.st-sunMoonThemeToggleBtn svg mask > circle {
   transition: transform 0.64s cubic-bezier(0.41, 0.64, 0.32, 1.575);
   transform: translate(0px, 0px);
 }
@@ -92,19 +108,19 @@ export default {
   animation-delay: 0.29s !important;
 }
 
-.st-sunMoonThemeToggleBtn .themeToggleInput:checked+svg {
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg {
   transform: rotate(90deg);
 }
 
-.st-sunMoonThemeToggleBtn .themeToggleInput:checked+svg mask>circle {
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg mask > circle {
   transform: translate(16px, -3px);
 }
 
-.st-sunMoonThemeToggleBtn .themeToggleInput:checked+svg .sunMoon {
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg .sunMoon {
   transform: scale(0.55);
 }
 
-.st-sunMoonThemeToggleBtn .themeToggleInput:checked+svg .sunRay {
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg .sunRay {
   animation: showRay1832 0.4s ease 0s 1 forwards;
 }
 

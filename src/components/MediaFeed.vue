@@ -15,19 +15,19 @@
 
 <script>
 export default {
-  name: "MediaFeed",
+  name: 'MediaFeed',
   props: {
     cover: String,
     title: String,
     author: String,
-    date: Date
+    date: Date,
   },
   methods: {
     formatDate(date) {
-      return new Date(date).toLocaleDateString();
-    }
-  }
-};
+      return new Date(date).toLocaleDateString()
+    },
+  },
+}
 </script>
 
 <style scoped>

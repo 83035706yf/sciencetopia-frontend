@@ -5,7 +5,7 @@
   border-color: gray;
 }
 
-.search-tools input[type="text"] {
+.search-tools input[type='text'] {
   flex-grow: 1;
   margin-right: 10px;
 }

@@ -3,24 +3,45 @@
     <HeaderBar @showStudyPlanDialog="handleDialogClick" />
 
     <transition name="header-transition">
-      <v-app-bar app fixed dense elevated v-if="scrolledPastHeader" class="thin-app-bar">
+      <v-app-bar
+        app
+        fixed
+        dense
+        elevated
+        v-if="scrolledPastHeader"
+        class="thin-app-bar"
+      >
         <ThinHeaderBar @showStudyPlanDialog="handleDialogClick" />
       </v-app-bar>
     </transition>
 
-    <v-dialog v-model="dialog" persistent :max-width="$vuetify.display.smAndDown ? '100%' : '800px'"
-      :fullscreen="$vuetify.display.smAndDown">
+    <v-dialog
+      v-model="dialog"
+      persistent
+      :max-width="$vuetify.display.smAndDown ? '100%' : '800px'"
+      :fullscreen="$vuetify.display.smAndDown"
+    >
       <v-card>
         <v-card-title>{{ $t('header.studyplan') }}</v-card-title>
         <v-card-text>
-          <LearningPlanner ref="learningPlanner" @update:showStudyPlan="handleShowStudyPlanUpdate" />
+          <LearningPlanner
+            ref="learningPlanner"
+            @update:showStudyPlan="handleShowStudyPlanUpdate"
+          />
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red darken-1" text v-if="showStudyPlan" @click="triggerSavePlan">
+          <v-btn
+            color="red darken-1"
+            text
+            v-if="showStudyPlan"
+            @click="triggerSavePlan"
+          >
             {{ $t('save') }}{{ $t('wordbreaker') }}{{ $t('header.studyplan') }}
           </v-btn>
-          <v-btn color="blue darken-1" text @click="closeDialog">{{ $t('close') }}</v-btn>
+          <v-btn color="blue darken-1" text @click="closeDialog">{{
+            $t('close')
+          }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -30,7 +51,10 @@
     </main>
 
     <div class="footer-container">
-      <transition name="footer-transition" :style="{ 'height': $vuetify.display.smAndDown ? '8vh' : '6vh' }">
+      <transition
+        name="footer-transition"
+        :style="{ height: $vuetify.display.smAndDown ? '8vh' : '6vh' }"
+      >
         <v-footer app v-if="!showFinalFooter" class="dynamic-footer">
           <FooterBar />
         </v-footer>
@@ -44,12 +68,12 @@
 </template>
 
 <script>
-import LearningPlanner from './LearningPlanner.vue';
-import HeaderBar from './HeaderBar.vue';
-import ThinHeaderBar from './ThinHeaderBar.vue';
-import FooterBar from './FooterBar.vue';
-import DefaultFooterBar from './DefaultFooterBar.vue';
-import ScrollToTopButton from './ScrollToTopButton.vue';
+import LearningPlanner from './LearningPlanner.vue'
+import HeaderBar from './HeaderBar.vue'
+import ThinHeaderBar from './ThinHeaderBar.vue'
+import FooterBar from './FooterBar.vue'
+import DefaultFooterBar from './DefaultFooterBar.vue'
+import ScrollToTopButton from './ScrollToTopButton.vue'
 
 export default {
   name: 'LayOut',
@@ -59,7 +83,7 @@ export default {
     ThinHeaderBar,
     FooterBar,
     DefaultFooterBar,
-    ScrollToTopButton
+    ScrollToTopButton,
   },
   data() {
     return {
@@ -68,45 +92,46 @@ export default {
       showStudyPlan: false,
       scrolledPastHeader: false,
       showFinalFooter: false,
-    };
+    }
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('scroll', this.handleScroll)
   },
   beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
     handleScroll() {
-      const headerHeight = document.querySelector('.large-header')?.offsetHeight || 0;
-      this.scrolledPastHeader = window.scrollY > headerHeight;
-      const bottomThreshold = window.scrollY >= 60;
-      this.showFinalFooter = bottomThreshold;
+      const headerHeight =
+        document.querySelector('.large-header')?.offsetHeight || 0
+      this.scrolledPastHeader = window.scrollY > headerHeight
+      const bottomThreshold = window.scrollY >= 60
+      this.showFinalFooter = bottomThreshold
     },
     triggerSavePlan() {
-      this.$refs.learningPlanner.savePlan();
+      this.$refs.learningPlanner.savePlan()
     },
     closeDialog() {
-      this.showStudyPlan = false;
-      this.dialog = false;
+      this.showStudyPlan = false
+      this.dialog = false
     },
     handleShowStudyPlanUpdate(value) {
-      this.showStudyPlan = value;
+      this.showStudyPlan = value
     },
     handleDialogClick() {
-      this.dialog = true;
-      console.log('Dialog clicked');
+      this.dialog = true
+      console.log('Dialog clicked')
     },
   },
 }
 </script>
 
 <style scoped>
-@import "../assets/css/layout.css";
-@import "../assets/css/header.css";
-@import "../assets/css/switches.css";
-@import "../assets/css/footer.css";
-@import "../assets/css/form.css";
+@import '../assets/css/layout.css';
+@import '../assets/css/header.css';
+@import '../assets/css/switches.css';
+@import '../assets/css/footer.css';
+@import '../assets/css/form.css';
 
 .layout-wrapper {
   display: flex;
@@ -129,7 +154,7 @@ export default {
 }
 
 .header-container {
-  background-color: #E8DABD;
+  background-color: #e8dabd;
   top: 0;
   left: 0;
   right: 0;
@@ -151,7 +176,7 @@ export default {
 .planner-card {
   max-width: 1600px;
   padding: 20px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, .3);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
 .header-button {

@@ -7,19 +7,34 @@
         </v-app-bar>
       </transition>
 
-      <v-dialog v-model="dialog" persistent :fullscreen="$vuetify.display.smAndDown"
-        :max-width="$vuetify.display.smAndDown ? '100%' : '800px'">
+      <v-dialog
+        v-model="dialog"
+        persistent
+        :fullscreen="$vuetify.display.smAndDown"
+        :max-width="$vuetify.display.smAndDown ? '100%' : '800px'"
+      >
         <v-card>
           <v-card-title>{{ $t('header.studyplan') }}</v-card-title>
           <v-card-text>
-            <LearningPlanner ref="learningPlanner" @update:showStudyPlan="handleShowStudyPlanUpdate" />
+            <LearningPlanner
+              ref="learningPlanner"
+              @update:showStudyPlan="handleShowStudyPlanUpdate"
+            />
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="red darken-1" text v-if="showStudyPlan" @click="triggerSavePlan">
-              {{ $t('save') }}{{ $t('wordbreaker') }}{{ $t('header.studyplan') }}
+            <v-btn
+              color="red darken-1"
+              text
+              v-if="showStudyPlan"
+              @click="triggerSavePlan"
+            >
+              {{ $t('save') }}{{ $t('wordbreaker')
+              }}{{ $t('header.studyplan') }}
             </v-btn>
-            <v-btn color="blue darken-1" text @click="closeDialog">{{ $t('close') }}</v-btn>
+            <v-btn color="blue darken-1" text @click="closeDialog">{{
+              $t('close')
+            }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -44,10 +59,10 @@
 </template>
 
 <script>
-import LearningPlanner from './LearningPlanner.vue';
-import ThinHeaderBar from './ThinHeaderBar.vue';
-import FooterBar from './FooterBar.vue';
-import DefaultFooterBar from './DefaultFooterBar.vue';
+import LearningPlanner from './LearningPlanner.vue'
+import ThinHeaderBar from './ThinHeaderBar.vue'
+import FooterBar from './FooterBar.vue'
+import DefaultFooterBar from './DefaultFooterBar.vue'
 
 export default {
   name: 'ThinLayOut',
@@ -55,7 +70,7 @@ export default {
     LearningPlanner,
     ThinHeaderBar,
     FooterBar,
-    DefaultFooterBar
+    DefaultFooterBar,
   },
   data() {
     return {
@@ -63,44 +78,44 @@ export default {
       dialog: false,
       showStudyPlan: false,
       showFinalFooter: false,
-    };
+    }
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('scroll', this.handleScroll)
   },
   beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
     triggerSavePlan() {
-      this.$refs.learningPlanner.savePlan();
+      this.$refs.learningPlanner.savePlan()
     },
     closeDialog() {
-      this.showStudyPlan = false;
-      this.dialog = false;
+      this.showStudyPlan = false
+      this.dialog = false
     },
     handleShowStudyPlanUpdate(value) {
-      this.showStudyPlan = value;
-      console.log('showStudyPlan:', this.showStudyPlan);
+      this.showStudyPlan = value
+      console.log('showStudyPlan:', this.showStudyPlan)
     },
     handleDialogClick() {
-      this.dialog = true;
-      console.log('Dialog clicked');
+      this.dialog = true
+      console.log('Dialog clicked')
     },
     handleScroll() {
-      const bottomThreshold = window.scrollY >= 60;
-      this.showFinalFooter = bottomThreshold;
+      const bottomThreshold = window.scrollY >= 60
+      this.showFinalFooter = bottomThreshold
     },
   },
 }
 </script>
 
 <style scoped>
-@import "../assets/css/layout.css";
-@import "../assets/css/header.css";
-@import "../assets/css/switches.css";
-@import "../assets/css/footer.css";
-@import "../assets/css/form.css";
+@import '../assets/css/layout.css';
+@import '../assets/css/header.css';
+@import '../assets/css/switches.css';
+@import '../assets/css/footer.css';
+@import '../assets/css/form.css';
 
 .layout-wrapper {
   display: flex;
@@ -132,7 +147,7 @@ export default {
 }
 
 .header-container {
-  background-color: #E8DABD;
+  background-color: #e8dabd;
   top: 0;
   left: 0;
   right: 0;
@@ -154,7 +169,7 @@ export default {
 .planner-card {
   max-width: 1600px;
   padding: 20px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, .3);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
 .header-button {

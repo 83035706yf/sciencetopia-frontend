@@ -4,58 +4,96 @@
       <!-- Logo -->
       <div class="logo-section">
         <v-btn variant="plain" class="logo-btn" @click.prevent="backToHomePage">
-          <img :src="isSmallScreen ? smallLogo : largeLogo" alt="Logo" class="responsive-logo" />
+          <img
+            :src="isSmallScreen ? smallLogo : largeLogo"
+            alt="Logo"
+            class="responsive-logo"
+          />
         </v-btn>
       </div>
 
       <!-- Search -->
       <div class="search-section">
-        <v-text-field v-model="searchQuery" :placeholder="$t('searchbar.iwanttolearn')" variant="plain"
-          density="comfortable" hide-details clearable @keydown.enter.prevent="globalSearch"
-          append-inner-icon="mdi-magnify" @click:append-inner="globalSearch" class="search-input" />
+        <v-text-field
+          v-model="searchQuery"
+          :placeholder="$t('searchbar.iwanttolearn')"
+          variant="plain"
+          density="comfortable"
+          hide-details
+          clearable
+          @keydown.enter.prevent="globalSearch"
+          append-inner-icon="mdi-magnify"
+          @click:append-inner="globalSearch"
+          class="search-input"
+        />
       </div>
 
       <!-- Icons (nav + actions) -->
       <div class="icons-section">
         <!-- 趋势 / Trend -->
-        <ReusableIconButton icon="mdi-rss" :label="$t('header.trend')" :iconSize="iconSize" @click="scrollToSection" />
+        <ReusableIconButton
+          icon="mdi-rss"
+          :label="$t('header.trend')"
+          :iconSize="iconSize"
+          @click="scrollToSection"
+        />
 
         <!-- 学习小组 / StudyGroup -->
-        <ReusableIconButton icon="mdi-account-group" :label="$t('header.studygroup')" :iconSize="iconSize"
-          @click="RouteToStudyGroup" />
+        <ReusableIconButton
+          icon="mdi-account-group"
+          :label="$t('header.studygroup')"
+          :iconSize="iconSize"
+          @click="RouteToStudyGroup"
+        />
 
         <!-- 学习计划 / StudyPlan -->
-        <ReusableIconButton icon="mdi-book-open-variant" :label="$t('header.studyplan')" :iconSize="iconSize"
-          @click="handleStudyPlan" />
+        <ReusableIconButton
+          icon="mdi-book-open-variant"
+          :label="$t('header.studyplan')"
+          :iconSize="iconSize"
+          @click="handleStudyPlan"
+        />
 
         <!-- 明/暗模式切换 -->
-        <ReusableIconButton :icon="themeIcon" :label="themeLabel" :iconSize="iconSize" @click="toggleTheme" />
+        <ReusableIconButton
+          :icon="themeIcon"
+          :label="themeLabel"
+          :iconSize="iconSize"
+          @click="toggleTheme"
+        />
 
         <!-- 登录 / Login (handled by LogInPartial) -->
         <LogInPartial :is-small-screen="isSmallScreen" :icon-size="iconSize" />
 
         <!-- 消息 / Messages -->
         <MessageAlert :is-small-screen="isSmallScreen" :icon-size="iconSize" />
-
       </div>
 
       <!-- 语言切换栏 -->
       <div class="language-section">
-        <v-select v-model="$i18n.locale" :items="languageOptions" density="comfortable" hide-details variant="plain"
-          class="language-select" @update:model-value="handleLanguageChange" :style="computeLangWidthStyle" />
+        <v-select
+          v-model="$i18n.locale"
+          :items="languageOptions"
+          density="comfortable"
+          hide-details
+          variant="plain"
+          class="language-select"
+          @update:model-value="handleLanguageChange"
+          :style="computeLangWidthStyle"
+        />
       </div>
     </v-container>
   </div>
 </template>
 
 <script>
-import { debounce } from 'lodash-es';
-import MessageAlert from './MessageAlert.vue';
-import LogInPartial from './LogInPartial.vue';
-import ReusableIconButton from './ReusableIconButton.vue';
+import { debounce } from 'lodash-es'
+import MessageAlert from './MessageAlert.vue'
+import LogInPartial from './LogInPartial.vue'
+import ReusableIconButton from './ReusableIconButton.vue'
 
 export default {
-  name: "HeaderBar",
+  name: 'HeaderBar',
   components: {
     MessageAlert,
     LogInPartial,
@@ -73,119 +111,119 @@ export default {
         { title: 'Chinese', value: 'zh' },
       ],
       langTextWidth: 0,
-    };
+    }
   },
   computed: {
     isAuthenticated() {
-      return this.$store.state.isAuthenticated;
+      return this.$store.state.isAuthenticated
     },
     iconSize() {
       // 大屏用 32，小屏用 24
-      return this.isSmallScreen ? 24 : 32;
+      return this.isSmallScreen ? 24 : 32
     },
     themeIcon() {
-      return this.isDarkThemeEnabled ? 'mdi-weather-night' : 'mdi-weather-sunny';
+      return this.isDarkThemeEnabled ? 'mdi-weather-night' : 'mdi-weather-sunny'
     },
     themeLabel() {
       return this.isDarkThemeEnabled
         ? this.$t('header.darkmode')
-        : this.$t('header.lightmode');
+        : this.$t('header.lightmode')
     },
     computeLangWidthStyle() {
-      const baseWidth = this.langTextWidth || 30;
-      const minW = 1.1 * baseWidth;
-      const maxW = 2 * baseWidth;
+      const baseWidth = this.langTextWidth || 30
+      const minW = 1.1 * baseWidth
+      const maxW = 2 * baseWidth
       return {
         minWidth: `${minW}px`,
         maxWidth: `${maxW}px`,
-      };
+      }
     },
   },
   methods: {
     handleResize() {
-      this.isSmallScreen = window.innerWidth <= 1200;
+      this.isSmallScreen = window.innerWidth <= 1200
     },
     toggleTheme() {
-      this.isDarkThemeEnabled = !this.isDarkThemeEnabled;
+      this.isDarkThemeEnabled = !this.isDarkThemeEnabled
       // Vuetify 主题切换
-      this.$vuetify.theme.dark = this.isDarkThemeEnabled;
+      this.$vuetify.theme.dark = this.isDarkThemeEnabled
       // 可选：持久化
-      localStorage.setItem('isDarkThemeEnabled', this.isDarkThemeEnabled);
+      localStorage.setItem('isDarkThemeEnabled', this.isDarkThemeEnabled)
     },
     backToHomePage() {
-      this.$router.push({ name: 'HomePage' });
+      this.$router.push({ name: 'HomePage' })
     },
     scrollToSection() {
-      const section = document.getElementById('feed-section');
+      const section = document.getElementById('feed-section')
       if (section) {
-        const yOffset = -60;
-        const y = section.getBoundingClientRect().top + window.scrollY + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
+        const yOffset = -60
+        const y = section.getBoundingClientRect().top + window.scrollY + yOffset
+        window.scrollTo({ top: y, behavior: 'smooth' })
       }
     },
     async globalSearch() {
-      const query = this.searchQuery.trim();
+      const query = this.searchQuery.trim()
       if (!query) {
-        console.log('Search query is empty!');
-        return;
+        console.log('Search query is empty!')
+        return
       }
       const path = this.$router.resolve({
         name: 'searchList',
         query: { q: query },
-      }).href;
-      window.open(path, '_blank');
+      }).href
+      window.open(path, '_blank')
     },
     RouteToStudyGroup() {
-      this.$router.push({ name: 'studyGroupList' });
+      this.$router.push({ name: 'studyGroupList' })
     },
     handleStudyPlan() {
       if (!this.isAuthenticated) {
-        alert("请先登录再查看学习计划");
+        alert('请先登录再查看学习计划')
       } else {
-        this.$emit('showStudyPlanDialog', true);
+        this.$emit('showStudyPlanDialog', true)
       }
     },
     handleLanguageChange(val) {
-      this.$i18n.locale = val;
-      this.$vuetify.locale.current = val;
+      this.$i18n.locale = val
+      this.$vuetify.locale.current = val
       this.$nextTick(() => {
-        this.measureLangTextWidth();
-      });
+        this.measureLangTextWidth()
+      })
     },
     measureLangTextWidth() {
-      const tempSpan = document.createElement('span');
+      const tempSpan = document.createElement('span')
       const selectedItem = this.languageOptions.find(
         (item) => item.value === this.$i18n.locale
-      );
-      const text = selectedItem ? selectedItem.title : '';
-      tempSpan.innerText = text;
-      tempSpan.style.position = 'absolute';
-      tempSpan.style.visibility = 'hidden';
-      tempSpan.style.whiteSpace = 'nowrap';
-      tempSpan.style.fontSize = '14px';
-      document.body.appendChild(tempSpan);
-      this.langTextWidth = tempSpan.offsetWidth;
-      document.body.removeChild(tempSpan);
+      )
+      const text = selectedItem ? selectedItem.title : ''
+      tempSpan.innerText = text
+      tempSpan.style.position = 'absolute'
+      tempSpan.style.visibility = 'hidden'
+      tempSpan.style.whiteSpace = 'nowrap'
+      tempSpan.style.fontSize = '14px'
+      document.body.appendChild(tempSpan)
+      this.langTextWidth = tempSpan.offsetWidth
+      document.body.removeChild(tempSpan)
     },
   },
   created() {
-    this.debouncedResize = debounce(this.handleResize, 100);
-    this.$root.isSmallScreen = this.isSmallScreen;
-    this.handleResize();
+    this.debouncedResize = debounce(this.handleResize, 100)
+    this.$root.isSmallScreen = this.isSmallScreen
+    this.handleResize()
   },
   mounted() {
-    window.addEventListener('resize', this.debouncedResize);
-    this.measureLangTextWidth();
-    const storedTheme = localStorage.getItem('isDarkThemeEnabled');
+    window.addEventListener('resize', this.debouncedResize)
+    this.measureLangTextWidth()
+    const storedTheme = localStorage.getItem('isDarkThemeEnabled')
     if (storedTheme !== null) {
-      this.isDarkThemeEnabled = storedTheme === 'true';
-      this.$vuetify.theme.dark = this.isDarkThemeEnabled;
+      this.isDarkThemeEnabled = storedTheme === 'true'
+      this.$vuetify.theme.dark = this.isDarkThemeEnabled
     }
   },
   beforeUnmount() {
-    window.removeEventListener('resize', this.debouncedResize);
+    window.removeEventListener('resize', this.debouncedResize)
   },
-};
+}
 </script>
 
 <style scoped>
@@ -206,11 +244,10 @@ export default {
   /* Fix overflow issues */
 }
 
-
 .header-grid {
   display: grid;
   grid-template-columns: auto 1fr auto auto;
-  grid-template-areas: "logo search icons language";
+  grid-template-areas: 'logo search icons language';
   align-items: center;
   column-gap: 24px;
   padding: 0 24px;
@@ -325,8 +362,8 @@ export default {
   .header-grid {
     grid-template-columns: auto 1fr auto;
     grid-template-areas:
-      "logo icons language"
-      "search search search";
+      'logo icons language'
+      'search search search';
     row-gap: 12px;
   }
 
@@ -354,10 +391,10 @@ export default {
   .header-grid {
     grid-template-columns: auto;
     grid-template-areas:
-      "logo"
-      "search"
-      "icons"
-      "language";
+      'logo'
+      'search'
+      'icons'
+      'language';
     row-gap: 8px;
   }
 

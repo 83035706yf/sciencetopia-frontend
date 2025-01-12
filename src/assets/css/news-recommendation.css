@@ -1,45 +1,45 @@
 .break-nav {
-    display: flex;
-    justify-content: space-between;
-    padding: 50px 0px;
+  display: flex;
+  justify-content: space-between;
+  padding: 50px 0px;
 }
 
 .break {
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    float: left;
-    gap: 10px;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  float: left;
+  gap: 10px;
+}
 
 .news-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: left;
-    float: right;
-    margin-right: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+  float: right;
+  margin-right: 50px;
 }
 
 .news-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
 .news-grid-item {
-    /* Style your grid items as needed */
-    position: relative;
-    background-color: #ddd; /* for example */
-    padding: 20px; /* for example */
-    padding-bottom: 56.25%;
-    width: 100%;
+  /* Style your grid items as needed */
+  position: relative;
+  background-color: #ddd; /* for example */
+  padding: 20px; /* for example */
+  padding-bottom: 56.25%;
+  width: 100%;
 }
 
 .grid-item-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Other styles */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Other styles */
 }

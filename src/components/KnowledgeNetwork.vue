@@ -1,14 +1,22 @@
 <template>
   <GlobalLoader />
-  <div ref="svgRef" id="cy" :class="{ 'fullscreen-mode': isFullScreen }"
-    :style="{ width: width + 'px', height: height + 'px' }">
+  <div
+    ref="svgRef"
+    id="cy"
+    :class="{ 'fullscreen-mode': isFullScreen }"
+    :style="{ width: width + 'px', height: height + 'px' }"
+  >
     <!-- Actions Container -->
     <div class="actions" :style="{ transform: `translateX(${offset}px)` }">
       <!-- Node Actions Box -->
       <div class="node-actions-box" v-if="selectedNodes.length > 0">
         <v-tooltip :text="$t('knowledgeGraph.adjacentnodes')" location="top">
           <template v-slot:activator="{ props }">
-            <button class="action-button" v-bind="props" @click="showAdjacentNodes">
+            <button
+              class="action-button"
+              v-bind="props"
+              @click="showAdjacentNodes"
+            >
               <i class="fas fa-circle-nodes action-icon"></i>
             </button>
           </template>
@@ -16,7 +24,11 @@
 
         <v-tooltip :text="$t('knowledgeGraph.frontnodes')" location="top">
           <template v-slot:activator="{ props }">
-            <button class="action-button" v-bind="props" @click="showPrerequisiteNodes">
+            <button
+              class="action-button"
+              v-bind="props"
+              @click="showPrerequisiteNodes"
+            >
               <i class="fas fa-share-nodes action-icon"></i>
             </button>
           </template>
@@ -24,17 +36,38 @@
 
         <v-tooltip :text="$t('knowledgeGraph.backnodes')" location="top">
           <template v-slot:activator="{ props }">
-            <button class="action-button" v-bind="props" @click="showSubsequentNodes">
+            <button
+              class="action-button"
+              v-bind="props"
+              @click="showSubsequentNodes"
+            >
               <i class="fas fa-share-nodes action-icon"></i>
             </button>
           </template>
         </v-tooltip>
 
-        <v-tooltip v-if="!isEditing"
-          :text="isFavorited ? $t('knowledgeGraph.removenode') : $t('knowledgeGraph.savenode')" location="top">
+        <v-tooltip
+          v-if="!isEditing"
+          :text="
+            isFavorited
+              ? $t('knowledgeGraph.removenode')
+              : $t('knowledgeGraph.savenode')
+          "
+          location="top"
+        >
           <template v-slot:activator="{ props }">
-            <button class="action-button" v-bind="props" @click="toggleFavorites">
-              <i :class="isFavorited ? 'fas fa-heart-circle-minus' : 'fas fa-heart-circle-plus'"></i>
+            <button
+              class="action-button"
+              v-bind="props"
+              @click="toggleFavorites"
+            >
+              <i
+                :class="
+                  isFavorited
+                    ? 'fas fa-heart-circle-minus'
+                    : 'fas fa-heart-circle-plus'
+                "
+              ></i>
             </button>
           </template>
         </v-tooltip>
@@ -44,7 +77,11 @@
       <div class="common-actions-box">
         <v-tooltip :text="$t('knowledgeGraph.saved')" location="top">
           <template v-slot:activator="{ props }">
-            <button class="action-button" v-bind="props" @click="showFavoritedNodes">
+            <button
+              class="action-button"
+              v-bind="props"
+              @click="showFavoritedNodes"
+            >
               <i class="fas fa-star action-icon"></i>
             </button>
           </template>
@@ -60,7 +97,12 @@
 
         <v-tooltip :text="$t('edit')" location="top">
           <template v-slot:activator="{ props }">
-            <button class="action-button" v-bind="props" @click="startEditing" v-if="!isEditing">
+            <button
+              class="action-button"
+              v-bind="props"
+              @click="startEditing"
+              v-if="!isEditing"
+            >
               <i class="fas fa-pen action-icon"></i>
             </button>
           </template>
@@ -83,20 +125,44 @@
       <!-- Bottom Right Actions -->
       <div class="bottom-right-actions">
         <div class="map-actions">
-          <div @mouseover="showInput(), overContainer = true" @mouseleave="overContainer = false; hideInput()"
-            class="action-container">
+          <div
+            @mouseover="(showInput(), (overContainer = true))"
+            @mouseleave="() => { overContainer = false; hideInput(); }"
+
+            class="action-container"
+          >
             <button @click="handleSearch" class="locator-btn">
               <svg-icon type="mdi" :path="path"></svg-icon>
             </button>
-            <input v-if="inputVisible" v-model="searchQuery" type="text" :placeholder="$t('knowledgeGraph.locateto')"
-              @input="handleInput" ref="searchInput" class="search-input" />
+            <input
+              v-if="inputVisible"
+              v-model="searchQuery"
+              type="text"
+              :placeholder="$t('knowledgeGraph.locateto')"
+              @input="handleInput"
+              ref="searchInput"
+              class="search-input"
+            />
           </div>
         </div>
 
-        <v-tooltip :text="isFullScreen ? $t('exitfullscreen') : $t('knowledgeGraph.fullscreen')" location="top">
+        <v-tooltip
+          :text="
+            isFullScreen
+              ? $t('exitfullscreen')
+              : $t('knowledgeGraph.fullscreen')
+          "
+          location="top"
+        >
           <template v-slot:activator="{ props }">
-            <button class="fullscreen-button" v-bind="props" @click="toggleFullScreen">
-              <i :class="isFullScreen ? 'fas fa-compress' : 'fas fa-expand'"></i>
+            <button
+              class="fullscreen-button"
+              v-bind="props"
+              @click="toggleFullScreen"
+            >
+              <i
+                :class="isFullScreen ? 'fas fa-compress' : 'fas fa-expand'"
+              ></i>
             </button>
           </template>
         </v-tooltip>
@@ -104,21 +170,28 @@
     </div>
 
     <slot v-if="isFullScreen"></slot>
-    <EditGuideDialog v-model="dialogVisible" @confirmed="confirmGuide"></EditGuideDialog>
-    <ContextMenu :visible="contextMenuState.visible" :position="contextMenuState.position"
-      @update:visible="contextMenuState.visible = $event" @close="hideContextMenu" />
+    <EditGuideDialog
+      v-model="dialogVisible"
+      @confirmed="confirmGuide"
+    ></EditGuideDialog>
+    <ContextMenu
+      :visible="contextMenuState.visible"
+      :position="contextMenuState.position"
+      @update:visible="contextMenuState.visible = $event"
+      @close="hideContextMenu"
+    />
   </div>
 </template>
 
 <script>
-import useKnowledgeGraph from './useKnowledgeGraph';
-import EditGuideDialog from './EditGuideDialog.vue';
-import ContextMenu from './ContextMenu.vue';
-import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
-import { apiClient } from '@/api';
-import { useStore } from 'vuex';
-import SvgIcon from '@jamescoyle/vue-icon';
-import { mdiMapSearch } from '@mdi/js';
+import useKnowledgeGraph from './useKnowledgeGraph'
+import EditGuideDialog from './EditGuideDialog.vue'
+import ContextMenu from './ContextMenu.vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { apiClient } from '@/api'
+import { useStore } from 'vuex'
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiMapSearch } from '@mdi/js'
 
 export default {
   name: 'KnowledgeNetwork',
@@ -130,32 +203,32 @@ export default {
   },
 
   setup() {
-    const store = useStore();
-    const searchQuery = ref('');
-    const inputVisible = ref(false);
-    const inputContent = ref(false);
-    const overContainer = ref(false);
-    const path = ref(mdiMapSearch);
+    const store = useStore()
+    const searchQuery = ref('')
+    const inputVisible = ref(false)
+    const inputContent = ref(false)
+    const overContainer = ref(false)
+    const path = ref(mdiMapSearch)
 
-    const dialogVisible = ref(false);
+    const dialogVisible = ref(false)
 
     // Scroll-related data
-    const offset = ref(0); // Tracks the movement of the actions container
+    const offset = ref(0) // Tracks the movement of the actions container
 
     // Update offset based on scroll
     const handleScroll = () => {
-      offset.value = window.scrollY * 0.5; // Adjust the multiplier for speed
-    };
+      offset.value = window.scrollY * 0.5 // Adjust the multiplier for speed
+    }
 
     // Add scroll event listener
     onMounted(() => {
-      window.addEventListener('scroll', handleScroll);
-    });
+      window.addEventListener('scroll', handleScroll)
+    })
 
     // Remove scroll event listener
     onBeforeUnmount(() => {
-      window.removeEventListener('scroll', handleScroll);
-    });
+      window.removeEventListener('scroll', handleScroll)
+    })
 
     const {
       svgRef,
@@ -174,86 +247,86 @@ export default {
       contextMenuState,
       hideContextMenu,
       showFavoritedNodes,
-    } = useKnowledgeGraph('/KnowledgeGraph/GetNodes');
+    } = useKnowledgeGraph('/KnowledgeGraph/GetNodes')
 
-    const isFavorited = ref(false);
+    const isFavorited = ref(false)
 
     const toggleFavorites = async () => {
       try {
         // Assuming the first node in selectedNodes is the target
-        const nodeId = selectedNodes.value[0].id;
+        const nodeId = selectedNodes.value[0].id
         const response = await apiClient.post(
           `/KnowledgeGraph/Favorites/${nodeId}`
-        );
+        )
 
         if (response.data.success) {
           // Update isFavorited based on the toggled status from the response
-          isFavorited.value = response.data.favorited;
+          isFavorited.value = response.data.favorited
 
           // Show different alert messages based on the new favorite status
           if (isFavorited.value) {
-            alert('Node added to favorites successfully!');
+            alert('Node added to favorites successfully!')
           } else {
-            alert('Node removed from favorites successfully!');
+            alert('Node removed from favorites successfully!')
           }
         } else {
-          alert('Failed to toggle favorite status.');
+          alert('Failed to toggle favorite status.')
         }
       } catch (error) {
-        console.error('Error toggling favorite status:', error);
+        console.error('Error toggling favorite status:', error)
       }
-    };
+    }
 
     // Fetch favorite status when a node is selected
     watch(selectedNodes, async (newVal) => {
       if (newVal && newVal.length > 0) {
         try {
-          const nodeId = newVal[0].id;
-          console.log(newVal[0].id);
+          const nodeId = newVal[0].id
+          console.log(newVal[0].id)
           const response = await apiClient.get(
             `/KnowledgeGraph/Favorites/Status/${nodeId}`
-          );
-          isFavorited.value = response.data.favorited;
-          console.log(isFavorited);
+          )
+          isFavorited.value = response.data.favorited
+          console.log(isFavorited)
         } catch (error) {
-          console.error('Error fetching favorite status:', error);
+          console.error('Error fetching favorite status:', error)
         }
       }
-    });
+    })
 
     const handleSearch = async () => {
-      const foundNodeId = await searchNode(searchQuery.value);
+      const foundNodeId = await searchNode(searchQuery.value)
       if (foundNodeId) {
         // `svgRef.value` should be the SVG element
-        highlightAndCenterNode(foundNodeId, svgRef.value);
+        highlightAndCenterNode(foundNodeId, svgRef.value)
       } else {
-        console.log('Node not found');
+        console.log('Node not found')
       }
-    };
+    }
 
     // Access Vuex state
-    const isEditing = computed(() => store.state.isEditing);
+    const isEditing = computed(() => store.state.isEditing)
 
     // Methods to interact with Vuex actions
     const toggleEditMode = () => {
-      store.dispatch('toggleEditMode');
-    };
+      store.dispatch('toggleEditMode')
+    }
 
     const startEditing = () => {
-      dialogVisible.value = true; // 用于控制对话框的显示
-    };
+      dialogVisible.value = true // 用于控制对话框的显示
+    }
 
     const confirmGuide = () => {
       // 用户确认指南后的逻辑
-      dialogVisible.value = false;
-      toggleEditMode();
+      dialogVisible.value = false
+      toggleEditMode()
       // isEditing.value = true;
-    };
+    }
 
     const submitEditing = () => {
-      toggleEditMode();
-      store.dispatch('toggleNodeCreationForm', false);
-    };
+      toggleEditMode()
+      store.dispatch('toggleNodeCreationForm', false)
+    }
 
     return {
       svgRef,
@@ -285,31 +358,31 @@ export default {
       toggleFullScreen,
       isFullScreen,
       offset,
-    };
+    }
   },
 
   methods: {
     showInput() {
-      this.inputVisible = true;
+      this.inputVisible = true
     },
     hideInput() {
       if (!this.overContainer && this.searchQuery.length === 0) {
-        this.inputVisible = false;
+        this.inputVisible = false
       }
     },
     handleInput() {
-      this.inputContent = this.searchQuery.length > 0;
+      this.inputContent = this.searchQuery.length > 0
       // 如果输入栏为空，并且鼠标不在按钮或输入栏上，隐藏输入栏
       if (
         this.searchQuery.length === 0 &&
         !this.overButton &&
         !this.overInput
       ) {
-        this.inputVisible = false;
+        this.inputVisible = false
       }
     },
   },
-};
+}
 </script>
 
 <style scoped>

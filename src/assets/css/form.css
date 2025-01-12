@@ -1,53 +1,53 @@
 /* Form */
 .form-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 10px auto;
-    background-color: #ffffff;
-    padding: 0px;
-    border-radius: 4px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .form-group {
-    margin-bottom: 10px;
-  }
-  
-  label {
-    display: block;
-    font-size: 16px;
-    color: #333333;
-    margin-bottom: 5px;
-  }
-  
-  input[type="text"],
-  input[type="email"],
-  input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    /* border: 1px solid black; */
-    border-radius: 4px;
-    color: #333333;
-  }
-  
-  button[type="submit"] {
-    display: block;
-    /* width: 100%; */
-    padding: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    border: none;
-    border-radius: 4px;
-    color: #333333;
-    cursor: pointer;
-    margin-top: 0px;
-  }
-  
-  button[type="submit"]:hover {
-    background-color: #d9c9a9;
-  }
+  width: 100%;
+  max-width: 400px;
+  margin: 10px auto;
+  background-color: #ffffff;
+  padding: 0px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-  button[type="word"]:hover {
-    color: #E00000;
-  }
+.form-group {
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  font-size: 16px;
+  color: #333333;
+  margin-bottom: 5px;
+}
+
+input[type='text'],
+input[type='email'],
+input[type='password'] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  /* border: 1px solid black; */
+  border-radius: 4px;
+  color: #333333;
+}
+
+button[type='submit'] {
+  display: block;
+  /* width: 100%; */
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  color: #333333;
+  cursor: pointer;
+  margin-top: 0px;
+}
+
+button[type='submit']:hover {
+  background-color: #d9c9a9;
+}
+
+button[type='word']:hover {
+  color: #e00000;
+}

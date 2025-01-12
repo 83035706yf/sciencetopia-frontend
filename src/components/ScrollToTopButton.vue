@@ -1,7 +1,11 @@
 <template>
   <!-- Scroll to Top Button -->
   <transition name="scroll-to-top">
-    <button v-if="showScrollToTop" class="scroll-to-top-wrapper" @click="scrollToTop">
+    <button
+      v-if="showScrollToTop"
+      class="scroll-to-top-wrapper"
+      @click="scrollToTop"
+    >
       <div class="scroll-to-top-arrow"></div>
       <div class="vertical-line"></div>
     </button>
@@ -13,30 +17,30 @@ export default {
   data() {
     return {
       showScrollToTop: false, // Whether the button should be displayed
-    };
+    }
   },
   methods: {
     scrollToTop() {
       window.scrollTo({
         top: 0,
         behavior: 'smooth', // Smooth scrolling
-      });
+      })
     },
     handleScroll() {
       if (window.scrollY > 400) {
-        this.showScrollToTop = true; // Show button
+        this.showScrollToTop = true // Show button
       } else if (this.showScrollToTop && !this.isLeaving) {
-        this.showScrollToTop = false; // Hide the button (keeps it in DOM until transition ends)
+        this.showScrollToTop = false // Hide the button (keeps it in DOM until transition ends)
       }
     },
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll); // Listen for scroll events
+    window.addEventListener('scroll', this.handleScroll) // Listen for scroll events
   },
   beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll); // Clean up event listener
+    window.removeEventListener('scroll', this.handleScroll) // Clean up event listener
   },
-};
+}
 </script>
 
 <style scoped>
@@ -46,8 +50,8 @@ export default {
   right: 30px;
   z-index: 1000;
   /* Ensure it's on top of other elements */
-  color: #304E75;
-  border: 2px solid #304E75;
+  color: #304e75;
+  border: 2px solid #304e75;
   box-shadow: none !important;
 
   &:hover {
@@ -104,21 +108,16 @@ export default {
 .scroll-to-top-arrow {
   width: 50px;
   height: 120px;
-  background-color: #EC0017;
+  background-color: #ec0017;
   /* Arrow background */
-  clip-path: polygon(0% 100%,
-      /* Bottom-left */
-      50% 30%,
-      /* Top-center (concave dip starts) */
-      100% 100%,
-      /* Bottom-right */
-      75% 90%,
-      /* Curve inward on the right */
-      50% 80%,
-      /* Middle of the bottom */
-      25% 90%
-      /* Curve inward on the left */
-    );
+  clip-path: polygon(
+    0% 100%,
+    /* Bottom-left */ 50% 30%,
+    /* Top-center (concave dip starts) */ 100% 100%,
+    /* Bottom-right */ 75% 90%,
+    /* Curve inward on the right */ 50% 80%,
+    /* Middle of the bottom */ 25% 90% /* Curve inward on the left */
+  );
   cursor: pointer;
   margin: 10px auto;
 }
@@ -128,7 +127,7 @@ export default {
   /* Line thickness */
   height: 60px;
   /* Line length */
-  background-color: #EC0017;
+  background-color: #ec0017;
   /* Line color */
   margin-top: -34px;
   margin-left: 22.8px;

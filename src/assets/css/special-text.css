@@ -1,55 +1,59 @@
 .dot-lattice-container {
-    background: radial-gradient(circle, #EC0017 30%, transparent 30%) !important;
-    /* Button background */
-    background-size: 5px 5px !important;
-    /* Button background size */
-    padding: 20px 10px !important;
-    /* Remove default padding */
-    max-width: 86px !important;
-  }
-  
-  .split-color-container {
-    background: linear-gradient(to bottom, transparent 50%, #C8001D 50%) !important;
-    /* Button background */
-    padding: 20px 0px 20px 20px !important;
-    /* Remove default padding */
-    line-height: normal !important;
-    /* Reset line height */
-    display: inline-flex;
-    /* Shrink-wrap to the content */
-    align-items: center;
-    /* Vertically center content */
-    justify-content: center;
-    /* Horizontally center content */
-    min-width: auto !important;
-    /* Prevent Vuetify default min-width */
-    height: auto !important;
-    /* Prevent fixed height */
-    border-radius: 0 !important;
-    /* Prevent border radius */
-    z-index: 10 !important;
-  }
-  
-  .split-color-text {
-    position: relative;
-    font-size: 60px;
-    font-weight: bold;
-    text-transform: uppercase;
-    background: linear-gradient(to bottom, black 50%, white 50%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    z-index: 10 !important;
-  }
-  
-  .feed-text {
-    font-size: 36px;
-    font-weight: bold;
-    text-transform: uppercase;
-  }
+  background: radial-gradient(circle, #ec0017 30%, transparent 30%) !important;
+  /* Button background */
+  background-size: 5px 5px !important;
+  /* Button background size */
+  padding: 20px 10px !important;
+  /* Remove default padding */
+  max-width: 86px !important;
+}
 
-  .plan-tab-text {
-    font-size: 24px;
-    font-weight: bold !important;
-    text-transform: uppercase;
-  }
+.split-color-container {
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    #c8001d 50%
+  ) !important;
+  /* Button background */
+  padding: 20px 0px 20px 20px !important;
+  /* Remove default padding */
+  line-height: normal !important;
+  /* Reset line height */
+  display: inline-flex;
+  /* Shrink-wrap to the content */
+  align-items: center;
+  /* Vertically center content */
+  justify-content: center;
+  /* Horizontally center content */
+  min-width: auto !important;
+  /* Prevent Vuetify default min-width */
+  height: auto !important;
+  /* Prevent fixed height */
+  border-radius: 0 !important;
+  /* Prevent border radius */
+  z-index: 10 !important;
+}
+
+.split-color-text {
+  position: relative;
+  font-size: 60px;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: linear-gradient(to bottom, black 50%, white 50%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  z-index: 10 !important;
+}
+
+.feed-text {
+  font-size: 36px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.plan-tab-text {
+  font-size: 24px;
+  font-weight: bold !important;
+  text-transform: uppercase;
+}

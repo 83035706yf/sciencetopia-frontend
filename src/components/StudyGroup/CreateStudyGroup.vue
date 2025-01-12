@@ -4,7 +4,12 @@
       <v-card-title class="headline">创建学习小组</v-card-title>
       <v-card-text>
         <v-form @submit.prevent="createGroup">
-          <input v-model="groupName" placeholder="帕鲁岛工人夜校" type="text" class="custom-input" />
+          <input
+            v-model="groupName"
+            placeholder="帕鲁岛工人夜校"
+            type="text"
+            class="custom-input"
+          />
           <!-- Placeholder for Quill Editor -->
           <div ref="quillEditor" class="quill-editor"></div>
           <v-card-actions>
@@ -18,21 +23,21 @@
 </template>
 
 <script>
-import { apiClient } from '@/api';
-import router from '@/router';
-import { ref, onMounted } from 'vue';
-import Quill from 'quill';
-import 'quill/dist/quill.snow.css'; // Ensure you import Quill's CSS
+import { apiClient } from '@/api'
+import router from '@/router'
+import { ref, onMounted } from 'vue'
+import Quill from 'quill'
+import 'quill/dist/quill.snow.css' // Ensure you import Quill's CSS
 
 export default {
   name: 'CreateStudyGroup',
   setup() {
-    const groupName = ref('');
-    const quillEditor = ref(null);
-    const groupDescription = ref('');
+    const groupName = ref('')
+    const quillEditor = ref(null)
+    const groupDescription = ref('')
 
     // Quill editor instance
-    let quillInstance;
+    let quillInstance
 
     onMounted(() => {
       quillInstance = new Quill(quillEditor.value, {
@@ -51,54 +56,54 @@ export default {
             // [{ font: ['songti'] }], // 字体种类
             [{ align: [] }], // 对齐方式
             // ['clean'], // 清除文本格式
-            ['link', 'image', 'video'] // 链接、图片、视频
+            ['link', 'image', 'video'], // 链接、图片、视频
           ],
         },
-      });
+      })
 
       // Listen for text change to update groupDescription
       quillInstance.on('text-change', function () {
-        groupDescription.value = quillInstance.root.innerHTML;
-      });
-    });
+        groupDescription.value = quillInstance.root.innerHTML
+      })
+    })
 
     const createGroup = async () => {
       try {
         const payload = {
           name: groupName.value,
           description: groupDescription.value, // Use innerHTML of Quill editor
-        };
+        }
         // API call logic here
-        await apiClient.post('/StudyGroup/CreateStudyGroup', payload);
+        await apiClient.post('/StudyGroup/CreateStudyGroup', payload)
         // 创建成功后的处理，例如跳转到小组列表或显示成功消息
-        alert('学习小组创建的请求已提交审核，请耐心等待。');
-        router.push({ name: 'studyGroupList' });
+        alert('学习小组创建的请求已提交审核，请耐心等待。')
+        router.push({ name: 'studyGroupList' })
       } catch (error) {
-        console.error("创建学习小组失败:", error);
-        alert('学习小组创建失败!');
+        console.error('创建学习小组失败:', error)
+        alert('学习小组创建失败!')
       }
-    };
+    }
 
     const cancel = () => {
       // Cancel logic here
-      if (confirm("确定要取消学习小组创建吗?")) {
-        router.push({ name: 'studyGroupList' });
+      if (confirm('确定要取消学习小组创建吗?')) {
+        router.push({ name: 'studyGroupList' })
       }
-    };
+    }
 
     return {
       groupName,
       quillEditor,
       createGroup,
       cancel,
-    };
+    }
   },
-};
+}
 </script>
 
 <style>
 .create-studygroup {
-  background-color: #F4EEE1;
+  background-color: #f4eee1;
   padding-left: 40px;
   padding-right: 40px;
   padding-top: 20px;

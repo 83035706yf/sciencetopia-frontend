@@ -1,10 +1,27 @@
 <template>
-  <div class="icon-item" @click.prevent="handleClick" role="button" tabindex="0" @keydown.enter.prevent="handleClick"
-    :aria-label="computedLabel">
+  <div
+    class="icon-item"
+    @click.prevent="handleClick"
+    role="button"
+    tabindex="0"
+    @keydown.enter.prevent="handleClick"
+    :aria-label="computedLabel"
+  >
     <!-- Tooltip 根据屏幕大小动态显示 -->
-    <v-tooltip :text="computedLabel" location="bottom" open-delay="300" :disabled="!isSmallScreen">
+    <v-tooltip
+      :text="computedLabel"
+      location="bottom"
+      open-delay="300"
+      :disabled="!isSmallScreen"
+    >
       <template v-slot:activator="{ props }">
-        <v-btn v-bind="props" class="icon-btn" variant="plain" :disabled="disabled" :aria-label="computedLabel">
+        <v-btn
+          v-bind="props"
+          class="icon-btn"
+          variant="plain"
+          :disabled="disabled"
+          :aria-label="computedLabel"
+        >
           <v-icon :size="computedIconSize">{{ computedIcon }}</v-icon>
         </v-btn>
       </template>
@@ -18,23 +35,23 @@
 </template>
 <script>
 export default {
-  name: "ReusableIconButton",
+  name: 'ReusableIconButton',
   props: {
     icon: {
       type: String,
-      default: "",
+      default: '',
     },
     label: {
       type: String,
-      default: "",
+      default: '',
     },
     dynamicIcon: {
       type: String,
-      default: "",
+      default: '',
     },
     dynamicLabel: {
       type: String,
-      default: "",
+      default: '',
     },
     iconSize: {
       type: Number,
@@ -57,45 +74,45 @@ export default {
   data() {
     return {
       isSmallScreenLocal: window.innerWidth <= 1200, // 初始判断屏幕大小
-    };
+    }
   },
   computed: {
     // 优先使用内部判断的值，如果父组件传参了，则使用父组件的值
     isSmallScreen() {
       return this.isSmallScreenProp !== null
         ? this.isSmallScreenProp
-        : this.isSmallScreenLocal;
+        : this.isSmallScreenLocal
     },
     computedIcon() {
-      return this.dynamicIcon || this.icon;
+      return this.dynamicIcon || this.icon
     },
     computedLabel() {
-      return this.dynamicLabel || this.label;
+      return this.dynamicLabel || this.label
     },
     computedIconSize() {
-      return this.iconSize;
+      return this.iconSize
     },
   },
   methods: {
     handleClick() {
       if (!this.disabled) {
-        this.$emit("click");
+        this.$emit('click')
       }
     },
     handleResize() {
       // 更新屏幕大小的状态
-      this.isSmallScreenLocal = window.innerWidth <= 1200;
+      this.isSmallScreenLocal = window.innerWidth <= 1200
     },
   },
   mounted() {
     // 监听窗口大小变化
-    window.addEventListener("resize", this.handleResize);
+    window.addEventListener('resize', this.handleResize)
   },
   beforeUnmount() {
     // 移除事件监听器
-    window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener('resize', this.handleResize)
   },
-};
+}
 </script>
 <style scoped>
 .icon-item {

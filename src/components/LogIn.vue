@@ -23,9 +23,13 @@
             <img src="../assets/images/logo.png" class="logo-bold" />
           </div>
           <div class="welcome-text-container welcome-container-position">
-            <h2 class="welcome-text text-white text-center">{{ $t('login.welcome') }}</h2>
+            <h2 class="welcome-text text-white text-center">
+              {{ $t('login.welcome') }}
+            </h2>
           </div>
-          <div class="welcome-text-container-nonmask welcome-container-position">
+          <div
+            class="welcome-text-container-nonmask welcome-container-position"
+          >
             <h2 class="welcome-text text-center">{{ $t('login.welcome') }}</h2>
           </div>
         </v-card>
@@ -37,15 +41,38 @@
             <h2 class="text-center">{{ $t('login.title') }}</h2>
           </v-card-title>
           <v-card-text>
-            <v-alert v-if="validationSummary" type="error" dismissible class="mb-4">
+            <v-alert
+              v-if="validationSummary"
+              type="error"
+              dismissible
+              class="mb-4"
+            >
               {{ validationSummary }}
             </v-alert>
             <v-form @submit.prevent="handleSubmit" ref="form">
-              <v-text-field v-model="userName" :label="$t('login.userNameLabel')" :error-messages="userNameError"
-                variant="filled" required class="mb-4"></v-text-field>
-              <v-text-field v-model="password" :label="$t('login.passwordLabel')" :error-messages="passwordError"
-                type="password" variant="filled" shaped required class="mb-4"></v-text-field>
-              <v-checkbox v-model="rememberMe" :label="$t('login.rememberMeLabel')" dense></v-checkbox>
+              <v-text-field
+                v-model="userName"
+                :label="$t('login.userNameLabel')"
+                :error-messages="userNameError"
+                variant="filled"
+                required
+                class="mb-4"
+              ></v-text-field>
+              <v-text-field
+                v-model="password"
+                :label="$t('login.passwordLabel')"
+                :error-messages="passwordError"
+                type="password"
+                variant="filled"
+                shaped
+                required
+                class="mb-4"
+              ></v-text-field>
+              <v-checkbox
+                v-model="rememberMe"
+                :label="$t('login.rememberMeLabel')"
+                dense
+              ></v-checkbox>
 
               <!-- Login button -->
               <button class="login-button" type="submit" block>
@@ -56,7 +83,8 @@
             </v-form>
           </v-card-text>
           <v-card-text class="to-register-text">
-            <p class="text-center">{{ $t('login.dontHaveAccount') }}
+            <p class="text-center">
+              {{ $t('login.dontHaveAccount') }}
               <span @click="navigateToRegister" class="interactive-text">
                 {{ $t('login.clickHere') }}
               </span>
@@ -70,49 +98,50 @@
 </template>
 
 <script>
-import { apiClient } from "@/api"; // Ensure the path to api.js is correct
+import { apiClient } from '@/api' // Ensure the path to api.js is correct
 
 export default {
-  name: "LogIn",
+  name: 'LogIn',
   data() {
     return {
-      userName: "",
-      password: "",
+      userName: '',
+      password: '',
       rememberMe: false,
-      validationSummary: "",
-      userNameError: "",
-      passwordError: "",
-    };
+      validationSummary: '',
+      userNameError: '',
+      passwordError: '',
+    }
   },
   methods: {
     async handleSubmit() {
       try {
-        const response = await apiClient.post("/users/Account/Login", {
+        const response = await apiClient.post('/users/Account/Login', {
           userName: this.userName,
           password: this.password,
           rememberMe: this.rememberMe,
-        });
+        })
 
-        this.$router.push("/");
-        this.$store.dispatch("checkAuthenticationStatus");
+        this.$router.push('/')
+        this.$store.dispatch('checkAuthenticationStatus')
         // this.$store.dispatch('connectSignalR');
 
-        console.log(this.$t("login.success"), response.config.data);
+        console.log(this.$t('login.success'), response.config.data)
       } catch (error) {
-        console.error(this.$t("login.failed"), error);
+        console.error(this.$t('login.failed'), error)
         if (error.response && error.response.data) {
-          this.validationSummary = error.response.data.error || this.$t("login.failed");
+          this.validationSummary =
+            error.response.data.error || this.$t('login.failed')
         } else {
-          this.validationSummary = this.$t("login.failed");
+          this.validationSummary = this.$t('login.failed')
         }
       }
     },
 
     navigateToRegister() {
-      this.$router.push({ name: "register" });
+      this.$router.push({ name: 'register' })
     },
   },
-};
+}
 </script>
 
 <style scoped>
@@ -161,7 +190,7 @@ export default {
   width: 42vw;
   margin: 0 !important;
   padding: 0 !important;
-  background-color: #DFCBA4;
+  background-color: #dfcba4;
 }
 
 .welcome-container-position {
@@ -211,7 +240,7 @@ export default {
 .right-card {
   height: 42vh;
   width: 42vw;
-  background-color: #F4EEE1;
+  background-color: #f4eee1;
   padding: 10px !important;
 }
 
@@ -231,13 +260,8 @@ export default {
 .login-arrow {
   width: 80px;
   height: 240px;
-  background: linear-gradient(to left, #AA1B1D 50%, #EC0017 50%);
-  clip-path: polygon(0% 100%,
-      50% 30%,
-      100% 100%,
-      50% 90%,
-      50% 80%,
-      50% 90%);
+  background: linear-gradient(to left, #aa1b1d 50%, #ec0017 50%);
+  clip-path: polygon(0% 100%, 50% 30%, 100% 100%, 50% 90%, 50% 80%, 50% 90%);
   transform: rotate(90deg);
 }
 
@@ -259,7 +283,8 @@ export default {
   font-weight: normal;
 
   /* Add 3D distortion */
-  transform: perspective(500px) rotateX(20deg) rotateY(8deg) skewX(15deg) scaleX(1.5);
+  transform: perspective(500px) rotateX(20deg) rotateY(8deg) skewX(15deg)
+    scaleX(1.5);
   transform-origin: center;
   /* Rotate around the center */
   display: inline-block;
@@ -272,7 +297,7 @@ export default {
   left: 15.6vw;
   width: calc(22vw - 40px);
   height: 4px;
-  background-color: #EC0017;
+  background-color: #ec0017;
   z-index: 1;
   /* box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1); */
 }
