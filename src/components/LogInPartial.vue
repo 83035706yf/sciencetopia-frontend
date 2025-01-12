@@ -123,16 +123,16 @@
       <!-- 大屏下显示“登录”和“注册”按钮 -->
       <div v-if="!isSmallScreen" class="auth-buttons">
         <v-btn
-          text
-          color="primary"
+          variant="flat"
+          style="background-color: #DE2910; color: black;"
           class="auth-btn"
           @click="login"
         >
           {{ $t('header.login') }}
         </v-btn>
         <v-btn
-          text
-          color="secondary"
+          variant="flat"
+          style="background-color: black; color: white;"
           class="auth-btn"
           @click="register"
         >
@@ -307,7 +307,8 @@ export default {
   display: flex;
   justify-content: center; /* 居中对齐 */
   align-items: center;
-  gap: 16px; /* 调整按钮之间的间距 */
+  padding: auto;
+  gap: 10px; /* 调整按钮之间的间距 */
   width: 100%; /* 使容器占满父容器的宽度 */
 }
 
