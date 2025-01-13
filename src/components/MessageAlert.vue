@@ -1,7 +1,17 @@
 <template>
-  <div class="icon-item" role="button" tabindex="0" @keydown.enter.prevent="directMessages">
+  <div
+    class="icon-item"
+    role="button"
+    tabindex="0"
+    @keydown.enter.prevent="directMessages"
+  >
     <!-- 根据登录状态动态显示悬停提示 -->
-    <v-tooltip v-if="!isAuthenticated" text="请先登录以查看信息" location="bottom" open-delay="300">
+    <v-tooltip
+      v-if="!isAuthenticated"
+      text="请先登录以查看信息"
+      location="bottom"
+      open-delay="300"
+    >
       <template v-slot:activator="{ props }">
         <v-btn v-bind="props" class="icon-btn" variant="plain" disabled>
           <v-icon :size="iconSize">mdi-bell</v-icon>
@@ -28,24 +38,33 @@
       <!-- 下拉菜单: 仅当已登录(isAuthenticated)时才显示 -->
       <v-list class="header-list st-card">
         <v-list-item variant="plain" @click="directMessages">
-          <v-list-item-title>{{ $t('message.privatemessage') }}</v-list-item-title>
+          <v-list-item-title>{{
+            $t('message.privatemessage')
+          }}</v-list-item-title>
         </v-list-item>
-        <v-divider color="text" style="margin-top: 5px; margin-bottom: 5px;"></v-divider>
+        <v-divider
+          color="text"
+          style="margin-top: 5px; margin-bottom: 5px"
+        ></v-divider>
         <v-list-item variant="plain" @click="notifications">
-          <v-list-item-title>{{ $t('message.notification') }}</v-list-item-title>
+          <v-list-item-title>{{
+            $t('message.notification')
+          }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
 
     <!-- 根据屏幕大小动态显示文字 -->
-    <span v-if="!computedIsSmallScreen" class="icon-label">{{ $t('header.messages') }}</span>
+    <span v-if="!computedIsSmallScreen" class="icon-label">{{
+      $t('header.messages')
+    }}</span>
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
 
 export default {
-  name: "MessageAlert",
+  name: 'MessageAlert',
   props: {
     isSmallScreen: {
       type: Boolean,
@@ -59,51 +78,51 @@ export default {
   data() {
     return {
       isSmallScreenLocal: window.innerWidth <= 1200, // 初始判断屏幕大小
-    };
+    }
   },
   computed: {
     ...mapState(['messageCount', 'notificationCount']),
     isAuthenticated() {
-      return this.$store.state.isAuthenticated; // 判断用户是否已登录
+      return this.$store.state.isAuthenticated // 判断用户是否已登录
     },
     computedIsSmallScreen() {
       // 优先使用父组件传递的值，否则使用内部判断
       return this.isSmallScreen !== null
         ? this.isSmallScreen
-        : this.isSmallScreenLocal;
+        : this.isSmallScreenLocal
     },
   },
   methods: {
     login() {
-      this.$router.push({ name: 'login' });
+      this.$router.push({ name: 'login' })
     },
     directMessages() {
       if (!this.isAuthenticated) {
         // 未登录 -> 提示或跳转登录
-        alert("请先登录再查看消息列表");
+        alert('请先登录再查看消息列表')
       } else {
-        const userId = this.$store.state.currentUserID;
-        this.$router.push({ name: 'directMessages', params: { userId } });
+        const userId = this.$store.state.currentUserID
+        this.$router.push({ name: 'directMessages', params: { userId } })
       }
     },
     notifications() {
-      const userId = this.$store.state.currentUserID;
-      this.$router.push({ name: 'notifications', params: { userId } });
+      const userId = this.$store.state.currentUserID
+      this.$router.push({ name: 'notifications', params: { userId } })
     },
     handleResize() {
       // 更新屏幕大小的状态
-      this.isSmallScreenLocal = window.innerWidth <= 1200;
+      this.isSmallScreenLocal = window.innerWidth <= 1200
     },
   },
   mounted() {
     // 监听窗口大小变化
-    window.addEventListener("resize", this.handleResize);
+    window.addEventListener('resize', this.handleResize)
   },
   beforeUnmount() {
     // 移除事件监听器
-    window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener('resize', this.handleResize)
   },
-};
+}
 </script>
 <style scoped>
 .icon-item {

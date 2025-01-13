@@ -4,8 +4,12 @@
       <!-- Personal Information -->
       <v-col cols="auto" class="profile-container">
         <PersonalInformation :userId="userId">
-          <v-btn variant="outlined" :style="{ backgroundColor: 'white' }" prepend-icon="mdi-email-outline"
-            @click="startOrLoadConversation(userId)">
+          <v-btn
+            variant="outlined"
+            :style="{ backgroundColor: 'white' }"
+            prepend-icon="mdi-email-outline"
+            @click="startOrLoadConversation(userId)"
+          >
             <template v-slot:prepend>
               <v-icon color="#ff4d4d"></v-icon>
             </template>
@@ -16,29 +20,40 @@
 
       <!-- Study Plans Section -->
       <v-col cols="auto" class="study-plan-container">
-        <StudyPlanList :isCurrentUser="isCurrentUser" :studyPlanDataList="studyPlanDataList" />
+        <StudyPlanList
+          :isCurrentUser="isCurrentUser"
+          :studyPlanDataList="studyPlanDataList"
+        />
       </v-col>
 
       <!-- Study Groups Section -->
       <v-col cols="auto" class="study-group-container">
         <v-container>
           <v-card-title class="study-group-title">
-            {{ isCurrentUser ? $t('usercenter.my') : $t('usercenter.their') }}{{ $t('wordbreaker') }}{{
-              $t('usercenter.studygroup') }}
+            {{ isCurrentUser ? $t('usercenter.my') : $t('usercenter.their')
+            }}{{ $t('wordbreaker') }}{{ $t('usercenter.studygroup') }}
           </v-card-title>
           <div v-if="studyGroupList.length === 0">
             <v-container>
               <v-card class="d-flex align-center justify-center">
                 <v-card-title>
-                  {{ isCurrentUser
-                    ? $t('studygroup.nogroup_my')
-                    : $t('studygroup.nogroup_their') }}
+                  {{
+                    isCurrentUser
+                      ? $t('studygroup.nogroup_my')
+                      : $t('studygroup.nogroup_their')
+                  }}
                 </v-card-title>
               </v-card>
             </v-container>
           </div>
           <v-row v-else>
-            <v-col v-for="group in studyGroupList" :key="group.id" cols="12" sm="6" md="6">
+            <v-col
+              v-for="group in studyGroupList"
+              :key="group.id"
+              cols="12"
+              sm="6"
+              md="6"
+            >
               <v-card class="st-card">
                 <v-card-title>
                   {{ group.name }}
@@ -46,8 +61,20 @@
                 <!-- eslint-disable-next-line vue/no-v-text-v-html-on-component -->
                 <v-card-subtitle v-html="group.description"></v-card-subtitle>
                 <v-card-text>
-                  <v-chip class="group-chip ml-auto" color="text" variant="outlined" label>{{ group.role }}</v-chip>
-                  <v-chip class="group-chip ml-auto" variant="outlined" v-if="group.status === 'pending_approval'" color="red" label>
+                  <v-chip
+                    class="group-chip ml-auto"
+                    color="text"
+                    variant="outlined"
+                    label
+                    >{{ group.role }}</v-chip
+                  >
+                  <v-chip
+                    class="group-chip ml-auto"
+                    variant="outlined"
+                    v-if="group.status === 'pending_approval'"
+                    color="red"
+                    label
+                  >
                     {{ group.status }}
                   </v-chip>
                 </v-card-text>
@@ -66,9 +93,9 @@
 </template>
 
 <script>
-import PersonalInformation from "./PersonalInformation.vue";
-import StudyPlanList from "./StudyPlanList.vue";
-import { apiClient } from "@/api";
+import PersonalInformation from './PersonalInformation.vue'
+import StudyPlanList from './StudyPlanList.vue'
+import { apiClient } from '@/api'
 
 export default {
   components: {
@@ -87,77 +114,86 @@ export default {
       studyGroupList: [],
       activeTab: 0,
       currentUserId: this.$store.state.currentUserID,
-    };
+    }
   },
   created() {
-    this.fetchDataForUser();
+    this.fetchDataForUser()
   },
   computed: {
     isCurrentUser() {
-      return this.userId === this.currentUserId;
+      return this.userId === this.currentUserId
     },
   },
   methods: {
     async fetchDataForUser() {
       try {
-        const studyPlanResponse = await apiClient.get(`/StudyPlan/FetchStudyPlans`, {
-          params: { targetUserId: this.userId },
-        });
-        this.studyPlanDataList = studyPlanResponse.data;
+        const studyPlanResponse = await apiClient.get(
+          `/StudyPlan/FetchStudyPlans`,
+          {
+            params: { targetUserId: this.userId },
+          }
+        )
+        this.studyPlanDataList = studyPlanResponse.data
 
-        const studyGroupResponse = await apiClient.get(`/StudyGroup/GetStudyGroup`, {
-          params: { targetUserId: this.userId },
-        });
-        this.studyGroupList = studyGroupResponse.data;
+        const studyGroupResponse = await apiClient.get(
+          `/StudyGroup/GetStudyGroup`,
+          {
+            params: { targetUserId: this.userId },
+          }
+        )
+        this.studyGroupList = studyGroupResponse.data
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error)
       }
     },
     async deleteStudyPlan(planTitle) {
-      if (confirm(this.$t("studyplan.confirmdelete"))) {
+      if (confirm(this.$t('studyplan.confirmdelete'))) {
         try {
-          const response = await apiClient.delete(`/StudyPlan/DeleteStudyPlan`, {
-            params: { studyPlanTitle: planTitle },
-          });
+          const response = await apiClient.delete(
+            `/StudyPlan/DeleteStudyPlan`,
+            {
+              params: { studyPlanTitle: planTitle },
+            }
+          )
           if (response.status === 200) {
-            alert(this.$t("studyplan.deletesuccess"));
-            this.fetchDataForUser();
+            alert(this.$t('studyplan.deletesuccess'))
+            this.fetchDataForUser()
           } else {
-            throw new Error(this.$t("studyplan.deletefailed"));
+            throw new Error(this.$t('studyplan.deletefailed'))
           }
         } catch (error) {
-          console.error("Error deleting study plan:", error);
-          alert(this.$t("studyplan.deletefailed"));
+          console.error('Error deleting study plan:', error)
+          alert(this.$t('studyplan.deletefailed'))
         }
       }
     },
     async handleResourceUpdated() {
-      await this.fetchDataForUser();
+      await this.fetchDataForUser()
     },
     toGroupPage(groupId) {
-      this.$router.push({ name: "studyGroupPage", params: { groupId } });
+      this.$router.push({ name: 'studyGroupPage', params: { groupId } })
     },
     async startOrLoadConversation(otherUserId) {
-      const currentUserId = this.currentUserId;
+      const currentUserId = this.currentUserId
 
       try {
         const conversationData = await this.$root.$signalRConnection.invoke(
-          "GetOrStartConversation",
+          'GetOrStartConversation',
           currentUserId,
           otherUserId
-        );
+        )
 
         this.$router.push({
-          name: "directMessages",
+          name: 'directMessages',
           params: { userId: currentUserId },
           query: { conversationId: conversationData.ConversationId },
-        });
+        })
       } catch (error) {
-        console.error("Error starting or loading conversation:", error);
+        console.error('Error starting or loading conversation:', error)
       }
     },
   },
-};
+}
 </script>
 
 <style scoped>

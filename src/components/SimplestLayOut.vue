@@ -1,11 +1,7 @@
 <template>
   <div class="simplest-layout">
     <v-btn variant="plain" class="btn back-to-home" @click="backToHomePage">
-      <img
-        src="../assets/images/logo.png"
-        alt="Logo"
-        class="logo-image"
-      />
+      <img src="../assets/images/logo.png" alt="Logo" class="logo-image" />
     </v-btn>
 
     <v-spacer class="header-spacer"></v-spacer>
@@ -19,7 +15,7 @@
 </template>
 
 <script>
-import DefaultFooterBar from './DefaultFooterBar.vue';
+import DefaultFooterBar from './DefaultFooterBar.vue'
 
 export default {
   name: 'SimplestLayOut',
@@ -27,11 +23,11 @@ export default {
     DefaultFooterBar,
   },
   data() {
-    return {};
+    return {}
   },
   methods: {
     backToHomePage() {
-      this.$router.push({ name: 'HomePage' });
+      this.$router.push({ name: 'HomePage' })
     },
   },
 }

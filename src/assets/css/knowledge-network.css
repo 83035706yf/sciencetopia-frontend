@@ -1,25 +1,25 @@
 .knowledge-network {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    width: 100%;
-    margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .knowledge-network-figure {
-    display: flexbox;
-    float: left;
-    width: 49%;
-    height: 500px;
-    /* margin-right: 50px; */
-    border: 1px dashed gray; 
+  display: flexbox;
+  float: left;
+  width: 49%;
+  height: 500px;
+  /* margin-right: 50px; */
+  border: 1px dashed gray;
 }
 
 .knowledge-network-description {
-    display: flexbox;
-    float: right;
-    width: 49%;
-    height: 550px;
-    /* margin-left: 50px; */
-    border: 1px dashed gray; 
+  display: flexbox;
+  float: right;
+  width: 49%;
+  height: 550px;
+  /* margin-left: 50px; */
+  border: 1px dashed gray;
 }

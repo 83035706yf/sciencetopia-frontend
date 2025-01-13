@@ -1,6 +1,9 @@
 <template>
   <div v-if="internalDialog" class="custom-overlay" @click.self="triggerWink">
-    <v-card :class="['overlay-content', { wink: isWinking }]" @animationend="isWinking = false">
+    <v-card
+      :class="['overlay-content', { wink: isWinking }]"
+      @animationend="isWinking = false"
+    >
       <v-card-title class="text-h5">编辑指南</v-card-title>
       <v-card-text class="scrollable-content">
         <p>在编辑之前，请阅读我们的编辑指南。</p>
@@ -10,21 +13,33 @@
             <v-col cols="auto" class="d-flex justify-center align-center">
               <v-card class="svg-card">
                 <v-card-text>
-                  <img src="../assets/images/EditGuide/resource3.svg" alt="resource3" class="svg-figure">
+                  <img
+                    src="../assets/images/EditGuide/resource3.svg"
+                    alt="resource3"
+                    class="svg-figure"
+                  />
                 </v-card-text>
               </v-card>
             </v-col>
             <v-col cols="auto" class="d-flex justify-center align-center">
               <v-card class="svg-card">
                 <v-card-text>
-                  <img src="../assets/images/EditGuide/resource14.svg" alt="resource6" class="svg-figure">
+                  <img
+                    src="../assets/images/EditGuide/resource14.svg"
+                    alt="resource6"
+                    class="svg-figure"
+                  />
                 </v-card-text>
               </v-card>
             </v-col>
             <v-col cols="auto" class="d-flex justify-center align-center">
               <v-card class="svg-card">
                 <v-card-text>
-                  <img src="../assets/images/EditGuide/resource7.svg" alt="resource7" class="svg-figure">
+                  <img
+                    src="../assets/images/EditGuide/resource7.svg"
+                    alt="resource7"
+                    class="svg-figure"
+                  />
                 </v-card-text>
               </v-card>
             </v-col>
@@ -35,29 +50,46 @@
             <v-col cols="auto" class="d-flex justify-center align-center">
               <v-card class="svg-card">
                 <v-card-text>
-                  <img src="../assets/images/EditGuide/resource16.svg" alt="resource8" class="svg-figure">
+                  <img
+                    src="../assets/images/EditGuide/resource16.svg"
+                    alt="resource8"
+                    class="svg-figure"
+                  />
                 </v-card-text>
               </v-card>
             </v-col>
             <v-col cols="auto" class="d-flex justify-center align-center">
               <v-card class="svg-card">
                 <v-card-text>
-                  <img src="../assets/images/EditGuide/resource19.svg" alt="resource11" class="svg-figure">
+                  <img
+                    src="../assets/images/EditGuide/resource19.svg"
+                    alt="resource11"
+                    class="svg-figure"
+                  />
                 </v-card-text>
               </v-card>
             </v-col>
             <v-col cols="auto" class="d-flex justify-center align-center">
               <v-card class="svg-card">
                 <v-card-text>
-                  <img src="../assets/images/EditGuide/resource17.svg" alt="resource9" class="svg-figure">
+                  <img
+                    src="../assets/images/EditGuide/resource17.svg"
+                    alt="resource9"
+                    class="svg-figure"
+                  />
                 </v-card-text>
               </v-card>
             </v-col>
           </v-row>
         </v-container>
-        <v-card-text style="padding-left: 8%; padding-right: 8%; padding-top: 2%;">
-            请确保您已经阅读并理解了为知识网络添加新节点和节点间的边的操作。Scienetopia知识网络是公开的、共享的知识网络，您所添加的节点和边将会被录入这个知识库里，向所有学习者公开。请对您所添加的知识节点和边负有责任，我们期待您做出高质量的贡献，让我们一起营造一个更好的Sicentopia共享知识网络和更好的Sciencetopia社区。
-          <v-checkbox v-model="agreed" label="我已阅读、知晓并同意"></v-checkbox>
+        <v-card-text
+          style="padding-left: 8%; padding-right: 8%; padding-top: 2%"
+        >
+          请确保您已经阅读并理解了为知识网络添加新节点和节点间的边的操作。Scienetopia知识网络是公开的、共享的知识网络，您所添加的节点和边将会被录入这个知识库里，向所有学习者公开。请对您所添加的知识节点和边负有责任，我们期待您做出高质量的贡献，让我们一起营造一个更好的Sicentopia共享知识网络和更好的Sciencetopia社区。
+          <v-checkbox
+            v-model="agreed"
+            label="我已阅读、知晓并同意"
+          ></v-checkbox>
         </v-card-text>
       </v-card-text>
       <v-card-actions>
@@ -80,10 +112,10 @@ export default {
   computed: {
     internalDialog: {
       get() {
-        return this.modelValue;
+        return this.modelValue
       },
       set(value) {
-        this.$emit('update:modelValue', value);
+        this.$emit('update:modelValue', value)
       },
     },
   },
@@ -91,21 +123,21 @@ export default {
     return {
       agreed: false,
       isWinking: false,
-    };
+    }
   },
   methods: {
     confirm() {
-      this.$emit('confirmed'); // 触发确认事件
-      this.internalDialog = false; // 关闭对话框
+      this.$emit('confirmed') // 触发确认事件
+      this.internalDialog = false // 关闭对话框
     },
     cancel() {
-      this.internalDialog = false; // 直接关闭对话框，不需要触发外部事件
+      this.internalDialog = false // 直接关闭对话框，不需要触发外部事件
     },
     triggerWink() {
-      this.isWinking = true;
+      this.isWinking = true
     },
   },
-};
+}
 </script>
 
 <style scoped>
@@ -158,7 +190,6 @@ export default {
 }
 
 @keyframes wink {
-
   0%,
   100% {
     transform: scale(1);

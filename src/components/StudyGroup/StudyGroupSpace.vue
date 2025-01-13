@@ -15,16 +15,16 @@ export default {
   data() {
     return {
       newPost: '',
-      posts: [] // Posts in the group
-    };
+      posts: [], // Posts in the group
+    }
   },
   methods: {
     postUpdate() {
       // Logic to post an update
-    }
+    },
   },
   mounted() {
     // Fetch posts on component mount
-  }
-};
+  },
+}
 </script>

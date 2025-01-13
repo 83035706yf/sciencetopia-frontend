@@ -1,13 +1,16 @@
 /* Set up using Vue 3 */
 import { createApp } from 'vue'
-import store from './store';
+import store from './store'
 import App from './App.vue'
-import i18n from './i18n';
-import GlobalLoader from './components/GlobalLoader.vue';
-import { initializeSignalRConnection, connection } from './services/signalr-service';
+import i18n from './i18n'
+import GlobalLoader from './components/GlobalLoader.vue'
+import {
+  initializeSignalRConnection,
+  connection,
+} from './services/signalr-service'
 import router from './router'
 import './assets/css/site.css'
-import './styles/main.scss';
+import './styles/main.scss'
 
 // Vuetify
 import 'vuetify/styles'
@@ -33,8 +36,8 @@ const vuetify = createVuetify({
     },
     // 添加响应式布局
     breakpoint: {
-      mobileBreakpoint: 'sm'
-    }
+      mobileBreakpoint: 'sm',
+    },
   },
   theme: {
     defaultTheme: 'light',
@@ -49,7 +52,7 @@ const vuetify = createVuetify({
           accent: '#00FFF7',
           darkred: '#C8001D',
           error: '#f44336',
-          border: '#C59F59'
+          border: '#C59F59',
         },
       },
       dark: {
@@ -66,21 +69,21 @@ const vuetify = createVuetify({
 
 router.beforeEach((to, from, next) => {
   if (to.path !== from.path) {
-    store.commit('resetSelectedNodes');
-    store.commit('RESET_EDIT_MODE');
+    store.commit('resetSelectedNodes')
+    store.commit('RESET_EDIT_MODE')
   }
-  next();
-});
+  next()
+})
 
 const app = createApp(App)
-app.component('GlobalLoader', GlobalLoader);
+app.component('GlobalLoader', GlobalLoader)
 
-initializeSignalRConnection();
-app.config.globalProperties.$signalRConnection = connection;
+initializeSignalRConnection()
+app.config.globalProperties.$signalRConnection = connection
 
 app.use(router)
 app.use(store)
 app.use(vuetify)
-app.use(i18n);
+app.use(i18n)
 
 app.mount('#app')

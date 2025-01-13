@@ -2,18 +2,30 @@
   <div class="knowledgegraph-container">
     <!-- 知识网络 -->
     <!-- <v-col cols="8" class="knowledge-graph"> -->
-    <KnowledgeNetwork> <!-- Slot content for full-screen overlay -->
+    <KnowledgeNetwork>
+      <!-- Slot content for full-screen overlay -->
       <div class="fullscreen-overlay-content">
-        <NodeCreationForm v-if="this.$store.state.displayNodeCreationForm"></NodeCreationForm>
-        <LinkCreationForm v-else-if="this.$store.state.displayLinkCreationForm"></LinkCreationForm>
+        <NodeCreationForm
+          v-if="this.$store.state.displayNodeCreationForm"
+        ></NodeCreationForm>
+        <LinkCreationForm
+          v-else-if="this.$store.state.displayLinkCreationForm"
+        ></LinkCreationForm>
         <NodeInfo v-else></NodeInfo>
       </div>
     </KnowledgeNetwork>
     <!-- <p>一个可以查询节点内容和生成学习路径的知识网络</p> -->
     <!-- </v-col> -->
-    <div class="non-fullscreen-content" :style="{ transform: `translateX(${offset}px)` }">
-      <NodeCreationForm v-if="this.$store.state.displayNodeCreationForm"></NodeCreationForm>
-      <LinkCreationForm v-else-if="this.$store.state.displayLinkCreationForm"></LinkCreationForm>
+    <div
+      class="non-fullscreen-content"
+      :style="{ transform: `translateX(${offset}px)` }"
+    >
+      <NodeCreationForm
+        v-if="this.$store.state.displayNodeCreationForm"
+      ></NodeCreationForm>
+      <LinkCreationForm
+        v-else-if="this.$store.state.displayLinkCreationForm"
+      ></LinkCreationForm>
       <NodeInfo v-else></NodeInfo>
     </div>
   </div>
@@ -51,34 +63,50 @@
       </v-row>
     </v-container>
 
-    <v-divider color="darkred" :thickness="2" opacity="1" style="margin-top: 40px; margin-left: 120px;"></v-divider>
+    <v-divider
+      color="darkred"
+      :thickness="2"
+      opacity="1"
+      style="margin-top: 40px; margin-left: 120px"
+    ></v-divider>
 
-    <v-spacer style="height: 60px;"></v-spacer>
+    <v-spacer style="height: 60px"></v-spacer>
 
     <v-container>
       <v-row>
         <v-col v-for="media in mediaList" :key="media.id" cols="3">
-          <mediaFeed :cover="media.cover" :title="media.title" :author="media.author" :date="media.date"></mediaFeed>
+          <mediaFeed
+            :cover="media.cover"
+            :title="media.title"
+            :author="media.author"
+            :date="media.date"
+          ></mediaFeed>
         </v-col>
       </v-row>
     </v-container>
     <!-- Final Footer -->
     <DefaultFooterBar />
   </div>
-
 </template>
 
 <script>
-import KnowledgeNetwork from '@/components/KnowledgeNetwork.vue';
-import NodeInfo from '@/components/NodeInfo.vue';
-import MediaFeed from '@/components/MediaFeed.vue';
-import NodeCreationForm from '@/components/NodeCreationForm.vue';
-import LinkCreationForm from '@/components/LinkCreationForm.vue';
-import DefaultFooterBar from '@/components/DefaultFooterBar.vue';
+import KnowledgeNetwork from '@/components/KnowledgeNetwork.vue'
+import NodeInfo from '@/components/NodeInfo.vue'
+import MediaFeed from '@/components/MediaFeed.vue'
+import NodeCreationForm from '@/components/NodeCreationForm.vue'
+import LinkCreationForm from '@/components/LinkCreationForm.vue'
+import DefaultFooterBar from '@/components/DefaultFooterBar.vue'
 
 export default {
   name: 'HomePage',
-  components: { KnowledgeNetwork, NodeInfo, MediaFeed, NodeCreationForm, LinkCreationForm, DefaultFooterBar },
+  components: {
+    KnowledgeNetwork,
+    NodeInfo,
+    MediaFeed,
+    NodeCreationForm,
+    LinkCreationForm,
+    DefaultFooterBar,
+  },
   data() {
     return {
       displayNodeCreationForm: false,
@@ -90,53 +118,53 @@ export default {
           cover: require('@/assets/images/banner.png'),
           title: '动态推送功能开发中，敬请期待！',
           author: 'Sciencetopia团队',
-          date: '2024-01-14'
+          date: '2024-01-14',
         },
         {
           id: 2,
           cover: '',
           title: '',
           author: '',
-          date: ''
+          date: '',
         },
         {
           id: 3,
           cover: '',
           title: '',
           author: '',
-          date: ''
+          date: '',
         },
         {
           id: 4,
           cover: '',
           title: '',
           author: '',
-          date: ''
+          date: '',
         },
         // ... more media items ...
-      ]
+      ],
     }
   },
 
   methods: {
     handleScroll() {
-      this.offset = window.scrollY; // Adjust speed multiplier for smooth movement
+      this.offset = window.scrollY // Adjust speed multiplier for smooth movement
     },
   },
 
   mounted() {
-    window.addEventListener('scroll', this.handleScroll); // Attach scroll listener
+    window.addEventListener('scroll', this.handleScroll) // Attach scroll listener
   },
 
   beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll); // Cleanup scroll listener
+    window.removeEventListener('scroll', this.handleScroll) // Cleanup scroll listener
   },
-};
+}
 </script>
 
 <style scoped>
-@import "../assets/css/special-text.css";
-@import "../assets/css/knowledge-graph.css";
+@import '../assets/css/special-text.css';
+@import '../assets/css/knowledge-graph.css';
 
 .fullscreen-overlay-content {
   position: fixed;
@@ -207,7 +235,7 @@ export default {
 }
 
 .refresh-text {
-  color: #C8001D;
+  color: #c8001d;
 }
 
 .feed-container {

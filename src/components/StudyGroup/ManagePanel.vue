@@ -4,13 +4,25 @@
       <v-col cols="2">
         <!-- Side Navigation List -->
         <v-list variant="plain" class="tab-list">
-          <v-list-item color="secondary" v-for="(item, index) in tabs" :key="index" :active="activeTab === index"
-            @click="activeTab = index" class="list-item">
-            <div style="display: flex; align-items: center; margin-left: 6vw;">
-              <v-list-item-title style="font-size: 1.2rem;">{{ item.title }}</v-list-item-title>
-              <v-badge style="margin-left: 20px; margin-bottom: 5px;"
-                v-if="item.title === '加入请求' && pendingJoinRequests > 0" color="red" :content="pendingJoinRequests"
-                overlap></v-badge>
+          <v-list-item
+            color="secondary"
+            v-for="(item, index) in tabs"
+            :key="index"
+            :active="activeTab === index"
+            @click="activeTab = index"
+            class="list-item"
+          >
+            <div style="display: flex; align-items: center; margin-left: 6vw">
+              <v-list-item-title style="font-size: 1.2rem">{{
+                item.title
+              }}</v-list-item-title>
+              <v-badge
+                style="margin-left: 20px; margin-bottom: 5px"
+                v-if="item.title === '加入请求' && pendingJoinRequests > 0"
+                color="red"
+                :content="pendingJoinRequests"
+                overlap
+              ></v-badge>
             </div>
           </v-list-item>
         </v-list>
@@ -36,16 +48,16 @@
 </template>
 
 <script>
-import GroupOverview from './GroupOverview.vue';
-import MemberManagement from './MemberManagement.vue';
-import JoinRequests from './JoinRequests.vue';
-import ActivityLogs from './ActivityLogs.vue';
-import { apiClient } from '@/api';
+import GroupOverview from './GroupOverview.vue'
+import MemberManagement from './MemberManagement.vue'
+import JoinRequests from './JoinRequests.vue'
+import ActivityLogs from './ActivityLogs.vue'
+import { apiClient } from '@/api'
 
 export default {
   props: {
     groupId: String,
-    pendingJoinRequests: Number
+    pendingJoinRequests: Number,
   },
   data() {
     return {
@@ -55,13 +67,15 @@ export default {
         { title: '基础信息', component: GroupOverview },
         { title: '成员管理', component: MemberManagement },
         { title: '加入请求', component: JoinRequests },
-        { title: '活动日志', component: ActivityLogs }
-      ]
-    };
+        { title: '活动日志', component: ActivityLogs },
+      ],
+    }
   },
   async mounted() {
-    const response = await apiClient.get(`/StudyGroup/GetUserRoleInGroup/${this.groupId}`);
-    this.isManager = response.data === 'manager';
+    const response = await apiClient.get(
+      `/StudyGroup/GetUserRoleInGroup/${this.groupId}`
+    )
+    this.isManager = response.data === 'manager'
 
     // // Fetch pending join requests if the user is a manager
     // if (this.isManager) {
@@ -71,16 +85,16 @@ export default {
 
     // Filter tabs based on user role
     if (!this.isManager) {
-      this.tabs = this.tabs.filter((tab, index) => index === 0);
+      this.tabs = this.tabs.filter((tab, index) => index === 0)
     }
   },
   components: {
     GroupOverview,
     MemberManagement,
     JoinRequests,
-    ActivityLogs
-  }
-};
+    ActivityLogs,
+  },
+}
 </script>
 
 <style scoped>
@@ -95,7 +109,7 @@ export default {
 }
 
 .tab-list {
-  background-color: #F4EEE1;
+  background-color: #f4eee1;
   padding: 0;
   box-shadow: -8px 4px 8px 0px rgba(0, 0, 0, 0.05) !important;
   height: 100%;
@@ -103,7 +117,7 @@ export default {
 }
 
 .tab-content {
-  background-color: #F4EEE1;
+  background-color: #f4eee1;
   padding: 0;
   box-shadow: 8px 4px 8px 0px rgba(0, 0, 0, 0.05) !important;
   height: 100%;
@@ -127,7 +141,7 @@ export default {
     width: 100%;
     height: 2px !important;
     /* Adjust thickness of underline */
-    background-color: #EC0017 !important;
+    background-color: #ec0017 !important;
     /* Underline color */
     transform: scaleX(0) !important;
     /* Initially hidden */

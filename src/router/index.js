@@ -34,19 +34,19 @@ const routes = [
     path: '/search',
     name: 'searchList',
     component: SearchListPage,
-    props: true
+    props: true,
   },
   {
     path: '/login',
     name: 'login',
     component: LogIn,
-    meta: { layout: "simplest" },
+    meta: { layout: 'simplest' },
   },
   {
     path: '/register',
     name: 'register',
     component: ReGister,
-    meta: { layout: "simplest" },
+    meta: { layout: 'simplest' },
   },
   {
     path: '/:userId',
@@ -59,32 +59,32 @@ const routes = [
     name: 'StudyPlanDetail',
     component: StudyPlanDetail,
     props: true,
-    meta: { layout: "thin" },
+    meta: { layout: 'thin' },
   },
   {
     path: '/:userId/message',
     name: 'messagecenter',
     component: MessageCenter,
-    meta: { layout: "thin" },
+    meta: { layout: 'thin' },
     props: true,
     children: [
       {
         path: 'directMessages',
         name: 'directMessages',
         component: MessageCenter,
-        props: route => ({ userId: route.params.userId })  // Pass userId explicitly
+        props: (route) => ({ userId: route.params.userId }), // Pass userId explicitly
       },
       {
         path: 'notifications',
         name: 'notifications',
         component: MessageCenter,
-        props: route => ({ userId: route.params.userId })  // Pass userId explicitly
-      }
-    ]
+        props: (route) => ({ userId: route.params.userId }), // Pass userId explicitly
+      },
+    ],
   },
   {
     path: '/:catchAll(.*)',
-    redirect: '/messages/directMessages'
+    redirect: '/messages/directMessages',
   },
   {
     path: '/:userId/account',
@@ -95,33 +95,33 @@ const routes = [
   {
     path: '/allstudygroups',
     name: 'studyGroupList',
-    component: StudyGroupList
+    component: StudyGroupList,
   },
   {
     path: '/createstudygroup',
     name: 'createStudyGroup',
-    component: CreateStudyGroup
+    component: CreateStudyGroup,
   },
   {
     path: '/studygroup/:groupId',
     name: 'studyGroupPage',
     component: StudyGroupPage,
     props: true, // Enables the route parameter to be passed as a prop to the component
-    meta: { layout: "thin" },
+    meta: { layout: 'thin' },
     children: [
       {
         path: 'studyGroupSpace',
         name: 'studyGroupSpace',
         component: StudyGroupPage,
-        props: route => ({ groupId: route.params.groupId })  // Pass userId explicitly
+        props: (route) => ({ groupId: route.params.groupId }), // Pass userId explicitly
       },
       {
         path: 'managePanel',
         name: 'managePanel',
         component: StudyGroupPage,
-        props: route => ({ groupId: route.params.groupId })  // Pass userId explicitly
-      }
-    ]
+        props: (route) => ({ groupId: route.params.groupId }), // Pass userId explicitly
+      },
+    ],
   },
   // {
   //   path: '/group/:groupId/manage',
@@ -138,28 +138,28 @@ const routes = [
   {
     path: '/support',
     name: 'support',
-    component: SponsorShip
+    component: SponsorShip,
   },
   {
     path: '/about',
     name: '/about',
-    component: AboutUs
+    component: AboutUs,
   },
   {
     path: '/contact',
     name: '/contact',
-    component: ContactUs
-  }
+    component: ContactUs,
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 })
 
 router.beforeEach((to, from, next) => {
-  store.commit('resetSelectedNodes'); // commit the mutation
-  next(); // proceed to the next route
-});
+  store.commit('resetSelectedNodes') // commit the mutation
+  next() // proceed to the next route
+})
 
 export default router

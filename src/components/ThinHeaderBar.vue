@@ -4,7 +4,11 @@
       <!-- Logo -->
       <div class="logo-section">
         <v-btn variant="plain" class="logo-btn" @click.prevent="backToHomePage">
-          <img :src="isSmallScreen ? smallLogo : largeLogo" alt="Logo" class="responsive-logo" />
+          <img
+            :src="isSmallScreen ? smallLogo : largeLogo"
+            alt="Logo"
+            class="responsive-logo"
+          />
         </v-btn>
       </div>
 
@@ -64,13 +68,13 @@
 </template>
 
 <script>
-import { debounce } from 'lodash-es';
-import MessageAlert from './MessageAlert.vue';
-import LogInPartial from './LogInPartial.vue';
-import ReusableIconButton from './ReusableIconButton.vue';
+import { debounce } from 'lodash-es'
+import MessageAlert from './MessageAlert.vue'
+import LogInPartial from './LogInPartial.vue'
+import ReusableIconButton from './ReusableIconButton.vue'
 
 export default {
-  name: "ThinHeaderBar",
+  name: 'ThinHeaderBar',
 
   components: {
     MessageAlert,
@@ -91,27 +95,27 @@ export default {
       ],
       currentLocale: this.$i18n.locale,
       langTextWidth: 0,
-    };
+    }
   },
 
   computed: {
     isAuthenticated() {
-      return this.$store.state.isAuthenticated;
+      return this.$store.state.isAuthenticated
     },
 
     iconSize() {
       // 大屏用 32，小屏用 24
-      return this.isSmallScreen ? 24 : 32;
+      return this.isSmallScreen ? 24 : 32
     },
 
     themeIcon() {
-      return this.isDarkThemeEnabled ? 'mdi-weather-night' : 'mdi-weather-sunny';
+      return this.isDarkThemeEnabled ? 'mdi-weather-night' : 'mdi-weather-sunny'
     },
 
     themeLabel() {
       return this.isDarkThemeEnabled
         ? this.$t('header.darkmode')
-        : this.$t('header.lightmode');
+        : this.$t('header.lightmode')
     },
 
     navItems() {
@@ -119,133 +123,133 @@ export default {
         {
           icon: 'mdi-rss',
           label: this.$t('header.trend'),
-          action: this.scrollToSection
+          action: this.scrollToSection,
         },
         {
           icon: 'mdi-account-group',
           label: this.$t('header.studygroup'),
-          action: this.RouteToStudyGroup
+          action: this.RouteToStudyGroup,
         },
         {
           icon: 'mdi-book-open-variant',
           label: this.$t('header.studyplan'),
-          action: this.handleStudyPlan
-        }
-      ];
+          action: this.handleStudyPlan,
+        },
+      ]
     },
 
     computeLangWidthStyle() {
-      const baseWidth = this.langTextWidth || 30;
-      const minW = 1.1 * baseWidth;
-      const maxW = 2 * baseWidth;
+      const baseWidth = this.langTextWidth || 30
+      const minW = 1.1 * baseWidth
+      const maxW = 2 * baseWidth
       return {
         minWidth: `${minW}px`,
         maxWidth: `${maxW}px`,
-      };
+      }
     },
   },
 
   methods: {
     handleResize() {
-      this.isSmallScreen = window.innerWidth <= 1200;
+      this.isSmallScreen = window.innerWidth <= 1200
     },
 
     toggleTheme() {
-      this.isDarkThemeEnabled = !this.isDarkThemeEnabled;
+      this.isDarkThemeEnabled = !this.isDarkThemeEnabled
       // Vuetify 主题切换
-      this.$vuetify.theme.dark = this.isDarkThemeEnabled;
+      this.$vuetify.theme.dark = this.isDarkThemeEnabled
       // 持久化主题选择
-      localStorage.setItem('isDarkThemeEnabled', this.isDarkThemeEnabled);
+      localStorage.setItem('isDarkThemeEnabled', this.isDarkThemeEnabled)
     },
 
     backToHomePage() {
-      this.$router.push({ name: 'HomePage' });
+      this.$router.push({ name: 'HomePage' })
     },
 
     scrollToSection() {
-      const section = document.getElementById('feed-section');
+      const section = document.getElementById('feed-section')
       if (section) {
-        const yOffset = -60;
-        const y = section.getBoundingClientRect().top + window.scrollY + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
+        const yOffset = -60
+        const y = section.getBoundingClientRect().top + window.scrollY + yOffset
+        window.scrollTo({ top: y, behavior: 'smooth' })
       }
     },
 
     RouteToStudyGroup() {
-      this.$router.push({ name: 'studyGroupList' });
+      this.$router.push({ name: 'studyGroupList' })
     },
 
     async globalSearch() {
-      const query = this.searchQuery.trim();
+      const query = this.searchQuery.trim()
       if (!query) {
-        this.$refs.searchInput?.focus();
-        return;
+        this.$refs.searchInput?.focus()
+        return
       }
       try {
         const path = this.$router.resolve({
           name: 'searchList',
           query: { q: query },
-        }).href;
-        window.open(path, '_blank');
+        }).href
+        window.open(path, '_blank')
       } catch (error) {
-        console.error('Search error:', error);
+        console.error('Search error:', error)
       }
     },
 
     handleStudyPlan() {
       if (!this.isAuthenticated) {
-        this.alertMessage = this.$t('pleaseLoginToViewStudyPlan');
-        return;
+        this.alertMessage = this.$t('pleaseLoginToViewStudyPlan')
+        return
       }
-      this.$emit('showStudyPlanDialog', true);
+      this.$emit('showStudyPlanDialog', true)
     },
 
     handleLanguageChange(val) {
-      this.currentLocale = val;
-      this.$i18n.locale = val;
-      this.$vuetify.locale = val;
+      this.currentLocale = val
+      this.$i18n.locale = val
+      this.$vuetify.locale = val
       this.$nextTick(() => {
-        this.measureLangTextWidth();
-      });
+        this.measureLangTextWidth()
+      })
     },
 
     measureLangTextWidth() {
-      const tempSpan = document.createElement('span');
+      const tempSpan = document.createElement('span')
       const selectedItem = this.languageOptions.find(
         (item) => item.value === this.currentLocale
-      );
-      const text = selectedItem ? selectedItem.title : '';
-      tempSpan.innerText = text;
-      tempSpan.style.position = 'absolute';
-      tempSpan.style.visibility = 'hidden';
-      tempSpan.style.whiteSpace = 'nowrap';
-      tempSpan.style.fontSize = '14px';
-      document.body.appendChild(tempSpan);
-      this.langTextWidth = tempSpan.offsetWidth;
-      document.body.removeChild(tempSpan);
+      )
+      const text = selectedItem ? selectedItem.title : ''
+      tempSpan.innerText = text
+      tempSpan.style.position = 'absolute'
+      tempSpan.style.visibility = 'hidden'
+      tempSpan.style.whiteSpace = 'nowrap'
+      tempSpan.style.fontSize = '14px'
+      document.body.appendChild(tempSpan)
+      this.langTextWidth = tempSpan.offsetWidth
+      document.body.removeChild(tempSpan)
     },
   },
 
   created() {
-    this.debouncedResize = debounce(this.handleResize, 100);
-    this.$root.isSmallScreen = this.isSmallScreen;
-    this.handleResize();
+    this.debouncedResize = debounce(this.handleResize, 100)
+    this.$root.isSmallScreen = this.isSmallScreen
+    this.handleResize()
   },
 
   mounted() {
-    window.addEventListener('resize', this.debouncedResize);
-    this.measureLangTextWidth();
-    const storedTheme = localStorage.getItem('isDarkThemeEnabled');
+    window.addEventListener('resize', this.debouncedResize)
+    this.measureLangTextWidth()
+    const storedTheme = localStorage.getItem('isDarkThemeEnabled')
     if (storedTheme !== null) {
-      this.isDarkThemeEnabled = storedTheme === 'true';
-      this.$vuetify.theme.dark = this.isDarkThemeEnabled;
+      this.isDarkThemeEnabled = storedTheme === 'true'
+      this.$vuetify.theme.dark = this.isDarkThemeEnabled
     }
   },
 
   beforeUnmount() {
-    window.removeEventListener('resize', this.debouncedResize);
+    window.removeEventListener('resize', this.debouncedResize)
   },
-};
+}
 </script>
 
 <style scoped>
@@ -255,25 +259,28 @@ export default {
   -webkit-backdrop-filter: blur(10px);
   transition: all 0.3s ease;
   z-index: 1000;
-  padding: 16px 0; /* Ensure padding is visible */
+  padding: 16px 0;
+  /* Ensure padding is visible */
   width: 100%;
   position: relative;
   min-height: 80px;
   display: flex;
   align-items: center;
-  overflow: hidden; /* Fix overflow issues */
+  overflow: hidden;
+  /* Fix overflow issues */
 }
 
 .header-grid {
   display: grid;
   grid-template-columns: auto 1fr auto auto;
-  grid-template-areas: "logo search icons language";
+  grid-template-areas: 'logo search icons language';
   align-items: center;
   column-gap: 24px;
   padding: 0 24px;
   position: relative;
   width: 100%;
-  overflow: hidden; /* Fix overflow issues */
+  overflow: hidden;
+  /* Fix overflow issues */
 }
 
 /* Logo区域 */
@@ -384,8 +391,8 @@ export default {
   .header-grid {
     grid-template-columns: auto 1fr auto;
     grid-template-areas:
-      "logo icons language"
-      "search search search";
+      'logo icons language'
+      'search search search';
     row-gap: 12px;
   }
 
@@ -413,10 +420,10 @@ export default {
   .header-grid {
     grid-template-columns: auto;
     grid-template-areas:
-      "logo"
-      "search"
-      "icons"
-      "language";
+      'logo'
+      'search'
+      'icons'
+      'language';
     row-gap: 8px;
   }
 

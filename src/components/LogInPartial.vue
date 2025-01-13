@@ -1,7 +1,11 @@
 <template>
   <div class="avatar-container icon-item">
     <!-- 已登录状态 -->
-    <div v-if="isAuthenticated" @mouseleave="hovering = false" class="icon-item">
+    <div
+      v-if="isAuthenticated"
+      @mouseleave="hovering = false"
+      class="icon-item"
+    >
       <v-tooltip
         :text="$store.state.userInfo.userName"
         location="bottom"
@@ -40,7 +44,10 @@
                     <v-btn
                       icon
                       class="default-avatar"
-                      :style="{ width: (iconSize * 1.3) + 'px', height: (iconSize * 1.3) + 'px' }"
+                      :style="{
+                        width: iconSize * 1.3 + 'px',
+                        height: iconSize * 1.3 + 'px',
+                      }"
                     >
                       <v-avatar :size="iconSize * 1.25">
                         <img :src="avatarUrl" :alt="$t('user.useravatar')" />
@@ -58,7 +65,7 @@
                 color="text"
                 opacity="0.1"
                 :thickness="2"
-                style="margin: 5px 0;"
+                style="margin: 5px 0"
               />
               <v-list class="list-on-card" dense>
                 <v-list-item @click="personalcenter">
@@ -67,14 +74,14 @@
                   </v-list-item-title>
                 </v-list-item>
 
-                <v-divider color="text" opacity="0.1" style="margin: 5px 0;" />
+                <v-divider color="text" opacity="0.1" style="margin: 5px 0" />
                 <v-list-item @click="accountcenter">
                   <v-list-item-title>
                     <v-icon>mdi-cog</v-icon>{{ $t('user.accountsetting') }}
                   </v-list-item-title>
                 </v-list-item>
 
-                <v-divider color="text" opacity="0.1" style="margin: 5px 0;" />
+                <v-divider color="text" opacity="0.1" style="margin: 5px 0" />
                 <v-list-item @click="logout">
                   <v-list-item-title>
                     <v-icon>mdi-logout</v-icon>{{ $t('user.logout') }}
@@ -113,7 +120,7 @@
               <img
                 src="../assets/images/avatar.svg"
                 alt="avatar"
-                style="width: 100%; height: 100%; border-radius: 50%;"
+                style="width: 100%; height: 100%; border-radius: 50%"
               />
             </v-avatar>
           </v-btn>
@@ -124,7 +131,7 @@
       <div v-if="!isSmallScreen" class="auth-buttons">
         <v-btn
           variant="flat"
-          style="background-color: #DE2910; color: black;"
+          style="background-color: #de2910; color: black"
           class="auth-btn"
           @click="login"
         >
@@ -132,7 +139,7 @@
         </v-btn>
         <v-btn
           variant="flat"
-          style="background-color: black; color: white;"
+          style="background-color: black; color: white"
           class="auth-btn"
           @click="register"
         >
@@ -144,60 +151,60 @@
 </template>
 
 <script>
-import { apiClient } from "@/api";
+import { apiClient } from '@/api'
 
 export default {
-  name: "LogInPartial",
+  name: 'LogInPartial',
   props: {
     scrolledPastHeader: Boolean,
     isSmallScreen: Boolean,
     iconSize: {
       type: Number,
-      default: 32
-    }
+      default: 32,
+    },
   },
   data() {
     return {
-      hovering: false
-    };
+      hovering: false,
+    }
   },
   computed: {
     isAuthenticated() {
-      return this.$store.state.isAuthenticated;
+      return this.$store.state.isAuthenticated
     },
     avatarUrl() {
-      return this.$store.state.avatarUrl;
-    }
+      return this.$store.state.avatarUrl
+    },
   },
   methods: {
     login() {
-      this.$router.push({ name: "login" });
+      this.$router.push({ name: 'login' })
     },
     register() {
-      this.$router.push({ name: "register" });
+      this.$router.push({ name: 'register' })
     },
     personalcenter() {
-      const userId = this.$store.state.currentUserID;
-      this.$router.push({ name: "personalcenter", params: { userId } });
+      const userId = this.$store.state.currentUserID
+      this.$router.push({ name: 'personalcenter', params: { userId } })
     },
     accountcenter() {
-      const userId = this.$store.state.currentUserID;
-      this.$router.push({ name: "accountcenter", params: { userId } });
+      const userId = this.$store.state.currentUserID
+      this.$router.push({ name: 'accountcenter', params: { userId } })
     },
     async logout() {
       try {
-        await apiClient.post("/users/Account/Logout");
-        await this.$store.dispatch("checkAuthenticationStatus");
-        this.$router.push("/");
+        await apiClient.post('/users/Account/Logout')
+        await this.$store.dispatch('checkAuthenticationStatus')
+        this.$router.push('/')
       } catch (error) {
-        console.error(this.$t("user.erroroccur"), error);
+        console.error(this.$t('user.erroroccur'), error)
       }
-    }
+    },
   },
   mounted() {
-    this.$store.dispatch("checkAuthenticationStatus");
-  }
-};
+    this.$store.dispatch('checkAuthenticationStatus')
+  },
+}
 </script>
 
 <style scoped>
@@ -205,7 +212,8 @@ export default {
 .avatar-container {
   display: flex;
   align-items: center;
-  gap: 16px; /* 保持与其他图标相同的左右间距 */
+  gap: 16px;
+  /* 保持与其他图标相同的左右间距 */
 }
 
 /* 用于统一整体样式，跟 icons-section 内其他 icon-item 保持一致 */
@@ -242,27 +250,35 @@ export default {
   position: relative;
   display: inline-block;
 }
+
 .avatar-hover {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
+
 .user-info-card {
   position: absolute !important;
   top: -20px !important;
   left: -160px !important;
   z-index: 1000 !important;
 }
+
 .avatar-hover {
   opacity: 1;
   transform: scale(1);
 }
+
 .avatar-hover-container:hover .avatar-hover {
   opacity: 0;
   transform: scale(0.9);
 }
+
 .avatar-hover-container:hover .user-info-card {
   opacity: 1;
   transform: scale(1);
 }
+
 .user-name {
   font-weight: bold;
   font-size: 16px;
@@ -274,28 +290,34 @@ export default {
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
   }
 }
+
 @keyframes fadeOutScale {
   from {
     opacity: 1;
     transform: scale(1);
   }
+
   to {
     opacity: 0;
     transform: scale(0.9);
   }
 }
+
 .animated-card {
   animation-duration: 0.3s;
   animation-fill-mode: forwards;
 }
+
 .avatar-hover-container:hover .animated-card {
   animation-name: fadeInScale;
 }
+
 .avatar-hover-container:not(:hover) .animated-card {
   animation-name: fadeOutScale;
 }
@@ -305,11 +327,14 @@ export default {
 /* 大屏下的“登录”和“注册”按钮容器 */
 .auth-buttons {
   display: flex;
-  justify-content: center; /* 居中对齐 */
+  justify-content: center;
+  /* 居中对齐 */
   align-items: center;
   padding: auto;
-  gap: 10px; /* 调整按钮之间的间距 */
-  width: 100%; /* 使容器占满父容器的宽度 */
+  gap: 10px;
+  /* 调整按钮之间的间距 */
+  width: 100%;
+  /* 使容器占满父容器的宽度 */
 }
 
 /* “登录”和“注册”按钮的统一样式 */

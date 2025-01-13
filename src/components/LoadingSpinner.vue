@@ -11,8 +11,8 @@
 
 <script>
 export default {
-  name: 'LoadingSpinner'
-};
+  name: 'LoadingSpinner',
+}
 </script>
 
 <style scoped>
@@ -20,7 +20,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100px; /* Adjust as needed */
+  height: 100px;
+  /* Adjust as needed */
 }
 
 .loading {
@@ -39,10 +40,13 @@ export default {
   transform: rotate(50deg);
   width: 0;
   height: 0;
-  content: "";
-  border-left: 6px solid transparent; /* Half the width of the triangle */
-  border-right: 6px solid transparent; /* Half the width of the triangle */
-  border-bottom: 20px solid red; /* Height of the triangle */
+  content: '';
+  border-left: 6px solid transparent;
+  /* Half the width of the triangle */
+  border-right: 6px solid transparent;
+  /* Half the width of the triangle */
+  border-bottom: 20px solid red;
+  /* Height of the triangle */
 }
 
 .outer-circle {
@@ -51,8 +55,10 @@ export default {
   width: 20px;
   height: 20px;
   margin: 13px;
-  border-radius: 100%; /* Change to 0% for a square shape */
-  background-color: #00FFF7; /* Change color to blue */
+  border-radius: 100%;
+  /* Change to 0% for a square shape */
+  background-color: #00fff7;
+  /* Change color to blue */
   border: 2px solid #000;
 }
 
@@ -71,6 +77,7 @@ export default {
   from {
     transform: rotate(0) translateZ(0);
   }
+
   to {
     transform: rotate(360deg) translateZ(0);
   }
